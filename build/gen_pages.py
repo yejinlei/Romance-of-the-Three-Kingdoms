@@ -35,6 +35,7 @@ freq       = load('freq.json')
 stat       = load('stat.json')
 chapters   = load('chapters.json')
 read_data  = load('read.json')  # list of {no,title,paragraphs,chars}
+VARIANTS_DATA = json.load(open(DOCS/'data'/'variants.json', encoding='utf-8'))
 
 # ========== 修正：战役/事件真实年份硬编码（回目章节号→公元年映射）=============
 # 三国纪年关键锚点：1回=184黄巾, 5回=189董卓, 21回=200官渡, 38回=207三顾,
@@ -248,11 +249,13 @@ def page_ontology():
     # 自動從 TTL 統計 TBox 規模
     import re as _re
     _ttl_text = open(ROOT/'03_本体论规范/sanguo_kg_ontology.ttl',encoding='utf-8').read()
+    _abox_text = open(ROOT/'03_本体论规范/sanguo_kg_multiversion_abox.ttl',encoding='utf-8').read()
     _n_classes = len(_re.findall(r'a\s+owl:Class', _ttl_text))
     _n_obj = len(_re.findall(r'a\s+owl:ObjectProperty', _ttl_text))
     _n_data = len(_re.findall(r'a\s+owl:DatatypeProperty', _ttl_text))
-    _n_inst = len(_re.findall(r'^sg:\w+\s+a\s+sg:', _ttl_text, _re.M))
+    _n_inst = len(_re.findall(r'^sg:\w+\s+a\s+sg:', _ttl_text, _re.M)) + len(_re.findall(r'^sg:\w+\s+a\s+:', _abox_text, _re.M))
     _ttl_lines = _ttl_text.count('\n')+1
+    _abox_lines = _abox_text.count('\n')+1
     # 計算 ABox 實例規模（從 parquet/json 合計）
     n_persons = len(persons)
     n_factions = len(factions)
@@ -262,20 +265,24 @@ def page_ontology():
     n_artifacts = len(artifacts)
     n_strat = len(stratagems)
     n_prop = len(prophecies)
-    n_editions = len(editions)
-    n_scholars_t = scholars if isinstance(scholars,list) else []
+    n_editions = len(VARIANTS_DATA['editions'])
+    n_scholars_t = VARIANTS_DATA['scholars'] if isinstance(VARIANTS_DATA.get('scholars'),list) else []
     n_scholars = len(n_scholars_t)
     n_papers = len(papers)
     n_adapts = len(adaptations)
+    n_variants = len(VARIANTS)
+    n_chapter_units = n_editions*0 + 360  # 毛本120+嘉靖240
+    n_commentary = len(VARIANTS_DATA['commentary_lineage'])
 
     html = header("本體論規範","ontology.html",
-        f"OWL 2 DL 描述邏輯本體，含 {_n_classes} 個類、{_n_obj} 個對象屬性、{_n_data} 個數據屬性；TBox+ABox {_ttl_lines} 行 Turtle，兼容 Protégé/rdflib/GraphDB/Apache Jena。") + f'''
+        f"OWL 2 DL 描述邏輯本體，含 {_n_classes} 個類、{_n_obj} 個對象屬性、{_n_data} 個數據屬性；TBox {_ttl_lines} 行 + ABox {_abox_lines} 行 Turtle，兼容 Protégé/rdflib/GraphDB/Apache Jena。") + f'''
 <section class="paper">
-  <h2>本體論 OWL 2 規範 v3.1-multiversion</h2>
+  <h2>本體論 OWL 2 規範 v3.2-multiversion</h2>
   <p>本體文件採用 Turtle 語法，詞表採用 YAML 受控詞表，兼容 Protégé / rdflib / GraphDB / Apache Jena 直接導入。
   與《水滸傳》本體（<code>sh:</code> 前綴）統一 <code>sg:</code> 命名空間，跨本體可按人物/地名 ID JOIN。</p>
   <div class="btn-row">
-    <a class="btn primary" href="ontology/sanguo_kg_ontology.ttl" download>📥 下載本體 TTL（{_ttl_lines} 行 Turtle · {n_editions} 版本 / {_n_classes} 類 / 31 核心異文）</a>
+    <a class="btn primary" href="ontology/sanguo_kg_ontology.ttl" download>📥 下載 TBox（本體結構 · {_ttl_lines} 行 · {_n_classes} 類 / {_n_obj} 對象屬性 / {_n_data} 數據屬性）</a>
+    <a class="btn primary" href="ontology/sanguo_kg_multiversion_abox.ttl" download>📥 下載多版本 ABox（{_abox_lines} 行 · {n_editions} 版本 / {n_variants} 異文 / {n_scholars} 學者 / {n_commentary} 評點 / {n_chapter_units} 回目個體）</a>
     <a class="btn" href="ontology/vocabularies.yaml" download>📥 下載受控詞表 YAML（11 大詞族）</a>
     <a class="btn" href="query.html">🔍 在瀏覽器查詢本體（DuckDB-WASM）</a>
   </div>
@@ -292,9 +299,11 @@ def page_ontology():
     <div class="kpi"><div class="kpi-num">{n_strat}</div><div class="kpi-lab">計謀</div></div>
     <div class="kpi"><div class="kpi-num">{n_artifacts}</div><div class="kpi-lab">器物</div></div>
     <div class="kpi"><div class="kpi-num">{n_prop}</div><div class="kpi-lab">讖緯</div></div>
-    <div class="kpi"><div class="kpi-num">{n_editions}</div><div class="kpi-lab">版本</div></div>
-    <div class="kpi"><div class="kpi-num">31</div><div class="kpi-lab">核心異文</div></div>
-    <div class="kpi"><div class="kpi-num">{n_scholars}</div><div class="kpi-lab">學者</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:#9e2b25">{n_editions}</div><div class="kpi-lab">版本</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:#9e2b25">{n_variants}</div><div class="kpi-lab">核心異文</div></div>
+    <div class="kpi"><div class="kpi-num">{n_scholars}</div><div class="kpi-lab">學者/評點家</div></div>
+    <div class="kpi"><div class="kpi-num">{n_commentary}</div><div class="kpi-lab">評點傳承</div></div>
+    <div class="kpi"><div class="kpi-num">360</div><div class="kpi-lab">回目/則個體</div></div>
     <div class="kpi"><div class="kpi-num">{n_papers}+{n_adapts}</div><div class="kpi-lab">論著+改編</div></div>
   </div>
 </section>
@@ -566,10 +575,8 @@ def render_edition(e):
 <p class="edition-feature">{esc(e.get("feature","") or e.get("desc","") or "")}</p>
 </article>'''
 
-# 載入 variants.json（31 條專業異文+版本+學者）
-VARIANTS_DATA = json.load(open(DATA/'variants.json', encoding='utf-8'))
 VARIANTS = VARIANTS_DATA['variants']
-VT_LABEL = {"vt_typo":"訛字","vt_missing":"脫文","vt_extra":"衍文","vt_rewrite":"改寫","vt_poetry":"詩文增刪","vt_plot":"情節增刪","vt_commentary":"評點增刪"}
+VT_LABEL = {"vt_typo":"訛字","vt_missing":"脫文","vt_extra":"衍文","vt_rewrite":"改寫","vt_poetry":"詩文增刪","vt_plot":"情節增刪","vt_commentary":"評點增刪","vt_add":"毛本新增","vt_transfer":"情節遷移"}
 EDITIONS_V = VARIANTS_DATA['editions']
 
 def render_variant(v):

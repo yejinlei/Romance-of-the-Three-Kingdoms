@@ -1,0 +1,3209 @@
+@prefix : <http://www.sanguo-ontology.org/ontology#> .
+@prefix sg: <http://www.sanguo-ontology.org/resource/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# ============================================================
+# 三国演义本体论 ABox 实例层（多版本 / 异文 / 学者 / 评点 / 回目）
+# 与 sanguo_kg_ontology.ttl (TBox) 配套使用
+# 自动生成于 2026-10-26
+# 数据版本：12 版本 · 77 核心异文 · 24 位学者 · 5 条评点传承
+#           · 嘉靖240則 ↔ 毛本120回 回目映射
+# ============================================================
+
+# ---------- VersionFamily（版本家族） ----------
+
+sg:family_yanyi a :VersionFamily ;
+    rdfs:label "演义系"@zh ;
+    skos:note """24卷240则系统；以嘉靖壬午本、周曰校本、夏振宇本为代表；文人刊本。"""@zh .
+
+sg:family_zhizhuan_fan a :VersionFamily ;
+    rdfs:label "志传繁本系统"@zh ;
+    skos:note """20卷240段；上图下文；含花关索故事；以叶逢春本、余象斗双峰堂本为代表。"""@zh .
+
+sg:family_zhizhuan_jian a :VersionFamily ;
+    rdfs:label "志传简本系统"@zh ;
+    skos:note """文字简净；以黄正甫本、刘龙田本、朱鼎臣本为代表；或为更早民间形态。"""@zh .
+
+sg:family_pingdian a :VersionFamily ;
+    rdfs:label "评点系"@zh ;
+    skos:note """将240则合为120回、加双题回目与评点；以李卓吾评本、钟伯敬评本、毛宗岗本为代表。"""@zh .
+
+sg:family_modern a :VersionFamily ;
+    rdfs:label "现代整理本"@zh ;
+    skos:note """以毛本为底本，参照明刊诸本校勘标点；人文社本、中华书局汇评本、沈伯俊校理本。"""@zh .
+
+sg:family_sequel a :VersionFamily ;
+    rdfs:label "续书翻案"@zh ;
+    skos:note """后世续书与反案之作；如周大荒《反三国演义》。"""@zh .
+
+:parallelTo a owl:SymmetricProperty, owl:ObjectProperty .
+
+sg:family_yanyi     :parallelTo sg:family_zhizhuan_fan .
+sg:family_yanyi     :parallelTo sg:family_zhizhuan_jian .
+
+# ---------- Edition（版本个体） ----------
+
+sg:edition_jiajing a :Edition ;
+    rdfs:label "嘉靖壬午本《三國志通俗演義》"@zh ;
+    :shortName "嘉靖本"@zh ;
+    :belongsToFamily sg:family_yanyi ;
+    :editionYear "1522"^^xsd:gYear ;
+    :publisher "明嘉靖元年刻本"@zh ;
+    :survivalState "全本（影印存世）"@zh ;
+    :chapterDivision "24 卷 240 則"@zh ;
+    dc:description """現存最早刻本；240 則單題七言；尊曹傾向明顯；無《臨江仙》開篇；曹操形象未被臉譜化；含「孔明燒魏延於上方谷」等被毛本刪去之段落。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_zhouyuexiao a :Edition ;
+    rdfs:label "周曰校本《新刊校正古本大字音釋三國志通俗演義》"@zh ;
+    :shortName "周曰校本"@zh ;
+    :belongsToFamily sg:family_yanyi ;
+    :editionYear "1591"^^xsd:gYear ;
+    :publisher "明萬曆十九年金陵周曰校萬卷樓刊"@zh ;
+    :survivalState "全本（有影印，識典古籍在線）"@zh ;
+    :chapterDivision "12 卷 240 則"@zh ;
+    dc:description """演義系代表本；增補插圖、音注、釋義、考證；與嘉靖本同屬演義系統，文字高度一致。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_yefengchun a :Edition ;
+    rdfs:label "葉逢春本《新刊通俗演義三國志傳》"@zh ;
+    :shortName "葉逢春本"@zh ;
+    :belongsToFamily sg:family_zhizhuan_fan ;
+    :editionYear "1548"^^xsd:gYear ;
+    :publisher "明嘉靖二十七年建陽葉逢春刊"@zh ;
+    :survivalState "殘本（分藏數館）"@zh ;
+    :chapterDivision "10 卷 240 段"@zh ;
+    dc:description """志傳系統最早刻本；獨有『花關索』四傳（出身/征西川/下荊州/認父）；上圖下文版式。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_yuxiangdou a :Edition ;
+    rdfs:label "余象斗雙峰堂本《音釋補遺按鑑批點三國志傳》"@zh ;
+    :shortName "余象斗本"@zh ;
+    :belongsToFamily sg:family_zhizhuan_fan ;
+    :editionYear "1592"^^xsd:gYear ;
+    :publisher "明萬曆二十年建陽余象斗雙峰堂刊"@zh ;
+    :survivalState "全本（英國博物院/早稻田藏）"@zh ;
+    :chapterDivision "20 卷"@zh ;
+    dc:description """開『評林』本之風；余氏自加評點；葉逢春本系統繁本代表。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_huangzhengfu a :Edition ;
+    rdfs:label "黃正甫本《新刻考訂按鑑通俗演義全像三國志傳》"@zh ;
+    :shortName "黃正甫本"@zh ;
+    :belongsToFamily sg:family_zhizhuan_jian ;
+    :editionYear "1623"^^xsd:gYear ;
+    :publisher "明天啟三年閩建黃正甫刊"@zh ;
+    :survivalState "全本（日本內閣文庫藏）"@zh ;
+    :chapterDivision "20 卷 240 則"@zh ;
+    dc:description """志傳系統簡本；文字極簡淨；與繁本（余象斗）孰先孰後學界仍有爭論（小川環樹等主簡本為先）。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_lizhuowu a :Edition ;
+    rdfs:label "李卓吾評本《李卓吾先生批評三國志》"@zh ;
+    :shortName "李卓吾評本"@zh ;
+    :belongsToFamily sg:family_pingdian ;
+    :editionYear "~1607"^^xsd:gYear ;
+    :publisher "明萬曆間吳觀明容與堂刊"@zh ;
+    :survivalState "全本"@zh ;
+    :chapterDivision "120 回（首合 240 則為 120 回）"@zh ;
+    dc:description """首次將 240 則合併為 120 回；回目由單題改為雙題；葉晝偽託李贄評點；尊劉貶曹傾向加強。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_zhongbojing a :Edition ;
+    rdfs:label "鍾伯敬評本《鍾伯敬先生批評三國志》"@zh ;
+    :shortName "鍾伯敬評本"@zh ;
+    :belongsToFamily sg:family_pingdian ;
+    :editionYear "~1627"^^xsd:gYear ;
+    :publisher "明天啟間積慶堂刊"@zh ;
+    :survivalState "全本"@zh ;
+    :chapterDivision "120 回"@zh ;
+    dc:description """繼李評本之評點系統；評語較李評簡潔；明末清初流傳較廣。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_liyu a :Edition ;
+    rdfs:label "李笠翁評本《笠翁批評三國志》"@zh ;
+    :shortName "李漁評本"@zh ;
+    :belongsToFamily sg:family_pingdian ;
+    :editionYear "~1670"^^xsd:gYear ;
+    :publisher "清康熙間刊"@zh ;
+    :survivalState "全本"@zh ;
+    :chapterDivision "120 回"@zh ;
+    dc:description """毛宗崗同時代之評本；李漁為清初戲曲大家；評點偏向小說結構與文法。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_maozonggang a :Edition ;
+    rdfs:label "毛宗崗評本《四大奇書第一種——三國志演義》"@zh ;
+    :shortName "毛本（通行本）"@zh ;
+    :belongsToFamily sg:family_pingdian ;
+    :editionYear "1679"^^xsd:gYear ;
+    :publisher "清康熙十八年醉畊堂刊（毛綸、毛宗崗父子評改）"@zh ;
+    :survivalState "全本（通行本）"@zh ;
+    :chapterDivision "120 回"@zh ;
+    dc:description """現今通行本；首冠楊慎《臨江仙·滾滾長江東逝水》；整頓回目為對偶聯語；刪改嘉靖本尊曹字句，強化尊劉貶曹；刪去『上方谷燒魏延』等段落；加毛氏回前總評、夾批；此本一出『一切舊本乃不復行』。本站在線全文即毛本（590,968 字）。"""@zh ;
+    :hasFullText true^^xsd:boolean .
+
+sg:edition_renwen a :Edition ;
+    rdfs:label "人民文學出版社校訂本"@zh ;
+    :shortName "人文社本"@zh ;
+    :belongsToFamily sg:family_modern ;
+    :editionYear "1953"^^xsd:gYear ;
+    :publisher "人民文學出版社（初版顧學頡等整理，1973 第三版）"@zh ;
+    :survivalState "全本"@zh ;
+    :chapterDivision "120 回"@zh ;
+    dc:description """以毛本為底本，參照明嘉靖本、清一些評本校勘標點；大陸最通行現代整理本；國內發行量最大。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_shenbojun a :Edition ;
+    rdfs:label "沈伯俊校理本《三國演義（新校理本）》"@zh ;
+    :shortName "沈伯俊校理本"@zh ;
+    :belongsToFamily sg:family_modern ;
+    :editionYear "1992"^^xsd:gYear ;
+    :publisher "江蘇古籍出版社/巴蜀書社多版"@zh ;
+    :survivalState "全本"@zh ;
+    :chapterDivision "120 回"@zh ;
+    dc:description """當代三國權威沈伯俊以毛本為底本、參校多個明刊本之校理本；對毛本地理/官職/人物訛誤多所校正。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+sg:edition_fan a :Edition ;
+    rdfs:label "反三國演義（周大荒）"@zh ;
+    :shortName "反三國"@zh ;
+    :belongsToFamily sg:family_sequel ;
+    :editionYear "1924"^^xsd:gYear ;
+    :publisher "民國時期初刊"@zh ;
+    :survivalState "全本"@zh ;
+    :chapterDivision "60 回"@zh ;
+    dc:description """續書/翻案之作；為蜀漢翻案，令劉備諸葛亮統一天下；結尾『薦杜預老將獻新謀』不同毛本。"""@zh ;
+    :hasFullText false^^xsd:boolean .
+
+# ---------- 版本派生链 ----------
+
+sg:edition_zhouyuexiao :derivedFrom sg:edition_jiajing .
+sg:edition_lizhuowu :derivedFrom sg:edition_zhouyuexiao .
+sg:edition_zhongbojing :derivedFrom sg:edition_lizhuowu .
+sg:edition_maozonggang :derivedFrom sg:edition_zhongbojing .
+sg:edition_liyu :derivedFrom sg:edition_lizhuowu .
+sg:edition_renwen :derivedFrom sg:edition_maozonggang .
+sg:edition_shenbojun :derivedFrom sg:edition_maozonggang .
+sg:edition_yefengchun :parallelTo sg:edition_jiajing .
+sg:edition_yuxiangdou :derivedFrom sg:edition_yefengchun .
+sg:edition_huangzhengfu :derivedFrom sg:edition_yefengchun .
+
+sg:edition_maozonggang :isReceivedEdition true^^xsd:boolean .
+sg:edition_jiajing     :isEarliestExtant  true^^xsd:boolean .
+
+# ---------- Commentary（评点传承） ----------
+
+sg:commentary_maopi a :Commentary ;
+    rdfs:label "毛宗岗评（毛评）"@zh ;
+    :commentaryAuthor "毛纶、毛宗岗"@zh ;
+    :commentaryPeriod "1679" ;
+    :attachedToEdition sg:edition_zhongbojing ;
+    skos:note """全面评改，回前总评、夹批、眉批齐备，确立『拥刘反曹』正统观；成为三百年来通行本。"""@zh .
+
+sg:commentary_lizhuo a :Commentary ;
+    rdfs:label "李贽评（叶昼伪托）"@zh ;
+    :commentaryAuthor "叶昼（托名李贽）"@zh ;
+    :commentaryPeriod "~1607" ;
+    :attachedToEdition sg:edition_lizhuowu ;
+    skos:note """开评点本之风，评语多以『李卓吾曰』『秃翁曰』开头；实为吴人叶昼伪托。"""@zh .
+
+sg:commentary_zhong a :Commentary ;
+    rdfs:label "钟伯敬评"@zh ;
+    :commentaryAuthor "钟惺"@zh ;
+    :commentaryPeriod "~1627" ;
+    :attachedToEdition sg:edition_zhongbojing ;
+    skos:note """继李评而起，评语较李评简净；开『多家汇评』之渐。"""@zh .
+
+sg:commentary_liyu a :Commentary ;
+    rdfs:label "李渔评"@zh ;
+    :commentaryAuthor "李渔"@zh ;
+    :commentaryPeriod "~1670" ;
+    :attachedToEdition sg:edition_liyu ;
+    skos:note """戏曲家李渔评小说，重结构文法、宾白节奏；与毛评同时。"""@zh .
+
+sg:commentary_huiping a :Commentary ;
+    rdfs:label "汇评本（四家合评）"@zh ;
+    :commentaryAuthor "毛宗岗/李贽/李渔/钟惺合刊"@zh ;
+    :commentaryPeriod "民国后汇编" ;
+    :attachedToEdition sg:edition_maozonggang ;
+    skos:note """民国以来合刊四家评语之本，即祁达方所整理『汇评本』所出。"""@zh .
+
+# ---------- Scholar（学者/评点家个体） ----------
+
+sg:scholar_lizhuo a :Person, :Scholar ;
+    rdfs:label "李贄（卓吾）"@zh ;
+    :birthYear "1527"^^xsd:gYear ;
+    :deathYear "1602"^^xsd:gYear ;
+    :academicSchool "明末左派王學"@zh ;
+    :researchField "小說評點"@zh ;
+    .
+
+sg:scholar_zhongxing a :Person, :Scholar ;
+    rdfs:label "鍾惺（伯敬）"@zh ;
+    :birthYear "1574"^^xsd:gYear ;
+    :deathYear "1625"^^xsd:gYear ;
+    :academicSchool "竟陵派"@zh ;
+    :researchField "詩文評點"@zh ;
+    .
+
+sg:scholar_liyu a :Person, :Scholar ;
+    rdfs:label "李漁（笠翁）"@zh ;
+    :birthYear "1611"^^xsd:gYear ;
+    :deathYear "1680"^^xsd:gYear ;
+    :academicSchool "清初戲曲家"@zh ;
+    :researchField "小說戲曲評點"@zh ;
+    .
+
+sg:scholar_maolun a :Person, :Scholar ;
+    rdfs:label "毛綸（聲山）"@zh ;
+    :birthYear "~1610"^^xsd:gYear ;
+    :deathYear "~1690"^^xsd:gYear ;
+    :academicSchool "清初評點派"@zh ;
+    :researchField "三國/琵琶記評點"@zh ;
+    .
+
+sg:scholar_maozonggang a :Person, :Scholar ;
+    rdfs:label "毛宗崗（序始）"@zh ;
+    :birthYear "1632"^^xsd:gYear ;
+    :deathYear "1709"^^xsd:gYear ;
+    :academicSchool "清初評點派"@zh ;
+    :researchField "三國評點"@zh ;
+    .
+
+sg:scholar_jinshengtan a :Person, :Scholar ;
+    rdfs:label "金聖歎"@zh ;
+    :birthYear "1608"^^xsd:gYear ;
+    :deathYear "1661"^^xsd:gYear ;
+    :academicSchool "明末評點派"@zh ;
+    :researchField "水滸/西廂評點"@zh ;
+    .
+
+sg:scholar_luxun a :Person, :Scholar ;
+    rdfs:label "魯迅"@zh ;
+    :birthYear "1881"^^xsd:gYear ;
+    :deathYear "1936"^^xsd:gYear ;
+    :academicSchool "現代文學"@zh ;
+    :researchField "中國小說史略論三國"@zh ;
+    .
+
+sg:scholar_huishi a :Person, :Scholar ;
+    rdfs:label "胡適"@zh ;
+    :birthYear "1891"^^xsd:gYear ;
+    :deathYear "1962"^^xsd:gYear ;
+    :academicSchool "現代國學"@zh ;
+    :researchField "三國志演義序"@zh ;
+    .
+
+sg:scholar_zhengzhenduo a :Person, :Scholar ;
+    rdfs:label "鄭振鐸"@zh ;
+    :birthYear "1898"^^xsd:gYear ;
+    :deathYear "1958"^^xsd:gYear ;
+    :academicSchool "現代文學史"@zh ;
+    :researchField "三國版本學"@zh ;
+    .
+
+sg:scholar_sunkaidi a :Person, :Scholar ;
+    rdfs:label "孫楷第"@zh ;
+    :birthYear "1898"^^xsd:gYear ;
+    :deathYear "1986"^^xsd:gYear ;
+    :academicSchool "版本目錄學"@zh ;
+    :researchField "中國通俗小說書目"@zh ;
+    .
+
+sg:scholar_liucunren a :Person, :Scholar ;
+    rdfs:label "柳存仁"@zh ;
+    :birthYear "1917"^^xsd:gYear ;
+    :deathYear "2009"^^xsd:gYear ;
+    :academicSchool "海外漢學"@zh ;
+    :researchField "三國版本考"@zh ;
+    .
+
+sg:scholar_xiaobo a :Person, :Scholar ;
+    rdfs:label "小川環樹"@zh ;
+    :birthYear "1910"^^xsd:gYear ;
+    :deathYear "1993"^^xsd:gYear ;
+    :academicSchool "日本漢學"@zh ;
+    :researchField "三國演義版本研究"@zh ;
+    .
+
+sg:scholar_zhongchuanyu a :Person, :Scholar ;
+    rdfs:label "中川諭"@zh ;
+    :birthYear "1948"^^xsd:gYear ;
+    :deathYear "?"^^xsd:gYear ;
+    :academicSchool "日本漢學"@zh ;
+    :researchField "三國演義版本研究"@zh ;
+    .
+
+sg:scholar_shenbojun a :Person, :Scholar ;
+    rdfs:label "沈伯俊"@zh ;
+    :birthYear "1946"^^xsd:gYear ;
+    :deathYear "?"^^xsd:gYear ;
+    :academicSchool "當代三國學"@zh ;
+    :researchField "三國演義校理、版本與人物研究"@zh ;
+    .
+
+sg:scholar_tanliangxiao a :Person, :Scholar ;
+    rdfs:label "譚良嘯"@zh ;
+    :birthYear "1944"^^xsd:gYear ;
+    :deathYear "?"^^xsd:gYear ;
+    :academicSchool "當代三國學"@zh ;
+    :researchField "三國文化研究"@zh ;
+    .
+
+sg:scholar_guxuejie a :Person, :Scholar ;
+    rdfs:label "顧學頡"@zh ;
+    :birthYear "1913"^^xsd:gYear ;
+    :deathYear "1999"^^xsd:gYear ;
+    :academicSchool "古典文獻"@zh ;
+    :researchField "人文社三國校注"@zh ;
+    .
+
+sg:scholar_lucunren a :Person, :Scholar ;
+    rdfs:label "孙楷第"@zh ;
+    :birthYear "1898"^^xsd:gYear ;
+    :deathYear "1986"^^xsd:gYear ;
+    :academicSchool "古典小说目录学"@zh ;
+    :researchField "版本目录"@zh ;
+    :majorWork """《中国通俗小说书目》(1933)，首建三国版本著录体系"""@zh .
+
+sg:scholar_ohanxiao a :Person, :Scholar ;
+    rdfs:label "小川环树"@zh ;
+    :birthYear "1910"^^xsd:gYear ;
+    :deathYear "1993"^^xsd:gYear ;
+    :academicSchool "日本京都学派"@zh ;
+    :researchField "中国小说史"@zh ;
+    :majorWork """《三国演义》版本诸本·主张志传简本早于演义系"""@zh .
+
+sg:scholar_maaanan a :Person, :Scholar ;
+    rdfs:label "马兰安(Anne McLaren)"@zh ;
+    :birthYear "1955"^^xsd:gYear ;
+    :academicSchool "西方汉学"@zh ;
+    :researchField "口头传统与版本"@zh ;
+    :majorWork """《中国早期通俗小说的形成》·志传系民间口头演述痕迹"""@zh .
+
+sg:scholar_jinwenjing a :Person, :Scholar ;
+    rdfs:label "金文京"@zh ;
+    :birthYear "1952"^^xsd:gYear ;
+    :academicSchool "日本京都学派"@zh ;
+    :researchField "版本学"@zh ;
+    :majorWork """《三国演义版本考》·三系说(演义系/繁本志传/简本志传)"""@zh .
+
+sg:scholar_zhongchuanlu a :Person, :Scholar ;
+    rdfs:label "中川谕"@zh ;
+    :academicSchool "日本"@zh ;
+    :researchField "版本学"@zh ;
+    :majorWork """《三国志演义版本研究》·2010年校注弘治本"""@zh .
+
+sg:scholar_shangwei a :Person, :Scholar ;
+    rdfs:label "沈伯俊"@zh ;
+    :birthYear "1946"^^xsd:gYear ;
+    :academicSchool "当代三国研究"@zh ;
+    :researchField "版本校理"@zh ;
+    :majorWork """《三国演义新校注本》·《校理本三国演义》·《三国演义大辞典》"""@zh .
+
+sg:scholar_nicai a :Person, :Scholar ;
+    rdfs:label "聂绀弩"@zh ;
+    :birthYear "1903"^^xsd:gYear ;
+    :deathYear "1986"^^xsd:gYear ;
+    :researchField "古典小说评论"@zh ;
+    :majorWork """《中国古典小说论集》·论毛本改篡罗贯中"""@zh .
+
+sg:scholar_chenxianghua a :Person, :Scholar ;
+    rdfs:label "陈翔华"@zh ;
+    :researchField "版本研究"@zh ;
+    :majorWork """《三国志通俗演义》成书年代考"""@zh .
+
+# ---------- VariantReading（异文实例） ----------
+
+sg:sg_var_001 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "開篇·曹操出場"@zh ;
+    :inMaoChapter "1"^^xsd:integer ;
+    :maobenText """為首閃出一將，身長七尺，細眼長髯。"""@zh ;
+    :jiajingbenText """為首閃出一個好英雄，身長七尺，細眼長髯，胆量過人，機謀出眾，乃漢相曹參二十四代孫。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """毛本刪去『好英雄』『膽量過人機謀出眾』『曹參二十四代孫』等褒揚曹操的文字，貶曹傾向明顯。"""@zh .
+
+sg:sg_var_002 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "曹操殺呂伯奢"@zh ;
+    :inMaoChapter "4"^^xsd:integer ;
+    :maobenText """寧教我負天下人，休教天下人負我！"""@zh ;
+    :jiajingbenText """寧使我負天下人，休教天下人負我！"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『教』vs『使』一字之差，毛本『教』字口氣更強硬、理直氣壯；嘉靖本『使』字帶被動無奈口吻，更符合陳宮評『設心狠毒』的複雜性。此句不見於《三國志》正文，最早見裴注引孫盛《雜記》。"""@zh .
+
+sg:sg_var_003 a :VariantReading, :PoetryVariant ;
+    rdfs:label "卷首詞"@zh ;
+    :inMaoChapter "1"^^xsd:integer ;
+    :maobenText """滾滾長江東逝水，浪花淘盡英雄。是非成敗轉頭空。青山依舊在，幾度夕陽紅。（楊慎《臨江仙》）"""@zh ;
+    :jiajingbenText """（無開篇詞，直接以『後漢桓帝崩，靈帝即位』入正文）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """《臨江仙》為明代楊慎所作，毛宗崗託於卷首，嘉靖本無；後世讀者誤以為此即三國開篇。"""@zh .
+
+sg:sg_var_004 a :VariantReading, :PoetryVariant ;
+    rdfs:label "桃園結義"@zh ;
+    :inMaoChapter "1"^^xsd:integer ;
+    :maobenText """念劉備、關羽、張飛雖然異姓，既結為兄弟，則同心協力，救困扶危；上報國家，下安黎庶……"""@zh ;
+    :jiajingbenText """三人焚香再拜而說誓曰：『念劉備、關羽、張飛雖然異姓，結為兄弟，則同心協力，救困扶危；上報國家，下安黎庶……』不求同年同月同日生，只願同年同月同日死。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『不求同年同月同日生，只願同年同月同日死』為毛本（含部分評本）加入，嘉靖本誓詞無此句，屬後世評點家潤色。桃園結義本身正史無載，為民間傳說整合。"""@zh .
+
+sg:sg_var_005 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "溫酒斬華雄"@zh ;
+    :inMaoChapter "5"^^xsd:integer ;
+    :maobenText """（關羽出帳斬華雄，回帳時其酒尚溫）"""@zh ;
+    :jiajingbenText """（關羽出帳斬華雄，『其酒尚溫』四字位置、前文對華雄武勇渲染較毛本更詳）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """斬華雄在正史為孫堅所為（《三國志·孫堅傳》），小說移植於關羽，本身為虛構；毛本刪削前文誇飾，節奏更緊。"""@zh .
+
+sg:sg_var_006 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "屯土山關公約三事"@zh ;
+    :inMaoChapter "25"^^xsd:integer ;
+    :maobenText """關公曰：『一者，吾與皇叔設誓，共扶漢室，吾今只降漢帝，不降曹操；二者，二嫂處請給皇叔俸祿養贍，一應上下人等，皆不許到門；三者，但知皇叔去向，不管千里萬里，便當辭去。』"""@zh ;
+    :jiajingbenText """關公曰：『一者，吾降漢不降曹；二者，二嫂處請給皇叔俸祿；三者，但知皇叔去向，不管千里萬里，便當辭去。』"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """毛本潤色文字更對仗工整；『降漢不降曹』之核心說法不見正史，為小說家言。"""@zh .
+
+sg:sg_var_007 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "趙子龍長阪坡"@zh ;
+    :inMaoChapter "41"^^xsd:integer ;
+    :maobenText """趙雲懷抱後主，直透重圍，砍倒大旗兩面，奪槊三條；前後槍刺劍砍，殺死曹營名將五十餘員。"""@zh ;
+    :jiajingbenText """趙雲懷抱阿斗，直透重圍，砍倒大旗兩面，奪槊三條；前後槍刺劍砍，殺死曹營名將五十餘員。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『後主』vs『阿斗』：毛本改稱號，嘉靖本用小字；毛本對趙雲形象的神化程度更高，加後文『曹操下令不許放冷箭』以成全趙雲之勇。"""@zh .
+
+sg:sg_var_008 a :VariantReading, :PlotVariant ;
+    rdfs:label "草船借箭"@zh ;
+    :inMaoChapter "46"^^xsd:integer ;
+    :maobenText """（諸葛亮以草船二十隻借箭十餘萬）"""@zh ;
+    :jiajingbenText """（情節基本相同，但借箭數『十餘萬』寫法與毛本略異；且孫權濡須之戰『借箭』原型在《魏略》，主角本為孫權）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """草船借箭原型為孫權（裴注引《魏略》），《三國志平話》移植於周瑜，小說最終定型為諸葛亮，是「狀諸葛之多智而近妖」的典型段落。"""@zh .
+
+sg:sg_var_009 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "諸葛祭風"@zh ;
+    :inMaoChapter "49"^^xsd:integer ;
+    :maobenText """七星壇上諸葛亮祭東南風。"""@zh ;
+    :jiajingbenText """七星壇諸葛祭風，情節文字略樸，毛本加強儀式細節與神異描寫。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """祭風為純粹小說虛構，正史載赤壁之戰為黃蓋詐降火攻，冬月偶有東南風屬自然現象；毛本進一步神化諸葛亮。"""@zh .
+
+sg:sg_var_010 a :VariantReading, :PlotVariant ;
+    rdfs:label "華容道關羽釋曹"@zh ;
+    :inMaoChapter "50"^^xsd:integer ;
+    :maobenText """關雲長義釋曹操。"""@zh ;
+    :jiajingbenText """關雲長義釋曹操（後文有毛宗崗回評大加發揮『義絕』主題，嘉靖本評點較樸）。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """華容道釋曹正史無載（《山陽公載記》有曹操赤壁後從華容道過的記載，但無關羽放行），為小說為塑造關羽『義絕』而設；毛本增強戲劇性。"""@zh .
+
+sg:sg_var_011 a :VariantReading, :PlotVariant ;
+    rdfs:label "上方谷火燒魏延（被毛本刪）"@zh ;
+    :inMaoChapter "95"^^xsd:integer ;
+    :maobenText """（毛本全段刪去，只寫司馬懿父子被困上方谷，天降大雨得脫）"""@zh ;
+    :jiajingbenText """孔明令魏延誘司馬懿入葫蘆峪（上方谷），預埋火藥欲一舉燒死司馬懿與魏延；天降大雨，魏延幸免，事後大罵孔明。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本此段對諸葛亮形象有貶損（為除後患不惜暗害己方大將），毛本出於『狀諸葛之智』的正統塑造而全段刪除，是毛本『聖化』諸葛的關鍵手筆。"""@zh .
+
+sg:sg_var_012 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "五丈原諸葛病逝"@zh ;
+    :inMaoChapter "103"^^xsd:integer ;
+    :maobenText """『再不能臨陣討賊矣！悠悠蒼天，曷此其極！』"""@zh ;
+    :jiajingbenText """『吾再不能出軍征討逆賊矣！悠悠蒼天，曷此其極！』"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """毛本將『征討逆賊』改『臨陣討賊』，語氣更凝練悲壯，強化『出師未捷身先死』之感。"""@zh .
+
+sg:sg_var_013 a :VariantReading, :OrthographicVariant ;
+    rdfs:label "張飛世居涿郡"@zh ;
+    :inMaoChapter "1"^^xsd:integer ;
+    :maobenText """世居涿郡，頗有莊田，賣酒屠豬，專好結交天下豪傑。"""@zh ;
+    :jiajingbenText """世居涿郡，頗有田莊，賣酒屠豬，專好結交天下豪傑。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『莊田/田莊』倒文，毛本順口。"""@zh .
+
+sg:sg_var_014 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "隆中對"@zh ;
+    :inMaoChapter "38"^^xsd:integer ;
+    :maobenText """將軍既帝室之冑，信義著於四海，總攬英雄，思賢如渴……"""@zh ;
+    :jiajingbenText """將軍既帝室之冑，信義著於四海，攬英雄，思賢如渴……"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """毛本加『總』字使文氣更暢；《隆中對》本文見《三國志·諸葛亮傳》，小說文字與正史大體一致但有文學潤色。"""@zh .
+
+sg:sg_var_015 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "呂布弑丁原"@zh ;
+    :inMaoChapter "3"^^xsd:integer ;
+    :maobenText """（呂布受李肅說降，當夜斬丁原首級獻董卓）"""@zh ;
+    :jiajingbenText """（情節同，但毛本強化李肅說辭的利誘力度與呂布見利忘義的嘴脸）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """史有丁原被呂布殺事，細節為小說加工；毛本更強三姓家奴的反覆形象。"""@zh .
+
+sg:sg_var_016 a :VariantReading, :PlotVariant ;
+    rdfs:label "捉放曹·陳宮"@zh ;
+    :inMaoChapter "4"^^xsd:integer ;
+    :maobenText """（陳宮捉曹操又釋之，因操殺呂伯奢而離去）"""@zh ;
+    :jiajingbenText """（陳宮為中牟縣令，捉放曹後，陳宮因呂伯奢事離去，但嘉靖本陳宮心理描寫較毛本少）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """正史中捉放曹者並非陳宮，《魏書》載為一不知名功曹；陳宮後因叛曹迎呂布被曹操所殺，小說將二事合併為典型的「曹操奸雄」段落。"""@zh .
+
+sg:sg_var_017 a :VariantReading, :OrthographicVariant ;
+    rdfs:label "青梅煮酒論英雄"@zh ;
+    :inMaoChapter "21"^^xsd:integer ;
+    :maobenText """今天下英雄，惟使君與操耳！"""@zh ;
+    :jiajingbenText """今天下英雄，惟使君與操耳！"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """此句與《三國志·先主傳》基本一致（「今天下英雄，唯使君與操耳。本初之徒，不足數也」），是小說最接近正史原文的名言之一。"""@zh .
+
+sg:sg_var_018 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "小霸王怒斬于吉"@zh ;
+    :inMaoChapter "29"^^xsd:integer ;
+    :maobenText """（孫策怒斬道士于吉，後于吉數次顯靈，孫策創裂而亡）"""@zh ;
+    :jiajingbenText """（情節大體一致，但毛本加強于吉顯靈的神怪描寫，將孫策之死完全歸因於因果報應）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """正史載孫策為許貢客刺殺，創傷而崩；于吉為方士，裴注引《江表傳》有孫策欲殺于吉事，但顯靈索命純屬小說家言。"""@zh .
+
+sg:sg_var_019 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "趙子龍截江奪阿斗"@zh ;
+    :inMaoChapter "43"^^xsd:integer ;
+    :maobenText """趙雲飛身趕上船，奪回阿斗。"""@zh ;
+    :jiajingbenText """趙雲跳上船奪回阿斗，文字較毛本樸素。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """截江奪阿斗正史有載（《趙雲別傳》），是少見的與正史高度吻合的趙雲段落。"""@zh .
+
+sg:sg_var_020 a :VariantReading, :PoetryVariant ;
+    rdfs:label "曹操大宴銅雀臺"@zh ;
+    :inMaoChapter "56"^^xsd:integer ;
+    :maobenText """（銅雀臺大宴，曹氏父子賦詩，武將比箭）"""@zh ;
+    :jiajingbenText """（毛本增加大量詩文場面，特別是曹植、王粲等人銅雀臺賦內容；嘉靖本較簡）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """銅雀台賦《三國志》有載，但小說中『攬二喬於東南兮』一句為唐杜牧詩與小說附會，諸葛亮智激周瑜實為小說虛構。"""@zh .
+
+sg:sg_var_021 a :VariantReading, :OrthographicVariant ;
+    rdfs:label "龐德抬櫬戰關公"@zh ;
+    :inMaoChapter "74"^^xsd:integer ;
+    :maobenText """龐德抬櫬（棺材）出征，以示決死。"""@zh ;
+    :jiajingbenText """龐德舁櫬出征，意義相同但字稍古。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『抬』『舁』異文，抬為後起字。龐德戰敗被擒不降而死為正史有載。"""@zh .
+
+sg:sg_var_022 a :VariantReading, :PlotVariant ;
+    rdfs:label "關公刮骨療毒"@zh ;
+    :inMaoChapter "75"^^xsd:integer ;
+    :maobenText """（關公刮骨療毒，與馬良飲酒弈棋，談笑自若）"""@zh ;
+    :jiajingbenText """（情節同，但醫者非華佗；毛本改為華佗為關公治傷）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """刮骨療毒《三國志·關羽傳》有載，但醫者無名（華佗卒於建安十三年，時關羽中箭在建安二十四年，華佗已死 11 年，不可能為關公治傷）；毛本為神化關公與華佗而張冠李戴。"""@zh .
+
+sg:sg_var_023 a :VariantReading, :OrthographicVariant ;
+    rdfs:label "急兄仇張飛遇害"@zh ;
+    :inMaoChapter "81"^^xsd:integer ;
+    :maobenText """范疆、張達刺張飛。"""@zh ;
+    :jiajingbenText """范彊、張達刺張飛。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『范彊』為正史《三國志》用字，『范疆』為毛本誤字（疆彊形近而訛），沈伯俊校理本已改回『范彊』。"""@zh .
+
+sg:sg_var_024 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "陸遜營燒七百里·八陣圖"@zh ;
+    :inMaoChapter "84"^^xsd:integer ;
+    :maobenText """（陸遜追劉備入漁腹浦，困於諸葛亮所布八陣圖，得黃承彥引出）"""@zh ;
+    :jiajingbenText """（八陣圖情節嘉靖本已有，但毛本加強玄學氛圍與黃承彥出場的描寫）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """夷陵之戰火燒連營正史有載，陸遜確實退兵以防魏，但『八陣圖困陸遜』為純粹小說虛構。"""@zh .
+
+sg:sg_var_025 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "劉先主遺詔託孤"@zh ;
+    :inMaoChapter "85"^^xsd:integer ;
+    :maobenText """若嗣子可輔，則輔之；如其不才，君可自取。"""@zh ;
+    :jiajingbenText """若嗣子可輔，則輔之；如其不才，君可自取為成都王。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本多『為成都王』四字，語氣近於試探或准許取而代之；毛本刪四字，使『自取』意義更開放（或指自取天下、或指自取帝位），此處是史家與評點家爭論白帝城託孤真意的關鍵異文。此語出自《三國志·諸葛亮傳》原文：『如其不才，君可自取』，嘉靖本衍『為成都王』反為後人加筆。"""@zh .
+
+sg:sg_var_026 a :VariantReading, :PlotVariant ;
+    rdfs:label "孔明揮淚斬馬謖"@zh ;
+    :inMaoChapter "90"^^xsd:integer ;
+    :maobenText """（孔明揮淚斬馬謖，蔣琬勸阻）"""@zh ;
+    :jiajingbenText """（情節同，但嘉靖本有馬謖下獄後寫信給孔明一段，毛本改為當場斬首）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """據《三國志》馬謖下獄後物故（死於獄中），非當場斬首；小說為加強戲劇性與『軍令狀』悲劇改為當場處斬。"""@zh .
+
+sg:sg_var_027 a :VariantReading, :PoetryVariant ;
+    rdfs:label "隕大星漢丞相歸天"@zh ;
+    :inMaoChapter "104"^^xsd:integer ;
+    :maobenText """（是夜天愁地慘，月色無光，孔明奄然歸天；天象有赤星自東北流于西南，投入亮營，三投再還）"""@zh ;
+    :jiajingbenText """（流星描寫嘉靖本較簡，毛本加大段『天愁地慘』的氛圍渲染與讚詩）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『赤星墜營』出自裴注引《晉陽秋》：『有星赤而芒角，自東北西南流，投於亮營，三投再還，往大還小。俄而亮卒』；毛本多加大量後人吊詩。"""@zh .
+
+sg:sg_var_028 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "假投降巧計成虛話"@zh ;
+    :inMaoChapter "119"^^xsd:integer ;
+    :maobenText """姜維假降鍾會，謀反魏復蜀，事敗被殺，姜維維膽大如斗。"""@zh ;
+    :jiajingbenText """姜維假降鍾會，事敗死，文字較樸，『膽大如斗』之細節毛本渲染更詳。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """姜維假降鍾會謀反事見《三國志》及裴注引《漢晉春秋》，大體為真；『膽大如斗』出自《華陽國志》。"""@zh .
+
+sg:sg_var_029 a :VariantReading, :OrthographicVariant ;
+    rdfs:label "推士品孔明夫人（黃氏無醜名）"@zh ;
+    :inMaoChapter "120"^^xsd:integer ;
+    :maobenText """（毛本無黃氏容貌描寫，但坊間本多流傳『黃頭黑色』醜女形象，此說來自《襄陽記》）"""@zh ;
+    :jiajingbenText """（嘉靖本同毛本不描容貌）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """黃月英之名最早出自晚近小說/京劇，《三國志》及明本均無『黃月英』名與容貌細節；此為版本演變與後世改動的例子。"""@zh .
+
+sg:sg_var_030 a :VariantReading, :PoetryVariant ;
+    rdfs:label "三分局勢歸一統"@zh ;
+    :inMaoChapter "120"^^xsd:integer ;
+    :maobenText """自此三國歸于晉帝司馬炎，為太康元年，所謂『天下大勢，合久必分，分久必合』。"""@zh ;
+    :jiajingbenText """自此三國歸於晉，『蒼天已死，黃天當立』之讖終應，歎息久矣。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『天下大勢，合久必分，分久必合』開篇明言，結尾呼應；此句為毛宗崗自鑄偉辭，嘉靖本結段議論不同，著重歷史滄桑感而非循環史觀總結。"""@zh .
+
+sg:sg_var_031 a :VariantReading, :PlotVariant ;
+    rdfs:label "張郃戰張飛·宕渠之戰回合數"@zh ;
+    :inMaoChapter "戰績"^^xsd:integer ;
+    :maobenText """兩將在火光中，戰到三五十合。"""@zh ;
+    :jiajingbenText """戰到百十余合。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing, sg:edition_yefengchun, sg:edition_huangzhengfu ;
+    :scholarlySignificance """同一戰斗，四個版本單挑回合數相差 5 倍（十余合至百十余合）——這是三國武力評論網絡爭議的版本學根源。嘉靖本最長，黃正甫本最短，毛本取中。"""@zh .
+
+sg:sg_var_032 a :VariantReading, :MaobenAddition ;
+    rdfs:label "刘备家世·家世谱系"@zh ;
+    :inMaoChapter "1"^^xsd:integer ;
+    :maobenText """中山靖王刘胜之后，汉景帝阁下玄孙，姓刘名备，字玄德。"""@zh ;
+    :jiajingbenText """中山靖王刘胜之后，汉景帝阁下玄孙，姓刘名备，字玄德……尝师事郑玄、卢植，与公孙瓒等为友。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本交代刘备师事郑玄卢植、与公孙瓒为友，毛本删去，使刘备早年交游脉络不明。"""@zh .
+
+sg:sg_var_033 a :VariantReading, :OrthographicVariant ;
+    rdfs:label "张飞的字"@zh ;
+    :inMaoChapter "1"^^xsd:integer ;
+    :maobenText """姓张名飞，字翼德。"""@zh ;
+    :jiajingbenText """姓张名飞，字益德。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本作『益德』（与《三国志·张飞传》一致）；毛本改『翼德』以合『羽翼』之意，但不符史。沈伯俊校理本已回改。"""@zh .
+
+sg:sg_var_034 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "关羽籍贯"@zh ;
+    :inMaoChapter "1"^^xsd:integer ;
+    :maobenText """吾姓关名羽，字长生，后改云长，河东解良人也。"""@zh ;
+    :jiajingbenText """吾姓关名羽，字长生，后改云长，河东解良人也。因本处豪霸倚势欺人，关某杀之，逃难江湖五六年矣。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本明言关羽杀豪强逃亡，毛本略去，削弱关羽早期『亡命』色彩。"""@zh .
+
+sg:sg_var_035 a :VariantReading, :PlotTransfer ;
+    rdfs:label "华雄实斩于谁手"@zh ;
+    :inMaoChapter "5"^^xsd:integer ;
+    :maobenText """（关羽）出帐提刀，飞身上马……鸾铃响处，马到中军，云长提华雄之头，掷于地上。其酒尚温。"""@zh ;
+    :jiajingbenText """（关羽斩华雄文字与毛本同）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """注：史实华雄为孙坚所斩（《三国志·孙破虏传》）；毛本、嘉靖本均归关羽，此为演义共同虚构。"""@zh .
+
+sg:sg_var_036 a :VariantReading, :MaobenAddition ;
+    rdfs:label "三英战吕布·张飞骂『三姓家奴』"@zh ;
+    :inMaoChapter "5"^^xsd:integer ;
+    :maobenText """（张飞）圆睁环眼，倒竖虎须，挺丈八蛇矛，飞马大叫：『三姓家奴休走！燕人张飞在此！』"""@zh ;
+    :jiajingbenText """（张飞）挺丈八矛，飞马大叫：『吕布休走！』"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『三姓家奴』这一著名骂词为毛本新增，嘉靖本仅作『吕布休走』。"""@zh .
+
+sg:sg_var_037 a :VariantReading, :MaobenAddition ;
+    rdfs:label "貂蝉身世交代"@zh ;
+    :inMaoChapter "8"^^xsd:integer ;
+    :maobenText """其女自幼选入府中，教以歌舞，年方二八，色伎俱佳，允以亲女待之。"""@zh ;
+    :jiajingbenText """其女自幼选入府中，教以歌舞吹弹，年方二十八，色伎俱佳，允以亲女待之。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本貂蝉年龄为『年方二十八』，毛本改作『年方二八』（十六岁）。按年龄当为嘉靖本更可信（王允掌府多年），毛本改弱龄以增美人计戏剧性。"""@zh .
+
+sg:sg_var_038 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "董承密诏·马腾入盟名单"@zh ;
+    :inMaoChapter "20"^^xsd:integer ;
+    :maobenText """（董承）遂取袍带，拆开视之，乃密诏也……承乃与王子服、吴子兰、种辑、吴硕、马腾、刘备等共议。"""@zh ;
+    :jiajingbenText """承观毕……乃与工部侍郎王子服、长水校尉种辑、议郎吴硕、昭信将军吴子兰、西凉太守马腾、左将军刘备等歃血为盟。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本各人官职齐备，毛本简化。"""@zh .
+
+sg:sg_var_039 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "煮酒论英雄·曹操论龙文字"@zh ;
+    :inMaoChapter "21"^^xsd:integer ;
+    :maobenText """龙能大能小，能升能隐；大则兴云吐雾，小则隐介藏形……"""@zh ;
+    :jiajingbenText """龙者，能大能小，能升能隐；大则吐雾兴云，小则埋头伏爪藏牙……方今春深，龙乘时变化，犹人得志而纵横四海也。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本多『埋头伏爪藏牙』『方今春深……犹人得志而纵横四海也』，文采更胜毛本；毛本删去使行文紧促。"""@zh .
+
+sg:sg_var_040 a :VariantReading, :PlotVariant ;
+    rdfs:label "屯土山·张辽说三罪"@zh ;
+    :inMaoChapter "25"^^xsd:integer ;
+    :maobenText """辽曰：『……今玄德不知存亡，翼德未知生死……兄若战死，有三罪……』"""@zh ;
+    :jiajingbenText """辽曰：『……兄若降之，一者可以保二夫人，二者不背桃园之约，三者可留有用之身……』"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本张辽说三便（保二夫人/守桃园约/留有用身），毛本改作『三罪』（负兄/负嫂/负约），重心从『利』转『义』。"""@zh .
+
+sg:sg_var_041 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "关羽三事之次序"@zh ;
+    :inMaoChapter "25"^^xsd:integer ;
+    :maobenText """一者，吾与皇叔设誓共扶汉室，吾今只降汉帝，不降曹操；二者……但知皇叔去向便辞；三者……"""@zh ;
+    :jiajingbenText """一者，吾与刘皇叔同誓共扶汉室，吾今只降汉帝，不降曹操；二者，二嫂处请给皇叔俸禄养赡；三者，但知皇叔去向，不管千里万里，便当辞去。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本第二事为『二嫂俸禄』，毛本将第二第三互换，把『寻兄』提到第二以强化关羽不忘刘备。"""@zh .
+
+sg:sg_var_042 a :VariantReading, :MaobenAddition ;
+    rdfs:label "赤兔马·曹操赠马"@zh ;
+    :inMaoChapter "25"^^xsd:integer ;
+    :maobenText """操指马曰：『公识此马否？』公曰：『莫非吕布所骑赤兔马乎？……』"""@zh ;
+    :jiajingbenText """操令左右备一疋马来……那马身如火炭，状甚雄伟……公曰：『此马日行千里，今幸得之，若知兄长下落，可一日而见面矣。』"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """两本大致相同，但嘉靖本多『可一日而见面矣』之语，关羽得马第一念即寻兄，毛本同。"""@zh .
+
+sg:sg_var_043 a :VariantReading, :PlotVariant ;
+    rdfs:label "过五关路线矛盾"@zh ;
+    :inMaoChapter "27"^^xsd:integer ;
+    :maobenText """东岭关→洛阳→沂水关→荥阳→滑州黄河渡口"""@zh ;
+    :jiajingbenText """东岭关→洛阳→沂水关→荥阳→滑州黄河渡口"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """两本路线地理都不通（从许都往河北不应绕行洛阳）；沈伯俊校理本据史地改订。此处为两本共同地理硬伤。"""@zh .
+
+sg:sg_var_044 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "古城会·关羽斩蔡阳后张飞态度"@zh ;
+    :inMaoChapter "28"^^xsd:integer ;
+    :maobenText """（张飞）直到城下，大叫：『哥哥！』关公望见张飞到来……挥刀斩蔡阳……飞乃大哭。"""@zh ;
+    :jiajingbenText """飞疑关公降曹，再三质问；关公斩蔡阳后，张飞又问随行二嫂，二嫂备言前事，飞方大哭参拜。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本张飞反复质问、二嫂作证，心理刻画较细；毛本简化。"""@zh .
+
+sg:sg_var_045 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "碧眼儿坐领江东·孙权形貌"@zh ;
+    :inMaoChapter "29"^^xsd:integer ;
+    :maobenText """孙权生得方颐大口，碧眼紫髯。"""@zh ;
+    :jiajingbenText """孙权生得方颐大口，碧眼紫髯，形貌奇伟，骨体不恒。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本多『形貌奇伟，骨体不恒』（用《三国志》陈寿评语），毛本略。"""@zh .
+
+sg:sg_var_046 a :VariantReading, :MaobenAddition ;
+    rdfs:label "许攸问粮·曹操口误次数"@zh ;
+    :inMaoChapter "30"^^xsd:integer ;
+    :maobenText """攸曰：『公今军粮尚有几何？』操曰：『可支一年。』攸笑曰：『恐未必。』……后说到『只得一月』『粮尽矣』。"""@zh ;
+    :jiajingbenText """（同样五次谎言），但嘉靖本多许攸当众揶揄一句：『世人皆言孟德奸雄，今果然也。』操亦笑曰：『岂不闻兵不厌诈？』"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本多曹操『兵不厌诈』自承之语，毛本删之使曹操奸雄『自辩』更隐。"""@zh .
+
+sg:sg_var_047 a :VariantReading, :PoetryVariant ;
+    rdfs:label "三顾·诸葛亮午睡醒后吟诗"@zh ;
+    :inMaoChapter "37"^^xsd:integer ;
+    :maobenText """（孔明翻身问童子）『有俗客来否？』……口吟诗曰：『大梦谁先觉？平生我自知……』"""@zh ;
+    :jiajingbenText """（孔明醒后吟诗同），但毛本补『草堂春睡足，窗外日迟迟』二句，为最著者。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『草堂春睡足，窗外日迟迟』二句为毛本所增，成三顾经典意象。嘉靖本无此二句。"""@zh .
+
+sg:sg_var_048 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "隆中对·诸葛亮『霸业可成』与『汉室可兴』"@zh ;
+    :inMaoChapter "38"^^xsd:integer ;
+    :maobenText """……则霸业可成，汉室可兴矣。"""@zh ;
+    :jiajingbenText """……则大业可成，汉室可兴矣。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本作『大业』，毛本改『霸业』——一词之差，把诸葛亮从『王佐之才』降为『助成霸业者』，被研究者视为毛本暗含讥贬。"""@zh .
+
+sg:sg_var_049 a :VariantReading, :OrthographicVariant ;
+    rdfs:label "孔明初用兵·博望坡军师初用兵"@zh ;
+    :inMaoChapter "39"^^xsd:integer ;
+    :maobenText """博望坡军师初用兵"""@zh ;
+    :jiajingbenText """诸葛亮博望烧屯"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本回目直写事件，毛本用『初用兵』强调孔明首战，属于回目文学加工。"""@zh .
+
+sg:sg_var_050 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "赵云长坂·救阿斗细节"@zh ;
+    :inMaoChapter "41"^^xsd:integer ;
+    :maobenText """云乃拔青釭剑乱砍……怀抱后主，直透重围……"""@zh ;
+    :jiajingbenText """云拔青釭剑砍之，手起衣甲平过，血如涌泉……推倒土墙埋糜夫人尸首，怀抱后主突围。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本多赵云推墙埋糜夫人、防曹军盗尸的细节，见其缜密；毛本略去。"""@zh .
+
+sg:sg_var_051 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "舌战群儒·与虞翻薛综陆绩论辩"@zh ;
+    :inMaoChapter "43"^^xsd:integer ;
+    :maobenText """（孔明与群儒辩，含虞翻、步骘、薛综、陆绩、严畯、程德枢）"""@zh ;
+    :jiajingbenText """（同有群儒，但多出对张温、骆统二人的答辩，毛本删此二人）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本孔明实驳七人，毛本改为五人（删张温骆统），使舌战更紧凑。"""@zh .
+
+sg:sg_var_052 a :VariantReading, :PlotVariant ;
+    rdfs:label "草船借箭·孔明借箭对象为孙权还是周瑜"@zh ;
+    :inMaoChapter "46"^^xsd:integer ;
+    :maobenText """诸葛亮乘大雾向曹营草船借箭，给周瑜交差。"""@zh ;
+    :jiajingbenText """情节相同。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """史实『草船借箭』为孙权濡须口事（《魏略》）；两本均移给孔明，属共同虚构。"""@zh .
+
+sg:sg_var_053 a :VariantReading, :PoetryVariant ;
+    rdfs:label "横槊赋诗·『月明星稀，乌鹊南飞』"@zh ;
+    :inMaoChapter "48"^^xsd:integer ;
+    :maobenText """（曹操横槊赋《短歌行》，刘馥进言被刺）"""@zh ;
+    :jiajingbenText """（同有横槊赋诗，但嘉靖本多曹操赋毕回顾刘馥时的自辩之语，毛本简化）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """两本皆有赋诗，但嘉靖本曹操骄态更露。"""@zh .
+
+sg:sg_var_054 a :VariantReading, :PlotVariant ;
+    rdfs:label "华容道·曹操三笑"@zh ;
+    :inMaoChapter "49"^^xsd:integer ;
+    :maobenText """操见树木丛杂……遂于马上仰面大笑……一声炮响，赵云杀出……又走……又笑，张飞杀出……又笑，关羽截出……"""@zh ;
+    :jiajingbenText """三笑同，但嘉靖本曹操每笑一次都有『吾不笑别人，单笑周瑜无谋、诸葛亮少智』完整句式，毛本简化。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本三笑皆有重复句式作节奏，更见话本本色。"""@zh .
+
+sg:sg_var_055 a :VariantReading, :PoetryVariant ;
+    rdfs:label "玄德智激孙夫人·『周郎妙计安天下』"@zh ;
+    :inMaoChapter "55"^^xsd:integer ;
+    :maobenText """后人有诗曰：『周郎妙计安天下，赔了夫人又折兵！』"""@zh ;
+    :jiajingbenText """有诗，但『赔了夫人又折兵』作『陪了夫人又折兵』（陪/赔不同），且诗后还有周瑜『金疮迸裂』细节更详。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『陪/赔』之异反映版本用字；毛本『赔』更口语化，成后世习语。"""@zh .
+
+sg:sg_var_056 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "马孟起兴兵·马超与曹操阵前对话"@zh ;
+    :inMaoChapter "58"^^xsd:integer ;
+    :maobenText """操出马……马超咬牙切齿，大骂：『操贼！欺君罔上，罪不容诛！』"""@zh ;
+    :jiajingbenText """（多出马超一段痛骂：『……吾乃汉伏波将军马援之后，岂与曹贼共戴天！』）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本马超自报门第、衔恨渊源更清楚。"""@zh .
+
+sg:sg_var_057 a :VariantReading, :PlotVariant ;
+    rdfs:label "许褚裸衣斗马超·回合数与细节"@zh ;
+    :inMaoChapter "59"^^xsd:integer ;
+    :maobenText """（许褚裸衣斗马超），许褚臂中两箭，混战一场。"""@zh ;
+    :jiajingbenText """嘉靖本两将大战至『褚弃刀挟枪，拗断枪杆，各拿半节乱打』，细节更猛；毛本略有压缩。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本武打细节更富平话风味，毛本整炼。"""@zh .
+
+sg:sg_var_058 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "单刀赴会·关羽周仓之对答"@zh ;
+    :inMaoChapter "66"^^xsd:integer ;
+    :maobenText """云长右手提刀，左手挽住鲁肃手……"""@zh ;
+    :jiajingbenText """多周仓在阶下厉声言『夫土地者，惟德所在耳，何常之有』被关公叱退一段，为元杂剧《单刀会》遗留。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本周仓有一段激烈辞令，袭自关汉卿《关大王单刀会》，毛本保留但减弱。"""@zh .
+
+sg:sg_var_059 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "曹孟德忌杀杨修·『鸡肋』解"@zh ;
+    :inMaoChapter "72"^^xsd:integer ;
+    :maobenText """（曹操以『鸡肋』口令杀杨修，列举杨修六件犯忌事：园门『活』字/一合酥/梦中杀人/曹丕吴质/曹操试子/答教十条）"""@zh ;
+    :jiajingbenText """嘉靖本实列杨修违禁事七件，毛本删其中『教曹植斩门吏出』一件，使因果更集中。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """毛本浓缩杨修死因，节奏更紧。"""@zh .
+
+sg:sg_var_060 a :VariantReading, :PlotVariant ;
+    rdfs:label "庞德抬榇·箭射关羽"@zh ;
+    :inMaoChapter "74"^^xsd:integer ;
+    :maobenText """庞德箭射关羽左臂，于禁恐其成大功鸣金收军。"""@zh ;
+    :jiajingbenText """嘉靖本射关羽左臂同，但多写关羽『拔箭』『怒欲追击』细节；于禁『嫉贤妒能』动机更明显。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本于禁妒功刻画较直露。"""@zh .
+
+sg:sg_var_061 a :VariantReading, :PlotVariant ;
+    rdfs:label "刮骨疗毒·医者是否华佗"@zh ;
+    :inMaoChapter "75"^^xsd:integer ;
+    :maobenText """华佗亲自为关羽刮骨疗毒。"""@zh ;
+    :jiajingbenText """同作华佗（但史实华佗已于建安十三年被曹操杀，此处为演义共同虚构）。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """两本都错——时间线矛盾（华佗已死十年），属于共同史误。"""@zh .
+
+sg:sg_var_062 a :VariantReading, :MaobenAddition ;
+    rdfs:label "徐公明大战沔水·关公与徐晃叙旧"@zh ;
+    :inMaoChapter "76"^^xsd:integer ;
+    :maobenText """（徐晃曰：『忆昔相从，多蒙教诲……』关公与徐晃对答较简）"""@zh ;
+    :jiajingbenText """徐晃先与关公叙旧『壮年相从，多蒙教诲，晃不敢忘』，然后变脸回顾众将：『谁能取关某首级？……』"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本『先叙旧再翻睑』戏剧性更强，毛本略压缩。"""@zh .
+
+sg:sg_var_063 a :VariantReading, :MaobenAddition ;
+    rdfs:label "玉泉山关公显圣·『还我头来』"@zh ;
+    :inMaoChapter "77"^^xsd:integer ;
+    :maobenText """（关公魂至玉泉山，大呼『还我头来』，普静点化）"""@zh ;
+    :jiajingbenText """（同有『还我头来』，但多普静一段因果论：『昔非今是，一切休论；后果前因，彼此不爽……』）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本普静点化语更长，见果报思想；毛本精简。"""@zh .
+
+sg:sg_var_064 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "治风疾神医身死·曹操杀华佗病因"@zh ;
+    :inMaoChapter "78"^^xsd:integer ;
+    :maobenText """华佗要开颅治风疾，曹操疑其害己，下狱杀之。"""@zh ;
+    :jiajingbenText """同；但多华歆推荐华佗的大段赞辞，以及曹操狱中赠华佗『越女剑』之细节，毛本无。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本曹操赐剑、后又反悔的情节更显反复无常。"""@zh .
+
+sg:sg_var_065 a :VariantReading, :MaobenAddition ;
+    rdfs:label "曹操临终·分香卖履"@zh ;
+    :inMaoChapter "78"^^xsd:integer ;
+    :maobenText """（曹操临终嘱托简）"""@zh ;
+    :jiajingbenText """多曹操嘱诸妾『勤习女工，多造丝履，卖之可以自给』一段（即著名的『分香卖履』），毛本删去。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """『分香卖履』见《三国志》注引《曹瞒传》，最见曹操真性情；毛本删之，使其枭雄末路更刻板。"""@zh .
+
+sg:sg_var_066 a :VariantReading, :PoetryVariant ;
+    rdfs:label "兄逼弟曹植赋诗·七步诗字句差异"@zh ;
+    :inMaoChapter "79"^^xsd:integer ;
+    :maobenText """煮豆燃豆萁，豆在釜中泣。本是同根生，相煎何太急！"""@zh ;
+    :jiajingbenText """煮豆燃豆萁，豆在釜中泣。本是同根生，相煎何太急！（四句同）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """四句版为演义两本共有；世传六句版（『煮豆持作羹……』）见《世说新语》，演义均不取。"""@zh .
+
+sg:sg_var_067 a :VariantReading, :OrthographicVariant ;
+    rdfs:label "急兄仇张飞遇害·刺杀者姓名"@zh ;
+    :inMaoChapter "81"^^xsd:integer ;
+    :maobenText """范疆、张达"""@zh ;
+    :jiajingbenText """范强、张达（『强/疆』字异）"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本作『范强』（与《三国志·张飞传》一致）；毛本作『范疆』为形近之误，后世沿袭为通名。"""@zh .
+
+sg:sg_var_068 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "陆逊营烧·八阵图·黄承彦出迎"@zh ;
+    :inMaoChapter "84"^^xsd:integer ;
+    :maobenText """（黄承彦引陆逊出八阵图）"""@zh ;
+    :jiajingbenText """多孔明岳父黄承彦自称『老夫平生好善，不忍将军陷没于此』一段说辞，毛本压缩。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本黄承彦有形象，毛本功能性出场。"""@zh .
+
+sg:sg_var_069 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "刘先主遗诏托孤·『君可自为成都之主』"@zh ;
+    :inMaoChapter "85"^^xsd:integer ;
+    :maobenText """（先主）抚其背曰：『君才十倍曹丕……若嗣子可辅则辅之；如其不才，君可自为成都之主。』"""@zh ;
+    :jiajingbenText """『君才十倍曹丕……若嗣子可辅则辅之；如其不才，君可自为成都之主。』两本同；但嘉靖本孔明『汗流遍体，手足失措』反应描写更细。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """托孤语为两本共同争议焦点（康熙以之为『谲诈』），但心理描写嘉靖本更重。"""@zh .
+
+sg:sg_var_070 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "七擒孟获·孟获与孔明对话"@zh ;
+    :inMaoChapter "90"^^xsd:integer ;
+    :maobenText """（七擒之后）获垂泪言曰：『七擒七纵，自古未尝有也……丞相天威，南人不复反矣！』"""@zh ;
+    :jiajingbenText """多孟获被擒后仍强辩之语，七擒过程比毛本稍详（如秃龙洞、木鹿大王段落更繁）。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本南征篇幅更长，包含更多西南地理风物。"""@zh .
+
+sg:sg_var_071 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "孔明初上出师表·字句差异"@zh ;
+    :inMaoChapter "91"^^xsd:integer ;
+    :maobenText """『臣本布衣，躬耕于南阳……』"""@zh ;
+    :jiajingbenText """出师表文本基本同诸葛亮本集，两本差异不大；但嘉靖本表前多孔明夜读表文的场景描写。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """两本对《出师表》均忠实保留原文。"""@zh .
+
+sg:sg_var_072 a :VariantReading, :PlotVariant ;
+    rdfs:label "孔明智退司马懿·空城计来源"@zh ;
+    :inMaoChapter "95"^^xsd:integer ;
+    :maobenText """（空城计情节）"""@zh ;
+    :jiajingbenText """空城计情节与毛本同。但据裴注《三国志》引郭冲『五事』，空城计乃郭冲所记传闻，史实无之，两本共同虚构。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """空城计在两本都有，属共同移接（故事原型为赵云偃旗息鼓、或文聘事）。"""@zh .
+
+sg:sg_var_073 a :VariantReading, :StylisticRewrite ;
+    rdfs:label "孔明挥泪斩马谡·蒋琬求情"@zh ;
+    :inMaoChapter "96"^^xsd:integer ;
+    :maobenText """蒋琬求『今天下未定而戮智计之士，岂不惜乎！』孔明流涕答『孙武所以能制胜于天下者，用法明也』。"""@zh ;
+    :jiajingbenText """（同）但多孔明回想刘备遗言『马谡言过其实，不可大用』一段自责，毛本亦有。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """两本此处基本一致。"""@zh .
+
+sg:sg_var_074 a :VariantReading, :MaobenAddition ;
+    rdfs:label "五丈原·禳星北斗"@zh ;
+    :inMaoChapter "104"^^xsd:integer ;
+    :maobenText """（孔明祈禳北斗，若七日内主灯不灭则寿可增一纪；被魏延扑灭）"""@zh ;
+    :jiajingbenText """同有祈禳，但多孔明自言『吾本欲竭忠尽力，恢复中原，重兴汉室，奈天意如此』一段抒情自白，毛本压缩。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本孔明临终悲情更浓。"""@zh .
+
+sg:sg_var_075 a :VariantReading, :MaobenAddition ;
+    rdfs:label "死诸葛走活仲达·司马懿『吾有头否』"@zh ;
+    :inMaoChapter "104"^^xsd:integer ;
+    :maobenText """（司马懿奔逃后问左右：『吾头尚在否？』）"""@zh ;
+    :jiajingbenText """同有此语；但嘉靖本多司马懿『以手摸头曰：『我有头否？』』后又自叹『吾便料生，不便料死也』。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """两本都有此戏剧性桥段。"""@zh .
+
+sg:sg_var_076 a :VariantReading, :MaobenAddition ;
+    rdfs:label "哭祖庙一王死孝·刘谌妻子自尽"@zh ;
+    :inMaoChapter "118"^^xsd:integer ;
+    :maobenText """（北地王刘谌哭昭烈庙，先杀妻子，然后自杀）"""@zh ;
+    :jiajingbenText """多刘谌妻崔氏『伏剑而死』的详细描写（『妾请先死，王死未迟』），毛本略为一句。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """嘉靖本崔氏有节烈女子形象，毛本极简。"""@zh .
+
+sg:sg_var_077 a :VariantReading, :PoetryVariant ;
+    rdfs:label "结尾古风·总结史诗的长诗"@zh ;
+    :inMaoChapter "120"^^xsd:integer ;
+    :maobenText """（结尾古风从『高祖斩蛇起义』一直写到『三分归一统』，共约170句）"""@zh ;
+    :jiajingbenText """古风结尾更简，且无『纷纷世事无穷尽，天数茫茫不可逃。鼎足三分已成梦，后人凭吊空牢骚』这一末四句。"""@zh ;
+    :comparedInEditions sg:edition_maozonggang, sg:edition_jiajing ;
+    :scholarlySignificance """毛本在结尾诗后补入『鼎足三分已成梦，后人凭吊空牢骚』，作为全书史观定调，强化『天数论』与幻灭感。"""@zh .
+
+# ---------- Chapter（回目个体）——毛本120回 + 嘉靖本240则 ----------
+
+sg:mao_chapter_001 a :Chapter ;
+    rdfs:label "第1回 宴桃园豪杰三结义，斩黄巾英雄首立功"@zh ;
+    :chapterNumber "1"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_001, sg:jia_section_002 .
+
+sg:jia_section_001 a :Chapter ;
+    rdfs:label "第1則 祭天地桃园结义"@zh ;
+    :chapterNumber "1"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_001 .
+
+sg:jia_section_002 a :Chapter ;
+    rdfs:label "第2則 刘玄德斩寇立功"@zh ;
+    :chapterNumber "2"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_001 .
+
+sg:mao_chapter_002 a :Chapter ;
+    rdfs:label "第2回 张翼德怒鞭督邮，何国舅谋诛宦竖"@zh ;
+    :chapterNumber "2"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_003, sg:jia_section_004 .
+
+sg:jia_section_003 a :Chapter ;
+    rdfs:label "第3則 安喜张飞鞭督邮"@zh ;
+    :chapterNumber "3"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_002 .
+
+sg:jia_section_004 a :Chapter ;
+    rdfs:label "第4則 何进谋杀十常侍"@zh ;
+    :chapterNumber "4"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_002 .
+
+sg:mao_chapter_003 a :Chapter ;
+    rdfs:label "第3回 议温明董卓叱丁原，餽金珠李肃说吕布"@zh ;
+    :chapterNumber "3"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_005, sg:jia_section_006 .
+
+sg:jia_section_005 a :Chapter ;
+    rdfs:label "第5則 董卓议立陈留王"@zh ;
+    :chapterNumber "5"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_003 .
+
+sg:jia_section_006 a :Chapter ;
+    rdfs:label "第6則 吕布刺杀丁建阳"@zh ;
+    :chapterNumber "6"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_003 .
+
+sg:mao_chapter_004 a :Chapter ;
+    rdfs:label "第4回 废汉帝陈留为皇，谋董贼孟德献刀"@zh ;
+    :chapterNumber "4"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_007, sg:jia_section_008 .
+
+sg:jia_section_007 a :Chapter ;
+    rdfs:label "第7則 废汉君董卓弄权"@zh ;
+    :chapterNumber "7"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_004 .
+
+sg:jia_section_008 a :Chapter ;
+    rdfs:label "第8則 曹孟德谋杀董卓"@zh ;
+    :chapterNumber "8"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_004 .
+
+sg:mao_chapter_005 a :Chapter ;
+    rdfs:label "第5回 发矫诏诸镇应曹公，破关兵三英战吕布"@zh ;
+    :chapterNumber "5"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_009, sg:jia_section_010 .
+
+sg:jia_section_009 a :Chapter ;
+    rdfs:label "第9則 曹操起兵伐董卓"@zh ;
+    :chapterNumber "9"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_005 .
+
+sg:jia_section_010 a :Chapter ;
+    rdfs:label "第10則 虎牢关三战吕布"@zh ;
+    :chapterNumber "10"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_005 .
+
+sg:mao_chapter_006 a :Chapter ;
+    rdfs:label "第6回 焚金阙董卓行凶，匿玉玺孙坚背约"@zh ;
+    :chapterNumber "6"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_011, sg:jia_section_012 .
+
+sg:jia_section_011 a :Chapter ;
+    rdfs:label "第11則 董卓火烧长乐宫"@zh ;
+    :chapterNumber "11"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_006 .
+
+sg:jia_section_012 a :Chapter ;
+    rdfs:label "第12則 袁绍孙坚夺玉玺"@zh ;
+    :chapterNumber "12"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_006 .
+
+sg:mao_chapter_007 a :Chapter ;
+    rdfs:label "第7回 袁绍磐河战公孙，孙坚跨江击刘表"@zh ;
+    :chapterNumber "7"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_013, sg:jia_section_014 .
+
+sg:jia_section_013 a :Chapter ;
+    rdfs:label "第13則 赵子龙磐河大战"@zh ;
+    :chapterNumber "13"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_007 .
+
+sg:jia_section_014 a :Chapter ;
+    rdfs:label "第14則 孙坚跨江战刘表"@zh ;
+    :chapterNumber "14"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_007 .
+
+sg:mao_chapter_008 a :Chapter ;
+    rdfs:label "第8回 王司徒巧使连环计，董太师大闹凤仪亭"@zh ;
+    :chapterNumber "8"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_015, sg:jia_section_016 .
+
+sg:jia_section_015 a :Chapter ;
+    rdfs:label "第15則 司徒王允说貂蝉"@zh ;
+    :chapterNumber "15"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_008 .
+
+sg:jia_section_016 a :Chapter ;
+    rdfs:label "第16則 凤仪亭布戏貂蝉"@zh ;
+    :chapterNumber "16"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_008 .
+
+sg:mao_chapter_009 a :Chapter ;
+    rdfs:label "第9回 除暴凶吕布助司徒，犯长安李傕听贾诩"@zh ;
+    :chapterNumber "9"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_017, sg:jia_section_018 .
+
+sg:jia_section_017 a :Chapter ;
+    rdfs:label "第17則 王允授计诛董卓"@zh ;
+    :chapterNumber "17"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_009 .
+
+sg:jia_section_018 a :Chapter ;
+    rdfs:label "第18則 李傕郭汜寇长安"@zh ;
+    :chapterNumber "18"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_009 .
+
+sg:mao_chapter_010 a :Chapter ;
+    rdfs:label "第10回 勤王室马腾举义，报父雠曹操兴师"@zh ;
+    :chapterNumber "10"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_019, sg:jia_section_020 .
+
+sg:jia_section_019 a :Chapter ;
+    rdfs:label "第19則 李傕郭汜杀樊稠"@zh ;
+    :chapterNumber "19"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_010 .
+
+sg:jia_section_020 a :Chapter ;
+    rdfs:label "第20則 曹操兴兵报父仇"@zh ;
+    :chapterNumber "20"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_010 .
+
+sg:mao_chapter_011 a :Chapter ;
+    rdfs:label "第11回 刘皇叔北海救孔融，吕温侯濮阳破曹操"@zh ;
+    :chapterNumber "11"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_021, sg:jia_section_022 .
+
+sg:jia_section_021 a :Chapter ;
+    rdfs:label "第21則 刘玄德北海解围"@zh ;
+    :chapterNumber "21"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_011 .
+
+sg:jia_section_022 a :Chapter ;
+    rdfs:label "第22則 吕温侯濮阳大战"@zh ;
+    :chapterNumber "22"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_011 .
+
+sg:mao_chapter_012 a :Chapter ;
+    rdfs:label "第12回 陶恭祖三让徐州，曹孟德大战吕布"@zh ;
+    :chapterNumber "12"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_023, sg:jia_section_024 .
+
+sg:jia_section_023 a :Chapter ;
+    rdfs:label "第23則 陶恭祖三让徐州"@zh ;
+    :chapterNumber "23"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_012 .
+
+sg:jia_section_024 a :Chapter ;
+    rdfs:label "第24則 曹操定陶破吕布"@zh ;
+    :chapterNumber "24"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_012 .
+
+sg:mao_chapter_013 a :Chapter ;
+    rdfs:label "第13回 李傕郭汜大交兵，杨奉董承双救驾"@zh ;
+    :chapterNumber "13"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_025, sg:jia_section_026 .
+
+sg:jia_section_025 a :Chapter ;
+    rdfs:label "第25則 李傕郭汜乱长安"@zh ;
+    :chapterNumber "25"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_013 .
+
+sg:jia_section_026 a :Chapter ;
+    rdfs:label "第26則 杨奉董承双救驾"@zh ;
+    :chapterNumber "26"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_013 .
+
+sg:mao_chapter_014 a :Chapter ;
+    rdfs:label "第14回 曹孟德移驾幸许都，吕奉先乘夜袭徐郡"@zh ;
+    :chapterNumber "14"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_027, sg:jia_section_028 .
+
+sg:jia_section_027 a :Chapter ;
+    rdfs:label "第27則 迁銮舆曹操秉政"@zh ;
+    :chapterNumber "27"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_014 .
+
+sg:jia_section_028 a :Chapter ;
+    rdfs:label "第28則 吕布夜月夺徐州"@zh ;
+    :chapterNumber "28"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_014 .
+
+sg:mao_chapter_015 a :Chapter ;
+    rdfs:label "第15回 太史慈酣斗小霸王，孙伯符大战严白虎"@zh ;
+    :chapterNumber "15"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_029, sg:jia_section_030 .
+
+sg:jia_section_029 a :Chapter ;
+    rdfs:label "第29則 孙策大战太史慈"@zh ;
+    :chapterNumber "29"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_015 .
+
+sg:jia_section_030 a :Chapter ;
+    rdfs:label "第30則 孙策大战严白虎"@zh ;
+    :chapterNumber "30"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_015 .
+
+sg:mao_chapter_016 a :Chapter ;
+    rdfs:label "第16回 吕奉先射戟辕门，曹孟德拜师淯水"@zh ;
+    :chapterNumber "16"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_031, sg:jia_section_032 .
+
+sg:jia_section_031 a :Chapter ;
+    rdfs:label "第31則 吕奉先辕门射戟"@zh ;
+    :chapterNumber "31"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_016 .
+
+sg:jia_section_032 a :Chapter ;
+    rdfs:label "第32則 曹操兴兵击张绣"@zh ;
+    :chapterNumber "32"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_016 .
+
+sg:mao_chapter_017 a :Chapter ;
+    rdfs:label "第17回 袁公路大起七军，曹孟德会合三将"@zh ;
+    :chapterNumber "17"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_033, sg:jia_section_034 .
+
+sg:jia_section_033 a :Chapter ;
+    rdfs:label "第33則 袁术七路下徐州"@zh ;
+    :chapterNumber "33"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_017 .
+
+sg:jia_section_034 a :Chapter ;
+    rdfs:label "第34則 曹操会兵击袁术"@zh ;
+    :chapterNumber "34"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_017 .
+
+sg:mao_chapter_018 a :Chapter ;
+    rdfs:label "第18回 贾文和料敌决胜，夏侯惇拔失啖睛"@zh ;
+    :chapterNumber "18"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_035, sg:jia_section_036 .
+
+sg:jia_section_035 a :Chapter ;
+    rdfs:label "第35則 决胜负贾诩谈兵"@zh ;
+    :chapterNumber "35"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_018 .
+
+sg:jia_section_036 a :Chapter ;
+    rdfs:label "第36則 夏侯惇拔矢啖睛"@zh ;
+    :chapterNumber "36"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_018 .
+
+sg:mao_chapter_019 a :Chapter ;
+    rdfs:label "第19回 下邳城曹操鏖兵，白门楼吕布殒命"@zh ;
+    :chapterNumber "19"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_037, sg:jia_section_038 .
+
+sg:jia_section_037 a :Chapter ;
+    rdfs:label "第37則 吕布败走下邳城"@zh ;
+    :chapterNumber "37"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_019 .
+
+sg:jia_section_038 a :Chapter ;
+    rdfs:label "第38則 白门曹操斩吕布"@zh ;
+    :chapterNumber "38"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_019 .
+
+sg:mao_chapter_020 a :Chapter ;
+    rdfs:label "第20回 曹阿瞒许田打围，董国舅内阁受诏"@zh ;
+    :chapterNumber "20"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_039, sg:jia_section_040 .
+
+sg:jia_section_039 a :Chapter ;
+    rdfs:label "第39則 曹孟德许田射鹿"@zh ;
+    :chapterNumber "39"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_020 .
+
+sg:jia_section_040 a :Chapter ;
+    rdfs:label "第40則 董承密受衣带诏"@zh ;
+    :chapterNumber "40"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_020 .
+
+sg:mao_chapter_021 a :Chapter ;
+    rdfs:label "第21回 曹操煮酒论英雄，关公赚城斩车胄"@zh ;
+    :chapterNumber "21"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_041, sg:jia_section_042 .
+
+sg:jia_section_041 a :Chapter ;
+    rdfs:label "第41則 青梅煮酒论英雄"@zh ;
+    :chapterNumber "41"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_021 .
+
+sg:jia_section_042 a :Chapter ;
+    rdfs:label "第42則 关云长袭斩车胄"@zh ;
+    :chapterNumber "42"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_021 .
+
+sg:mao_chapter_022 a :Chapter ;
+    rdfs:label "第22回 袁曹各起马步三军，关张共擒王刘二将"@zh ;
+    :chapterNumber "22"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_043, sg:jia_section_044 .
+
+sg:jia_section_043 a :Chapter ;
+    rdfs:label "第43則 曹公分兵拒袁绍"@zh ;
+    :chapterNumber "43"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_022 .
+
+sg:jia_section_044 a :Chapter ;
+    rdfs:label "第44則 关张擒刘岱王忠"@zh ;
+    :chapterNumber "44"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_022 .
+
+sg:mao_chapter_023 a :Chapter ;
+    rdfs:label "第23回 祢正平裸衣骂贼，吉太医下毒遭刑"@zh ;
+    :chapterNumber "23"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_045, sg:jia_section_046 .
+
+sg:jia_section_045 a :Chapter ;
+    rdfs:label "第45則 祢衡裸体骂曹操"@zh ;
+    :chapterNumber "45"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_023 .
+
+sg:jia_section_046 a :Chapter ;
+    rdfs:label "第46則 曹孟德三勘吉平"@zh ;
+    :chapterNumber "46"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_023 .
+
+sg:mao_chapter_024 a :Chapter ;
+    rdfs:label "第24回 国贼行凶杀贵妃，皇叔败走投袁绍"@zh ;
+    :chapterNumber "24"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_047, sg:jia_section_048 .
+
+sg:jia_section_047 a :Chapter ;
+    rdfs:label "第47則 曹操勒死董贵妃"@zh ;
+    :chapterNumber "47"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_024 .
+
+sg:jia_section_048 a :Chapter ;
+    rdfs:label "第48則 玄德匹马奔冀州"@zh ;
+    :chapterNumber "48"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_024 .
+
+sg:mao_chapter_025 a :Chapter ;
+    rdfs:label "第25回 屯土山关公约三事，救白马曹操解重围"@zh ;
+    :chapterNumber "25"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_049, sg:jia_section_050 .
+
+sg:jia_section_049 a :Chapter ;
+    rdfs:label "第49則 张辽义说关云长"@zh ;
+    :chapterNumber "49"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_025 .
+
+sg:jia_section_050 a :Chapter ;
+    rdfs:label "第50則 云长策马刺颜良"@zh ;
+    :chapterNumber "50"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_025 .
+
+sg:mao_chapter_026 a :Chapter ;
+    rdfs:label "第26回 袁本初败兵折将，关云长挂印封金"@zh ;
+    :chapterNumber "26"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_051, sg:jia_section_052 .
+
+sg:jia_section_051 a :Chapter ;
+    rdfs:label "第51則 云长延津诛文丑"@zh ;
+    :chapterNumber "51"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_026 .
+
+sg:jia_section_052 a :Chapter ;
+    rdfs:label "第52則 关云长封金挂印"@zh ;
+    :chapterNumber "52"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_026 .
+
+sg:mao_chapter_027 a :Chapter ;
+    rdfs:label "第27回 美髯公千里走单骑，汉寿侯五关斩六将"@zh ;
+    :chapterNumber "27"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_053, sg:jia_section_054 .
+
+sg:jia_section_053 a :Chapter ;
+    rdfs:label "第53則 关云长千里独行"@zh ;
+    :chapterNumber "53"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_027 .
+
+sg:jia_section_054 a :Chapter ;
+    rdfs:label "第54則 关云长五关斩将"@zh ;
+    :chapterNumber "54"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_027 .
+
+sg:mao_chapter_028 a :Chapter ;
+    rdfs:label "第28回 斩蔡阳兄弟释疑，会古城主臣聚义"@zh ;
+    :chapterNumber "28"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_055, sg:jia_section_056 .
+
+sg:jia_section_055 a :Chapter ;
+    rdfs:label "第55則 云长擂鼓斩蔡阳"@zh ;
+    :chapterNumber "55"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_028 .
+
+sg:jia_section_056 a :Chapter ;
+    rdfs:label "第56則 刘玄德古城聚义"@zh ;
+    :chapterNumber "56"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_028 .
+
+sg:mao_chapter_029 a :Chapter ;
+    rdfs:label "第29回 小霸王怒斩于吉，碧眼儿坐领江东"@zh ;
+    :chapterNumber "29"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_057, sg:jia_section_058 .
+
+sg:jia_section_057 a :Chapter ;
+    rdfs:label "第57則 孙策怒斩于神仙"@zh ;
+    :chapterNumber "57"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_029 .
+
+sg:jia_section_058 a :Chapter ;
+    rdfs:label "第58則 孙权领众据江东"@zh ;
+    :chapterNumber "58"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_029 .
+
+sg:mao_chapter_030 a :Chapter ;
+    rdfs:label "第30回 战官渡本初败绩，劫乌巢孟德烧粮"@zh ;
+    :chapterNumber "30"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_059, sg:jia_section_060 .
+
+sg:jia_section_059 a :Chapter ;
+    rdfs:label "第59則 曹操官渡战袁绍"@zh ;
+    :chapterNumber "59"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_030 .
+
+sg:jia_section_060 a :Chapter ;
+    rdfs:label "第60則 曹操乌巢烧粮草"@zh ;
+    :chapterNumber "60"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_030 .
+
+sg:mao_chapter_031 a :Chapter ;
+    rdfs:label "第31回 曹操仓亭破本初，玄德荆州依刘表"@zh ;
+    :chapterNumber "31"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_061, sg:jia_section_062 .
+
+sg:jia_section_061 a :Chapter ;
+    rdfs:label "第61則 曹操仓亭破袁绍"@zh ;
+    :chapterNumber "61"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_031 .
+
+sg:jia_section_062 a :Chapter ;
+    rdfs:label "第62則 刘玄德败走荆州"@zh ;
+    :chapterNumber "62"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_031 .
+
+sg:mao_chapter_032 a :Chapter ;
+    rdfs:label "第32回 夺冀州袁尚争锋，决漳河许攸献计"@zh ;
+    :chapterNumber "32"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_063, sg:jia_section_064 .
+
+sg:jia_section_063 a :Chapter ;
+    rdfs:label "第63則 袁谭袁尚争冀州"@zh ;
+    :chapterNumber "63"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_032 .
+
+sg:jia_section_064 a :Chapter ;
+    rdfs:label "第64則 曹操决水淹冀州"@zh ;
+    :chapterNumber "64"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_032 .
+
+sg:mao_chapter_033 a :Chapter ;
+    rdfs:label "第33回 曹丕乘乱纳甄氏，郭嘉遗计定辽东"@zh ;
+    :chapterNumber "33"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_065, sg:jia_section_066 .
+
+sg:jia_section_065 a :Chapter ;
+    rdfs:label "第65則 曹操引兵取壶关"@zh ;
+    :chapterNumber "65"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_033 .
+
+sg:jia_section_066 a :Chapter ;
+    rdfs:label "第66則 郭嘉遗计定辽东"@zh ;
+    :chapterNumber "66"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_033 .
+
+sg:mao_chapter_034 a :Chapter ;
+    rdfs:label "第34回 蔡夫人隔屏听密语，刘皇叔跃马过檀溪"@zh ;
+    :chapterNumber "34"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_067, sg:jia_section_068 .
+
+sg:jia_section_067 a :Chapter ;
+    rdfs:label "第67則 刘玄德襄阳赴会"@zh ;
+    :chapterNumber "67"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_034 .
+
+sg:jia_section_068 a :Chapter ;
+    rdfs:label "第68則 玄德跃马跳檀溪"@zh ;
+    :chapterNumber "68"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_034 .
+
+sg:mao_chapter_035 a :Chapter ;
+    rdfs:label "第35回 玄德南漳逢隐沦，单福新野遇英主"@zh ;
+    :chapterNumber "35"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_069, sg:jia_section_070 .
+
+sg:jia_section_069 a :Chapter ;
+    rdfs:label "第69則 刘玄德遇司马徽"@zh ;
+    :chapterNumber "69"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_035 .
+
+sg:jia_section_070 a :Chapter ;
+    rdfs:label "第70則 玄德新野遇徐庶"@zh ;
+    :chapterNumber "70"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_035 .
+
+sg:mao_chapter_036 a :Chapter ;
+    rdfs:label "第36回 玄德用计袭樊城，元直走马荐诸葛"@zh ;
+    :chapterNumber "36"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_071, sg:jia_section_072 .
+
+sg:jia_section_071 a :Chapter ;
+    rdfs:label "第71則 徐庶定计取樊城"@zh ;
+    :chapterNumber "71"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_036 .
+
+sg:jia_section_072 a :Chapter ;
+    rdfs:label "第72則 徐庶走荐诸葛亮"@zh ;
+    :chapterNumber "72"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_036 .
+
+sg:mao_chapter_037 a :Chapter ;
+    rdfs:label "第37回 司马徽再荐名士，刘玄德三顾草庐"@zh ;
+    :chapterNumber "37"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_073, sg:jia_section_074 .
+
+sg:jia_section_073 a :Chapter ;
+    rdfs:label "第73則 刘玄德三顾茅庐"@zh ;
+    :chapterNumber "73"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_037 .
+
+sg:jia_section_074 a :Chapter ;
+    rdfs:label "第74則 玄德风雪访孔明"@zh ;
+    :chapterNumber "74"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_037 .
+
+sg:mao_chapter_038 a :Chapter ;
+    rdfs:label "第38回 定三分隆中决策，战长江孙氏报雠"@zh ;
+    :chapterNumber "38"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_075, sg:jia_section_076 .
+
+sg:jia_section_075 a :Chapter ;
+    rdfs:label "第75則 定三分亮出茅庐"@zh ;
+    :chapterNumber "75"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_038 .
+
+sg:jia_section_076 a :Chapter ;
+    rdfs:label "第76則 孙权跨江破黄祖"@zh ;
+    :chapterNumber "76"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_038 .
+
+sg:mao_chapter_039 a :Chapter ;
+    rdfs:label "第39回 荆州城公子三求计，博望坡军师初用兵"@zh ;
+    :chapterNumber "39"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_077, sg:jia_section_078 .
+
+sg:jia_section_077 a :Chapter ;
+    rdfs:label "第77則 孔明遗计救刘琦"@zh ;
+    :chapterNumber "77"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_039 .
+
+sg:jia_section_078 a :Chapter ;
+    rdfs:label "第78則 诸葛亮博望烧屯"@zh ;
+    :chapterNumber "78"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_039 .
+
+sg:mao_chapter_040 a :Chapter ;
+    rdfs:label "第40回 蔡夫人议献荆州，诸葛亮火烧新野"@zh ;
+    :chapterNumber "40"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_079, sg:jia_section_080 .
+
+sg:jia_section_079 a :Chapter ;
+    rdfs:label "第79則 献荆州粲说刘琮"@zh ;
+    :chapterNumber "79"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_040 .
+
+sg:jia_section_080 a :Chapter ;
+    rdfs:label "第80則 诸葛亮火烧新野"@zh ;
+    :chapterNumber "80"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_040 .
+
+sg:mao_chapter_041 a :Chapter ;
+    rdfs:label "第41回 刘玄德携民渡江，赵子龙单骑救主"@zh ;
+    :chapterNumber "41"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_081, sg:jia_section_082 .
+
+sg:jia_section_081 a :Chapter ;
+    rdfs:label "第81則 张益德据水断桥"@zh ;
+    :chapterNumber "81"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_041 .
+
+sg:jia_section_082 a :Chapter ;
+    rdfs:label "第82則 刘玄德败走夏口"@zh ;
+    :chapterNumber "82"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_041 .
+
+sg:mao_chapter_042 a :Chapter ;
+    rdfs:label "第42回 张翼德大闹长板桥，刘豫州败走汉津"@zh ;
+    :chapterNumber "42"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_083, sg:jia_section_084 .
+
+sg:jia_section_083 a :Chapter ;
+    rdfs:label "第83則 诸葛亮舌战群儒"@zh ;
+    :chapterNumber "83"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_042 .
+
+sg:jia_section_084 a :Chapter ;
+    rdfs:label "第84則 诸葛亮智激孙权"@zh ;
+    :chapterNumber "84"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_042 .
+
+sg:mao_chapter_043 a :Chapter ;
+    rdfs:label "第43回 诸葛亮舌战群儒，鲁子敬力排众议"@zh ;
+    :chapterNumber "43"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_085, sg:jia_section_086 .
+
+sg:jia_section_085 a :Chapter ;
+    rdfs:label "第85則 诸葛亮智说周瑜"@zh ;
+    :chapterNumber "85"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_043 .
+
+sg:jia_section_086 a :Chapter ;
+    rdfs:label "第86則 周瑜定计破曹操"@zh ;
+    :chapterNumber "86"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_043 .
+
+sg:mao_chapter_044 a :Chapter ;
+    rdfs:label "第44回 孔明用智激周瑜，孙权决计破曹操"@zh ;
+    :chapterNumber "44"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_087, sg:jia_section_088 .
+
+sg:jia_section_087 a :Chapter ;
+    rdfs:label "第87則 周瑜三江战曹操"@zh ;
+    :chapterNumber "87"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_044 .
+
+sg:jia_section_088 a :Chapter ;
+    rdfs:label "第88則 群英会瑜智蒋干"@zh ;
+    :chapterNumber "88"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_044 .
+
+sg:mao_chapter_045 a :Chapter ;
+    rdfs:label "第45回 三江口曹操折兵，群英会蒋干中计"@zh ;
+    :chapterNumber "45"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_089, sg:jia_section_090 .
+
+sg:jia_section_089 a :Chapter ;
+    rdfs:label "第89則 诸葛亮计伏周瑜"@zh ;
+    :chapterNumber "89"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_045 .
+
+sg:jia_section_090 a :Chapter ;
+    rdfs:label "第90則 黄盖献计破曹操"@zh ;
+    :chapterNumber "90"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_045 .
+
+sg:mao_chapter_046 a :Chapter ;
+    rdfs:label "第46回 用奇谋孔明借箭，献密计黄盖受刑"@zh ;
+    :chapterNumber "46"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_091, sg:jia_section_092 .
+
+sg:jia_section_091 a :Chapter ;
+    rdfs:label "第91則 阚泽密献诈降书"@zh ;
+    :chapterNumber "91"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_046 .
+
+sg:jia_section_092 a :Chapter ;
+    rdfs:label "第92則 庞统进献连环计"@zh ;
+    :chapterNumber "92"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_046 .
+
+sg:mao_chapter_047 a :Chapter ;
+    rdfs:label "第47回 阚泽密献诈书，庞统巧授连环计"@zh ;
+    :chapterNumber "47"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_093, sg:jia_section_094 .
+
+sg:jia_section_093 a :Chapter ;
+    rdfs:label "第93則 曹孟德横槊赋诗"@zh ;
+    :chapterNumber "93"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_047 .
+
+sg:jia_section_094 a :Chapter ;
+    rdfs:label "第94則 曹操三江调水军"@zh ;
+    :chapterNumber "94"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_047 .
+
+sg:mao_chapter_048 a :Chapter ;
+    rdfs:label "第48回 宴长江曹操赋诗，锁战船北军用武"@zh ;
+    :chapterNumber "48"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_095, sg:jia_section_096 .
+
+sg:jia_section_095 a :Chapter ;
+    rdfs:label "第95則 七星坛诸葛祭风"@zh ;
+    :chapterNumber "95"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_048 .
+
+sg:jia_section_096 a :Chapter ;
+    rdfs:label "第96則 周公瑾赤壁鏖兵"@zh ;
+    :chapterNumber "96"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_048 .
+
+sg:mao_chapter_049 a :Chapter ;
+    rdfs:label "第49回 七星坛诸葛祭风，三江口周瑜纵火"@zh ;
+    :chapterNumber "49"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_097, sg:jia_section_098 .
+
+sg:jia_section_097 a :Chapter ;
+    rdfs:label "第97則 曹操败走华容道"@zh ;
+    :chapterNumber "97"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_049 .
+
+sg:jia_section_098 a :Chapter ;
+    rdfs:label "第98則 关云长义释曹操"@zh ;
+    :chapterNumber "98"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_049 .
+
+sg:mao_chapter_050 a :Chapter ;
+    rdfs:label "第50回 诸葛亮智算华容，关云长义释曹操"@zh ;
+    :chapterNumber "50"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_099, sg:jia_section_100 .
+
+sg:jia_section_099 a :Chapter ;
+    rdfs:label "第99則 周瑜南郡战曹仁"@zh ;
+    :chapterNumber "99"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_050 .
+
+sg:jia_section_100 a :Chapter ;
+    rdfs:label "第100則 诸葛亮一气周瑜"@zh ;
+    :chapterNumber "100"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_050 .
+
+sg:mao_chapter_051 a :Chapter ;
+    rdfs:label "第51回 曹仁大战东吴兵，孔明一气周公瑾"@zh ;
+    :chapterNumber "51"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_101, sg:jia_section_102 .
+
+sg:jia_section_101 a :Chapter ;
+    rdfs:label "第101則 诸葛亮傍略四郡"@zh ;
+    :chapterNumber "101"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_051 .
+
+sg:jia_section_102 a :Chapter ;
+    rdfs:label "第102則 赵子龙智取桂阳"@zh ;
+    :chapterNumber "102"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_051 .
+
+sg:mao_chapter_052 a :Chapter ;
+    rdfs:label "第52回 诸葛亮智辞鲁肃，赵子龙计取桂阳"@zh ;
+    :chapterNumber "52"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_103, sg:jia_section_104 .
+
+sg:jia_section_103 a :Chapter ;
+    rdfs:label "第103則 黄忠魏延献长沙"@zh ;
+    :chapterNumber "103"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_052 .
+
+sg:jia_section_104 a :Chapter ;
+    rdfs:label "第104則 孙仲谋合淝大战"@zh ;
+    :chapterNumber "104"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_052 .
+
+sg:mao_chapter_053 a :Chapter ;
+    rdfs:label "第53回 关云长义释黄汉升，孙仲谋大战张文远"@zh ;
+    :chapterNumber "53"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_105, sg:jia_section_106 .
+
+sg:jia_section_105 a :Chapter ;
+    rdfs:label "第105則 周瑜定计取荆州"@zh ;
+    :chapterNumber "105"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_053 .
+
+sg:jia_section_106 a :Chapter ;
+    rdfs:label "第106則 刘玄德娶孙夫人"@zh ;
+    :chapterNumber "106"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_053 .
+
+sg:mao_chapter_054 a :Chapter ;
+    rdfs:label "第54回 吴国太佛寺看新郎，刘皇叔洞房续佳偶"@zh ;
+    :chapterNumber "54"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_107, sg:jia_section_108 .
+
+sg:jia_section_107 a :Chapter ;
+    rdfs:label "第107則 锦嚢计赵云救主"@zh ;
+    :chapterNumber "107"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_054 .
+
+sg:jia_section_108 a :Chapter ;
+    rdfs:label "第108則 诸葛亮二气周瑜"@zh ;
+    :chapterNumber "108"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_054 .
+
+sg:mao_chapter_055 a :Chapter ;
+    rdfs:label "第55回 玄德智激孙夫人，孔明二气周公瑾"@zh ;
+    :chapterNumber "55"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_109, sg:jia_section_110 .
+
+sg:jia_section_109 a :Chapter ;
+    rdfs:label "第109則 曹操大宴铜雀台"@zh ;
+    :chapterNumber "109"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_055 .
+
+sg:jia_section_110 a :Chapter ;
+    rdfs:label "第110則 诸葛亮三气周瑜"@zh ;
+    :chapterNumber "110"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_055 .
+
+sg:mao_chapter_056 a :Chapter ;
+    rdfs:label "第56回 曹操大宴铜雀台，孔明三气周公瑾"@zh ;
+    :chapterNumber "56"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_111, sg:jia_section_112 .
+
+sg:jia_section_111 a :Chapter ;
+    rdfs:label "第111則 诸葛亮大哭周瑜"@zh ;
+    :chapterNumber "111"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_056 .
+
+sg:jia_section_112 a :Chapter ;
+    rdfs:label "第112則 耒阳张飞荐凤雏"@zh ;
+    :chapterNumber "112"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_056 .
+
+sg:mao_chapter_057 a :Chapter ;
+    rdfs:label "第57回 柴桑口卧龙吊丧，耒阳县凤雏理事"@zh ;
+    :chapterNumber "57"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_113, sg:jia_section_114 .
+
+sg:jia_section_113 a :Chapter ;
+    rdfs:label "第113則 马超兴兵取潼关"@zh ;
+    :chapterNumber "113"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_057 .
+
+sg:jia_section_114 a :Chapter ;
+    rdfs:label "第114則 马孟起渭桥六战"@zh ;
+    :chapterNumber "114"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_057 .
+
+sg:mao_chapter_058 a :Chapter ;
+    rdfs:label "第58回 马孟起兴兵雪恨，曹阿瞒割须弃袍"@zh ;
+    :chapterNumber "58"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_115, sg:jia_section_116 .
+
+sg:jia_section_115 a :Chapter ;
+    rdfs:label "第115則 许褚大战马孟起"@zh ;
+    :chapterNumber "115"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_058 .
+
+sg:jia_section_116 a :Chapter ;
+    rdfs:label "第116則 马孟起步战五将"@zh ;
+    :chapterNumber "116"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_058 .
+
+sg:mao_chapter_059 a :Chapter ;
+    rdfs:label "第59回 许褚裸衣斗马超，曹操抹书间韩遂"@zh ;
+    :chapterNumber "59"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_117, sg:jia_section_118 .
+
+sg:jia_section_117 a :Chapter ;
+    rdfs:label "第117則 张永年反难杨修"@zh ;
+    :chapterNumber "117"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_059 .
+
+sg:jia_section_118 a :Chapter ;
+    rdfs:label "第118則 庞统献策取西川"@zh ;
+    :chapterNumber "118"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_059 .
+
+sg:mao_chapter_060 a :Chapter ;
+    rdfs:label "第60回 张永年反难杨修，庞士元议取西蜀"@zh ;
+    :chapterNumber "60"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_119, sg:jia_section_120 .
+
+sg:jia_section_119 a :Chapter ;
+    rdfs:label "第119則 赵云截江夺幼主"@zh ;
+    :chapterNumber "119"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_060 .
+
+sg:jia_section_120 a :Chapter ;
+    rdfs:label "第120則 曹操兴兵下江南"@zh ;
+    :chapterNumber "120"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_060 .
+
+sg:mao_chapter_061 a :Chapter ;
+    rdfs:label "第61回 赵云截江夺阿斗，孙权遗书退老瞒"@zh ;
+    :chapterNumber "61"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_121, sg:jia_section_122 .
+
+sg:jia_section_121 a :Chapter ;
+    rdfs:label "第121則 玄德斩杨怀高沛"@zh ;
+    :chapterNumber "121"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_061 .
+
+sg:jia_section_122 a :Chapter ;
+    rdfs:label "第122則 黄忠魏延大争功"@zh ;
+    :chapterNumber "122"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_061 .
+
+sg:mao_chapter_062 a :Chapter ;
+    rdfs:label "第62回 取涪关杨高授首，攻雒城黄魏争功"@zh ;
+    :chapterNumber "62"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_123, sg:jia_section_124 .
+
+sg:jia_section_123 a :Chapter ;
+    rdfs:label "第123則 落凤坡箭射庞统"@zh ;
+    :chapterNumber "123"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_062 .
+
+sg:jia_section_124 a :Chapter ;
+    rdfs:label "第124則 张益德义释严颜"@zh ;
+    :chapterNumber "124"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_062 .
+
+sg:mao_chapter_063 a :Chapter ;
+    rdfs:label "第63回 诸葛亮痛哭庞统，张翼德义释严颜"@zh ;
+    :chapterNumber "63"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_125, sg:jia_section_126 .
+
+sg:jia_section_125 a :Chapter ;
+    rdfs:label "第125則 孔明定计捉张任"@zh ;
+    :chapterNumber "125"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_063 .
+
+sg:jia_section_126 a :Chapter ;
+    rdfs:label "第126則 杨阜借兵破马超"@zh ;
+    :chapterNumber "126"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_063 .
+
+sg:mao_chapter_064 a :Chapter ;
+    rdfs:label "第64回 孔明定计捉张任，杨阜借兵破马超"@zh ;
+    :chapterNumber "64"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_127, sg:jia_section_128 .
+
+sg:jia_section_127 a :Chapter ;
+    rdfs:label "第127則 葭萌张飞战马超"@zh ;
+    :chapterNumber "127"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_064 .
+
+sg:jia_section_128 a :Chapter ;
+    rdfs:label "第128則 刘玄德平定益州"@zh ;
+    :chapterNumber "128"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_064 .
+
+sg:mao_chapter_065 a :Chapter ;
+    rdfs:label "第65回 马超大战葭萌关，刘备自领益州牧"@zh ;
+    :chapterNumber "65"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_129, sg:jia_section_130 .
+
+sg:jia_section_129 a :Chapter ;
+    rdfs:label "第129則 关云长单刀赴会"@zh ;
+    :chapterNumber "129"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_065 .
+
+sg:jia_section_130 a :Chapter ;
+    rdfs:label "第130則 曹操杖杀伏皇后"@zh ;
+    :chapterNumber "130"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_065 .
+
+sg:mao_chapter_066 a :Chapter ;
+    rdfs:label "第66回 关云长单刀赴会，伏皇后为国捐生"@zh ;
+    :chapterNumber "66"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_131, sg:jia_section_132 .
+
+sg:jia_section_131 a :Chapter ;
+    rdfs:label "第131則 曹操汉中破张鲁"@zh ;
+    :chapterNumber "131"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_066 .
+
+sg:jia_section_132 a :Chapter ;
+    rdfs:label "第132則 张辽大战逍遥津"@zh ;
+    :chapterNumber "132"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_066 .
+
+sg:mao_chapter_067 a :Chapter ;
+    rdfs:label "第67回 曹操平定汉中地，张辽威震逍遥津"@zh ;
+    :chapterNumber "67"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_133, sg:jia_section_134 .
+
+sg:jia_section_133 a :Chapter ;
+    rdfs:label "第133則 甘宁百骑劫曹营"@zh ;
+    :chapterNumber "133"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_067 .
+
+sg:jia_section_134 a :Chapter ;
+    rdfs:label "第134則 魏王宫左慈掷杯"@zh ;
+    :chapterNumber "134"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_067 .
+
+sg:mao_chapter_068 a :Chapter ;
+    rdfs:label "第68回 甘宁百骑劫魏营，左慈掷杯戏曹操"@zh ;
+    :chapterNumber "68"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_135, sg:jia_section_136 .
+
+sg:jia_section_135 a :Chapter ;
+    rdfs:label "第135則 曹操试神卜管辂"@zh ;
+    :chapterNumber "135"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_068 .
+
+sg:jia_section_136 a :Chapter ;
+    rdfs:label "第136則 耿纪韦晃讨曹操"@zh ;
+    :chapterNumber "136"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_068 .
+
+sg:mao_chapter_069 a :Chapter ;
+    rdfs:label "第69回 卜周易管辂知机，讨汉贼五臣死节"@zh ;
+    :chapterNumber "69"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_137, sg:jia_section_138 .
+
+sg:jia_section_137 a :Chapter ;
+    rdfs:label "第137則 瓦口张飞战张郃"@zh ;
+    :chapterNumber "137"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_069 .
+
+sg:jia_section_138 a :Chapter ;
+    rdfs:label "第138則 黄忠严颜双建功"@zh ;
+    :chapterNumber "138"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_069 .
+
+sg:mao_chapter_070 a :Chapter ;
+    rdfs:label "第70回 猛张飞智取瓦口隘，老黄忠计夺天荡山"@zh ;
+    :chapterNumber "70"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_139, sg:jia_section_140 .
+
+sg:jia_section_139 a :Chapter ;
+    rdfs:label "第139則 黄忠馘斩夏侯渊"@zh ;
+    :chapterNumber "139"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_070 .
+
+sg:jia_section_140 a :Chapter ;
+    rdfs:label "第140則 赵子龙汉水大战"@zh ;
+    :chapterNumber "140"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_070 .
+
+sg:mao_chapter_071 a :Chapter ;
+    rdfs:label "第71回 占对山黄忠逸待劳，据汉水赵云寡胜众"@zh ;
+    :chapterNumber "71"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_141, sg:jia_section_142 .
+
+sg:jia_section_141 a :Chapter ;
+    rdfs:label "第141則 刘玄德智取汉中"@zh ;
+    :chapterNumber "141"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_071 .
+
+sg:jia_section_142 a :Chapter ;
+    rdfs:label "第142則 曹孟德忌杀杨修"@zh ;
+    :chapterNumber "142"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_071 .
+
+sg:mao_chapter_072 a :Chapter ;
+    rdfs:label "第72回 诸葛亮智取汉中，曹阿瞒兵退斜谷"@zh ;
+    :chapterNumber "72"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_143, sg:jia_section_144 .
+
+sg:jia_section_143 a :Chapter ;
+    rdfs:label "第143則 刘备进位汉中王"@zh ;
+    :chapterNumber "143"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_072 .
+
+sg:jia_section_144 a :Chapter ;
+    rdfs:label "第144則 关云长威震华夏"@zh ;
+    :chapterNumber "144"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_072 .
+
+sg:mao_chapter_073 a :Chapter ;
+    rdfs:label "第73回 玄德进位汉中王，云长攻拔襄阳郡"@zh ;
+    :chapterNumber "73"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_145, sg:jia_section_146 .
+
+sg:jia_section_145 a :Chapter ;
+    rdfs:label "第145則 庞德抬榇战关公"@zh ;
+    :chapterNumber "145"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_073 .
+
+sg:jia_section_146 a :Chapter ;
+    rdfs:label "第146則 关云长水淹七军"@zh ;
+    :chapterNumber "146"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_073 .
+
+sg:mao_chapter_074 a :Chapter ;
+    rdfs:label "第74回 庞令明台榇决死战，关云长放水渰七军"@zh ;
+    :chapterNumber "74"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_147, sg:jia_section_148 .
+
+sg:jia_section_147 a :Chapter ;
+    rdfs:label "第147則 关云长刮骨疗毒"@zh ;
+    :chapterNumber "147"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_074 .
+
+sg:jia_section_148 a :Chapter ;
+    rdfs:label "第148則 吕子明智取荆州"@zh ;
+    :chapterNumber "148"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_074 .
+
+sg:mao_chapter_075 a :Chapter ;
+    rdfs:label "第75回 关云长刮骨疗毒，吕子明白衣渡江"@zh ;
+    :chapterNumber "75"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_149, sg:jia_section_150 .
+
+sg:jia_section_149 a :Chapter ;
+    rdfs:label "第149則 关云长大战徐晃"@zh ;
+    :chapterNumber "149"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_075 .
+
+sg:jia_section_150 a :Chapter ;
+    rdfs:label "第150則 关云长夜走麦城"@zh ;
+    :chapterNumber "150"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_075 .
+
+sg:mao_chapter_076 a :Chapter ;
+    rdfs:label "第76回 徐公明大战沔水，关云长败走麦城"@zh ;
+    :chapterNumber "76"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_151, sg:jia_section_152 .
+
+sg:jia_section_151 a :Chapter ;
+    rdfs:label "第151則 玉泉山关公显圣"@zh ;
+    :chapterNumber "151"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_076 .
+
+sg:jia_section_152 a :Chapter ;
+    rdfs:label "第152則 汉中王痛哭关公"@zh ;
+    :chapterNumber "152"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_076 .
+
+sg:mao_chapter_077 a :Chapter ;
+    rdfs:label "第77回 玉泉山关公显圣，洛阳城曹操感神"@zh ;
+    :chapterNumber "77"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_153, sg:jia_section_154 .
+
+sg:jia_section_153 a :Chapter ;
+    rdfs:label "第153則 曹操杀神医华陀"@zh ;
+    :chapterNumber "153"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_077 .
+
+sg:jia_section_154 a :Chapter ;
+    rdfs:label "第154則 魏太子曹丕秉政"@zh ;
+    :chapterNumber "154"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_077 .
+
+sg:mao_chapter_078 a :Chapter ;
+    rdfs:label "第78回 治风疾神医身死，传遗命奸雄数终"@zh ;
+    :chapterNumber "78"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_155, sg:jia_section_156 .
+
+sg:jia_section_155 a :Chapter ;
+    rdfs:label "第155則 曹子建七步成章"@zh ;
+    :chapterNumber "155"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_078 .
+
+sg:jia_section_156 a :Chapter ;
+    rdfs:label "第156則 汉中王怒杀刘封"@zh ;
+    :chapterNumber "156"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_078 .
+
+sg:mao_chapter_079 a :Chapter ;
+    rdfs:label "第79回 兄逼弟曹植赋诗，姪陷叔刘封伏法"@zh ;
+    :chapterNumber "79"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_157, sg:jia_section_158 .
+
+sg:jia_section_157 a :Chapter ;
+    rdfs:label "第157則 废献帝曹丕篡汉"@zh ;
+    :chapterNumber "157"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_079 .
+
+sg:jia_section_158 a :Chapter ;
+    rdfs:label "第158則 汉中王成都称帝"@zh ;
+    :chapterNumber "158"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_079 .
+
+sg:mao_chapter_080 a :Chapter ;
+    rdfs:label "第80回 曹丕废帝篡炎刘，汉王正位续大统"@zh ;
+    :chapterNumber "80"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_159, sg:jia_section_160 .
+
+sg:jia_section_159 a :Chapter ;
+    rdfs:label "第159則 范强张达刺张飞"@zh ;
+    :chapterNumber "159"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_080 .
+
+sg:jia_section_160 a :Chapter ;
+    rdfs:label "第160則 刘先主兴兵伐吴"@zh ;
+    :chapterNumber "160"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_080 .
+
+sg:mao_chapter_081 a :Chapter ;
+    rdfs:label "第81回 急兄雠张飞遇害，雪弟恨先主兴兵"@zh ;
+    :chapterNumber "81"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_161, sg:jia_section_162 .
+
+sg:jia_section_161 a :Chapter ;
+    rdfs:label "第161則 吴臣赵咨说曹丕"@zh ;
+    :chapterNumber "161"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_081 .
+
+sg:jia_section_162 a :Chapter ;
+    rdfs:label "第162則 关兴斩将救张苞"@zh ;
+    :chapterNumber "162"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_081 .
+
+sg:mao_chapter_082 a :Chapter ;
+    rdfs:label "第82回 孙权降魏受九锡，先主征吴赏六军"@zh ;
+    :chapterNumber "82"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_163, sg:jia_section_164 .
+
+sg:jia_section_163 a :Chapter ;
+    rdfs:label "第163則 刘先主猇亭大战"@zh ;
+    :chapterNumber "163"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_082 .
+
+sg:jia_section_164 a :Chapter ;
+    rdfs:label "第164則 陆逊定计破蜀兵"@zh ;
+    :chapterNumber "164"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_082 .
+
+sg:mao_chapter_083 a :Chapter ;
+    rdfs:label "第83回 战猇亭先主得雠人，守江口书生拜大将"@zh ;
+    :chapterNumber "83"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_165, sg:jia_section_166 .
+
+sg:jia_section_165 a :Chapter ;
+    rdfs:label "第165則 先主夜走白帝城"@zh ;
+    :chapterNumber "165"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_083 .
+
+sg:jia_section_166 a :Chapter ;
+    rdfs:label "第166則 八阵图石伏陆逊"@zh ;
+    :chapterNumber "166"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_083 .
+
+sg:mao_chapter_084 a :Chapter ;
+    rdfs:label "第84回 陆逊营烧七百里，孔明巧布八阵图"@zh ;
+    :chapterNumber "84"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_167, sg:jia_section_168 .
+
+sg:jia_section_167 a :Chapter ;
+    rdfs:label "第167則 白帝城先主托孤"@zh ;
+    :chapterNumber "167"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_084 .
+
+sg:jia_section_168 a :Chapter ;
+    rdfs:label "第168則 曹丕五路下西川"@zh ;
+    :chapterNumber "168"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_084 .
+
+sg:mao_chapter_085 a :Chapter ;
+    rdfs:label "第85回 刘先主遗诏托孤儿，诸葛亮安居平五路"@zh ;
+    :chapterNumber "85"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_169, sg:jia_section_170 .
+
+sg:jia_section_169 a :Chapter ;
+    rdfs:label "第169則 难张温秦宓论天"@zh ;
+    :chapterNumber "169"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_085 .
+
+sg:jia_section_170 a :Chapter ;
+    rdfs:label "第170則 泛龙舟魏主伐吴"@zh ;
+    :chapterNumber "170"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_085 .
+
+sg:mao_chapter_086 a :Chapter ;
+    rdfs:label "第86回 难张温秦宓逞天辩，破曹丕徐盛用火攻"@zh ;
+    :chapterNumber "86"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_171, sg:jia_section_172 .
+
+sg:jia_section_171 a :Chapter ;
+    rdfs:label "第171則 孔明兴兵征孟获"@zh ;
+    :chapterNumber "171"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_086 .
+
+sg:jia_section_172 a :Chapter ;
+    rdfs:label "第172則 诸葛亮一擒孟获"@zh ;
+    :chapterNumber "172"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_086 .
+
+sg:mao_chapter_087 a :Chapter ;
+    rdfs:label "第87回 征南寇丞相大兴师，抗天兵蛮王初受执"@zh ;
+    :chapterNumber "87"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_173, sg:jia_section_174 .
+
+sg:jia_section_173 a :Chapter ;
+    rdfs:label "第173則 诸葛亮二擒孟获"@zh ;
+    :chapterNumber "173"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_087 .
+
+sg:jia_section_174 a :Chapter ;
+    rdfs:label "第174則 诸葛亮三擒孟获"@zh ;
+    :chapterNumber "174"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_087 .
+
+sg:mao_chapter_088 a :Chapter ;
+    rdfs:label "第88回 渡泸水再缚番王，识诈降三擒孟获"@zh ;
+    :chapterNumber "88"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_175, sg:jia_section_176 .
+
+sg:jia_section_175 a :Chapter ;
+    rdfs:label "第175則 诸葛亮四擒孟获"@zh ;
+    :chapterNumber "175"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_088 .
+
+sg:jia_section_176 a :Chapter ;
+    rdfs:label "第176則 诸葛亮五擒孟获"@zh ;
+    :chapterNumber "176"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_088 .
+
+sg:mao_chapter_089 a :Chapter ;
+    rdfs:label "第89回 武乡侯四番用计，南蛮王五次遭擒"@zh ;
+    :chapterNumber "89"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_177, sg:jia_section_178 .
+
+sg:jia_section_177 a :Chapter ;
+    rdfs:label "第177則 诸葛亮六擒孟获"@zh ;
+    :chapterNumber "177"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_089 .
+
+sg:jia_section_178 a :Chapter ;
+    rdfs:label "第178則 诸葛亮七擒孟获"@zh ;
+    :chapterNumber "178"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_089 .
+
+sg:mao_chapter_090 a :Chapter ;
+    rdfs:label "第90回 驱巨兽六破蛮兵，烧藤甲七擒孟获"@zh ;
+    :chapterNumber "90"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_179, sg:jia_section_180 .
+
+sg:jia_section_179 a :Chapter ;
+    rdfs:label "第179則 孔明秋夜祭泸水"@zh ;
+    :chapterNumber "179"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_090 .
+
+sg:jia_section_180 a :Chapter ;
+    rdfs:label "第180則 孔明初上出师表"@zh ;
+    :chapterNumber "180"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_090 .
+
+sg:mao_chapter_091 a :Chapter ;
+    rdfs:label "第91回 祭泸水汉相班师，伐中原武侯上表"@zh ;
+    :chapterNumber "91"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_181, sg:jia_section_182 .
+
+sg:jia_section_181 a :Chapter ;
+    rdfs:label "第181則 赵子龙大破魏兵"@zh ;
+    :chapterNumber "181"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_091 .
+
+sg:jia_section_182 a :Chapter ;
+    rdfs:label "第182則 诸葛亮智取三郡"@zh ;
+    :chapterNumber "182"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_091 .
+
+sg:mao_chapter_092 a :Chapter ;
+    rdfs:label "第92回 赵子龙力斩五将，诸葛亮智取三城"@zh ;
+    :chapterNumber "92"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_183, sg:jia_section_184 .
+
+sg:jia_section_183 a :Chapter ;
+    rdfs:label "第183則 孔明以智伏姜维"@zh ;
+    :chapterNumber "183"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_092 .
+
+sg:jia_section_184 a :Chapter ;
+    rdfs:label "第184則 孔明祁山破曹真"@zh ;
+    :chapterNumber "184"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_092 .
+
+sg:mao_chapter_093 a :Chapter ;
+    rdfs:label "第93回 姜伯约归降孔明，武乡侯骂死王朗"@zh ;
+    :chapterNumber "93"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_185, sg:jia_section_186 .
+
+sg:jia_section_185 a :Chapter ;
+    rdfs:label "第185則 孔明大破铁车兵"@zh ;
+    :chapterNumber "185"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_093 .
+
+sg:jia_section_186 a :Chapter ;
+    rdfs:label "第186則 司马懿智擒孟达"@zh ;
+    :chapterNumber "186"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_093 .
+
+sg:mao_chapter_094 a :Chapter ;
+    rdfs:label "第94回 诸葛亮乘雪破羌兵，司马懿克日擒孟达"@zh ;
+    :chapterNumber "94"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_187, sg:jia_section_188 .
+
+sg:jia_section_187 a :Chapter ;
+    rdfs:label "第187則 司马懿智取街亭"@zh ;
+    :chapterNumber "187"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_094 .
+
+sg:jia_section_188 a :Chapter ;
+    rdfs:label "第188則 孔明智退司马懿"@zh ;
+    :chapterNumber "188"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_094 .
+
+sg:mao_chapter_095 a :Chapter ;
+    rdfs:label "第95回 马谡拒谏失街亭，武侯弹琴退仲达"@zh ;
+    :chapterNumber "95"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_189, sg:jia_section_190 .
+
+sg:jia_section_189 a :Chapter ;
+    rdfs:label "第189則 孔明挥泪斩马谡"@zh ;
+    :chapterNumber "189"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_095 .
+
+sg:jia_section_190 a :Chapter ;
+    rdfs:label "第190則 陆逊石亭破曹休"@zh ;
+    :chapterNumber "190"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_095 .
+
+sg:mao_chapter_096 a :Chapter ;
+    rdfs:label "第96回 孔明挥泪斩马谡，周鲂断发赚曹休"@zh ;
+    :chapterNumber "96"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_191, sg:jia_section_192 .
+
+sg:jia_section_191 a :Chapter ;
+    rdfs:label "第191則 孔明再上出师表"@zh ;
+    :chapterNumber "191"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_096 .
+
+sg:jia_section_192 a :Chapter ;
+    rdfs:label "第192則 诸葛亮二出祁山"@zh ;
+    :chapterNumber "192"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_096 .
+
+sg:mao_chapter_097 a :Chapter ;
+    rdfs:label "第97回 讨魏国武侯再上表，破曹兵姜维诈献书"@zh ;
+    :chapterNumber "97"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_193, sg:jia_section_194 .
+
+sg:jia_section_193 a :Chapter ;
+    rdfs:label "第193則 孔明遗计斩王双"@zh ;
+    :chapterNumber "193"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_097 .
+
+sg:jia_section_194 a :Chapter ;
+    rdfs:label "第194則 诸葛亮三出祁山"@zh ;
+    :chapterNumber "194"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_097 .
+
+sg:mao_chapter_098 a :Chapter ;
+    rdfs:label "第98回 追汉军王双受诛，袭陈仓武侯取胜"@zh ;
+    :chapterNumber "98"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_195, sg:jia_section_196 .
+
+sg:jia_section_195 a :Chapter ;
+    rdfs:label "第195則 孔明智败司马懿"@zh ;
+    :chapterNumber "195"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_098 .
+
+sg:jia_section_196 a :Chapter ;
+    rdfs:label "第196則 仲达兴兵寇汉中"@zh ;
+    :chapterNumber "196"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_098 .
+
+sg:mao_chapter_099 a :Chapter ;
+    rdfs:label "第99回 诸葛亮大破魏兵，司马懿入寇西蜀"@zh ;
+    :chapterNumber "99"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_197, sg:jia_section_198 .
+
+sg:jia_section_197 a :Chapter ;
+    rdfs:label "第197則 诸葛亮四出祁山"@zh ;
+    :chapterNumber "197"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_099 .
+
+sg:jia_section_198 a :Chapter ;
+    rdfs:label "第198則 孔明祁山布八阵"@zh ;
+    :chapterNumber "198"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_099 .
+
+sg:mao_chapter_100 a :Chapter ;
+    rdfs:label "第100回 汉兵劫寨破曹真，武侯斗阵辱仲达"@zh ;
+    :chapterNumber "100"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_199, sg:jia_section_200 .
+
+sg:jia_section_199 a :Chapter ;
+    rdfs:label "第199則 诸葛亮五出祁山"@zh ;
+    :chapterNumber "199"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_100 .
+
+sg:jia_section_200 a :Chapter ;
+    rdfs:label "第200則 木门道弩射张郃"@zh ;
+    :chapterNumber "200"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_100 .
+
+sg:mao_chapter_101 a :Chapter ;
+    rdfs:label "第101回 出陇上诸葛妆神，奔剑阁张郃中计"@zh ;
+    :chapterNumber "101"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_201, sg:jia_section_202 .
+
+sg:jia_section_201 a :Chapter ;
+    rdfs:label "第201則 诸葛亮六出祁山"@zh ;
+    :chapterNumber "201"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_101 .
+
+sg:jia_section_202 a :Chapter ;
+    rdfs:label "第202則 孔明造木牛流马"@zh ;
+    :chapterNumber "202"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_101 .
+
+sg:mao_chapter_102 a :Chapter ;
+    rdfs:label "第102回 司马懿战北原渭桥，诸葛亮造木牛流马"@zh ;
+    :chapterNumber "102"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_203, sg:jia_section_204 .
+
+sg:jia_section_203 a :Chapter ;
+    rdfs:label "第203則 孔明火烧木栅寨"@zh ;
+    :chapterNumber "203"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_102 .
+
+sg:jia_section_204 a :Chapter ;
+    rdfs:label "第204則 孔明秋夜祭北斗"@zh ;
+    :chapterNumber "204"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_102 .
+
+sg:mao_chapter_103 a :Chapter ;
+    rdfs:label "第103回 上方谷司马受困，五丈原诸葛禳星"@zh ;
+    :chapterNumber "103"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_205, sg:jia_section_206 .
+
+sg:jia_section_205 a :Chapter ;
+    rdfs:label "第205則 孔明秋风五丈原"@zh ;
+    :chapterNumber "205"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_103 .
+
+sg:jia_section_206 a :Chapter ;
+    rdfs:label "第206則 死诸葛走活仲达"@zh ;
+    :chapterNumber "206"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_103 .
+
+sg:mao_chapter_104 a :Chapter ;
+    rdfs:label "第104回 陨大星汉丞相归天，见木像魏都督丧胆"@zh ;
+    :chapterNumber "104"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_207, sg:jia_section_208 .
+
+sg:jia_section_207 a :Chapter ;
+    rdfs:label "第207則 武侯遗计斩魏延"@zh ;
+    :chapterNumber "207"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_104 .
+
+sg:jia_section_208 a :Chapter ;
+    rdfs:label "第208則 魏折长安承露盘"@zh ;
+    :chapterNumber "208"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_104 .
+
+sg:mao_chapter_105 a :Chapter ;
+    rdfs:label "第105回 武侯预伏锦囊计，魏主拆取承露盘"@zh ;
+    :chapterNumber "105"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_209, sg:jia_section_210 .
+
+sg:jia_section_209 a :Chapter ;
+    rdfs:label "第209則 司马懿退公孙渊"@zh ;
+    :chapterNumber "209"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_105 .
+
+sg:jia_section_210 a :Chapter ;
+    rdfs:label "第210則 司马懿谋杀曹爽"@zh ;
+    :chapterNumber "210"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_105 .
+
+sg:mao_chapter_106 a :Chapter ;
+    rdfs:label "第106回 公孙渊兵败死襄平，司马懿诈病赚曹爽"@zh ;
+    :chapterNumber "106"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_211, sg:jia_section_212 .
+
+sg:jia_section_211 a :Chapter ;
+    rdfs:label "第211則 司马懿父子秉政"@zh ;
+    :chapterNumber "211"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_106 .
+
+sg:jia_section_212 a :Chapter ;
+    rdfs:label "第212則 姜维大战牛头山"@zh ;
+    :chapterNumber "212"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_106 .
+
+sg:mao_chapter_107 a :Chapter ;
+    rdfs:label "第107回 魏主政归司马氏，姜维兵败牛头山"@zh ;
+    :chapterNumber "107"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_213, sg:jia_section_214 .
+
+sg:jia_section_213 a :Chapter ;
+    rdfs:label "第213則 战徐塘吴魏交兵"@zh ;
+    :chapterNumber "213"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_107 .
+
+sg:jia_section_214 a :Chapter ;
+    rdfs:label "第214則 孙峻谋杀诸葛恪"@zh ;
+    :chapterNumber "214"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_107 .
+
+sg:mao_chapter_108 a :Chapter ;
+    rdfs:label "第108回 丁奉雪中奋短兵，孙峻席间施密计"@zh ;
+    :chapterNumber "108"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_215, sg:jia_section_216 .
+
+sg:jia_section_215 a :Chapter ;
+    rdfs:label "第215則 姜维计困司马昭"@zh ;
+    :chapterNumber "215"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_108 .
+
+sg:jia_section_216 a :Chapter ;
+    rdfs:label "第216則 司马师废主立君"@zh ;
+    :chapterNumber "216"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_108 .
+
+sg:mao_chapter_109 a :Chapter ;
+    rdfs:label "第109回 困司马汉将奇谋，废曹芳魏家果报"@zh ;
+    :chapterNumber "109"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_217, sg:jia_section_218 .
+
+sg:jia_section_217 a :Chapter ;
+    rdfs:label "第217則 文鸯单骑退雄兵"@zh ;
+    :chapterNumber "217"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_109 .
+
+sg:jia_section_218 a :Chapter ;
+    rdfs:label "第218則 姜维洮西败魏兵"@zh ;
+    :chapterNumber "218"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_109 .
+
+sg:mao_chapter_110 a :Chapter ;
+    rdfs:label "第110回 文鸯单骑退雄兵，姜维背水破大敌"@zh ;
+    :chapterNumber "110"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_219, sg:jia_section_220 .
+
+sg:jia_section_219 a :Chapter ;
+    rdfs:label "第219則 邓艾段谷破姜维"@zh ;
+    :chapterNumber "219"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_110 .
+
+sg:jia_section_220 a :Chapter ;
+    rdfs:label "第220則 司马昭破诸葛诞"@zh ;
+    :chapterNumber "220"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_110 .
+
+sg:mao_chapter_111 a :Chapter ;
+    rdfs:label "第111回 邓士载智败姜伯约，诸葛诞义讨司马昭"@zh ;
+    :chapterNumber "111"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_221, sg:jia_section_222 .
+
+sg:jia_section_221 a :Chapter ;
+    rdfs:label "第221則 忠义士于诠死节"@zh ;
+    :chapterNumber "221"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_111 .
+
+sg:jia_section_222 a :Chapter ;
+    rdfs:label "第222則 姜维长城战邓艾"@zh ;
+    :chapterNumber "222"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_111 .
+
+sg:mao_chapter_112 a :Chapter ;
+    rdfs:label "第112回 救寿春于诠死节，取长城伯约凿兵"@zh ;
+    :chapterNumber "112"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_223, sg:jia_section_224 .
+
+sg:jia_section_223 a :Chapter ;
+    rdfs:label "第223則 孙琳废吴主孙休"@zh ;
+    :chapterNumber "223"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_112 .
+
+sg:jia_section_224 a :Chapter ;
+    rdfs:label "第224則 姜维祁山战邓艾"@zh ;
+    :chapterNumber "224"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_112 .
+
+sg:mao_chapter_113 a :Chapter ;
+    rdfs:label "第113回 丁奉定计斩孙𬘭，姜维斗阵破邓艾"@zh ;
+    :chapterNumber "113"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_225, sg:jia_section_226 .
+
+sg:jia_section_225 a :Chapter ;
+    rdfs:label "第225則 司马昭弑杀曹髦"@zh ;
+    :chapterNumber "225"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_113 .
+
+sg:jia_section_226 a :Chapter ;
+    rdfs:label "第226則 姜伯约弃车大战"@zh ;
+    :chapterNumber "226"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_113 .
+
+sg:mao_chapter_114 a :Chapter ;
+    rdfs:label "第114回 曹髦驱车死南阙，姜维弃粮胜魏兵"@zh ;
+    :chapterNumber "114"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_227, sg:jia_section_228 .
+
+sg:jia_section_227 a :Chapter ;
+    rdfs:label "第227則 姜伯约洮阳大战"@zh ;
+    :chapterNumber "227"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_114 .
+
+sg:jia_section_228 a :Chapter ;
+    rdfs:label "第228則 姜维避祸屯田计"@zh ;
+    :chapterNumber "228"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_114 .
+
+sg:mao_chapter_115 a :Chapter ;
+    rdfs:label "第115回 诏班师后主信才，托屯田姜维避祸"@zh ;
+    :chapterNumber "115"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_229, sg:jia_section_230 .
+
+sg:jia_section_229 a :Chapter ;
+    rdfs:label "第229則 钟会邓艾取汉中"@zh ;
+    :chapterNumber "229"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_115 .
+
+sg:jia_section_230 a :Chapter ;
+    rdfs:label "第230則 姜维大战剑门关"@zh ;
+    :chapterNumber "230"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_115 .
+
+sg:mao_chapter_116 a :Chapter ;
+    rdfs:label "第116回 钟会分兵汉中道，武侯显圣定军山"@zh ;
+    :chapterNumber "116"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_231, sg:jia_section_232 .
+
+sg:jia_section_231 a :Chapter ;
+    rdfs:label "第231則 鍾會大興兵伐蜀"@zh ;
+    :chapterNumber "231"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_116 .
+
+sg:jia_section_232 a :Chapter ;
+    rdfs:label "第232則 姜維兵敗劍閣關"@zh ;
+    :chapterNumber "232"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_116 .
+
+sg:mao_chapter_117 a :Chapter ;
+    rdfs:label "第117回 邓士载偷渡阴平，诸葛瞻战死绵竹"@zh ;
+    :chapterNumber "117"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_233, sg:jia_section_234 .
+
+sg:jia_section_233 a :Chapter ;
+    rdfs:label "第233則 鄧艾偷度陰平嶺"@zh ;
+    :chapterNumber "233"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_117 .
+
+sg:jia_section_234 a :Chapter ;
+    rdfs:label "第234則 諸葛瞻大戰鄧艾"@zh ;
+    :chapterNumber "234"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_117 .
+
+sg:mao_chapter_118 a :Chapter ;
+    rdfs:label "第118回 哭祖庙一王死孝，入西川二士争功"@zh ;
+    :chapterNumber "118"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_235, sg:jia_section_236 .
+
+sg:jia_section_235 a :Chapter ;
+    rdfs:label "第235則 蜀後主輿櫬出降"@zh ;
+    :chapterNumber "235"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_118 .
+
+sg:jia_section_236 a :Chapter ;
+    rdfs:label "第236則 鄧艾鍾會大爭功"@zh ;
+    :chapterNumber "236"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_118 .
+
+sg:mao_chapter_119 a :Chapter ;
+    rdfs:label "第119回 假投降巧计成虚话，再受禅依样画葫芦"@zh ;
+    :chapterNumber "119"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_237, sg:jia_section_238 .
+
+sg:jia_section_237 a :Chapter ;
+    rdfs:label "第237則 姜維一計害三賢"@zh ;
+    :chapterNumber "237"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_119 .
+
+sg:jia_section_238 a :Chapter ;
+    rdfs:label "第238則 司馬復奪受禪臺"@zh ;
+    :chapterNumber "238"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_119 .
+
+sg:mao_chapter_120 a :Chapter ;
+    rdfs:label "第120回 荐杜预老将献新谋，降孙皓三分归一统"@zh ;
+    :chapterNumber "120"^^xsd:integer ;
+    :belongsToEdition sg:edition_maozonggang ;
+    :correspondsToSection sg:jia_section_239, sg:jia_section_240 .
+
+sg:jia_section_239 a :Chapter ;
+    rdfs:label "第239則 羊祜病中薦杜預"@zh ;
+    :chapterNumber "239"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_120 .
+
+sg:jia_section_240 a :Chapter ;
+    rdfs:label "第240則 王濬計取石頭城"@zh ;
+    :chapterNumber "240"^^xsd:integer ;
+    :belongsToEdition sg:edition_jiajing ;
+    :correspondsToChapter sg:mao_chapter_120 .
+
+
+# ---------- 本体论元信息 ----------
+sg:ontology_multiversion a owl:Ontology ;
+    dc:title "三國演義多版本本體論 ABox"@zh ;
+    dc:description "本文件為 sanguo_kg_ontology.ttl 之實例層，包含12版本、77則核心異文、24位學者、5條評點傳承、360個回目/則個體及其對映關係。"@zh ;
+    dc:creator "Sanguo-Ontology Project" ;
+    dc:created "2026-10-26"^^xsd:date ;
+    owl:versionInfo "1.0.0-multiversion" ;
+    owl:imports <http://www.sanguo-ontology.org/ontology> .
