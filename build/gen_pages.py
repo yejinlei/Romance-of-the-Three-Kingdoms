@@ -672,31 +672,36 @@ def page_mirror():
 # ---- 21. 三絕 ----
 def page_sanjue():
     heroes = [
-        ("智絕·諸葛亮","jade","臥龍先生","草船借箭·借東風·空城計·六出祁山·七擒孟獲——「狀諸葛之多智而近妖」。出師一表真名世，千載誰堪伯仲間。"),
-        ("義絕·關羽","indigo","美髯公·漢壽亭侯","桃園結義·溫酒斬華雄·過五關斬六將·華容道釋曹操·刮骨療毒·走麥城。後世尊為武聖、關帝。"),
-        ("奸絕·曹操","red","孟德·魏武帝","挾天子以令諸侯·官渡敗袁紹·橫槊賦詩·夢中殺人·華容道三笑——寧教我負天下人，休教天下人負我。"),
+        ("智絕·諸葛亮","zhi","臥龍先生","草船借箭·借東風·空城計·六出祁山·七擒孟獲——「狀諸葛之多智而近妖」。出師一表真名世，千載誰堪伯仲間。"),
+        ("義絕·關羽","yi","美髯公·漢壽亭侯","桃園結義·溫酒斬華雄·過五關斬六將·華容道釋曹操·刮骨療毒·走麥城。後世尊為武聖、關帝。"),
+        ("奸絕·曹操","jian","孟德·魏武帝","挾天子以令諸侯·官渡敗袁紹·橫槊賦詩·夢中殺人·華容道三笑——寧教我負天下人，休教天下人負我。"),
     ]
-    cards=''.join('<div class="card hero-'+('zhu' if c=='red' else c)+'" style="padding:36px 32px"><h3 style="font-size:24px;margin-bottom:8px;color:var(--'+('cinnabar-d' if c=='red' else c)+')">'+n+'</h3>' \
-      '<div class="meta">'+sub+'</div><div style="margin-top:18px;font-size:16px;line-height:2">'+desc+'</div></div>' for n,c,sub,desc in heroes)
-    body = '<h2>三絕 · 毛宗崗評點論</h2>' \
-      '<p class="lead">毛宗崗在「讀三國志法」中標舉三絕——諸葛亮智絕、關羽義絕、曹操奸絕，三人撐起三國敘事三角。</p>' \
-      '<div class="grid" style="grid-template-columns:repeat(3,1fr);gap:24px">'+cards+'</div>'
+    cards=''.join('<div class="card"><h3>'+n+'</h3><div class="meta">'+sub+'</div><div class="desc">'+desc+'</div></div>' for n,c,sub,desc in heroes)
+    body = '<div class="hero"><span class="seal solid">三絕</span>' \
+      '<div class="verse">智絕·義絕·奸絕<br>毛宗崗「讀三國志法」所標舉</div>' \
+      '<div class="rule"></div>' \
+      '<p class="lead">吾以為《三國》有三奇：諸葛亮一絕也，關羽一絕也，曹操一絕也。' \
+      '歷稽載籍，賢相林立，而名高萬古者莫如孔明；名將林立，而名高萬古者莫如雲長；' \
+      '奸雄林立，而名高萬古者莫如孟德。三絕立，則一部《三國》之局成。</p></div>' \
+      '<div class="sanjue">'+cards+'</div>'
     write_page("sanjue.html", "三絕", body)
 
 # ---- 22. 桃園 ----
 def page_taoyuan():
-    body = '<h2>桃園 · 桃園結義與義的起點</h2>' \
-      '<div class="hero-poem" style="margin-bottom:32px"><div style="font-family:var(--kai);font-size:26px;line-height:1.8;color:var(--cinnabar-d);text-align:center;padding:40px 24px;background:var(--paper);border:1px double var(--bronze)">' \
-      '念劉備、關羽、張飛，雖然異姓，既結為兄弟，<br>則同心協力，救困扶危；上報國家，下安黎庶。<br>' \
-      '<span style="font-size:18px;color:var(--ink2)">——不求同年同月同日生，只願同年同月同日死。</span><br>' \
-      '<span class="mo" style="font-size:14px">第一回 · 宴桃園豪傑三結義</span></div></div>' \
-      '<h3>桃園結義在中國文化中的意義</h3>' \
-      '<p class="lead">桃園結義是中國人「義」的原點。從此，「兄弟」一詞跨過血緣，成為江湖倫理的最高範疇。關公信仰遍佈全球華人社區，皆源於此。</p>' \
+    body = '<div class="hero"><span class="seal solid">桃園</span>' \
+      '<div class="taoyuan">念劉備、關羽、張飛，雖然異姓，既結為兄弟，<br>' \
+      '則同心協力，救困扶危；上報國家，下安黎庶；<br>' \
+      '不求同年同月同日生，只願同年同月同日死。<br>' \
+      '<small>—— 第一回 · 宴桃園豪傑三結義</small></div>' \
+      '<div class="rule"></div>' \
+      '<p class="lead">桃園結義是中國人「義」的原點。從此，「兄弟」一詞跨過血緣，成為江湖倫理的最高範疇。' \
+      '關公信仰遍佈全球華人社區，皆源於此一拜。毛宗崗評：「從此以後，三人一體，是一部大書之綱。」</p></div>' \
+      '<h2>桃園四義</h2>' \
       '<div class="grid">' \
-      '<div class="card"><h3>桃園在何處？</h3><div class="desc">河北涿郡（今涿州）桃園——張飛莊後。今涿州市樓桑廟三義宮為祭祀舊址。</div></div>' \
-      '<div class="card"><h3>桃花意象</h3><div class="desc">桃花象徵春季、青春與短暫。三兄弟於桃下結義，桃花之艷即為後來悲劇伏筆。</div></div>' \
-      '<div class="card"><h3>「桃園」作為文化母題</h3><div class="desc">後世天地會、洪門、青幫入會結拜，皆以桃園為典範；《水滸》聚義、《西游》取經團契皆受其影響。</div></div>' \
-      '<div class="card jade"><h3>「義」的內涵</h3><div class="desc"><b>君臣義</b>：關羽千里走單騎；<b>兄弟義</b>：張飛為兄長仇出師未捷身先死；<b>朋友義</b>：趙雲單騎救主；<b>知己義</b>：孔明鞠躬盡瘁報三顧。</div></div>' \
+      '<div class="card"><h3>桃園在何處？</h3><p class="small">河北涿郡（今涿州）桃園——張飛莊後桃園。今涿州市樓桑廟三義宮為祭祀舊址。</p></div>' \
+      '<div class="card"><h3>桃花意象</h3><p class="small">桃花象徵春季、青春與短暫。三兄弟於桃下結義，桃花之艷即為後來悲劇伏筆：桃園一諾，終應於麥城、閬中、白帝城。</p></div>' \
+      '<div class="card"><h3>「桃園」文化母題</h3><p class="small">後世天地會、洪門、青幫入會結拜皆以桃園為典範；《水滸》聚義、《西游》取經團契，皆受其兄弟結義敘事影響。</p></div>' \
+      '<div class="card"><h3>「義」的內涵</h3><p class="small"><b class="zhu">君臣義</b>：關羽千里走單騎；<b class="zhu">兄弟義</b>：張飛為兄長仇出師未捷身先死；<b class="mo">朋友義</b>：趙雲單騎救主；<b class="mo">知己義</b>：孔明鞠躬盡瘁報三顧。</p></div>' \
       '</div>'
     write_page("taoyuan.html", "桃園", body)
 
