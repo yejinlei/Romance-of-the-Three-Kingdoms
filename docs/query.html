@@ -3,12 +3,11 @@
 <title>本體查詢 · 三國演義本體論</title>
 <link rel="stylesheet" href="assets/app.css"></head><body>
 <header>
-  <div class="seal l">三<br>國<br>志</div>
-  <div class="seal">演<br>義</div>
-  <h1>三國演義<span class="dot">·</span>本體論</h1>
-  <div class="subtitle">Romance of the Three Kingdoms · Ontology Project · DuckDB-WASM 控制台</div>
+  <span class="seal">演義</span>
+  <h1>三國演義</h1>
+  <div class="sub">Romance of the Three Kingdoms · Ontology Project · DuckDB-WASM 控制台</div>
+  <nav><a href="index.html">總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
 </header>
-<nav><a href="index.html">總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
 <main>
 <h2>本體查詢 · DuckDB-WASM</h2><p class="lead">無服務器 SQL 控制台——所有 Parquet 表本地讀取，可直接在瀏覽器中查詢人物、勢力、戰役、人物提及（章節分佈）、版本元數據等 19 張表。</p><div class="query-panel"><div id="qstatus" style="margin-bottom:8px;color:var(--bronze);font-size:13px">正在初始化 DuckDB…（首次需加載 ~3MB WASM，請稍候）</div><textarea id="sql" rows="5" placeholder="輸入 SQL，例如：&#10;SELECT name, faction, total FROM persons ORDER BY total DESC LIMIT 10;">SELECT name, faction, total FROM persons ORDER BY total DESC LIMIT 15;</textarea><div style="margin-top:8px"><button id="run">執行 ▶</button> <button id="explain">表結構</button> <select id="sample"><option value="">快速示例…</option><option>-- 諸葛亮在各章提及分佈
 SELECT l.chapter_no, COUNT(*) c FROM mentions m JOIN lines l ON m.line_id=l.line_id WHERE m.entity_id='sg_person_諸葛亮' GROUP BY l.chapter_no ORDER BY c DESC LIMIT 10;</option><option>-- 蜀漢人物按提及排序
@@ -17,8 +16,9 @@ SELECT name, year, side_a, side_b, outcome FROM battles ORDER BY CAST(year AS IN
 SELECT faction, COUNT(*) n FROM persons GROUP BY faction ORDER BY n DESC;</option></select></div><div id="results" style="margin-top:16px"></div><div id="schema" style="display:none;margin-top:16px;padding:12px;background:var(--paper);border:1px solid var(--border);font-size:12px;max-height:300px;overflow:auto"></div></div><p class="mo" style="margin-top:12px">技術：DuckDB-WASM 瀏覽器內 SQL 引擎；Parquet 文件由 build/build_parquet.py 生成，並發布至 docs/data/*.parquet。</p><script src="assets/query.js"></script>
 </main>
 <footer>
-  《三國演義》本體論工程 · 參考 yejinlei 紅樓未完與西遊記本體論範式 · OWL 2 DL + DuckDB-WASM · 無服務器靜態站
-  <span class="stamp">千秋</span><span class="stamp">青史</span>
+  <span class="seal">千秋</span>
+  <div>《三國演義》本體論工程 · 以 OWL 2 DL 建構本體 · DuckDB-WASM 瀏覽器端查詢 · 無服務器靜態站<br>
+  參考 yejinlei《紅樓未完》與《西遊記》本體論範式 · 兼容《水滸傳》本體 sg/sh 前綴</div>
 </footer>
 <script src="assets/common.js"></script>
 </body></html>

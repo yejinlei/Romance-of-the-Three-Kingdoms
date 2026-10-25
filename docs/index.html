@@ -3,181 +3,68 @@
 <title>總覽 · 三國演義本體論</title>
 <link rel="stylesheet" href="assets/app.css"></head><body>
 <header>
-  <div class="seal l">三<br>國<br>志</div>
-  <div class="seal">演<br>義</div>
-  <h1>三國演義<span class="dot">·</span>本體論</h1>
-  <div class="subtitle">Romance of the Three Kingdoms · Ontology Project</div>
+  <span class="seal">演義</span>
+  <h1>三國演義</h1>
+  <div class="sub">Romance of the Three Kingdoms · Ontology Project</div>
+  <nav><a href="index.html" class=on>總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
 </header>
-<nav><a href="index.html" class=active>總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
 <main>
 
 <div class="hero">
-  <div class="poem">
-    滾滾長江東逝水，浪花淘盡英雄。<br>
-    是非成敗轉頭空。青山依舊在，幾度夕陽紅。<br>
-    白髮漁樵江渚上，慣看秋月春風。<br>
-    一壺濁酒喜相逢。<br>古今多少事，都付笑談中。
-    <small>—— 明·楊慎《臨江仙》（毛宗崗冠於卷首）</small>
-  </div>
-  <div class="intro">以羅貫中《三國演義》為核心文本，採用 OWL 2 DL 本體論建模，兼容水滸本體棧，<br>瀏覽器端 DuckDB-WASM 查詢，無服務器靜態部署。</div>
+  <span class="seal solid">開篇</span>
+  <div class="verse">滾滾長江東逝水　浪花淘盡英雄<br>
+  是非成敗轉頭空　青山依舊在　幾度夕陽紅<br>
+  白髮漁樵江渚上　慣看秋月春風<br>
+  一壺濁酒喜相逢　古今多少事　都付笑談中</div>
+  <div class="rule"></div>
+  <p class="lead">本工程以羅貫中《三國演義》毛宗崗評本為核心文本，效法 yejinlei《紅樓未完》本體論與
+  視覺範式，先立 OWL 2 DL 本體（10 大頂級類、35 對象屬性、24 種核心關係，其中 6 種三國專屬），
+  再以多 Agent 互相質證：版本學家、評點家、文史互證學者、知識圖譜工程師。
+  <b>毛宗崗定本為正統，嘉靖本/葉逢春本/李卓吾評本/沈伯俊校理本並列作異文對勘。</b></p>
 </div>
 
 <h2>規模</h2>
-<div class="stat-grid">
-  <div class="stat"><div class="num">120</div><div class="lbl">回次</div></div>
-  <div class="stat"><div class="num jade">0萬</div><div class="lbl">字數</div></div>
-  <div class="stat"><div class="num cinnabar">132</div><div class="lbl">人物</div></div>
-  <div class="stat"><div class="num bronze">19</div><div class="lbl">勢力</div></div>
-  <div class="stat"><div class="num steel">19</div><div class="lbl">戰役</div></div>
-  <div class="stat"><div class="num jade">104</div><div class="lbl">地點</div></div>
-  <div class="stat"><div class="num">13</div><div class="lbl">事件</div></div>
-  <div class="stat"><div class="num cinnabar">12</div><div class="lbl">版本</div></div>
-  <div class="stat"><div class="num bronze">27</div><div class="lbl">計謀</div></div>
-  <div class="stat"><div class="num indigo">12</div><div class="lbl">讖語</div></div>
-  <div class="stat"><div class="num gold">17</div><div class="lbl">器物</div></div>
-  <div class="stat"><div class="num steel">10</div><div class="lbl">本體類</div></div>
+<div class="grid">
+<div class="card">正文 <big>120</big> 回 · 毛評 <big>98</big> 條</div>
+<div class="card">人物 <big>132</big> · 勢力 <big>19</big></div>
+<div class="card">戰役 <big>19</big> · 地點 <big>104</big></div>
+<div class="card">計謀 <big>27</big> · 讖語 <big>12</big> · 器物 <big>17</big></div>
+<div class="card">版本 <big>12</big> 種 · 異文 <big>8</big> 組 · 關係 <big>137</big> 條</div>
 </div>
-
-<p class="lead">本工程以《紅樓未完》視覺與本體論方法為範式，將《三國演義》重構為可計算的知識本體：10 大頂級類（文學作品/人物/政治勢力/戰役/地理/事件/學者/成果/衍生/器物）、24 種核心關係（6 種三國專屬、18 種與水滸本體通用）、16 種版本元數據、8 組關鍵異文，並以 DuckDB-WASM 在瀏覽器端提供 SQL 查詢，無服務器、無數據外發。</p>
 
 <h2>入口</h2>
-<div class="portal-grid"><a class="portal" href="read.html">
-          <div class="en">The Text</div>
-          <h4>正文·毛宗崗評本</h4>
-          <div class="desc">一百二十回全文，朱批旁註，跨版本標註異文位置</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="ontology.html">
-          <div class="en">Ontology</div>
-          <h4>本體論·TBox</h4>
-          <div class="desc">10 大實體類、35 對象屬性、24 種核心關係，OWL 2 DL 公理</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="sanjue.html">
-          <div class="en">Three Paragons</div>
-          <h4>三絕</h4>
-          <div class="desc">毛宗崗標舉：智絕諸葛、義絕關羽、奸絕曹操</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="taoyuan.html">
-          <div class="en">Peach Garden</div>
-          <h4>桃園</h4>
-          <div class="desc">桃園結義——中國人「義」的原點</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="persons.html">
-          <div class="en">Persons</div>
-          <h4>人物譜</h4>
-          <div class="desc">主要人物卡片：字號/陣營/兵器/熱度</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="heroes.html">
-          <div class="en">Heroes List</div>
-          <h4>英雄譜</h4>
-          <div class="desc">全 132 位人物檢索表，按提及排序</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="genealogy.html">
-          <div class="en">Genealogy</div>
-          <h4>將相譜</h4>
-          <div class="desc">三國君臣將相隸屬體系，主從、姻親、仇敵</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="factions.html">
-          <div class="en">Factions</div>
-          <h4>勢力志</h4>
-          <div class="desc">東漢朝廷、曹魏、蜀漢、東吳、群雄並起的政治圖景</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="battles.html">
-          <div class="en">Battles</div>
-          <h4>戰役錄</h4>
-          <div class="desc">19 場會戰奇襲，火攻水戰、經緯戰場</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="timeline.html">
-          <div class="en">Century</div>
-          <h4>百年興亡</h4>
-          <div class="desc">從 184 黃巾起義到 280 三國歸晉，五階段百年時間軸</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="map.html">
-          <div class="en">Map</div>
-          <h4>三國輿圖</h4>
-          <div class="desc">三國形勢略圖：魏/蜀/吳疆域與郡城</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="places.html">
-          <div class="en">Places</div>
-          <h4>地名錄</h4>
-          <div class="desc">104 處關隘州郡，按類型分組</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="stratagems.html">
-          <div class="en">Stratagems</div>
-          <h4>計謀譜</h4>
-          <div class="desc">27 條奇策，三十六計在三國的實戰演繹</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="artifacts.html">
-          <div class="en">Artifacts</div>
-          <h4>兵器名馬</h4>
-          <div class="desc">17 件器物：青龍刀、赤兔馬、木牛流馬</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="prophecies.html">
-          <div class="en">Prophecies</div>
-          <h4>讖緯童謠</h4>
-          <div class="desc">12 則童謠、預言、星象讖語，敘事伏筆</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="foreshadow.html">
-          <div class="en">Foreshadowing</div>
-          <h4>草蛇灰線</h4>
-          <div class="desc">桃園誓言應驗、三馬同槽、臥龍鳳雛——千里伏線</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="poems.html">
-          <div class="en">Verse</div>
-          <h4>詩詞讚語</h4>
-          <div class="desc">開篇臨江仙、短歌行、隆中對、出師表</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="versions.html">
-          <div class="en">Editions</div>
-          <h4>版本譜</h4>
-          <div class="desc">演義系 / 志傳系 / 評點本 / 現代本源流 SVG 族譜</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="variants.html">
-          <div class="en">Variants</div>
-          <h4>異文對勘</h4>
-          <div class="desc">關鍵異文對照：「寧我負人」等文字演變</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="scholars.html">
-          <div class="en">Commentators</div>
-          <h4>批者群像</h4>
-          <div class="desc">李卓吾/金聖歎/毛宗崗/胡適/魯迅/沈伯俊/易中天</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="academy.html">
-          <div class="en">Scholarship</div>
-          <h4>論著</h4>
-          <div class="desc">版本學考證、文史互證、現代三國研究代表作</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="adaptations.html">
-          <div class="en">Adaptations</div>
-          <h4>影視戲曲遊戲</h4>
-          <div class="desc">央視三國/赤壁/真三國無雙/三國志/連環畫/京劇</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="graph.html">
-          <div class="en">Graph</div>
-          <h4>圖譜</h4>
-          <div class="desc">力導向知識圖譜：人物/勢力/器物三張子圖</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="mirror.html">
-          <div class="en">Mirror</div>
-          <h4>字鏡</h4>
-          <div class="desc">全書字頻雲，三國的字是刀、馬、兵、將</div>
-          <div class="enter">進入 →</div>
-        </a><a class="portal" href="query.html">
-          <div class="en">Query</div>
-          <h4>本體查詢</h4>
-          <div class="desc">DuckDB-WASM 瀏覽器內 SQL，無服務器、無數據外發</div>
-          <div class="enter">進入 →</div>
-        </a></div>
-
-<div class="colophon">
-  本體工程參考 yejinlei 西遊記本體論規範與《紅樓未完》視覺風格<br>
-  滾滾長江東逝水 · 浪花淘盡英雄
-  <span class="stamp">大塊</span><span class="stamp">文章</span>
-</div>
+<div class="grid"><div class="card"><h3>正文·毛宗崗評本</h3><p class="small">一百二十回全文，朱批旁註，跨版本標註異文位置</p>
+          <a href="read.html">進入 →</a></div><div class="card"><h3>本體論·TBox</h3><p class="small">10 大實體類、35 對象屬性、24 種核心關係，OWL 2 DL 公理</p>
+          <a href="ontology.html">進入 →</a></div><div class="card"><h3>三絕</h3><p class="small">毛宗崗標舉：智絕諸葛、義絕關羽、奸絕曹操</p>
+          <a href="sanjue.html">進入 →</a></div><div class="card"><h3>桃園</h3><p class="small">桃園結義——中國人「義」的原點</p>
+          <a href="taoyuan.html">進入 →</a></div><div class="card"><h3>人物譜</h3><p class="small">主要人物卡片：字號/陣營/兵器/熱度</p>
+          <a href="persons.html">進入 →</a></div><div class="card"><h3>英雄譜</h3><p class="small">全 132 位人物檢索表，按提及排序</p>
+          <a href="heroes.html">進入 →</a></div><div class="card"><h3>將相譜</h3><p class="small">三國君臣將相隸屬體系，主從、姻親、仇敵</p>
+          <a href="genealogy.html">進入 →</a></div><div class="card"><h3>勢力志</h3><p class="small">東漢朝廷、曹魏、蜀漢、東吳、群雄並起的政治圖景</p>
+          <a href="factions.html">進入 →</a></div><div class="card"><h3>戰役錄</h3><p class="small">19 場會戰奇襲，火攻水戰、經緯戰場</p>
+          <a href="battles.html">進入 →</a></div><div class="card"><h3>百年興亡</h3><p class="small">從 184 黃巾起義到 280 三國歸晉，五階段百年時間軸</p>
+          <a href="timeline.html">進入 →</a></div><div class="card"><h3>三國輿圖</h3><p class="small">三國形勢略圖：魏/蜀/吳疆域與郡城</p>
+          <a href="map.html">進入 →</a></div><div class="card"><h3>地名錄</h3><p class="small">104 處關隘州郡，按類型分組</p>
+          <a href="places.html">進入 →</a></div><div class="card"><h3>計謀譜</h3><p class="small">27 條奇策，三十六計在三國的實戰演繹</p>
+          <a href="stratagems.html">進入 →</a></div><div class="card"><h3>兵器名馬</h3><p class="small">17 件器物：青龍刀、赤兔馬、木牛流馬</p>
+          <a href="artifacts.html">進入 →</a></div><div class="card"><h3>讖緯童謠</h3><p class="small">12 則童謠、預言、星象讖語，敘事伏筆</p>
+          <a href="prophecies.html">進入 →</a></div><div class="card"><h3>草蛇灰線</h3><p class="small">桃園誓言應驗、三馬同槽、臥龍鳳雛——千里伏線</p>
+          <a href="foreshadow.html">進入 →</a></div><div class="card"><h3>詩詞讚語</h3><p class="small">開篇臨江仙、短歌行、隆中對、出師表</p>
+          <a href="poems.html">進入 →</a></div><div class="card"><h3>版本譜</h3><p class="small">演義系 / 志傳系 / 評點本 / 現代本源流 SVG 族譜</p>
+          <a href="versions.html">進入 →</a></div><div class="card"><h3>異文對勘</h3><p class="small">關鍵異文對照：「寧我負人」等文字演變</p>
+          <a href="variants.html">進入 →</a></div><div class="card"><h3>批者群像</h3><p class="small">李卓吾/金聖歎/毛宗崗/胡適/魯迅/沈伯俊/易中天</p>
+          <a href="scholars.html">進入 →</a></div><div class="card"><h3>論著</h3><p class="small">版本學考證、文史互證、現代三國研究代表作</p>
+          <a href="academy.html">進入 →</a></div><div class="card"><h3>影視戲曲遊戲</h3><p class="small">央視三國/赤壁/真三國無雙/三國志/連環畫/京劇</p>
+          <a href="adaptations.html">進入 →</a></div><div class="card"><h3>圖譜</h3><p class="small">力導向知識圖譜：人物/勢力/器物三張子圖</p>
+          <a href="graph.html">進入 →</a></div><div class="card"><h3>字鏡</h3><p class="small">全書字頻雲，三國的字是刀、馬、兵、將</p>
+          <a href="mirror.html">進入 →</a></div><div class="card"><h3>本體查詢</h3><p class="small">DuckDB-WASM 瀏覽器內 SQL，無服務器、無數據外發</p>
+          <a href="query.html">進入 →</a></div></div>
 
 </main>
 <footer>
-  《三國演義》本體論工程 · 參考 yejinlei 紅樓未完與西遊記本體論範式 · OWL 2 DL + DuckDB-WASM · 無服務器靜態站
-  <span class="stamp">千秋</span><span class="stamp">青史</span>
+  <span class="seal">千秋</span>
+  <div>《三國演義》本體論工程 · 以 OWL 2 DL 建構本體 · DuckDB-WASM 瀏覽器端查詢 · 無服務器靜態站<br>
+  參考 yejinlei《紅樓未完》與《西遊記》本體論範式 · 兼容《水滸傳》本體 sg/sh 前綴</div>
 </footer>
 <script src="assets/common.js"></script>
 </body></html>

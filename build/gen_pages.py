@@ -105,7 +105,7 @@ def nav(active=""):
         ("query.html","查詢台"),
     ]
     return '<nav>' + ''.join(
-        f'<a href="{h}"{" class=active" if h==active else ""}>{t}</a>' for h,t in items
+        f'<a href="{h}"{" class=on" if h==active else ""}>{t}</a>' for h,t in items
     ) + '</nav>'
 
 def header(title, subtitle="", active=""):
@@ -114,12 +114,11 @@ def header(title, subtitle="", active=""):
 <title>{title} · 三國演義本體論</title>
 <link rel="stylesheet" href="assets/app.css"></head><body>
 <header>
-  <div class="seal l">三<br>國<br>志</div>
-  <div class="seal">演<br>義</div>
-  <h1>三國演義<span class="dot">·</span>本體論</h1>
-  <div class="subtitle">Romance of the Three Kingdoms · Ontology Project{(" · "+subtitle) if subtitle else ""}</div>
+  <span class="seal">演義</span>
+  <h1>三國演義</h1>
+  <div class="sub">Romance of the Three Kingdoms · Ontology Project{(" · "+subtitle) if subtitle else ""}</div>
+  {nav(active)}
 </header>
-{nav(active)}
 <main>
 '''
 
@@ -127,8 +126,9 @@ def footer():
     return '''
 </main>
 <footer>
-  《三國演義》本體論工程 · 參考 yejinlei 紅樓未完與西遊記本體論範式 · OWL 2 DL + DuckDB-WASM · 無服務器靜態站
-  <span class="stamp">千秋</span><span class="stamp">青史</span>
+  <span class="seal">千秋</span>
+  <div>《三國演義》本體論工程 · 以 OWL 2 DL 建構本體 · DuckDB-WASM 瀏覽器端查詢 · 無服務器靜態站<br>
+  參考 yejinlei《紅樓未完》與《西遊記》本體論範式 · 兼容《水滸傳》本體 sg/sh 前綴</div>
 </footer>
 <script src="assets/common.js"></script>
 </body></html>'''
@@ -155,52 +155,35 @@ window.addEventListener('DOMContentLoaded',()=>{
 # ---- 1. 首頁 ----
 def page_index():
     portals = ''.join(
-        f'''<a class="portal" href="{h}">
-          <div class="en">{en}</div>
-          <h4>{t}</h4>
-          <div class="desc">{d}</div>
-          <div class="enter">進入 →</div>
-        </a>'''
+        f'''<div class="card"><h3>{t}</h3><p class="small">{d}</p>
+          <a href="{h}">進入 →</a></div>'''
         for h,t,en,d in PORTALS
     )
     body = f'''
 <div class="hero">
-  <div class="poem">
-    滾滾長江東逝水，浪花淘盡英雄。<br>
-    是非成敗轉頭空。青山依舊在，幾度夕陽紅。<br>
-    白髮漁樵江渚上，慣看秋月春風。<br>
-    一壺濁酒喜相逢。<br>古今多少事，都付笑談中。
-    <small>—— 明·楊慎《臨江仙》（毛宗崗冠於卷首）</small>
-  </div>
-  <div class="intro">以羅貫中《三國演義》為核心文本，採用 OWL 2 DL 本體論建模，兼容水滸本體棧，<br>瀏覽器端 DuckDB-WASM 查詢，無服務器靜態部署。</div>
+  <span class="seal solid">開篇</span>
+  <div class="verse">滾滾長江東逝水　浪花淘盡英雄<br>
+  是非成敗轉頭空　青山依舊在　幾度夕陽紅<br>
+  白髮漁樵江渚上　慣看秋月春風<br>
+  一壺濁酒喜相逢　古今多少事　都付笑談中</div>
+  <div class="rule"></div>
+  <p class="lead">本工程以羅貫中《三國演義》毛宗崗評本為核心文本，效法 yejinlei《紅樓未完》本體論與
+  視覺範式，先立 OWL 2 DL 本體（10 大頂級類、35 對象屬性、24 種核心關係，其中 6 種三國專屬），
+  再以多 Agent 互相質證：版本學家、評點家、文史互證學者、知識圖譜工程師。
+  <b>毛宗崗定本為正統，嘉靖本/葉逢春本/李卓吾評本/沈伯俊校理本並列作異文對勘。</b></p>
 </div>
 
 <h2>規模</h2>
-<div class="stat-grid">
-  <div class="stat"><div class="num">{len(chapters)}</div><div class="lbl">回次</div></div>
-  <div class="stat"><div class="num jade">{n_char//10000}萬</div><div class="lbl">字數</div></div>
-  <div class="stat"><div class="num cinnabar">{n_person}</div><div class="lbl">人物</div></div>
-  <div class="stat"><div class="num bronze">{n_faction}</div><div class="lbl">勢力</div></div>
-  <div class="stat"><div class="num steel">{n_battle}</div><div class="lbl">戰役</div></div>
-  <div class="stat"><div class="num jade">{n_place}</div><div class="lbl">地點</div></div>
-  <div class="stat"><div class="num">{n_event}</div><div class="lbl">事件</div></div>
-  <div class="stat"><div class="num cinnabar">{n_edition}</div><div class="lbl">版本</div></div>
-  <div class="stat"><div class="num bronze">{n_strat}</div><div class="lbl">計謀</div></div>
-  <div class="stat"><div class="num indigo">{n_proph}</div><div class="lbl">讖語</div></div>
-  <div class="stat"><div class="num gold">{n_art}</div><div class="lbl">器物</div></div>
-  <div class="stat"><div class="num steel">10</div><div class="lbl">本體類</div></div>
+<div class="grid">
+<div class="card">正文 <big>{len(chapters)}</big> 回 · 毛評 <big>{stat.get('mao_notes',98)}</big> 條</div>
+<div class="card">人物 <big>{n_person}</big> · 勢力 <big>{n_faction}</big></div>
+<div class="card">戰役 <big>{n_battle}</big> · 地點 <big>{n_place}</big></div>
+<div class="card">計謀 <big>{n_strat}</big> · 讖語 <big>{n_proph}</big> · 器物 <big>{n_art}</big></div>
+<div class="card">版本 <big>{n_edition}</big> 種 · 異文 <big>8</big> 組 · 關係 <big>{stat.get('relations',137)}</big> 條</div>
 </div>
-
-<p class="lead">本工程以《紅樓未完》視覺與本體論方法為範式，將《三國演義》重構為可計算的知識本體：10 大頂級類（文學作品/人物/政治勢力/戰役/地理/事件/學者/成果/衍生/器物）、24 種核心關係（6 種三國專屬、18 種與水滸本體通用）、16 種版本元數據、8 組關鍵異文，並以 DuckDB-WASM 在瀏覽器端提供 SQL 查詢，無服務器、無數據外發。</p>
 
 <h2>入口</h2>
-<div class="portal-grid">{portals}</div>
-
-<div class="colophon">
-  本體工程參考 yejinlei 西遊記本體論規範與《紅樓未完》視覺風格<br>
-  滾滾長江東逝水 · 浪花淘盡英雄
-  <span class="stamp">大塊</span><span class="stamp">文章</span>
-</div>
+<div class="grid">{portals}</div>
 '''
     write_page("index.html", "總覽", body, "", "index.html")
 
@@ -369,7 +352,7 @@ def page_persons():
         if f: tags.append(f'<span class="tag bronze">{f}</span>')
         meta = f"登場第 {p.get('first','?')} 回 · 提及 {p.get('total',0):,}"
         cards.append(f'''<div class="card {fc}">
-          <h4>{p.get('name','')}</h4>
+          <h3>{p.get('name','')}</h3>
           <div class="meta">{meta}</div>
           <div class="desc">{"".join(tags)}</div>
         </div>''')
@@ -395,7 +378,7 @@ def page_factions():
         fc = type_color.get(f.get('type',''),"bronze")
         top = f.get('top',[])[:10]
         cards.append(f'''<div class="card {fc}">
-          <h4>{f.get('full',f.get('name',''))}</h4>
+          <h3>{f.get('full',f.get('name',''))}</h3>
           <div class="meta">{f.get('type','')} · 都城：{f.get('capital','—')} · 核心人物 {f.get('members',0)} 人 · 累計提及 {f.get('total',0):,}</div>
           <div class="desc">{"".join(f'<span class="tag">{n} {t}</span>' for n,t in top)}</div>
         </div>''')
@@ -443,7 +426,7 @@ def page_battles():
         sa = b.get('side_a','') or ''
         win_color = "jade" if ("勝" in (b.get('outcome','') or '') and ("蜀" in sa or "劉備" in sa or "諸葛" in sa)) else ("indigo" if ("魏" in sa or "曹" in sa) else "bronze")
         cards.append('<div class="card ' + win_color + '">'
-          '<h4>'+b['name']+'</h4>'
+          '<h3>'+b['name']+'</h3>'
           '<div class="meta">'+str(b.get('year',''))+'年 · 第 '+str(b.get('chapter',''))+' 回</div>'
           '<div class="desc"><div><b>'+b.get('side_a','')+'</b> <span class="zhu">VS</span> <b>'+b.get('side_b','')+'</b></div>'
           '<div class="mo">結果：'+b.get('outcome','')+'</div></div></div>')
@@ -463,7 +446,7 @@ def page_places():
         blocks.append('<h3>'+t+'（'+str(len(lst))+'）</h3><div class="grid">')
         for p in lst:
             first_ch = p["spark"][0][0] if p.get("spark") else "?"
-            blocks.append('<div class="card"><h4>'+p['name']+'</h4>'
+            blocks.append('<div class="card"><h3>'+p['name']+'</h3>'
               '<div class="meta">提及 '+format(p.get('total',0),',')+' 次</div>'
               '<div class="desc"><span class="tag">'+t+'</span>'
               '<span class="tag jade">首見第 '+str(first_ch)+' 回</span></div></div>')
@@ -487,7 +470,7 @@ def page_timeline():
       '<div class="tl-year">第 '+str(e.get('chapter',''))+' 回 · '+e.get('type','')+'</div>'
       '<div class="tl-title">'+e.get('name','')+'</div>'
       '<div class="tl-desc">'+e.get('desc','')+' <span class="mo">（地：'+e.get('place','—')+'）</span></div></div>' for e in events_sorted)
-    phase_cards=''.join('<div class="card '+c+'"><h4>'+name+'</h4><div class="meta">'+start+' – '+end+'</div><div class="desc">'+desc+'</div></div>' for start,end,name,c,desc in phases)
+    phase_cards=''.join('<div class="card '+c+'"><h3>'+name+'</h3><div class="meta">'+start+' – '+end+'</div><div class="desc">'+desc+'</div></div>' for start,end,name,c,desc in phases)
     body = '<h2>百年興亡 · 184 → 280</h2>' \
       '<p class="lead">從黃巾起義到三國歸晉，近百年大歷史分為五個階段。下方時間軸標註 '+str(len(events))+' 個關鍵事件。</p>' \
       '<div class="grid">'+phase_cards+'</div><h3>事件時間軸</h3><div class="timeline">'+evs+'</div>'
@@ -496,7 +479,7 @@ def page_timeline():
 # ---- 10. 計謀譜 ----
 def page_stratagems():
     cards=''.join('<div class="card ' + ('jade' if s.get('type')=='敗戰計' else ('bronze' if s.get('type')=='勝戰計' else '')) + '">'
-      '<h4>'+s['name']+'</h4>'
+      '<h3>'+s['name']+'</h3>'
       '<div class="meta">'+str(s.get('type',''))+' · '+str(s.get('user',''))+'用 · 第 '+str(s.get('chapter',''))+' 回</div>'
       '<div class="desc">'+str(s.get('desc',''))+'</div></div>' for s in stratagems)
     body = '<h2>計謀譜 · '+str(len(stratagems))+' 條奇策</h2>' \
@@ -507,7 +490,7 @@ def page_stratagems():
 # ---- 11. 兵器名馬 ----
 def page_artifacts():
     cards=''.join('<div class="card ' + ('gold' if a.get('type')=='名馬' else ('steel' if a.get('type')=='兵器' else 'jade')) + '">'
-      '<h4>'+a['name']+'</h4>'
+      '<h3>'+a['name']+'</h3>'
       '<div class="meta">'+str(a.get('type',''))+' · 持有者：'+str(a.get('owner','—'))+' · 提及 '+str(a.get('total',0))+'</div></div>'
       for a in sorted(artifacts, key=lambda x:-x.get('total',0)))
     body = '<h2>兵器名馬 · '+str(len(artifacts))+' 件</h2>' \
@@ -518,7 +501,7 @@ def page_artifacts():
 # ---- 12. 讖緯童謠 ----
 def page_prophecies():
     cards=''.join('<div class="card indigo">'
-      '<h4>'+str(p.get('kind','讖語'))+'</h4>'
+      '<h3>'+str(p.get('kind','讖語'))+'</h3>'
       '<div class="meta">第 '+str(p.get('chapter',''))+' 回 · 應驗於：'+str(p.get('target','—'))+'</div>'
       '<div class="desc"><span class="zhu">'+str(p.get('text',''))+'</span><br><span class="mo">'+str(p.get('note',''))+'</span></div></div>'
       for p in prophecies)
@@ -532,12 +515,12 @@ def page_versions():
     fam = editions.get('family_meta',{})
     eds = editions.get('editions',[])
     family_cards=''.join('<div class="card ' + ('jade' if k=='yanyi' else 'bronze') + '">'
-      '<h4>'+v.get('name','')+'</h4>'
+      '<h3>'+v.get('name','')+'</h3>'
       '<div class="meta">祖本：'+v.get('stem','—')+'</div>'
       '<div class="desc">'+v.get('feature','')+'</div></div>' for k,v in fam.items())
     fc_map = {"yanyi":"","zhizhuan":"bronze"}
     ed_cards=''.join('<div class="card '+fc_map.get(e.get('family',''),'indigo')+'">'
-      '<h4>'+e.get('short', e.get('name',''))+'</h4>'
+      '<h3>'+e.get('short', e.get('name',''))+'</h3>'
       '<div class="meta">'+str(e.get('year',''))+'年 · '+('演義系' if e.get('family')=='yanyi' else ('志傳系' if e.get('family')=='zhizhuan' else '其他'))+' · '+str(e.get('survival',''))+' · '+('★全文' if e.get('has_fulltext') else '元數據')+'</div>'
       '<div class="desc">'+str(e.get('feature',''))[:140]+'……<br><span class="mo">'+str(e.get('editor',''))+'</span></div></div>' for e in eds)
     svg = '<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:Kaiti SC,serif;font-size:13">' \
@@ -573,7 +556,7 @@ def page_variants():
     cards=''
     for v in vr:
         rows=''.join('<tr><td>'+x.get('edition','')+'</td><td class="diff">'+x.get('text','')+'</td><td>'+x.get('note','')+'</td></tr>' for x in v.get('variants',[]))
-        cards += '<div class="card"><h4>'+v.get('topic','')+'</h4>' \
+        cards += '<div class="card"><h3>'+v.get('topic','')+'</h3>' \
           '<div class="meta">'+v.get('narrative_point','')+'</div>' \
           '<div class="desc"><table><tr><th>版本</th><th>文字</th><th>校記</th></tr>'+rows+'</table>' \
           '<p class="quote"><b>文獻學意義：</b>'+v.get('significance','')+'</p></div></div>'
@@ -600,7 +583,7 @@ def page_scholars():
         cc = "" if c not in ("red",) else ""
         name_html = n + (' <span class="stamp">定本</span>' if c=="red" else "")
         h4_color = ' style="color:var(--cinnabar-d)"' if c=="red" else ""
-        cards += '<div class="card '+cc+'"><h4'+h4_color+'>'+name_html+'</h4>' \
+        cards += '<div class="card '+cc+'"><h4'+h4_color+'>'+name_html+'</h3>' \
           '<div class="meta">'+y+' · '+f+'</div><div class="desc">'+d+'</div></div>'
     body = '<h2>批者群像 · '+str(len(scholars))+' 位</h2>' \
       '<p class="lead">從明末李卓吾、清初毛宗崗的古典評點傳統，到胡適魯迅的現代考據學，再到沈伯俊的版本學與易中天的大眾傳播——三國學術史本身就是一部中國小說批評史。</p>' \
@@ -617,7 +600,7 @@ def page_academy():
         ("《三國史話》","1943","呂思勉","史學家以正史糾小說之誤，文史互證典範。","文史互證"),
         ("《品三國》","2006","易中天","百家講壇講稿，大眾傳播典範。","大眾學術"),
     ]
-    cards=''.join('<div class="card"><h4>'+t+'</h4><div class="meta">'+y+' · '+a+' · <span class="tag">'+c+'</span></div><div class="desc">'+d+'</div></div>' for t,y,a,d,c in papers)
+    cards=''.join('<div class="card"><h3>'+t+'</h3><div class="meta">'+y+' · '+a+' · <span class="tag">'+c+'</span></div><div class="desc">'+d+'</div></div>' for t,y,a,d,c in papers)
     body = '<h2>論著 · 代表性研究</h2><p class="lead">從毛評本到當代版本學，呈現三國研究的學術脈絡。</p><div class="grid">'+cards+'</div>'
     write_page("academy.html", "論著", body)
 
@@ -636,7 +619,7 @@ def page_adaptations():
     cards=''
     for n,t,y,d,c,col,s in adapt:
         cc = ""
-        cards += '<div class="card"><h4>'+n+'</h4><div class="meta">'+y+' · '+t+' · <span class="tag">'+c+'</span> · 豆瓣 '+s+'</div><div class="desc">'+d+'</div></div>'
+        cards += '<div class="card"><h3>'+n+'</h3><div class="meta">'+y+' · '+t+' · <span class="tag">'+c+'</span> · 豆瓣 '+s+'</div><div class="desc">'+d+'</div></div>'
     body = '<h2>影視戲曲遊戲 · 衍生世界</h2>' \
       '<p class="lead">三國是華文世界最大的文化 IP——京劇、電影、電視、遊戲、連環畫，數百年不絕。</p>' \
       '<div class="grid">'+cards+'</div>'
@@ -653,7 +636,7 @@ def page_poems():
         ("七步詩","曹植（第79回）","煮豆燃豆萁，豆在釜中泣。本是同根生，相煎何太急！"),
         ("卷末詩","","紛紛世事無窮盡，天數茫茫不可逃。鼎足三分已成夢，後人憑弔空牢騷。"),
     ]
-    cards=''.join('<div class="card"><h4>'+t+'</h4><div class="meta">'+a+'</div><div class="desc"><p style="font-family:var(--kai);font-size:16px;line-height:2;color:var(--ink);text-indent:0">'+v+'</p></div></div>' for t,a,v in famous)
+    cards=''.join('<div class="card"><h3>'+t+'</h3><div class="meta">'+a+'</div><div class="desc"><p style="font-family:var(--kai);font-size:16px;line-height:2;color:var(--ink);text-indent:0">'+v+'</p></div></div>' for t,a,v in famous)
     body = '<h2>詩詞讚語</h2><p class="lead">毛宗崗以楊慎《臨江仙》定調開篇，奠定千古悲涼基調。</p><div class="grid">'+cards+'</div>'
     write_page("poems.html", "詩詞讚語", body)
 
@@ -710,10 +693,10 @@ def page_taoyuan():
       '<h3>桃園結義在中國文化中的意義</h3>' \
       '<p class="lead">桃園結義是中國人「義」的原點。從此，「兄弟」一詞跨過血緣，成為江湖倫理的最高範疇。關公信仰遍佈全球華人社區，皆源於此。</p>' \
       '<div class="grid">' \
-      '<div class="card"><h4>桃園在何處？</h4><div class="desc">河北涿郡（今涿州）桃園——張飛莊後。今涿州市樓桑廟三義宮為祭祀舊址。</div></div>' \
-      '<div class="card"><h4>桃花意象</h4><div class="desc">桃花象徵春季、青春與短暫。三兄弟於桃下結義，桃花之艷即為後來悲劇伏筆。</div></div>' \
-      '<div class="card"><h4>「桃園」作為文化母題</h4><div class="desc">後世天地會、洪門、青幫入會結拜，皆以桃園為典範；《水滸》聚義、《西游》取經團契皆受其影響。</div></div>' \
-      '<div class="card jade"><h4>「義」的內涵</h4><div class="desc"><b>君臣義</b>：關羽千里走單騎；<b>兄弟義</b>：張飛為兄長仇出師未捷身先死；<b>朋友義</b>：趙雲單騎救主；<b>知己義</b>：孔明鞠躬盡瘁報三顧。</div></div>' \
+      '<div class="card"><h3>桃園在何處？</h3><div class="desc">河北涿郡（今涿州）桃園——張飛莊後。今涿州市樓桑廟三義宮為祭祀舊址。</div></div>' \
+      '<div class="card"><h3>桃花意象</h3><div class="desc">桃花象徵春季、青春與短暫。三兄弟於桃下結義，桃花之艷即為後來悲劇伏筆。</div></div>' \
+      '<div class="card"><h3>「桃園」作為文化母題</h3><div class="desc">後世天地會、洪門、青幫入會結拜，皆以桃園為典範；《水滸》聚義、《西游》取經團契皆受其影響。</div></div>' \
+      '<div class="card jade"><h3>「義」的內涵</h3><div class="desc"><b>君臣義</b>：關羽千里走單騎；<b>兄弟義</b>：張飛為兄長仇出師未捷身先死；<b>朋友義</b>：趙雲單騎救主；<b>知己義</b>：孔明鞠躬盡瘁報三顧。</div></div>' \
       '</div>'
     write_page("taoyuan.html", "桃園", body)
 
@@ -788,7 +771,7 @@ def page_foreshadow():
         ("郭嘉遺計定遼東", "第33回郭嘉臨終遺計——曹操依計不戰而得袁氏首級，郭嘉死後猶能定計，伏「若郭嘉在，不使孤至此」之赤壁遺恨。"),
         ("華容道釋曹", "第50回關羽義釋曹操——三分天下於此定局：曹操不死、孫劉可聯、玄德得以立足。關羽之義，實為大勢之鑰。"),
     ]
-    cards=''.join('<div class="card"><h4>'+t+'</h4><div class="desc">'+d+'</div></div>' for t,d in threads)
+    cards=''.join('<div class="card"><h3>'+t+'</h3><div class="desc">'+d+'</div></div>' for t,d in threads)
     body = '<h2>千里伏綫</h2><p class="lead">毛宗崗評點最欣賞三國的「隔年下種、先時伏著」——一個細節，往往數十回後應驗。</p>' \
       '<div class="grid">'+cards+'</div>'
     write_page("foreshadow.html", "千里伏綫", body)

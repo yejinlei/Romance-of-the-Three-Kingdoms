@@ -3,18 +3,18 @@
 <title>字鏡 · 三國演義本體論</title>
 <link rel="stylesheet" href="assets/app.css"></head><body>
 <header>
-  <div class="seal l">三<br>國<br>志</div>
-  <div class="seal">演<br>義</div>
-  <h1>三國演義<span class="dot">·</span>本體論</h1>
-  <div class="subtitle">Romance of the Three Kingdoms · Ontology Project · 字頻雲</div>
+  <span class="seal">演義</span>
+  <h1>三國演義</h1>
+  <div class="sub">Romance of the Three Kingdoms · Ontology Project · 字頻雲</div>
+  <nav><a href="index.html">總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
 </header>
-<nav><a href="index.html">總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
 <main>
 <h2>字鏡 · 全書 590,968 字</h2><p class="lead">按全書字頻降序呈現前 120 個單字，字號大小對應出現頻率——三國的字，是刀、馬、兵、將、軍、曹、玄。</p><div id="mirror"></div><p class="mo" style="margin-top:16px">說明：僅統計出現次數 ≥ 100 次的中文字（去除標點與空白）。</p><script>fetch("data/freq.json").then(r=>r.json()).then(f=>{const max=f[0].c;const d=document.getElementById("mirror");f.slice(0,180).forEach(w=>{const s=18+52*w.c/max;const op=.55+.45*w.c/max;d.insertAdjacentHTML("beforeend",`<span style="font-size:\${s}px;opacity:\${op};margin:0 6px;font-family:var(--kai);color:var(--ink)">\${w.ch}</span>`);});});</script>
 </main>
 <footer>
-  《三國演義》本體論工程 · 參考 yejinlei 紅樓未完與西遊記本體論範式 · OWL 2 DL + DuckDB-WASM · 無服務器靜態站
-  <span class="stamp">千秋</span><span class="stamp">青史</span>
+  <span class="seal">千秋</span>
+  <div>《三國演義》本體論工程 · 以 OWL 2 DL 建構本體 · DuckDB-WASM 瀏覽器端查詢 · 無服務器靜態站<br>
+  參考 yejinlei《紅樓未完》與《西遊記》本體論範式 · 兼容《水滸傳》本體 sg/sh 前綴</div>
 </footer>
 <script src="assets/common.js"></script>
 </body></html>
