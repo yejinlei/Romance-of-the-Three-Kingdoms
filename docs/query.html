@@ -139,8 +139,28 @@ function setStatus(state, msg){
 async function initDB() {
   try {
     setStatus('ld', '加载 DuckDB-WASM 模块…');
-    const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
-    const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
+    // 運行庫優先使用站內自帶檔案（無 CDN 依賴）；不支援 WASM-EH 的舊瀏覽器回退 CDN 的 mvp 版
+    const LOCAL_BASE = new URL('lib/duckdb/', location.href).href;
+    const CDN_BASE = 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.0/dist/';
+    const BUNDLES = {
+      mvp: {
+        mainModule: CDN_BASE + 'duckdb-mvp.wasm',
+        mainWorker: CDN_BASE + 'duckdb-browser-mvp.worker.js'
+      },
+      eh: {
+        mainModule: LOCAL_BASE + 'duckdb-eh.wasm',
+        mainWorker: LOCAL_BASE + 'duckdb-browser-eh.worker.js'
+      }
+    };
+    // 站內檔案若缺失（如尚未放入），自動回退到 CDN 的 eh 版
+    try {
+      const probe = await fetch(LOCAL_BASE + 'duckdb-eh.wasm', {method: 'HEAD'});
+      if (!probe.ok) {
+        BUNDLES.eh.mainModule = CDN_BASE + 'duckdb-eh.wasm';
+        BUNDLES.eh.mainWorker = CDN_BASE + 'duckdb-browser-eh.worker.js';
+      }
+    } catch (e) { /* 探測失敗則維持站內路徑 */ }
+    const bundle = await duckdb.selectBundle(BUNDLES);
 
     // worker URL
     const worker_url = URL.createObjectURL(
