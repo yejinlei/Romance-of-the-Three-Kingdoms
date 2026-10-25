@@ -1,14 +1,183 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>總覽 · 三國演義本體論</title><meta name="description" content=""><link rel="stylesheet" href="assets/app.css"></head><body>
-<header class="topbar"><div class="seal">三國</div><h1 class="title"><a href="index.html">三國演義本體論</a></h1><p class="sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p></header>
-<nav class="tabbar"><a href="index.html">總覽</a><a href="read.html">正文</a><a href="versions.html">版本譜</a><a href="variants.html">異文對照</a><a href="persons.html">人物譜</a><a href="factions.html">勢力志</a><a href="relations.html">關係網</a><a href="places.html">輿地圖</a><a href="battles.html">戰役錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">器物譜</a><a href="prophecies.html">讖緯志</a><a href="graph.html">本體圖譜</a><a href="query.html">本體查詢</a><a href="ontology.html">本體論規範</a></nav>
-<section class="hero">
-  <div class="hero-text">
-    <p class="yinxiao">滾滾長江東逝水，浪花淘盡英雄。</p>
-    <h2 class="hero-title">三國演義本體論</h2>
-    <p class="hero-sub">以羅貫中《三國演義》為錨，參考 yejinlei 西遊記本體論與《石頭記》數字人文站的設計語言，構建面向多版本對照、異文研究、人物關係知識圖譜的開放本體工程。</p>
-    <div class="stat-grid"><div class="stat"><span class="n">120</span><span class="l">回次</span></div><div class="stat"><span class="n">59萬</span><span class="l">字數</span></div><div class="stat"><span class="n">132</span><span class="l">人物</span></div><div class="stat"><span class="n">12</span><span class="l">版本</span></div><div class="stat"><span class="n">8</span><span class="l">異文</span></div><div class="stat"><span class="n">137</span><span class="l">關係</span></div></div>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>總覽 · 三國演義本體論</title>
+<link rel="stylesheet" href="assets/app.css"></head><body>
+<header>
+  <div class="seal l">三<br>國<br>志</div>
+  <div class="seal">演<br>義</div>
+  <h1>三國演義<span class="dot">·</span>本體論</h1>
+  <div class="subtitle">Romance of the Three Kingdoms · Ontology Project</div>
+</header>
+<nav><a href="index.html" class=active>總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
+<main>
+
+<div class="hero">
+  <div class="poem">
+    滾滾長江東逝水，浪花淘盡英雄。<br>
+    是非成敗轉頭空。青山依舊在，幾度夕陽紅。<br>
+    白髮漁樵江渚上，慣看秋月春風。<br>
+    一壺濁酒喜相逢。<br>古今多少事，都付笑談中。
+    <small>—— 明·楊慎《臨江仙》（毛宗崗冠於卷首）</small>
   </div>
-</section>
-<section class="card-grid"><article class="poem-card"><h3>📚 多版本本體框架</h3><div class="card-body"><p>本體論 OWL 2 建模，兼容 <b>12</b> 個明清主要刊本，分屬<strong>演義系</strong>（嘉靖壬午本→周曰校本→李卓吾評本→毛宗崗本）與<strong>志傳系</strong>（葉逢春本→黃正甫本→余象斗本）兩大版本族。</p><p>新增類：<code>VersionFamily / Edition / Volume / Chapter / Paragraph / VariantReading / Commentary</code>，支持版本源流（derivedFrom）、跨版本回目對應（correspondsTo）、異文類型與文獻學意義標註。</p></div></article><article class="poem-card"><h3>📝 在綫全文</h3><div class="card-body"><p>收錄<b>毛宗崗評本</b>百二十回全文 <b>590,968 字</b>。可按回次切換閱讀，人物/地點/勢力已自動鏈結至實體卡。</p><p>其他版本（嘉靖本、周曰校本等）給出完整版本元數據與經典異文案例；欲加全文，把 TXT 放入 <code>raw/</code> 目錄運行 <code>build/*.py</code> 即可自動入庫。</p></div></article><article class="poem-card"><h3>🔍 實體抽取</h3><div class="card-body"><p>以本體受控詞表為錨，從原文抽取實體：<b>132 人物</b> · <b>104 地點</b> · 19 勢力 · 19 戰役 · 27 計謀 · 17 器物 · 12 讖語 · 13 事件</p><p>人物提及次數：<span class="zhu">曹操 2543 · 劉備 2509 · 諸葛亮 1861 · 關羽 943 · 呂布 858 · 孫權 777</span>。</p></div></article><article class="poem-card"><h3>⚖️ 異文對照</h3><div class="card-body"><p>整理 <b>8 組經典版本差異</b>：曹操名言、關公改印、孔明燒魏延、花關索故事、開篇《臨江仙》、靜軒詩去留、張郃戰張飛回合數等，按『版本—文本—文獻學意義』三欄展示。</p></div></article></section>
-<section class="card"><h3>🔗 閱讀入口</h3><div class="card-body"><p><a href="read.html">📖 在綫正文（毛本百二十回）</a></p><p><a href="variants.html">⚖️ 版本異文對照（8組經典案例）</a></p><p><a href="versions.html">📚 版本源流譜（12個主要刊本）</a></p><p><a href="graph.html">🕸 本體關係圖譜（可拖拽）</a></p></div></section><footer class="footer"><p>本站以毛宗崗評本百二十回為在綫全文（590,968字）；本體論（OWL 2）兼容嘉靖本/周曰校本/葉逢春本/黃正甫本/余象斗本/李卓吾評本/李漁評本/毛宗崗本/人民文學出版社本等12個主要版本。</p><p>工程以 yejinlei 西遊記本體論（jtw_kg_ontology.ttl）為範式，面向多版本對照與異文比對場景擴展；視覺系統參考《石頭記》數字人文站。</p></footer><script src="assets/app.js" defer></script></body></html>
+  <div class="intro">以羅貫中《三國演義》為核心文本，採用 OWL 2 DL 本體論建模，兼容水滸本體棧，<br>瀏覽器端 DuckDB-WASM 查詢，無服務器靜態部署。</div>
+</div>
+
+<h2>規模</h2>
+<div class="stat-grid">
+  <div class="stat"><div class="num">120</div><div class="lbl">回次</div></div>
+  <div class="stat"><div class="num jade">0萬</div><div class="lbl">字數</div></div>
+  <div class="stat"><div class="num cinnabar">132</div><div class="lbl">人物</div></div>
+  <div class="stat"><div class="num bronze">19</div><div class="lbl">勢力</div></div>
+  <div class="stat"><div class="num steel">19</div><div class="lbl">戰役</div></div>
+  <div class="stat"><div class="num jade">104</div><div class="lbl">地點</div></div>
+  <div class="stat"><div class="num">13</div><div class="lbl">事件</div></div>
+  <div class="stat"><div class="num cinnabar">12</div><div class="lbl">版本</div></div>
+  <div class="stat"><div class="num bronze">27</div><div class="lbl">計謀</div></div>
+  <div class="stat"><div class="num indigo">12</div><div class="lbl">讖語</div></div>
+  <div class="stat"><div class="num gold">17</div><div class="lbl">器物</div></div>
+  <div class="stat"><div class="num steel">10</div><div class="lbl">本體類</div></div>
+</div>
+
+<p class="lead">本工程以《紅樓未完》視覺與本體論方法為範式，將《三國演義》重構為可計算的知識本體：10 大頂級類（文學作品/人物/政治勢力/戰役/地理/事件/學者/成果/衍生/器物）、24 種核心關係（6 種三國專屬、18 種與水滸本體通用）、16 種版本元數據、8 組關鍵異文，並以 DuckDB-WASM 在瀏覽器端提供 SQL 查詢，無服務器、無數據外發。</p>
+
+<h2>入口</h2>
+<div class="portal-grid"><a class="portal" href="read.html">
+          <div class="en">The Text</div>
+          <h4>正文·毛宗崗評本</h4>
+          <div class="desc">一百二十回全文，朱批旁註，跨版本標註異文位置</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="ontology.html">
+          <div class="en">Ontology</div>
+          <h4>本體論·TBox</h4>
+          <div class="desc">10 大實體類、35 對象屬性、24 種核心關係，OWL 2 DL 公理</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="sanjue.html">
+          <div class="en">Three Paragons</div>
+          <h4>三絕</h4>
+          <div class="desc">毛宗崗標舉：智絕諸葛、義絕關羽、奸絕曹操</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="taoyuan.html">
+          <div class="en">Peach Garden</div>
+          <h4>桃園</h4>
+          <div class="desc">桃園結義——中國人「義」的原點</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="persons.html">
+          <div class="en">Persons</div>
+          <h4>人物譜</h4>
+          <div class="desc">主要人物卡片：字號/陣營/兵器/熱度</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="heroes.html">
+          <div class="en">Heroes List</div>
+          <h4>英雄譜</h4>
+          <div class="desc">全 132 位人物檢索表，按提及排序</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="genealogy.html">
+          <div class="en">Genealogy</div>
+          <h4>將相譜</h4>
+          <div class="desc">三國君臣將相隸屬體系，主從、姻親、仇敵</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="factions.html">
+          <div class="en">Factions</div>
+          <h4>勢力志</h4>
+          <div class="desc">東漢朝廷、曹魏、蜀漢、東吳、群雄並起的政治圖景</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="battles.html">
+          <div class="en">Battles</div>
+          <h4>戰役錄</h4>
+          <div class="desc">19 場會戰奇襲，火攻水戰、經緯戰場</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="timeline.html">
+          <div class="en">Century</div>
+          <h4>百年興亡</h4>
+          <div class="desc">從 184 黃巾起義到 280 三國歸晉，五階段百年時間軸</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="map.html">
+          <div class="en">Map</div>
+          <h4>三國輿圖</h4>
+          <div class="desc">三國形勢略圖：魏/蜀/吳疆域與郡城</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="places.html">
+          <div class="en">Places</div>
+          <h4>地名錄</h4>
+          <div class="desc">104 處關隘州郡，按類型分組</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="stratagems.html">
+          <div class="en">Stratagems</div>
+          <h4>計謀譜</h4>
+          <div class="desc">27 條奇策，三十六計在三國的實戰演繹</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="artifacts.html">
+          <div class="en">Artifacts</div>
+          <h4>兵器名馬</h4>
+          <div class="desc">17 件器物：青龍刀、赤兔馬、木牛流馬</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="prophecies.html">
+          <div class="en">Prophecies</div>
+          <h4>讖緯童謠</h4>
+          <div class="desc">12 則童謠、預言、星象讖語，敘事伏筆</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="foreshadow.html">
+          <div class="en">Foreshadowing</div>
+          <h4>草蛇灰線</h4>
+          <div class="desc">桃園誓言應驗、三馬同槽、臥龍鳳雛——千里伏線</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="poems.html">
+          <div class="en">Verse</div>
+          <h4>詩詞讚語</h4>
+          <div class="desc">開篇臨江仙、短歌行、隆中對、出師表</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="versions.html">
+          <div class="en">Editions</div>
+          <h4>版本譜</h4>
+          <div class="desc">演義系 / 志傳系 / 評點本 / 現代本源流 SVG 族譜</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="variants.html">
+          <div class="en">Variants</div>
+          <h4>異文對勘</h4>
+          <div class="desc">關鍵異文對照：「寧我負人」等文字演變</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="scholars.html">
+          <div class="en">Commentators</div>
+          <h4>批者群像</h4>
+          <div class="desc">李卓吾/金聖歎/毛宗崗/胡適/魯迅/沈伯俊/易中天</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="academy.html">
+          <div class="en">Scholarship</div>
+          <h4>論著</h4>
+          <div class="desc">版本學考證、文史互證、現代三國研究代表作</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="adaptations.html">
+          <div class="en">Adaptations</div>
+          <h4>影視戲曲遊戲</h4>
+          <div class="desc">央視三國/赤壁/真三國無雙/三國志/連環畫/京劇</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="graph.html">
+          <div class="en">Graph</div>
+          <h4>圖譜</h4>
+          <div class="desc">力導向知識圖譜：人物/勢力/器物三張子圖</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="mirror.html">
+          <div class="en">Mirror</div>
+          <h4>字鏡</h4>
+          <div class="desc">全書字頻雲，三國的字是刀、馬、兵、將</div>
+          <div class="enter">進入 →</div>
+        </a><a class="portal" href="query.html">
+          <div class="en">Query</div>
+          <h4>本體查詢</h4>
+          <div class="desc">DuckDB-WASM 瀏覽器內 SQL，無服務器、無數據外發</div>
+          <div class="enter">進入 →</div>
+        </a></div>
+
+<div class="colophon">
+  本體工程參考 yejinlei 西遊記本體論規範與《紅樓未完》視覺風格<br>
+  滾滾長江東逝水 · 浪花淘盡英雄
+  <span class="stamp">大塊</span><span class="stamp">文章</span>
+</div>
+
+</main>
+<footer>
+  《三國演義》本體論工程 · 參考 yejinlei 紅樓未完與西遊記本體論範式 · OWL 2 DL + DuckDB-WASM · 無服務器靜態站
+  <span class="stamp">千秋</span><span class="stamp">青史</span>
+</footer>
+<script src="assets/common.js"></script>
+</body></html>

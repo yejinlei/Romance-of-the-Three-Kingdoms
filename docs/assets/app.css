@@ -277,3 +277,47 @@ footer .stamp{margin-left:10px}
 .cell.warm{background:#d69a72;color:#fff;border-color:#b47a51}
 .cell.cool{background:var(--jade);color:#fff;border-color:var(--jade-d)}
 .cell.cold{background:var(--indigo);color:#fff;border-color:var(--indigo-d)}
+
+/* ==== 新增：三国补充样式 ==== */
+.canvas-wrap{position:relative;background:var(--paper2);border:1px double var(--bronze);padding:0;overflow:hidden;margin:16px 0;border-radius:2px}
+.canvas-wrap canvas{display:block;width:100%;height:auto;background:
+  radial-gradient(ellipse at 30% 30%, rgba(255,255,255,.5), transparent 60%),
+  repeating-linear-gradient(90deg, rgba(139,111,62,.03) 0 1px, transparent 1px 40px),
+  repeating-linear-gradient(0deg,  rgba(139,111,62,.03) 0 1px, transparent 1px 40px),
+  var(--paper2)}
+#info{position:absolute;top:12px;left:12px;max-width:340px;padding:12px 14px;background:rgba(255,253,248,.92);border:1px solid var(--bronze);box-shadow:2px 3px 0 rgba(139,111,62,.15);font-size:13px;line-height:1.7;border-radius:2px}
+#info .tip h4{font-family:var(--kai)}
+#info .tag{display:inline-block;margin:2px 3px 0 0;padding:1px 7px;background:var(--paper);border:1px solid var(--border);font-size:11px;border-radius:1px;color:var(--ink2)}
+.legend{position:absolute;bottom:12px;right:12px;padding:8px 12px;background:rgba(255,253,248,.9);border:1px solid var(--border);font-size:12px;border-radius:2px}
+.lg{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 3px 0 10px;vertical-align:middle}
+.lg-people{background:#9e2a20}.lg-faction{background:#b07b28}.lg-artifact{background:#3d6b5c}
+
+.query-panel{background:var(--paper2);border:1px solid var(--border);padding:16px;margin:16px 0;border-radius:2px}
+.query-panel textarea{width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--paper);font-family:"SFMono-Regular",Consolas,"Kaiti SC",monospace;font-size:13px;line-height:1.7;resize:vertical;min-height:120px;color:var(--ink);border-radius:2px}
+.query-panel button{padding:7px 18px;background:var(--cinnabar);color:#f7edd4;border:none;font-family:var(--kai);font-size:14px;cursor:pointer;border-radius:2px;margin-right:6px}
+.query-panel button:hover{background:var(--cinnabar-d)}
+.query-panel select{padding:6px 10px;border:1px solid var(--border);background:var(--paper);font-family:var(--kai);font-size:13px;color:var(--ink);border-radius:2px}
+
+#q{width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--paper);font-size:14px;font-family:var(--kai);margin:8px 0 14px;border-radius:2px}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left}
+th{background:var(--paper);font-family:var(--kai);color:var(--ink);font-weight:600;border-top:1px solid var(--border);border-bottom:2px solid var(--bronze)}
+td.diff{font-family:var(--kai);color:var(--ink)}
+tbody tr:hover{background:rgba(176,123,40,.06)}
+
+.lineage{background:var(--paper2);border:1px double var(--bronze);padding:16px;margin:12px 0;border-radius:2px}
+.tl-item{padding:14px 18px;border-left:3px solid var(--bronze);margin:0 0 12px 18px;background:var(--paper2);position:relative;border-radius:0 2px 2px 0}
+.tl-item::before{content:"";position:absolute;left:-8px;top:18px;width:12px;height:12px;border-radius:50%;background:var(--cinnabar);border:2px solid var(--paper2)}
+.tl-year{font-size:12px;color:var(--cinnabar-d);font-family:var(--kai);margin-bottom:4px}
+.tl-title{font-size:16px;font-family:var(--kai);font-weight:600;color:var(--ink);margin-bottom:4px}
+.tl-desc{font-size:13px;line-height:1.8;color:var(--ink2)}
+
+.hero-poem{margin:20px 0}
+
+.card.red{border-left:3px solid var(--cinnabar)}
+.card.hero-jade{border-left:4px solid var(--jade)}
+.card.hero-indigo{border-left:4px solid var(--indigo)}
+.card.hero-zhu{border-left:4px solid var(--cinnabar-d);background:linear-gradient(90deg, rgba(158,42,32,.06), transparent)}
+
+.hero{padding:32px 0 16px;text-align:center}

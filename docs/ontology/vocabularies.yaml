@@ -1,188 +1,483 @@
 # ============================================================
-# 《三国演义》知识图谱受控词表
-# 用途：抽取 / 入库 / 查询全链路统一词汇，避免同义异写
+# 《三國演義》本體論 · 受控詞表（與 OWL TBox 同步）
+# 兼容水滸本體棧（sg_ / sh_ 統一前綴規則）
 # ============================================================
 
+ontology:
+  uri: "http://localhost/sanguo-kg#"
+  prefix: "sg"
+  title: "《三國演義》知識本體 · 受控詞表"
+  version: "3.0-complete"
+  cross_ontology:
+    - name: "水滸傳本體"
+      prefix: "sh"
+      uri: "http://localhost/outlaws-kg#"
+      join_key: ["person_id", "place_id", "artifact_id"]
+
+# ---- 頂層實體類與全局主鍵 ----
+entity_classes:
+  LiteraryWork:
+    label: "文學作品（版本）"
+    pk: "version_id"
+    id_prefix: "sg_version_"
+    subclasses:
+      AncientEdition:      "古本系統（明刊及更早）"
+      AnnotatedEdition:    "評點改造本"
+      ModernCollation:     "現代整理本"
+      SequelWork:          "續書衍生本"
+    properties:
+      - version_id
+      - version_name
+      - edition_year
+      - publisher
+      - survival_status
+      - source_text
+      - chapter_count
+      - variant_feature
+      - family_lineage
+      - has_fulltext
+
+  Person:
+    label: "人物"
+    pk: "person_id"
+    id_prefix: "sg_person_"
+    subclasses:
+      CivilOfficial:     "核心文臣（謀士/宰輔）"
+      General:           "武將"
+      Royalty:           "皇族（帝王/宗室）"
+      Commoner:          "民間角色"
+      MinorityFigure:    "少數民族人物"
+      Woman:             "女性角色"
+      FictionalFigure:   "虛構人物"
+    properties:
+      - person_id
+      - name
+      - zi
+      - hao
+      - nickname
+      - alias_set
+      - first_chapter
+      - death_chapter
+      - official_history
+      - weapon
+      - ending
+      - fictional_flag
+      - birth_year
+      - death_year
+      - gender
+      - mention_count
+
+  Faction:
+    label: "政治勢力"
+    pk: "force_id"
+    id_prefix: "sg_force_"
+    subclasses:
+      HanCourt:          "東漢朝廷"
+      CaoWei:            "曹魏"
+      ShuHan:            "蜀漢"
+      EasternWu:         "東吳"
+      Warlord:           "割據諸侯"
+      MinorityPower:     "少數民族政權"
+    properties:
+      - force_id
+      - faction_name
+      - founder
+      - period_start
+      - period_end
+      - capital
+      - core_officials
+      - territory
+      - reign_title
+
+  Battle:
+    label: "戰爭戰役"
+    pk: "battle_id"
+    id_prefix: "sg_battle_"
+    subclasses:
+      MajorBattle:       "大型會戰"
+      LocalBattle:       "局部戰役"
+      Ambush:            "伏擊戰"
+      NavalBattle:       "水戰"
+      Raid:              "奇襲戰"
+      Siege:             "圍城戰"
+    properties:
+      - battle_id
+      - battle_name
+      - battle_chapter
+      - battle_year
+      - side_a
+      - side_b
+      - key_tactic
+      - outcome
+      - impact
+      - casualties
+
+  Place:
+    label: "空間地理"
+    pk: "location_id"
+    id_prefix: "sg_place_"
+    subclasses:
+      AncientPlace:      "古地名（州郡）"
+      ModernSite:        "當代對應地點"
+      Pass:              "戰略關隘"
+      Capital:           "都城"
+      Battlefield:       "戰場遺址"
+      Mountain:          "山嶽"
+      River:             "江河"
+    properties:
+      - location_id
+      - ancient_name
+      - modern_name
+      - prefecture
+      - longitude
+      - latitude
+      - strategic_value
+      - related_battle
+      - modern_ruins
+
+  Event:
+    label: "事件"
+    pk: "event_id"
+    id_prefix: "sg_event_"
+    subclasses:
+      PersonalEvent:     "個人事件"
+      PoliticalEvent:    "政治事件"
+      DiplomaticEvent:   "外交事件"
+      AllusionEvent:     "典故事件"
+    properties:
+      - event_id
+      - event_name
+      - event_chapter
+      - event_year
+      - participants
+      - event_location
+      - narrative_weight
+      - fictional_event
+
+  Scholar:
+    label: "學術主體"
+    pk: "scholar_id"
+    id_prefix: "sg_scholar_"
+    subclasses:
+      AncientCommentator: "古代評點家"
+      ModernScholar:      "近現代三國學者"
+      ResearchInstitute:  "當代研究機構"
+    properties:
+      - scholar_id
+      - scholar_name
+      - birth_year
+      - death_year
+      - school
+      - research_field
+      - major_works
+
+  AcademicWork:
+    label: "學術成果"
+    pk: "paper_id"
+    id_prefix: "sg_paper_"
+    subclasses:
+      CommentaryEdition: "古代評點本"
+      ModernMonograph:   "現代研究論著"
+      AcademicPaper:     "學術論文"
+      CollatedEdition:   "校理校本"
+    properties:
+      - paper_id
+      - paper_title
+      - pub_year
+      - core_argument
+      - citations
+      - research_topic
+      - base_edition
+
+  Adaptation:
+    label: "衍生作品"
+    pk: "adapt_id"
+    id_prefix: "sg_adapt_"
+    subclasses:
+      FilmTV:            "影視改編"
+      Opera:             "戲曲改編"
+      Anime:             "動漫改編"
+      Game:              "遊戲改編"
+      FanWork:           "同人作品"
+    properties:
+      - adapt_id
+      - adapt_name
+      - adapt_type
+      - release_year
+      - core_change
+      - creator_team
+      - douban_score
+
+  Artifact:
+    label: "器物"
+    pk: "artifact_id"
+    id_prefix: "sg_artifact_"
+    subclasses:
+      Weapon:            "兵器"
+      FamousHorse:       "名馬"
+      Formation:         "陣法"
+      Invention:         "發明創造"
+      SealTalisman:      "印綬符節"
+    properties:
+      - artifact_id
+      - artifact_name
+      - owner
+      - artifact_chapter
+      - function
+      - allusion
+
+  # ---- 枚舉層（輔助）----
+  Stratagem:
+    label: "計謀"
+    pk: "stratagem_id"
+    id_prefix: "sg_strat_"
+
+  Prophecy:
+    label: "讖緯"
+    pk: "prophecy_id"
+    id_prefix: "sg_proph_"
+
+  Office:
+    label: "官職"
+    pk: "office_id"
+    id_prefix: "sg_office_"
+
+# ---- 24 種核心關係（6 三國專屬 + 18 通用）----
+relations:
+  # 人-人通用
+  swornBrotherOf:
+    label: "結拜為兄弟"
+    domain: Person
+    range: Person
+    shared_with_shuihu: true
+    attrs: ["oath_chapter", "rank_order"]
+    features: [symmetric]
+
+  enemyOf_person:
+    label: "敵對（人-人）"
+    domain: Person
+    range: Person
+    shared_with_shuihu: true
+    attrs: ["first_clash_chapter", "intensity"]
+    features: [symmetric]
+
+  masterOf:
+    label: "師徒（師→徒）"
+    domain: Person
+    range: Person
+    shared_with_shuihu: true
+    attrs: ["teaching_content", "appear_chapter"]
+    inverse: apprenticeOf
+
+  kinOf:
+    label: "親屬"
+    domain: Person
+    range: Person
+    shared_with_shuihu: true
+    attrs: ["kinship_type", "generation"]
+    features: [symmetric]
+
+  # 人-人專屬
+  lordOf:
+    label: "主臣（君→臣）"
+    domain: Person
+    range: Person
+    sanguo_only: true
+    attrs: ["service_period", "trust_level", "office_at"]
+    inverse: ministerOf
+
+  # 人-勢力專屬
+  belongsToForce:
+    label: "所屬（人物→勢力）"
+    domain: Person
+    range: Faction
+    sanguo_only: true
+    attrs: ["join_time", "office_history"]
+
+  # 人-戰役專屬
+  commands:
+    label: "指揮（人物→戰役）"
+    domain: Person
+    range: Battle
+    sanguo_only: true
+    attrs: ["role", "tactic_contribution"]
+
+  fightsIn:
+    label: "參戰（人物→戰役）"
+    domain: Person
+    range: Battle
+    sanguo_only: true
+    attrs: ["identity", "ending"]
+
+  # 勢力-勢力專屬
+  alliedWith:
+    label: "結盟"
+    domain: Faction
+    range: Faction
+    sanguo_only: true
+    attrs: ["period", "treaty"]
+    features: [symmetric]
+
+  enemyOf_force:
+    label: "敵對（勢力-勢力）"
+    domain: Faction
+    range: Faction
+    sanguo_only: true
+    attrs: ["war_period"]
+    features: [symmetric]
+
+  # 戰役-地點專屬
+  battleAt:
+    label: "發生於（戰役→地點）"
+    domain: Battle
+    range: Place
+    sanguo_only: true
+    attrs: ["battlefield_scope", "coordinates"]
+
+  # 版本-版本通用
+  derivedFrom:
+    label: "演化自"
+    domain: LiteraryWork
+    range: LiteraryWork
+    shared_with_shuihu: true
+    attrs: ["year_diff", "inheritance_rate"]
+    features: [transitive]
+
+  # 版本-版本專屬
+  annotatedBy:
+    label: "評點改造"
+    domain: LiteraryWork
+    range: Scholar
+    sanguo_only: true
+    attrs: ["modify_scale", "key_plot_changes"]
+
+  # 版本-人物通用
+  appearsIn:
+    label: "登場於（人物→版本）"
+    domain: Person
+    range: LiteraryWork
+    shared_with_shuihu: true
+    attrs: ["ending_diff", "text_variant"]
+
+  # 版本-事件通用
+  includedIn:
+    label: "收錄於（事件→版本）"
+    domain: Event
+    range: LiteraryWork
+    shared_with_shuihu: true
+    attrs: ["plot_cut", "text_variant"]
+
+  # 學者-成果通用
+  authored:
+    label: "創作"
+    domain: Scholar
+    range: AcademicWork
+    shared_with_shuihu: true
+    attrs: ["pub_time", "abstract"]
+
+  # 學者-學者通用
+  debatesWith:
+    label: "學術論戰"
+    domain: Scholar
+    range: Scholar
+    shared_with_shuihu: true
+    attrs: ["topic", "time"]
+    features: [symmetric]
+
+  # 版本-學者通用
+  studiesEdition:
+    label: "研究"
+    domain: Scholar
+    range: LiteraryWork
+    shared_with_shuihu: true
+    attrs: ["findings", "core_conclusion"]
+
+  # 事件-地點通用
+  eventAt:
+    label: "發生於（事件→地點）"
+    domain: Event
+    range: Place
+    shared_with_shuihu: true
+    attrs: ["event_time", "coordinates"]
+
+  # 衍生-版本通用
+  adaptedFrom:
+    label: "改編自"
+    domain: Adaptation
+    range: LiteraryWork
+    shared_with_shuihu: true
+    attrs: ["modify_scale", "key_plot_changes"]
+
+  # 人-器物專屬
+  possesses:
+    label: "持有（人物→器物）"
+    domain: Person
+    range: Artifact
+    sanguo_only: true
+    attrs: ["hold_period", "chapter"]
+
+  # 戰役-器物專屬
+  usesArtifact:
+    label: "使用（戰役→器物）"
+    domain: Battle
+    range: Artifact
+    sanguo_only: true
+    attrs: ["scene", "tactical_effect"]
+
+  # 人-事件通用
+  participatesIn:
+    label: "參與"
+    domain: Person
+    range: Event
+    shared_with_shuihu: true
+    attrs: ["role", "narrative_weight"]
+
+  # 人-地點通用
+  activeAt:
+    label: "活動於"
+    domain: Person
+    range: Place
+    shared_with_shuihu: true
+    attrs: ["chapters", "related_events"]
+
+# ---- 受控詞枚舉 ----
 verification_status:
-  已核实:
-    en: verified
-    desc: 至少两版原文印证或有明确史源
-  存疑:
-    en: doubtful
-    desc: 单一版本出现，或与主流版本冲突
-  待核实:
-    en: pending
-    desc: 抽取初稿，未交叉验证
-  版本间冲突:
-    en: cross_edition_conflict
-    desc: 嘉靖本与毛本对同一情节表述不一致（如回合数、兵器归属）
+  - {id: verified,  label: "已核實"}
+  - {id: doubtful,  label: "存疑"}
+  - {id: pending,   label: "待核實"}
+  - {id: conflict,  label: "版本間衝突"}
 
-# —— 人物类别 ——
-person_category:
-  君主:
-    en: monarch
-    desc: 各势力之主：曹操、刘备、孙权、袁绍、刘表、董卓……
-  谋士:
-    en: strategist
-    desc: 运筹帷幄者：诸葛亮、荀彧、郭嘉、周瑜、司马懿、贾诩……
-  将领:
-    en: general
-    desc: 统兵作战者：关羽、张飞、赵云、马超、张辽、夏侯惇……
-  文臣:
-    en: minister
-    desc: 理政外交者：荀攸、鲁肃、张昭、蒋琬、费祎……
-  武将:
-    en: warrior
-    desc: 以勇武见者：典韦、许褚、吕布、颜良、文丑、甘宁……
-  女性:
-    en: female
-    desc: 貂蝉、孙尚香、大乔小乔、糜夫人、甘夫人、祝融夫人……
-  宦官:
-    en: eunuch
-    desc: 十常侍、张让、赵忠、黄皓、岑昏……
-  方士:
-    en: thaumaturge
-    desc: 左慈、于吉、管辂、张角（以术惑众者）
-  隐逸:
-    en: recluse
-    desc: 水镜先生、庞德公、崔州平、石广元、孟公威
-  神异:
-    en: numinous
-    desc: 关羽显圣、诸葛亮定军山显灵、梨山老母式仙人
+variant_type:
+  - typo         # 訛字
+  - missing      # 脫文
+  - extra        # 衍文
+  - rewrite      # 改寫
+  - poetry       # 詩文增刪
+  - plot         # 情節增刪
+  - commentary   # 評點增刪
 
-# —— 势力类别 ——
-faction_category:
-  正统朝廷:
-    en: legitimate_court
-    desc: 汉室，都洛阳 / 许都
-  割据诸侯:
-    en: warlord
-    desc: 袁绍、袁术、刘表、刘璋、张鲁、马腾、公孙瓒、陶谦……
-  篡逆:
-    en: usurper
-    desc: 董卓、李傕郭汜、司马氏
-  三足鼎立:
-    en: tripartite
-    desc: 魏、蜀、吴
-  农民军:
-    en: rebel_army
-    desc: 黄巾、张角兄弟
-  边族:
-    en: frontier_people
-    desc: 南蛮孟获、西羌、乌桓、山越
-  草莽:
-    en: outlaw
-    desc: 张燕、裴元绍、周仓、廖化（早期）
+relation_weight:
+  - {id: core,    label: "核心（主線）"}
+  - {id: major,   label: "重要"}
+  - {id: minor,   label: "次要"}
 
-# —— 关系类型 ——
-relation_type:
-  # 血缘 kinship
-  父子: {en: parent_child}
-  兄弟: {en: sibling}
-  结义兄弟:
-    en: sworn_brother
-    desc: 桃园三结义：刘备—关羽—张飞
-  配偶: {en: spouse}
-  政治联姻:
-    en: political_marriage
-    desc: 孙权嫁妹与刘备、曹操以女配汉献帝
-  宗亲: {en: clan_kin}
+family_lineage:
+  - {id: yanyi,    label: "演義系"}
+  - {id: zhizhuan, label: "志傳系"}
+  - {id: modern,   label: "現代整理本"}
+  - {id: sequel,   label: "續書衍生"}
 
-  # 君臣主从 allegiance
-  君臣:
-    en: lord_vassal
-    desc: 一方为另一方之主
-  义从:
-    en: sworn_retainer
-    desc: 非血缘而以义相结，关羽之守义归刘
-  荐举:
-    en: recommendation
-    desc: 徐庶荐诸葛、鲁肃荐庞统、荀彧荐郭嘉
-  继任: {en: succession}
-  叛降:
-    en: defection
-    desc: 吕布之反复、张辽降曹、黄忠降刘、姜维降蜀
+faction_system:
+  - {id: HanCourt, label: "東漢朝廷", color: "#8b6f47"}
+  - {id: CaoWei,   label: "曹魏", color: "#4a5d8f"}
+  - {id: ShuHan,   label: "蜀漢", color: "#a8322a"}
+  - {id: Wu,       label: "東吳", color: "#3d6b5c"}
+  - {id: Warlord,  label: "群雄", color: "#7d6b5c"}
+  - {id: Other,    label: "其他", color: "#999"}
 
-  # 冲突 antagonism
-  敌对: {en: enmity}
-  杀:
-    en: kill
-    desc: 甲为乙所杀（关羽杀颜良、潘璋杀关羽）
-  败:
-    en: defeat
-    desc: 甲败于乙
-  仇:
-    en: feud
-
-  # 交游 / 情感
-  师友: {en: mentor_friend}
-  同僚: {en: colleague}
-  通好:
-    en: alliance
-    desc: 孙刘联盟、孙曹联合
-
-# —— 计谋类型（依三十六计归类） ——
-stratagem_type:
-  胜战计: {en: winning, desc: 瞒天过海、围魏救赵、借刀杀人、以逸待劳、趁火打劫、声东击西}
-  敌战计: {en: enemy, desc: 无中生有、暗度陈仓、隔岸观火、笑里藏刀、李代桃僵、顺手牵羊}
-  攻战计: {en: attack, desc: 打草惊蛇、借尸还魂、调虎离山、欲擒故纵、抛砖引玉、擒贼擒王}
-  混战计: {en: chaos, desc: 釜底抽薪、混水摸鱼、金蝉脱壳、关门捉贼、远交近攻、假道伐虢}
-  并战计: {en: coexistence, desc: 偷梁换柱、指桑骂槐、假痴不癫、上屋抽梯、树上开花、反客为主}
-  败战计: {en: desperate, desc: 美人计、空城计、反间计、苦肉计、连环计、走为上}
-
-# —— 谶语类型 ——
-prophecy_type:
-  童谣: {en: children_rhyme}
-  星象: {en: astrology}
-  梦兆: {en: dream_omen}
-  图谶: {en: apocrypha}
-  诗谶: {en: poetic_omen}
-  天象: {en: celestial}
-
-# —— 器物类型 ——
-artifact_type:
-  兵器: {en: weapon}
-  坐骑: {en: mount}
-  印绶: {en: seal}
-  服饰: {en: apparel}
-  琴书: {en: zither_book}
-  珍宝: {en: treasure}
-  军械: {en: siege_gear, desc: 木牛流马、连弩、霹雳车}
-
-# —— 地点类型 ——
-place_type:
-  州郡: {en: province}
-  城池: {en: city}
-  关隘: {en: pass, desc: 虎牢关、剑阁、阳平关、街亭}
-  山川: {en: mountain_river}
-  战场: {en: battlefield, desc: 官渡、赤壁、夷陵、五丈原、长坂坡}
-  宫室: {en: palace, desc: 铜雀台、未央宫、白帝城）
-  渡口: {en: ferry, desc: 白马津、朝阳、泸水}
-  祠庙: {en: shrine}
-
-edition_id:
-  jiajing:
-    display: 嘉靖壬午本
-    year: 1522
-    system: 通俗演义系统
-    desc: 现存最早完整刻本，240 则
-  yefengchun:
-    display: 叶逢春本
-    year: null
-    system: 通俗演义系统
-    desc: 最质朴，嘉靖本之重刻
-  huangzhengfu:
-    display: 黄正甫本
-    year: 1623
-    system: 三国志传系统
-    desc: 篇幅最小、文字最简洁的简本
-  lizhuowu:
-    display: 李卓吾评本
-    year: null
-    system: 通俗演义系统
-    desc: 明末评点本，120 回
-  maozonggang:
-    display: 毛宗岗本
-    year: 1679
-    system: 通俗演义系统
-    desc: 毛纶毛宗岗父子修订评点，今通行本基础
+five_phases:
+  - {id: yellow_turban,  label: "黃巾之亂",     start: 184, end: 189}
+  - {id: dong_zhuo,      label: "董卓之亂",     start: 189, end: 192}
+  - {id: warlords,       label: "群雄逐鹿",     start: 192, end: 208}
+  - {id: tripartite,     label: "三國鼎立",     start: 208, end: 263}
+  - {id: unification,    label: "三國歸晉",     start: 263, end: 280}

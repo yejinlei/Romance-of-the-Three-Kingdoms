@@ -1,4 +1,20 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>字鏡 · 三國演義本體論</title><meta name="description" content=""><link rel="stylesheet" href="assets/app.css"></head><body>
-<header class="topbar"><div class="seal">三國</div><h1 class="title"><a href="index.html">三國演義本體論</a></h1><p class="sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p></header>
-<nav class="tabbar"><a href="index.html">總覽</a><a href="read.html">正文</a><a href="versions.html">版本譜</a><a href="variants.html">異文對照</a><a href="persons.html">人物譜</a><a href="factions.html">勢力志</a><a href="relations.html">關係網</a><a href="places.html">輿地圖</a><a href="battles.html">戰役錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">器物譜</a><a href="prophecies.html">讖緯志</a><a href="graph.html">本體圖譜</a><a href="query.html">本體查詢</a><a href="ontology.html">本體論規範</a></nav><section class="card"><h3>字鏡</h3><div class="card-body"><p>以毛本全文為樣本的字符頻次表。共計 3978 個不同字符，總字數 590,968。</p><p>常見字 TOP 10：不 / 人 / 一 / 大 / 軍 / 兵 / 將 / 來 / 馬 / 曹。</p></div></section><footer class="footer"><p>本站以毛宗崗評本百二十回為在綫全文（590,968字）；本體論（OWL 2）兼容嘉靖本/周曰校本/葉逢春本/黃正甫本/余象斗本/李卓吾評本/李漁評本/毛宗崗本/人民文學出版社本等12個主要版本。</p><p>工程以 yejinlei 西遊記本體論（jtw_kg_ontology.ttl）為範式，面向多版本對照與異文比對場景擴展；視覺系統參考《石頭記》數字人文站。</p></footer><script src="assets/app.js" defer></script></body></html>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>字鏡 · 三國演義本體論</title>
+<link rel="stylesheet" href="assets/app.css"></head><body>
+<header>
+  <div class="seal l">三<br>國<br>志</div>
+  <div class="seal">演<br>義</div>
+  <h1>三國演義<span class="dot">·</span>本體論</h1>
+  <div class="subtitle">Romance of the Three Kingdoms · Ontology Project · 字頻雲</div>
+</header>
+<nav><a href="index.html">總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
+<main>
+<h2>字鏡 · 全書 590,968 字</h2><p class="lead">按全書字頻降序呈現前 120 個單字，字號大小對應出現頻率——三國的字，是刀、馬、兵、將、軍、曹、玄。</p><div id="mirror"></div><p class="mo" style="margin-top:16px">說明：僅統計出現次數 ≥ 100 次的中文字（去除標點與空白）。</p><script>fetch("data/freq.json").then(r=>r.json()).then(f=>{const max=f[0].c;const d=document.getElementById("mirror");f.slice(0,180).forEach(w=>{const s=18+52*w.c/max;const op=.55+.45*w.c/max;d.insertAdjacentHTML("beforeend",`<span style="font-size:\${s}px;opacity:\${op};margin:0 6px;font-family:var(--kai);color:var(--ink)">\${w.ch}</span>`);});});</script>
+</main>
+<footer>
+  《三國演義》本體論工程 · 參考 yejinlei 紅樓未完與西遊記本體論範式 · OWL 2 DL + DuckDB-WASM · 無服務器靜態站
+  <span class="stamp">千秋</span><span class="stamp">青史</span>
+</footer>
+<script src="assets/common.js"></script>
+</body></html>

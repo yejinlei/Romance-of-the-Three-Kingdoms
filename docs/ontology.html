@@ -1,18 +1,120 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>本體論規範 · 三國演義本體論</title><meta name="description" content=""><link rel="stylesheet" href="assets/app.css"></head><body>
-<header class="topbar"><div class="seal">三國</div><h1 class="title"><a href="index.html">三國演義本體論</a></h1><p class="sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p></header>
-<nav class="tabbar"><a href="index.html">總覽</a><a href="read.html">正文</a><a href="versions.html">版本譜</a><a href="variants.html">異文對照</a><a href="persons.html">人物譜</a><a href="factions.html">勢力志</a><a href="relations.html">關係網</a><a href="places.html">輿地圖</a><a href="battles.html">戰役錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">器物譜</a><a href="prophecies.html">讖緯志</a><a href="graph.html">本體圖譜</a><a href="query.html">本體查詢</a><a href="ontology.html">本體論規範</a></nav><section class="card">
-    <h3>本體論 OWL 2 規範</h3><div class="card-body">
-    <p>本體文件採用 Turtle 語法，兼容 Protégé / rdflib 等工具直接打開。詞表採用 YAML 受控詞表。</p>
-    <p><a class="btn" href="ontology/sanguo_kg_ontology.ttl" download>📥 下載本體 TTL（12 版本 / 12 類）</a>　
-    <a class="btn" href="ontology/vocabularies.yaml" download>📥 下載受控詞表 YAML</a></p>
-    <h4>類（Classes）</h4><ul><li><code>sg:Thing</code> — 頂層抽象事物</li><li><code>sg:Wu / Shi / ShiJian / Di</code> — 四範疇：物 / 事 / 時 / 地</li><li><code>sg:VersionFamily</code> — 版本族（演義系/志傳系）</li><li><code>sg:Edition</code> — 具體版本（刊本/抄本/評本/現代整理本）</li><li><code>sg:Volume</code> — 卷</li><li><code>sg:Chapter</code> — 回/則（敘事單元）</li><li><code>sg:Paragraph</code> — 段落（文本原子）</li><li><code>sg:VariantReading</code> — 異文（跨版本文字差異）</li><li><code>sg:Commentary</code> — 評點（毛評/李評/李漁評/鍾評）</li><li><code>sg:Person / Faction / Office / Place</code> — 人物 / 勢力 / 官職 / 地點</li><li><code>sg:Artifact / Stratagem / Battle / Event</code> — 器物 / 計謀 / 戰役 / 事件</li><li><code>sg:Prophecy / Poem / Concept</code> — 讖緯 / 詩文 / 主題概念</li></ul>
-    <h4>屬性（Properties）</h4><ul><li><code>belongsToFamily / derivedFrom / collatedWith</code> — 版本族譜關係</li><li><code>hasCommentator / hasEditor / publishedYear</code> — 版本元數據</li><li><code>chapterStructure / preservationStatus / repository</code> — 版本結構/典藏</li><li><code>correspondsTo</code> — 跨版本回/則對應</li><li><code>variantOf / variantEdition / variantText</code> — 異文所屬與文字</li><li><code>variantType / significance</code> — 異文類型與文獻學意義</li><li><code>mentions / appearsIn</code> — 段落提及實體</li><li><code>swornBrotherOf / fatherOf / lordOf / spouseOf / enemyOf</code> — 人物社會關係</li><li><code>poemAttribution</code> — 詩文署名（區分靜軒詩/後人詩/史官論）</li></ul>
-    <h4>設計原則</h4><ol>
-    <li><b>版本先行</b>：所有文本/段落/異文/評點都從屬於某個 Version，實體出處可追溯至版本；</li>
-    <li><b>四範疇分類</b>：沿襲《紅樓夢》本體「物/事/時/地」四分，保證敘事文學建模一致性；</li>
-    <li><b>異文一等公民</b>：VariantReading 是獨立類而非附屬文本，帶 variantType 與 significance 字段可查詢；</li>
-    <li><b>OWL DL 合規</b>：函數式屬性、傳遞屬性、逆屬性、對稱屬性顯式標註，可做推理；</li>
-    <li><b>可擴展</b>：新增版本只需在 data/editions.json 增一項，若加全文則將 TXT 放入 raw/ 並運行解析腳本。</li>
-    </ol>
-    </div></section><footer class="footer"><p>本站以毛宗崗評本百二十回為在綫全文（590,968字）；本體論（OWL 2）兼容嘉靖本/周曰校本/葉逢春本/黃正甫本/余象斗本/李卓吾評本/李漁評本/毛宗崗本/人民文學出版社本等12個主要版本。</p><p>工程以 yejinlei 西遊記本體論（jtw_kg_ontology.ttl）為範式，面向多版本對照與異文比對場景擴展；視覺系統參考《石頭記》數字人文站。</p></footer><script src="assets/app.js" defer></script></body></html>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>本體論 · 三國演義本體論</title>
+<link rel="stylesheet" href="assets/app.css"></head><body>
+<header>
+  <div class="seal l">三<br>國<br>志</div>
+  <div class="seal">演<br>義</div>
+  <h1>三國演義<span class="dot">·</span>本體論</h1>
+  <div class="subtitle">Romance of the Three Kingdoms · Ontology Project · OWL 2 DL · 10 類 · 24 關係</div>
+</header>
+<nav><a href="index.html">總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
+<main>
+
+<h2>本體論規範 · TBox 完備定義</h2>
+<p class="lead">本體採用 OWL 2 DL 描述邏輯規範，10 大頂級實體類，所有子類均繼承自對應頂級類；與水滸本體共享統一 ID 命名規則（<code>sg_xxx_yyy</code>），實現跨本體無縫聯動；可直接導入 Neo4j 與 DuckDB，無需二次重構。</p>
+
+<div class="btn-row">
+  <a class="badge zhu" href="ontology/sanguo_kg_ontology.ttl">⬇ 下載 TTL 本體文件</a>
+  <a class="badge mo" href="ontology/vocabularies.yaml">⬇ 下載受控詞表 YAML</a>
+</div>
+
+<h3>頂層元模型（TBox）10 大頂級類</h3>
+<table>
+<tr><th>頂級類</th><th>核心子類</th><th>全局主鍵</th><th>頂層通用屬性</th></tr>
+<tr><td><b>文學作品類</b><br><span class="mo">sg:LiteraryWork</span></td>
+  <td>古本系統、評點改造本、現代整理本、續書衍生本</td>
+  <td><code>version_id</code></td>
+  <td>版本名、刊刻年代、刊刻機構、存世狀態、底本來源、回目總數、文本異文特徵、族系、是否有全文</td></tr>
+<tr><td><b>人物類</b><br><span class="mo">sg:Person</span></td>
+  <td>核心文臣、武將、皇族、民間角色、少數民族、女性、虛構人物</td>
+  <td><code>person_id</code></td>
+  <td>姓名、字、號、綽號、別名、登場/死亡回目、所屬陣營、官職變遷、武器、結局、正史/虛構標註、生卒年、提及數</td></tr>
+<tr><td><b>政治勢力類</b><br><span class="mo">sg:Faction</span></td>
+  <td>東漢朝廷、曹魏、蜀漢、東吳、割據諸侯、少數民族政權</td>
+  <td><code>force_id</code></td>
+  <td>勢力名、建立者、建立/滅亡年、都城、核心文臣武將、疆域、年號序列</td></tr>
+<tr><td><b>戰爭戰役類</b><br><span class="mo">sg:Battle</span></td>
+  <td>大型會戰、局部戰役、伏擊戰、水戰、奇襲戰、圍城戰</td>
+  <td><code>battle_id</code></td>
+  <td>戰役名、發生回目、公元紀年、交戰雙方、關鍵戰術、勝負、歷史影響、兵力</td></tr>
+<tr><td><b>空間地理類</b><br><span class="mo">sg:Place</span></td>
+  <td>古地名、當代遺址、戰略關隘、都城、戰場、山嶽、江河</td>
+  <td><code>location_id</code></td>
+  <td>古地名、今地名、所屬州郡、經緯度、戰略地位、關聯戰役、當代遺存狀態</td></tr>
+<tr><td><b>事件類</b><br><span class="mo">sg:Event</span></td>
+  <td>個人事件、政治事件、外交事件、典故事件</td>
+  <td><code>event_id</code></td>
+  <td>事件名、發生回目、公元紀年、參與人物、地點、情節權重、正史/虛構標註</td></tr>
+<tr><td><b>學術主體類</b><br><span class="mo">sg:Scholar</span></td>
+  <td>古代評點家、近現代三國學者、當代研究機構</td>
+  <td><code>scholar_id</code></td>
+  <td>姓名、生卒年、所屬流派、研究方向、代表論著</td></tr>
+<tr><td><b>學術成果類</b><br><span class="mo">sg:AcademicWork</span></td>
+  <td>古代評點本、現代研究論著、學術論文、校理校本</td>
+  <td><code>paper_id</code></td>
+  <td>標題、發表年、核心觀點、引用文獻、研究方向、底本選擇說明</td></tr>
+<tr><td><b>衍生作品類</b><br><span class="mo">sg:Adaptation</span></td>
+  <td>影視改編、戲曲、動漫、遊戲、同人</td>
+  <td><code>adapt_id</code></td>
+  <td>作品名、改編類型、上映年、改編特徵、主創、豆瓣評分</td></tr>
+<tr><td><b>器物類</b><br><span class="mo">sg:Artifact</span></td>
+  <td>兵器、名馬、陣法、發明創造、印綬符節</td>
+  <td><code>artifact_id</code></td>
+  <td>器物名、持有者、登場回目、功能、典故</td></tr>
+</table>
+
+<h3>24 種核心有向關係</h3>
+<p class="piqian">其中 <span class="zhu">6 種為三國專屬</span>（主臣、所屬、指揮、參戰、結盟/敵對（勢力）、發生於（戰役-地點）、評點改造、持有、使用），<span class="mo">18 種與水滸本體通用</span>，全部附加方向與權重屬性。</p>
+<table>
+<tr><th>分類</th><th>關係</th><th>定義域 → 值域</th><th>附加屬性</th><th>特徵</th></tr>
+<tr><td rowspan="4">人-人通用</td><td>結拜為兄弟</td><td>人物→人物</td><td>結義回目、排序權重</td><td>對稱</td></tr>
+<tr><td>敵對</td><td>人物→人物</td><td>首次衝突回目、衝突強度</td><td>對稱</td></tr>
+<tr><td>師徒</td><td>人物→人物</td><td>授藝內容、登場回目</td><td>互逆</td></tr>
+<tr><td>親屬</td><td>人物→人物</td><td>親屬類型、輩分</td><td>對稱</td></tr>
+<tr><td>人-人專屬</td><td>主臣 <span class="zhu">★</span></td><td>人物→人物</td><td>從屬時間、信任等級、官職</td><td>互逆</td></tr>
+<tr><td>人-勢力專屬</td><td>所屬 <span class="zhu">★</span></td><td>人物→勢力</td><td>入職時間、官職變遷</td><td>—</td></tr>
+<tr><td rowspan="2">人-戰役專屬</td><td>指揮 <span class="zhu">★</span></td><td>人物→戰役</td><td>角色、戰術貢獻</td><td>—</td></tr>
+<tr><td>參戰 <span class="zhu">★</span></td><td>人物→戰役</td><td>身份、結局</td><td>—</td></tr>
+<tr><td rowspan="2">勢力-勢力專屬</td><td>結盟 <span class="zhu">★</span></td><td>勢力→勢力</td><td>起止時間、盟約</td><td>對稱</td></tr>
+<tr><td>敵對 <span class="zhu">★</span></td><td>勢力→勢力</td><td>戰爭起止</td><td>對稱</td></tr>
+<tr><td>戰役-地點專屬</td><td>發生於 <span class="zhu">★</span></td><td>戰役→地點</td><td>戰場範圍、坐標</td><td>—</td></tr>
+<tr><td>版本-版本通用</td><td>演化自</td><td>版本→版本</td><td>時間差、承襲度</td><td>傳遞</td></tr>
+<tr><td>版本-版本專屬</td><td>評點改造 <span class="zhu">★</span></td><td>版本→學者</td><td>改造幅度、情節改動</td><td>—</td></tr>
+<tr><td>版本-人物通用</td><td>登場於</td><td>人物→版本</td><td>結局差異、異文</td><td>—</td></tr>
+<tr><td>版本-事件通用</td><td>收錄於</td><td>事件→版本</td><td>情節刪改、文字異文</td><td>—</td></tr>
+<tr><td>學者-成果通用</td><td>創作</td><td>學者→成果</td><td>發表時間、觀點摘要</td><td>—</td></tr>
+<tr><td>學者-學者通用</td><td>學術論戰</td><td>學者→學者</td><td>主題、時間</td><td>對稱</td></tr>
+<tr><td>版本-學者通用</td><td>研究</td><td>學者→版本</td><td>成果、考證結論</td><td>—</td></tr>
+<tr><td>事件-地點通用</td><td>發生於</td><td>事件→地點</td><td>時間、坐標</td><td>—</td></tr>
+<tr><td>衍生-版本通用</td><td>改編自</td><td>衍生→版本</td><td>幅度、情節改動</td><td>—</td></tr>
+<tr><td>人-器物專屬</td><td>持有 <span class="zhu">★</span></td><td>人物→器物</td><td>時間、回目</td><td>—</td></tr>
+<tr><td>戰役-器物專屬</td><td>使用 <span class="zhu">★</span></td><td>戰役→器物</td><td>場景、戰術效果</td><td>—</td></tr>
+<tr><td>人-事件通用</td><td>參與</td><td>人物→事件</td><td>角色、權重</td><td>—</td></tr>
+<tr><td>人-地點通用</td><td>活動於</td><td>人物→地點</td><td>停留回目、事件關聯</td><td>—</td></tr>
+</table>
+
+<h3>OWL 公理</h3>
+<div class="scroll-note">
+<ul style="list-style:none;padding-left:0;text-indent:0">
+  <li>• 10 大頂級類互相不相交（<code>owl:AllDisjointClasses</code>），推理機可識別跨類衝突；</li>
+  <li>• 所有主鍵（xxx_id）同時為 <code>owl:FunctionalProperty</code> + <code>owl:InverseFunctionalProperty</code>，保證唯一性；</li>
+  <li>• <code>derivedFrom</code> 為 <code>owl:TransitiveProperty</code>（版本演化鏈可推理）；</li>
+  <li>• <code>swornBrotherOf / enemyOf_* / alliedWith / kinOf / debatesWith</code> 為 <code>owl:SymmetricProperty</code>；</li>
+  <li>• <code>masterOf / lordOf</code> 顯式定義 <code>owl:inverseOf</code>；</li>
+  <li>• 枚舉受控詞表：核實狀態（4）、異文類型（7）、關係權重（3）、版本族系（4）、五大歷史階段。</li>
+</ul>
+</div>
+
+<h3>跨本體聯動</h3>
+<p class="lead">ID 命名規則 <code>sg_person_xxx</code> 與水滸本體 <code>sh_person_xxx</code> 同構，在 DuckDB/Neo4j 中可直接以 <code>person_id</code> JOIN 實現跨四大名著本體的人物/地名/器物/關係聯查，無需二次重構。</p>
+
+<div class="piqian">本頁呈現的即為完備 TBox 規範；ABox 實例數據（人物、戰役、地點等）由構建腳本從原文抽取並寫入 Parquet/JSON，可在「本體查詢」頁用 SQL 直接查詢。</div>
+
+</main>
+<footer>
+  《三國演義》本體論工程 · 參考 yejinlei 紅樓未完與西遊記本體論範式 · OWL 2 DL + DuckDB-WASM · 無服務器靜態站
+  <span class="stamp">千秋</span><span class="stamp">青史</span>
+</footer>
+<script src="assets/common.js"></script>
+</body></html>
