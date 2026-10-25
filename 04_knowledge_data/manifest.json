@@ -1,7 +1,7 @@
 {
   "project": "Romance of the Three Kingdoms Knowledge Graph",
   "version": "1.0.0",
-  "built_at": "2026-10-26T01:54:07",
+  "built_at": "2026-10-26T02:48:54",
   "ontology": "../03_本体论规范/sanguo_kg_ontology.ttl",
   "vocabularies": "../03_本体论规范/vocabularies.yaml",
   "db_engine": "duckdb-wasm",
@@ -30,7 +30,7 @@
       "name": "editions",
       "path": "editions.parquet",
       "rows": 16,
-      "size_bytes": 10048
+      "size_bytes": 10118
     },
     {
       "name": "chapters",
@@ -48,7 +48,7 @@
       "name": "entities",
       "path": "entities.parquet",
       "rows": 943,
-      "size_bytes": 39807
+      "size_bytes": 39766
     },
     {
       "name": "persons",
@@ -72,13 +72,13 @@
       "name": "battles",
       "path": "battles.parquet",
       "rows": 115,
-      "size_bytes": 14462
+      "size_bytes": 14410
     },
     {
       "name": "events",
       "path": "events.parquet",
       "rows": 107,
-      "size_bytes": 14501
+      "size_bytes": 14746
     },
     {
       "name": "artifacts",
@@ -120,13 +120,13 @@
       "name": "mentions",
       "path": "mentions.parquet",
       "rows": 23478,
-      "size_bytes": 324681
+      "size_bytes": 324499
     },
     {
       "name": "relationships",
       "path": "relationships.parquet",
       "rows": 1421,
-      "size_bytes": 22051
+      "size_bytes": 22048
     },
     {
       "name": "annotations",
