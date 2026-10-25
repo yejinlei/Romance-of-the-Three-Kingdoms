@@ -1,0 +1,188 @@
+# ============================================================
+# 《三国演义》知识图谱受控词表
+# 用途：抽取 / 入库 / 查询全链路统一词汇，避免同义异写
+# ============================================================
+
+verification_status:
+  已核实:
+    en: verified
+    desc: 至少两版原文印证或有明确史源
+  存疑:
+    en: doubtful
+    desc: 单一版本出现，或与主流版本冲突
+  待核实:
+    en: pending
+    desc: 抽取初稿，未交叉验证
+  版本间冲突:
+    en: cross_edition_conflict
+    desc: 嘉靖本与毛本对同一情节表述不一致（如回合数、兵器归属）
+
+# —— 人物类别 ——
+person_category:
+  君主:
+    en: monarch
+    desc: 各势力之主：曹操、刘备、孙权、袁绍、刘表、董卓……
+  谋士:
+    en: strategist
+    desc: 运筹帷幄者：诸葛亮、荀彧、郭嘉、周瑜、司马懿、贾诩……
+  将领:
+    en: general
+    desc: 统兵作战者：关羽、张飞、赵云、马超、张辽、夏侯惇……
+  文臣:
+    en: minister
+    desc: 理政外交者：荀攸、鲁肃、张昭、蒋琬、费祎……
+  武将:
+    en: warrior
+    desc: 以勇武见者：典韦、许褚、吕布、颜良、文丑、甘宁……
+  女性:
+    en: female
+    desc: 貂蝉、孙尚香、大乔小乔、糜夫人、甘夫人、祝融夫人……
+  宦官:
+    en: eunuch
+    desc: 十常侍、张让、赵忠、黄皓、岑昏……
+  方士:
+    en: thaumaturge
+    desc: 左慈、于吉、管辂、张角（以术惑众者）
+  隐逸:
+    en: recluse
+    desc: 水镜先生、庞德公、崔州平、石广元、孟公威
+  神异:
+    en: numinous
+    desc: 关羽显圣、诸葛亮定军山显灵、梨山老母式仙人
+
+# —— 势力类别 ——
+faction_category:
+  正统朝廷:
+    en: legitimate_court
+    desc: 汉室，都洛阳 / 许都
+  割据诸侯:
+    en: warlord
+    desc: 袁绍、袁术、刘表、刘璋、张鲁、马腾、公孙瓒、陶谦……
+  篡逆:
+    en: usurper
+    desc: 董卓、李傕郭汜、司马氏
+  三足鼎立:
+    en: tripartite
+    desc: 魏、蜀、吴
+  农民军:
+    en: rebel_army
+    desc: 黄巾、张角兄弟
+  边族:
+    en: frontier_people
+    desc: 南蛮孟获、西羌、乌桓、山越
+  草莽:
+    en: outlaw
+    desc: 张燕、裴元绍、周仓、廖化（早期）
+
+# —— 关系类型 ——
+relation_type:
+  # 血缘 kinship
+  父子: {en: parent_child}
+  兄弟: {en: sibling}
+  结义兄弟:
+    en: sworn_brother
+    desc: 桃园三结义：刘备—关羽—张飞
+  配偶: {en: spouse}
+  政治联姻:
+    en: political_marriage
+    desc: 孙权嫁妹与刘备、曹操以女配汉献帝
+  宗亲: {en: clan_kin}
+
+  # 君臣主从 allegiance
+  君臣:
+    en: lord_vassal
+    desc: 一方为另一方之主
+  义从:
+    en: sworn_retainer
+    desc: 非血缘而以义相结，关羽之守义归刘
+  荐举:
+    en: recommendation
+    desc: 徐庶荐诸葛、鲁肃荐庞统、荀彧荐郭嘉
+  继任: {en: succession}
+  叛降:
+    en: defection
+    desc: 吕布之反复、张辽降曹、黄忠降刘、姜维降蜀
+
+  # 冲突 antagonism
+  敌对: {en: enmity}
+  杀:
+    en: kill
+    desc: 甲为乙所杀（关羽杀颜良、潘璋杀关羽）
+  败:
+    en: defeat
+    desc: 甲败于乙
+  仇:
+    en: feud
+
+  # 交游 / 情感
+  师友: {en: mentor_friend}
+  同僚: {en: colleague}
+  通好:
+    en: alliance
+    desc: 孙刘联盟、孙曹联合
+
+# —— 计谋类型（依三十六计归类） ——
+stratagem_type:
+  胜战计: {en: winning, desc: 瞒天过海、围魏救赵、借刀杀人、以逸待劳、趁火打劫、声东击西}
+  敌战计: {en: enemy, desc: 无中生有、暗度陈仓、隔岸观火、笑里藏刀、李代桃僵、顺手牵羊}
+  攻战计: {en: attack, desc: 打草惊蛇、借尸还魂、调虎离山、欲擒故纵、抛砖引玉、擒贼擒王}
+  混战计: {en: chaos, desc: 釜底抽薪、混水摸鱼、金蝉脱壳、关门捉贼、远交近攻、假道伐虢}
+  并战计: {en: coexistence, desc: 偷梁换柱、指桑骂槐、假痴不癫、上屋抽梯、树上开花、反客为主}
+  败战计: {en: desperate, desc: 美人计、空城计、反间计、苦肉计、连环计、走为上}
+
+# —— 谶语类型 ——
+prophecy_type:
+  童谣: {en: children_rhyme}
+  星象: {en: astrology}
+  梦兆: {en: dream_omen}
+  图谶: {en: apocrypha}
+  诗谶: {en: poetic_omen}
+  天象: {en: celestial}
+
+# —— 器物类型 ——
+artifact_type:
+  兵器: {en: weapon}
+  坐骑: {en: mount}
+  印绶: {en: seal}
+  服饰: {en: apparel}
+  琴书: {en: zither_book}
+  珍宝: {en: treasure}
+  军械: {en: siege_gear, desc: 木牛流马、连弩、霹雳车}
+
+# —— 地点类型 ——
+place_type:
+  州郡: {en: province}
+  城池: {en: city}
+  关隘: {en: pass, desc: 虎牢关、剑阁、阳平关、街亭}
+  山川: {en: mountain_river}
+  战场: {en: battlefield, desc: 官渡、赤壁、夷陵、五丈原、长坂坡}
+  宫室: {en: palace, desc: 铜雀台、未央宫、白帝城）
+  渡口: {en: ferry, desc: 白马津、朝阳、泸水}
+  祠庙: {en: shrine}
+
+edition_id:
+  jiajing:
+    display: 嘉靖壬午本
+    year: 1522
+    system: 通俗演义系统
+    desc: 现存最早完整刻本，240 则
+  yefengchun:
+    display: 叶逢春本
+    year: null
+    system: 通俗演义系统
+    desc: 最质朴，嘉靖本之重刻
+  huangzhengfu:
+    display: 黄正甫本
+    year: 1623
+    system: 三国志传系统
+    desc: 篇幅最小、文字最简洁的简本
+  lizhuowu:
+    display: 李卓吾评本
+    year: null
+    system: 通俗演义系统
+    desc: 明末评点本，120 回
+  maozonggang:
+    display: 毛宗岗本
+    year: 1679
+    system: 通俗演义系统
+    desc: 毛纶毛宗岗父子修订评点，今通行本基础

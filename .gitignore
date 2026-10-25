@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+raw/*.txt
+build/sanguo_raw.txt
+build/out/
+*.zip

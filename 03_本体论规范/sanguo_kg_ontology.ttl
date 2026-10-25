@@ -1,0 +1,339 @@
+@prefix sg:    <http://localhost/sanguo-kg#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov:  <http://www.w3.org/ns/prov#> .
+@prefix bibo:  <http://purl.org/ontology/bibo/> .
+
+<http://localhost/sanguo-kg#>
+        a                    owl:Ontology ;
+        dct:title            "《三國演義》多版本知識本體（Sanguo-Yanyi Multi-Edition Ontology）" ;
+        dct:creator          "本體論工程：參考 yejinlei 西遊記本體論 jtw_kg_ontology.ttl 範式，面向多版本對照場景擴展" ;
+        dct:description      "以羅貫中《三國演義》為核心文本，兼容『演義系』（嘉靖壬午本‧周曰校本‧李卓吾評本‧李漁評本‧毛宗崗本）與『志傳系』（葉逢春本‧黃正甫本‧余象斗本‧朱鼎臣本‧劉龍田本‧楊閩齋本‧種德堂本）兩大版本族，支持回目對照、異文比對、評點關係、人物出處版本差異建模。" ;
+        owl:versionInfo      "2.0-multiedition" .
+
+# ============================================================
+# 一、頂層類：事物根類
+# ============================================================
+sg:Thing  a  owl:Class ;
+  rdfs:label "事物（頂層抽象）" ;
+  rdfs:comment "所有本體實體的公共父類，對應 yejinlei 西游本體 jtw:Thing 的角色。" .
+
+# ============================================================
+# 二、四範疇：物 / 事 / 時 / 地 （沿用《紅樓夢》《西遊記》本體論框架）
+# ============================================================
+sg:Wu  a  owl:Class ;
+  rdfs:subClassOf  sg:Thing ;
+  rdfs:label  "物（具體可指認之存在）" ;
+  rdfs:comment "人物、勢力、器物、官職、動物、天象異物等具名實體。" .
+
+sg:Shi  a  owl:Class ;
+  rdfs:subClassOf  sg:Thing ;
+  rdfs:label  "事（事件、動作、敘事單元）" ;
+  rdfs:comment "戰役、計謀、事件、情節單元、詩文讚語、評點文字。" .
+
+sg:ShiJian  a  owl:Class ;
+  rdfs:subClassOf  sg:Thing ;
+  rdfs:label  "時（時間、年號、節序、回目位置）" ;
+  rdfs:comment "年號、歷史年代、虛構歲時、回次位置、版本刊刻年代。" .
+
+sg:Di  a  owl:Class ;
+  rdfs:subClassOf  sg:Thing ;
+  rdfs:label  "地（地點、空間）" ;
+  rdfs:comment "州郡縣、山川關隘、宮殿園林、莊院寨柵、虛構地點。" .
+
+# ============================================================
+# 三、【新版】版本族譜：多版本系統的核心擴展
+# ============================================================
+
+# --- 版本系統（Version Family）：區分「演義系 / 志傳系」兩大祖本 ---
+sg:VersionFamily  a  owl:Class ;
+  rdfs:subClassOf  sg:Wu ;
+  rdfs:label "版本族" ;
+  rdfs:comment "《三國演義》版本大別為『演義系』（240則單題、花關索/關索情節少、文字較雅）與『志傳系』（20卷240則、含花關索征南情節、文字較質樸）。" .
+
+sg:YanYiXi  a  sg:VersionFamily ;
+  rdfs:label  "演義系（通俗演義系統）" ;
+  sg:familyStemText  "明嘉靖壬午（1522）刊《三國志通俗演義》" ;
+  sg:keyFeature  "二十四卷二百四十則，單題七言，卷首有弘治甲寅蔣大器序、嘉靖壬午張尚德引；花關索/關索故事未見系統保留，關公封『漢壽亭侯』改印、孔明欲燒魏延等細節皆存。" .
+
+sg:ZhiZhuanXi  a  sg:VersionFamily ;
+  rdfs:label  "志傳系（三國志傳系統）" ;
+  sg:familyStemText  "元明之際民間《三國志傳》寫本" ;
+  sg:keyFeature  "二十卷二百四十則，多題對偶；保留『花關索出身傳』『花關索征西川』等關索故事；靜軒詩較多；部分情節文字較為樸質。" .
+
+# --- 版本（Edition）：一個具體刊本/抄本 ---
+sg:Edition  a  owl:Class ;
+  rdfs:subClassOf  sg:Wu ;
+  rdfs:label "版本（單一刊本/抄本）" ;
+  rdfs:comment "一個具體的刊刻本、抄本、評點本，對應古籍文獻學的『版本』概念。" .
+
+sg:belongsToFamily  a  owl:ObjectProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   sg:VersionFamily ;
+  rdfs:label "所屬版本族" .
+
+sg:derivedFrom  a  owl:ObjectProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   sg:Edition ;
+  owl:inverseOf sg:ancestorOf ;
+  rdfs:label "承自（版本淵源）" ;
+  rdfs:comment "如『毛宗崗本 derivedFrom 李卓吾評本』、『李卓吾評本 derivedFrom 周曰校本』。" .
+
+sg:ancestorOf  a  owl:ObjectProperty ;
+  rdfs:label "衍生出" .
+
+sg:collatedWith  a  owl:ObjectProperty, owl:SymmetricProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   sg:Edition ;
+  rdfs:label "參校" ;
+  rdfs:comment "某版本校勘時參考過另一版本，標記異文來源。" .
+
+sg:hasCommentator  a  owl:ObjectProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   sg:Person ;
+  rdfs:label "評點者" .
+
+sg:hasEditor  a  owl:ObjectProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   sg:Person ;
+  rdfs:label "刊刻/整理者" .
+
+sg:publishedYear  a  owl:DatatypeProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   xsd:gYear ;
+  rdfs:label "刊刻年代（年）" .
+
+sg:chapterStructure  a  owl:DatatypeProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   xsd:string ;
+  rdfs:label "卷回結構" ;
+  rdfs:comment "如『二十四卷二百四十則』『二十卷二百四十則』『一百二十回』。" .
+
+sg:preservationStatus  a  owl:DatatypeProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   xsd:string ;
+  rdfs:label "現存狀況" ;
+  rdfs:comment "足本/殘本/孤本/影印本/現代整理本。" .
+
+sg:repository  a  owl:DatatypeProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   xsd:string ;
+  rdfs:label "主要收藏/出版單位" .
+
+sg:fullTextAvailable  a  owl:DatatypeProperty ;
+  rdfs:domain  sg:Edition ;
+  rdfs:range   xsd:boolean ;
+  rdfs:label "本站是否收錄全文" .
+
+# --- 卷（Volume） ---
+sg:Volume  a  owl:Class ;
+  rdfs:subClassOf  sg:ShiJian ;
+  rdfs:label "卷" ;
+  rdfs:comment "一個版本的物理分卷單位，如卷之一/卷之二；毛本一百二十回不分卷。" .
+
+sg:inEdition  a  owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:domain  sg:Volume ;
+  rdfs:range   sg:Edition ;
+  rdfs:label "所屬版本" .
+
+sg:volumeNumber  a  owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain  sg:Volume ;
+  rdfs:range   xsd:integer ;
+  rdfs:label "卷次" .
+
+sg:volumeTitle  a  owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain  sg:Volume ;
+  rdfs:range   xsd:string ;
+  rdfs:label "卷題" .
+
+# --- 回/則（Chapter/Hui/Ze）：敘事最小分段單位 ---
+sg:Chapter  a  owl:Class ;
+  rdfs:subClassOf  sg:ShiJian ;
+  rdfs:label "回/則" ;
+  rdfs:comment "毛本一百二十回、嘉靖本二百四十則的基本敘事單元。" .
+
+sg:inVolume  a  owl:ObjectProperty ;
+  rdfs:domain  sg:Chapter ;
+  rdfs:range   sg:Volume ;
+  rdfs:label "所屬卷" .
+
+sg:chapterNumber  a  owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain  sg:Chapter ;
+  rdfs:range   xsd:integer ;
+  rdfs:label "回/則序號" .
+
+sg:chapterTitle  a  owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain  sg:Chapter ;
+  rdfs:range   xsd:string ;
+  rdfs:label "回/則目" .
+
+sg:correspondsTo  a  owl:ObjectProperty, owl:SymmetricProperty ;
+  rdfs:domain  sg:Chapter ;
+  rdfs:range   sg:Chapter ;
+  rdfs:label "對應（跨版本同段情節）" ;
+  rdfs:comment "嘉靖本『祭天地桃園結義』則 ↔ 毛本『宴桃園豪傑三結義』回。一個毛本回常對應兩個嘉靖本則。" .
+
+# --- 段落（Paragraph/Duan）：文本層原子 ---
+sg:Paragraph  a  owl:Class ;
+  rdfs:subClassOf  sg:Wu ;
+  rdfs:label "段落（文本原子）" ;
+  rdfs:comment "一回/則中的自然段落。" .
+
+sg:inChapter  a  owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:domain  sg:Paragraph ;
+  rdfs:range   sg:Chapter ;
+  rdfs:label "所屬回/則" .
+
+sg:paraIndex  a  owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain  sg:Paragraph ;
+  rdfs:range   xsd:integer ;
+  rdfs:label "段序" .
+
+sg:text  a  owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain  sg:Paragraph ;
+  rdfs:range   xsd:string ;
+  rdfs:label "正文文本" .
+
+# --- 異文（Variant Reading）：版本差異核心建模 ---
+sg:VariantReading  a  owl:Class ;
+  rdfs:subClassOf  sg:Wu ;
+  rdfs:label "異文" ;
+  rdfs:comment "同一敘事節點在不同版本中的文字差異，包含脫文、衍文、改寫、順序調整等。" .
+
+sg:variantOf  a  owl:ObjectProperty ;
+  rdfs:domain  sg:VariantReading ;
+  rdfs:range   sg:Paragraph ;
+  rdfs:label "異文所屬段落" .
+
+sg:variantEdition  a  owl:ObjectProperty ;
+  rdfs:domain  sg:VariantReading ;
+  rdfs:range   sg:Edition ;
+  rdfs:label "所見版本" .
+
+sg:variantText  a  owl:DatatypeProperty ;
+  rdfs:domain  sg:VariantReading ;
+  rdfs:range   xsd:string ;
+  rdfs:label "異文文字" .
+
+sg:variantType  a  owl:DatatypeProperty ;
+  rdfs:domain  sg:VariantReading ;
+  rdfs:range   xsd:string ;
+  rdfs:label "異文類型" ;
+  rdfs:comment "取值：訛字/脫文/衍文/改寫/順序調整/增刪詩文/情節增刪/評點增刪。" .
+
+sg:significance  a  owl:DatatypeProperty ;
+  rdfs:domain  sg:VariantReading ;
+  rdfs:range   xsd:string ;
+  rdfs:label "文獻學意義" ;
+  rdfs:comment "此異文對判斷版本源流、作者修訂、評點改動的啟示。" .
+
+# ============================================================
+# 四、主題層：人物、勢力、地點、官職、器物、計謀、事件、戰役、讖緯、概念、詩文、評點
+# ============================================================
+sg:Person  a  owl:Class ;
+  rdfs:subClassOf  sg:Wu ;
+  rdfs:label "人物" ;
+  rdfs:comment "歷史或虛構人物，區分史有其人與純虛構人物。" .
+
+sg:personZi       a  owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain sg:Person ; rdfs:range xsd:string ; rdfs:label "字" .
+sg:personHao      a  owl:DatatypeProperty ; rdfs:domain sg:Person ; rdfs:range xsd:string ; rdfs:label "號" .
+sg:personFaction  a  owl:ObjectProperty ; rdfs:domain sg:Person ; rdfs:range sg:Faction ; rdfs:label "陣營（主從）" .
+sg:personOffice   a  owl:ObjectProperty ; rdfs:domain sg:Person ; rdfs:range sg:Office ; rdfs:label "官職" .
+sg:personFirstSeen  a  owl:ObjectProperty ; rdfs:domain sg:Person ; rdfs:range sg:Chapter ; rdfs:label "初登場回/則" .
+sg:firstSeenInEdition a owl:ObjectProperty ; rdfs:domain sg:Person ; rdfs:range sg:Edition ; rdfs:label "最早所見版本" ;
+  rdfs:comment "某些人物（如花關索）僅在志傳系中出現，演義系無。" .
+sg:personMentionCount a owl:DatatypeProperty ; rdfs:domain sg:Person ; rdfs:range xsd:integer ; rdfs:label "提及次數" .
+
+sg:Faction  a  owl:Class ;
+  rdfs:subClassOf  sg:Wu ;
+  rdfs:label "勢力/陣營" ;
+  rdfs:comment "魏蜀吳、袁紹、董卓、呂布、黄巾等軍事政治集團。" .
+
+sg:Place  a  owl:Class ;
+  rdfs:subClassOf  sg:Di ;
+  rdfs:label "地點" .
+sg:placeBelongsTo a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:domain sg:Place ; rdfs:range sg:Place ; rdfs:label "從屬於（州轄郡、郡轄縣）" .
+sg:placeUnderFaction a owl:ObjectProperty ; rdfs:domain sg:Place ; rdfs:range sg:Faction ; rdfs:label "在某時期屬某勢力" .
+
+sg:Office  a  owl:Class ;
+  rdfs:subClassOf  sg:Wu ;
+  rdfs:label "官職/爵位" .
+
+sg:Artifact  a  owl:Class ;
+  rdfs:subClassOf  sg:Wu ;
+  rdfs:label "器物" ;
+  rdfs:comment "兵器、玉璽、衣甲、馬匹、輿圖、書信等具名物件。" .
+sg:artifactOwner  a  owl:ObjectProperty ; rdfs:domain sg:Artifact ; rdfs:range sg:Person ; rdfs:label "持有者" .
+sg:artifactType   a  owl:DatatypeProperty; rdfs:domain sg:Artifact ; rdfs:range xsd:string ; rdfs:label "器物類型（兵器/印璽/馬匹/衣甲/書信/輿圖）" .
+
+sg:Stratagem  a  owl:Class ;
+  rdfs:subClassOf  sg:Shi ;
+  rdfs:label "計謀" ;
+  rdfs:comment "火攻、水攻、連環、苦肉、空城等明確可命名的計謀。" .
+sg:stratagemBy  a  owl:ObjectProperty ; rdfs:domain sg:Stratagem ; rdfs:range sg:Person ; rdfs:label "設計者" .
+sg:stratagemAgainst a owl:ObjectProperty ; rdfs:domain sg:Stratagem ; rdfs:range sg:Faction ; rdfs:label "針對方" .
+
+sg:Battle  a  owl:Class ;
+  rdfs:subClassOf  sg:Shi ;
+  rdfs:label "戰役" .
+sg:bellegerent  a  owl:ObjectProperty ; rdfs:domain sg:Battle ; rdfs:range sg:Faction ; rdfs:label "交戰方" .
+sg:bellegerentCommander a owl:ObjectProperty ; rdfs:domain sg:Battle ; rdfs:range sg:Person ; rdfs:label "主將" .
+sg:battleResult a owl:DatatypeProperty; rdfs:domain sg:Battle; rdfs:range xsd:string; rdfs:label "戰役結果" .
+sg:battleChapter a owl:ObjectProperty; rdfs:domain sg:Battle; rdfs:range sg:Chapter; rdfs:label "對應回/則" .
+
+sg:Event  a  owl:Class ;
+  rdfs:subClassOf  sg:Shi ;
+  rdfs:label "事件" ;
+  rdfs:comment "桃園結義、三顧茅廬、白帝託孤等非單一戰役之事件。" .
+
+sg:Prophecy  a  owl:Class ;
+  rdfs:subClassOf  sg:Shi ;
+  rdfs:label "讖緯/預言/童謠/夢兆" .
+
+sg:Poem  a  owl:Class ;
+  rdfs:subClassOf  sg:Shi ;
+  rdfs:label "詩文讚語" ;
+  rdfs:comment "篇中『後人有詩曰』『史官贊曰』的韻文，版本差異常集中於此。" .
+sg:poemAuthor  a owl:ObjectProperty ; rdfs:domain sg:Poem ; rdfs:range sg:Person ; rdfs:label "作者" .
+sg:poemAttribution a owl:DatatypeProperty ; rdfs:domain sg:Poem ; rdfs:range xsd:string ; rdfs:label "署名（後人/史官/靜軒/周靜軒/唐庚等）" ;
+  rdfs:comment "志傳系多見『靜軒』詩，演義系多為『後人有詩曰』。" .
+
+sg:Commentary  a  owl:Class ;
+  rdfs:subClassOf  sg:Shi ;
+  rdfs:label "評點" ;
+  rdfs:comment "毛宗崗、李贄（李卓吾）、李漁、鍾伯敬等各家評語，以版本為依附。" .
+sg:commentaryBy  a owl:ObjectProperty ; rdfs:domain sg:Commentary ; rdfs:range sg:Person ; rdfs:label "評者" .
+sg:commentaryOn  a owl:ObjectProperty ; rdfs:domain sg:Commentary ; rdfs:range sg:Paragraph ; rdfs:label "所評段落" .
+sg:commentaryType a owl:DatatypeProperty; rdfs:domain sg:Commentary; rdfs:range xsd:string; rdfs:label "評點類型（回前總評/夾批/眉批/回末總評）" .
+
+sg:Concept  a  owl:Class ;
+  rdfs:subClassOf  sg:Wu ;
+  rdfs:label "概念/主題" ;
+  rdfs:comment "正統論、忠義論、天命論、分合論、英雄論等敘事母題。" .
+
+# ============================================================
+# 五、人物間社會關係
+# ============================================================
+sg:swornBrotherOf  a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain sg:Person ; rdfs:range sg:Person ; rdfs:label "結義兄弟" .
+sg:fatherOf        a owl:ObjectProperty ; rdfs:domain sg:Person ; rdfs:range sg:Person ; owl:inverseOf sg:sonOf ; rdfs:label "父" .
+sg:sonOf           a owl:ObjectProperty ; rdfs:label "子" .
+sg:lordOf          a owl:ObjectProperty ; rdfs:domain sg:Person ; rdfs:range sg:Person ; owl:inverseOf sg:ministerOf ; rdfs:label "君主" .
+sg:ministerOf      a owl:ObjectProperty ; rdfs:label "臣屬" .
+sg:spouseOf        a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:domain sg:Person ; rdfs:range sg:Person ; rdfs:label "配偶" .
+sg:swornBrotherOf  a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "結義" .
+sg:enemyOf         a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "敵對" .
+sg:killedBy        a owl:ObjectProperty ; rdfs:label "死於" .
+sg:recommended     a owl:ObjectProperty ; rdfs:label "舉薦" .
+sg:defectedTo      a owl:ObjectProperty ; rdfs:label "叛投" .
+sg:adoptedSonOf    a owl:ObjectProperty ; rdfs:label "義子" .
+
+# ============================================================
+# 六、敘事/出處約束
+# ============================================================
+sg:mentions        a owl:ObjectProperty ; rdfs:domain sg:Paragraph ; rdfs:range sg:Thing ; rdfs:label "提及" .
+sg:appearsIn       a owl:ObjectProperty ; rdfs:domain sg:Thing ; rdfs:range sg:Paragraph ; owl:inverseOf sg:mentions ; rdfs:label "出現於" .

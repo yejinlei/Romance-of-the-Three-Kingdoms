@@ -1,0 +1,18 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>本體論規範 · 三國演義本體論</title><meta name="description" content=""><link rel="stylesheet" href="assets/app.css"></head><body>
+<header class="topbar"><div class="seal">三國</div><h1 class="title"><a href="index.html">三國演義本體論</a></h1><p class="sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p></header>
+<nav class="tabbar"><a href="index.html">總覽</a><a href="read.html">正文</a><a href="versions.html">版本譜</a><a href="variants.html">異文對照</a><a href="persons.html">人物譜</a><a href="factions.html">勢力志</a><a href="relations.html">關係網</a><a href="places.html">輿地圖</a><a href="battles.html">戰役錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">器物譜</a><a href="prophecies.html">讖緯志</a><a href="graph.html">本體圖譜</a><a href="ontology.html">本體論規範</a></nav><section class="card">
+    <h3>本體論 OWL 2 規範</h3><div class="card-body">
+    <p>本體文件採用 Turtle 語法，兼容 Protégé / rdflib 等工具直接打開。詞表採用 YAML 受控詞表。</p>
+    <p><a class="btn" href="ontology/sanguo_kg_ontology.ttl" download>📥 下載本體 TTL（12 版本 / 12 類）</a>　
+    <a class="btn" href="ontology/vocabularies.yaml" download>📥 下載受控詞表 YAML</a></p>
+    <h4>類（Classes）</h4><ul><li><code>sg:Thing</code> — 頂層抽象事物</li><li><code>sg:Wu / Shi / ShiJian / Di</code> — 四範疇：物 / 事 / 時 / 地</li><li><code>sg:VersionFamily</code> — 版本族（演義系/志傳系）</li><li><code>sg:Edition</code> — 具體版本（刊本/抄本/評本/現代整理本）</li><li><code>sg:Volume</code> — 卷</li><li><code>sg:Chapter</code> — 回/則（敘事單元）</li><li><code>sg:Paragraph</code> — 段落（文本原子）</li><li><code>sg:VariantReading</code> — 異文（跨版本文字差異）</li><li><code>sg:Commentary</code> — 評點（毛評/李評/李漁評/鍾評）</li><li><code>sg:Person / Faction / Office / Place</code> — 人物 / 勢力 / 官職 / 地點</li><li><code>sg:Artifact / Stratagem / Battle / Event</code> — 器物 / 計謀 / 戰役 / 事件</li><li><code>sg:Prophecy / Poem / Concept</code> — 讖緯 / 詩文 / 主題概念</li></ul>
+    <h4>屬性（Properties）</h4><ul><li><code>belongsToFamily / derivedFrom / collatedWith</code> — 版本族譜關係</li><li><code>hasCommentator / hasEditor / publishedYear</code> — 版本元數據</li><li><code>chapterStructure / preservationStatus / repository</code> — 版本結構/典藏</li><li><code>correspondsTo</code> — 跨版本回/則對應</li><li><code>variantOf / variantEdition / variantText</code> — 異文所屬與文字</li><li><code>variantType / significance</code> — 異文類型與文獻學意義</li><li><code>mentions / appearsIn</code> — 段落提及實體</li><li><code>swornBrotherOf / fatherOf / lordOf / spouseOf / enemyOf</code> — 人物社會關係</li><li><code>poemAttribution</code> — 詩文署名（區分靜軒詩/後人詩/史官論）</li></ul>
+    <h4>設計原則</h4><ol>
+    <li><b>版本先行</b>：所有文本/段落/異文/評點都從屬於某個 Version，實體出處可追溯至版本；</li>
+    <li><b>四範疇分類</b>：沿襲《紅樓夢》本體「物/事/時/地」四分，保證敘事文學建模一致性；</li>
+    <li><b>異文一等公民</b>：VariantReading 是獨立類而非附屬文本，帶 variantType 與 significance 字段可查詢；</li>
+    <li><b>OWL DL 合規</b>：函數式屬性、傳遞屬性、逆屬性、對稱屬性顯式標註，可做推理；</li>
+    <li><b>可擴展</b>：新增版本只需在 data/editions.json 增一項，若加全文則將 TXT 放入 raw/ 並運行解析腳本。</li>
+    </ol>
+    </div></section><footer class="footer"><p>本站以毛宗崗評本百二十回為在綫全文（590,968字）；本體論（OWL 2）兼容嘉靖本/周曰校本/葉逢春本/黃正甫本/余象斗本/李卓吾評本/李漁評本/毛宗崗本/人民文學出版社本等12個主要版本。</p><p>工程以 yejinlei 西遊記本體論（jtw_kg_ontology.ttl）為範式，面向多版本對照與異文比對場景擴展；視覺系統參考《石頭記》數字人文站。</p></footer><script src="assets/app.js" defer></script></body></html>
