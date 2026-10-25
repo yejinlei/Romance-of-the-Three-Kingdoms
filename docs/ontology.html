@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>本体论规范 · 三国演义数字人文研究</title>
+<title>本體論規範 · 三国演义数字人文研究</title>
 <link rel="stylesheet" href="assets/app.css">
 </head><body>
 <header class="site-header">
@@ -9,40 +9,157 @@
   <p class="site-sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p>
   <div class="nav-grid"><a class="nav-card" href="index.html"><span class="seal">卷</span><span>首页</span></a><a class="nav-card active" href="ontology.html"><span class="seal">元</span><span>本体论</span></a><a class="nav-card" href="read.html"><span class="seal">读</span><span>全文阅读</span></a><a class="nav-card" href="persons.html"><span class="seal">人</span><span>人物志</span></a><a class="nav-card" href="factions.html"><span class="seal">势</span><span>势力谱</span></a><a class="nav-card" href="places.html"><span class="seal">地</span><span>地理志</span></a><a class="nav-card" href="battles.html"><span class="seal">战</span><span>战役史</span></a><a class="nav-card" href="events.html"><span class="seal">事</span><span>事件录</span></a><a class="nav-card" href="stratagems.html"><span class="seal">计</span><span>计谋鉴</span></a><a class="nav-card" href="artifacts.html"><span class="seal">物</span><span>器物簿</span></a><a class="nav-card" href="prophecies.html"><span class="seal">谶</span><span>谶纬考</span></a><a class="nav-card" href="versions.html"><span class="seal">版</span><span>版本族谱</span></a><a class="nav-card" href="variants.html"><span class="seal">勘</span><span>异文对勘</span></a><a class="nav-card" href="graph.html"><span class="seal">系</span><span>人物关系</span></a><a class="nav-card" href="map.html"><span class="seal">图</span><span>时空地图</span></a><a class="nav-card" href="query.html"><span class="seal">问</span><span>查询台</span></a><a class="nav-card" href="stats.html"><span class="seal">数</span><span>统计析</span></a><a class="nav-card" href="scholars.html"><span class="seal">学</span><span>学术史</span></a><a class="nav-card" href="papers.html"><span class="seal">论</span><span>论著举要</span></a><a class="nav-card" href="adaptations.html"><span class="seal">艺</span><span>衍生改编</span></a><a class="nav-card" href="poetry.html"><span class="seal">诗</span><span>诗词回目</span></a><a class="nav-card" href="mirror.html"><span class="seal">虚</span><span>虚实对照</span></a><a class="nav-card" href="destiny.html"><span class="seal">命</span><span>天命叙事</span></a><a class="nav-card" href="guide.html"><span class="seal">引</span><span>阅读指南</span></a></div>
 </header><main>
+<p class="subtitle">OWL 2 DL 描述邏輯本體，含 78 個類、37 個對象屬性、111 個數據屬性；TBox+ABox 1249 行 Turtle，兼容 Protégé/rdflib/GraphDB/Apache Jena。</p>
 <section class="paper">
-  <h2>本体论 OWL 2 规范</h2>
-  <p>本体文件采用 Turtle 语法，兼容 Protégé / rdflib 等工具直接打开。词表采用 YAML 受控词表。</p>
+  <h2>本體論 OWL 2 規範 v3.1-multiversion</h2>
+  <p>本體文件採用 Turtle 語法，詞表採用 YAML 受控詞表，兼容 Protégé / rdflib / GraphDB / Apache Jena 直接導入。
+  與《水滸傳》本體（<code>sh:</code> 前綴）統一 <code>sg:</code> 命名空間，跨本體可按人物/地名 ID JOIN。</p>
   <div class="btn-row">
-    <a class="btn primary" href="ontology/sanguo_kg_ontology.ttl">📥 下载本体 TTL（12 版本 / 12 类）</a>
-    <a class="btn" href="ontology/vocabularies.yaml">📥 下载受控词表 YAML</a>
+    <a class="btn primary" href="ontology/sanguo_kg_ontology.ttl" download>📥 下載本體 TTL（1249 行 Turtle · 12 版本 / 78 類 / 31 核心異文）</a>
+    <a class="btn" href="ontology/vocabularies.yaml" download>📥 下載受控詞表 YAML（11 大詞族）</a>
+    <a class="btn" href="query.html">🔍 在瀏覽器查詢本體（DuckDB-WASM）</a>
   </div>
+</section>
 
-  <h3>顶级类（Classes）</h3>
-  <ul class="cls-list">
-    <li><b>sg:Thing</b> — 顶层抽象事物</li>
-    <li><b>sg:Wu / Shi / ShiJian / Di</b> — 四范域：物 / 事 / 时 / 地</li>
-    <li><b>sg:VersionFamily</b> — 版本族（演义系/志传系）</li>
-    <li><b>sg:Edition</b> — 具体版本（刊本/抄本/评本/现代整理本）</li>
-    <li><b>sg:Chapter</b> — 回/则（叙事单元）</li>
-    <li><b>sg:Paragraph</b> — 段落（文本原子）</li>
-    <li><b>sg:VariantReading</b> — 异文（跨版本文字差异）</li>
-    <li><b>sg:Commentary</b> — 评点（毛评/李评/李渔评/钟评）</li>
-    <li><b>sg:Person / Faction / Office / Place</b> — 人物 / 势力 / 官职 / 地点</li>
-    <li><b>sg:Artifact / Stratagem / Battle / Event</b> — 器物 / 计谋 / 战役 / 事件</li>
-    <li><b>sg:Prophecy</b> — 谶纬预言</li>
-    <li><b>sg:Scholar / Paper / Adaptation</b> — 学者 / 论著 / 改编作品</li>
-  </ul>
+<section class="paper">
+  <h3>〇、ABox 實例統計（已導入知識庫）</h3>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-num">455</div><div class="kpi-lab">人物</div></div>
+    <div class="kpi"><div class="kpi-num">19</div><div class="kpi-lab">政治勢力</div></div>
+    <div class="kpi"><div class="kpi-num">191</div><div class="kpi-lab">地理地名</div></div>
+    <div class="kpi"><div class="kpi-num">115</div><div class="kpi-lab">戰役</div></div>
+    <div class="kpi"><div class="kpi-num">107</div><div class="kpi-lab">事件</div></div>
+    <div class="kpi"><div class="kpi-num">27</div><div class="kpi-lab">計謀</div></div>
+    <div class="kpi"><div class="kpi-num">17</div><div class="kpi-lab">器物</div></div>
+    <div class="kpi"><div class="kpi-num">12</div><div class="kpi-lab">讖緯</div></div>
+    <div class="kpi"><div class="kpi-num">12</div><div class="kpi-lab">版本</div></div>
+    <div class="kpi"><div class="kpi-num">31</div><div class="kpi-lab">核心異文</div></div>
+    <div class="kpi"><div class="kpi-num">15</div><div class="kpi-lab">學者</div></div>
+    <div class="kpi"><div class="kpi-num">12+17</div><div class="kpi-lab">論著+改編</div></div>
+  </div>
+</section>
 
-  <h3>24 种有向关系（Object Properties）</h3>
+<section class="paper">
+  <h3>一、頂層類層級（TBox Classes · 10 大範疇 + 7 大附屬）</h3>
+  <div class="class-tree">
+    <div class="cls-branch"><b>sg:Thing</b> — 頂層抽象事物
+      <ul>
+        <li><b>sg:LiteraryWork</b> — 文學作品（版本實體）
+          <ul>
+            <li>sg:AncientEdition — 古本系統（明刊及更早刻本）：演義系、志傳系</li>
+            <li>sg:AnnotatedEdition — 評點改造本（李卓吾/鍾伯敬/李漁/毛宗崗）</li>
+            <li>sg:ModernCollation — 現代整理本（人文社/沈伯俊校理本）</li>
+            <li>sg:SequelWork — 續書衍生本（反三國/續三國）</li>
+          </ul>
+        </li>
+        <li>文本結構單元
+          <ul>
+            <li>sg:Volume 卷 · sg:Chapter 回/則 · sg:Paragraph 段落</li>
+            <li>sg:VariantReading 異文 · sg:Commentary 評點</li>
+          </ul>
+        </li>
+        <li><b>sg:Person</b> — 人物
+          <ul>
+            <li>sg:CivilOfficial 文臣/謀士 · sg:General 武將 · sg:Royalty 皇族</li>
+            <li>sg:Commoner 平民 · sg:MinorityFigure 少數民族 · sg:Woman 女性 · sg:FictionalFigure 純虛構</li>
+          </ul>
+        </li>
+        <li><b>sg:Faction</b> — 政治勢力
+          <ul><li>sg:HanCourt 東漢 · sg:CaoWei 曹魏 · sg:ShuHan 蜀漢 · sg:EasternWu 東吳 · sg:Warlord 割據諸侯 · sg:MinorityPower 少數民族</li></ul>
+        </li>
+        <li><b>sg:Battle</b> — 戰役
+          <ul><li>sg:MajorBattle 大型會戰 · sg:LocalBattle 局部 · sg:Ambush 伏擊 · sg:NavalBattle 水戰 · sg:Raid 奇襲 · sg:Siege 圍城</li></ul>
+        </li>
+        <li><b>sg:Place</b> — 地點
+          <ul><li>sg:AncientPlace 古地名 · sg:ModernSite 今址 · sg:Pass 關隘 · sg:Capital 都城 · sg:Battlefield 戰場遺址 · sg:Mountain 山 · sg:River 江河</li></ul>
+        </li>
+        <li><b>sg:Event</b> — 事件
+          <ul><li>sg:PersonalEvent 個人 · sg:PoliticalEvent 政治 · sg:DiplomaticEvent 外交 · sg:AllusionEvent 典故</li></ul>
+        </li>
+        <li><b>sg:Scholar</b> — 學術主體（古代評點家/近現代學者/研究機構）</li>
+        <li><b>sg:AcademicWork</b> — 學術成果（評點本/專著/論文/校理本）</li>
+        <li><b>sg:Adaptation</b> — 衍生作品（影視/戲曲/動漫/遊戲/同人）</li>
+        <li><b>sg:Artifact</b> — 器物（兵器/名馬/陣法/發明/印綬）</li>
+        <li><b>sg:HistoricalSource</b> — 正史文獻（文史互證層）
+          <ul><li>sg:RecordsOfThreeKingdoms 陳壽《三國志》 · sg:PeiAnnotation 裴松之注 · sg:HouHanShu 《後漢書》 · sg:ZizhiTongjian 《資治通鑑》</li></ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="paper">
+  <h3>二、24 種核心有向關係（Object Properties · 按場景分組）</h3>
   <table class="data-table">
-    <thead><tr><th>属性</th><th>域</th><th>值域</th><th>说明</th></tr></thead><tbody>
-<tr><td><code>sg:allyOf</code></td><td>Person/Faction</td><td>Person/Faction</td><td>结为同盟</td></tr><tr><td><code>sg:appearsIn</code></td><td>Person/Place</td><td>Chapter</td><td>出场于</td></tr><tr><td><code>sg:belongsTo</code></td><td>Person/Artifact</td><td>Faction</td><td>归属</td></tr><tr><td><code>sg:defeats</code></td><td>Person/Faction</td><td>Person/Faction</td><td>战胜</td></tr><tr><td><code>sg:fatherOf</code></td><td>Person</td><td>Person</td><td>生父</td></tr><tr><td><code>sg:motherOf</code></td><td>Person</td><td>Person</td><td>生母</td></tr><tr><td><code>sg:swornBrotherOf</code></td><td>Person</td><td>Person</td><td>结义兄弟</td></tr><tr><td><code>sg:swornSisterOf</code></td><td>Person</td><td>Person</td><td>结义姐妹</td></tr><tr><td><code>sg:spouseOf</code></td><td>Person</td><td>Person</td><td>配偶</td></tr><tr><td><code>sg:siblingOf</code></td><td>Person</td><td>Person</td><td>同胞兄弟/姐妹</td></tr><tr><td><code>sg:sonOf</code></td><td>Person</td><td>Person</td><td>子（父/母）</td></tr><tr><td><code>sg:lordOf</code></td><td>Person</td><td>Person</td><td>君主</td></tr><tr><td><code>sg:subjectOf</code></td><td>Person</td><td>Person</td><td>臣属</td></tr><tr><td><code>sg:kills</code></td><td>Person</td><td>Person</td><td>诛杀</td></tr><tr><td><code>sg:serves</code></td><td>Person</td><td>Person/Faction</td><td>事奉/效力</td></tr><tr><td><code>sg:locatesIn</code></td><td>Battle/Event/Place</td><td>Place</td><td>位于</td></tr><tr><td><code>sg:participatesIn</code></td><td>Person</td><td>Battle/Event</td><td>参与</td></tr><tr><td><code>sg:uses</code></td><td>Person/Battle</td><td>Artifact/Stratagem</td><td>使用</td></tr><tr><td><code>sg:mentions</code></td><td>Paragraph/Commentary</td><td>Person/Place/Thing</td><td>提及</td></tr><tr><td><code>sg:variantOf</code></td><td>VariantReading</td><td>Paragraph</td><td>异文于</td></tr><tr><td><code>sg:basedOn</code></td><td>Edition</td><td>Edition</td><td>底本</td></tr><tr><td><code>sg:commentsOn</code></td><td>Commentary</td><td>Paragraph/Chapter</td><td>评点</td></tr><tr><td><code>sg:predicts</code></td><td>Prophecy</td><td>Event/Person</td><td>预言</td></tr><tr><td><code>sg:cites</code></td><td>Paper</td><td>Edition/Person/Event</td><td>引用/论述</td></tr></tbody></table>
-  <h3>数据属性（Datatype Properties）</h3>
+    <thead><tr><th>屬性</th><th>域 → 值域</th><th>語義</th><th>屬性特徵</th></tr></thead>
+    <tbody>
+<tr><td><code>sg:swornBrotherOf</code></td><td><code>Person→Person</code></td><td>結拜兄弟</td><td>對稱 Symmetric</td></tr><tr><td><code>sg:enemyOf_person</code></td><td><code>Person→Person</code></td><td>敵對（人）</td><td>對稱</td></tr><tr><td><code>sg:masterOf / apprenticeOf</code></td><td><code>Person→Person</code></td><td>師徒（師↔徒）</td><td>互逆 inverseOf</td></tr><tr><td><code>sg:kinOf</code></td><td><code>Person→Person</code></td><td>親屬</td><td>對稱</td></tr><tr><td><code>sg:lordOf / ministerOf</code></td><td><code>Person→Person</code></td><td>主臣（君↔臣）</td><td>三國專屬·互逆</td></tr><tr><td><code>sg:belongsToForce</code></td><td><code>Person→Faction</code></td><td>所屬（人物→勢力）</td><td>三國專屬</td></tr><tr><td><code>sg:commands / fightsIn</code></td><td><code>Person→Battle</code></td><td>指揮/參戰</td><td>三國專屬</td></tr><tr><td><code>sg:alliedWith / enemyOf_force</code></td><td><code>Faction→Faction</code></td><td>結盟/敵對（勢力）</td><td>對稱·三國專屬</td></tr><tr><td><code>sg:battleAt</code></td><td><code>Battle→Place</code></td><td>發生於</td><td>三國專屬</td></tr><tr><td><code>sg:derivedFrom</code></td><td><code>Edition→Edition</code></td><td>版本演化自</td><td>傳遞 Transitive</td></tr><tr><td><code>sg:annotatedBy</code></td><td><code>Edition→Scholar</code></td><td>評點改造</td><td>三國專屬</td></tr><tr><td><code>sg:appearsIn</code></td><td><code>Person→Edition</code></td><td>登場於（版本隔離）</td><td>多版本核心</td></tr><tr><td><code>sg:includedIn</code></td><td><code>Event→Edition</code></td><td>收錄於（版本隔離）</td><td>多版本核心</td></tr><tr><td><code>sg:authored</code></td><td><code>Scholar→AcademicWork</code></td><td>著作</td><td></td></tr><tr><td><code>sg:debatesWith</code></td><td><code>Scholar→Scholar</code></td><td>學術論戰</td><td>對稱</td></tr><tr><td><code>sg:studiesEdition</code></td><td><code>Scholar→Edition</code></td><td>研究</td><td></td></tr><tr><td><code>sg:eventAt</code></td><td><code>Event→Place</code></td><td>發生於（事件）</td><td></td></tr><tr><td><code>sg:adaptedFrom</code></td><td><code>Adaptation→Edition</code></td><td>改編自</td><td></td></tr><tr><td><code>sg:possesses</code></td><td><code>Person→Artifact</code></td><td>持有</td><td>三國專屬</td></tr><tr><td><code>sg:usesArtifact</code></td><td><code>Battle→Artifact</code></td><td>使用（戰術器物）</td><td>三國專屬</td></tr><tr><td><code>sg:participatesIn</code></td><td><code>Person→Event</code></td><td>參與</td><td></td></tr><tr><td><code>sg:activeAt</code></td><td><code>Person→Place</code></td><td>活動於</td><td></td></tr><tr><td><code>sg:attestedIn / contradicts / embellishedFrom</code></td><td><code>Person/Event/Battle→HistoricalSource</code></td><td>正史互證（0/1/2 虛實）</td><td>文史互證專屬</td></tr><tr><td><code>sg:correspondsTo</code></td><td><code>Chapter→Chapter</code></td><td>跨版本對應回目</td><td>對稱·多版本核心</td></tr></tbody></table>
+</section>
+
+<section class="paper">
+  <h3>三、受控詞表（11 族·摘錄）</h3>
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <h4>版本族系 <code>version_family</code></h4>
+      <ul><li>yanyi 演義系（24 卷）</li><li>zhizhuan 志傳系（20 卷）</li><li>pingdian 評點本（120 回）</li><li>modern 現代整理本</li><li>sequel 續書</li></ul>
+    </div>
+    <div class="vocab-card">
+      <h4>虛實標註 <code>fictional_flag</code></h4>
+      <ul><li><b>0</b> 正史有載（官渡/赤壁等）</li><li><b>1</b> 正史有載·小說加工（草船借箭/溫酒斬華雄）</li><li><b>2</b> 純虛構（桃園結義/過五關/祭東風）</li></ul>
+    </div>
+    <div class="vocab-card">
+      <h4>異文類型 <code>variant_type</code></h4>
+      <ul><li>vt_typo 訛字（范彊→范疆）</li><li>vt_missing 脫文</li><li>vt_extra 衍文（加《臨江仙》）</li><li>vt_rewrite 改寫（寧使→寧教）</li><li>vt_poetry 詩文增刪</li><li>vt_plot 情節增刪（刪燒魏延）</li><li>vt_commentary 評點</li></ul>
+    </div>
+    <div class="vocab-card">
+      <h4>敘事階段 <code>narrative_phases</code></h4>
+      <ul><li>黃巾之亂 184-189（1-2 回）</li><li>董卓之亂 189-192（3-9 回）</li><li>群雄逐鹿 192-208（10-42 回）</li><li>三國鼎立 208-234（43-104 回）</li><li>三國歸晉 234-280（105-120 回）</li></ul>
+    </div>
+  </div>
+  <p class="note">完整詞表請 <a href="ontology/vocabularies.yaml">下載 YAML</a> 查看，包含人物類別、勢力、計謀、器物、正史文獻等全部枚舉。</p>
+</section>
+
+<section class="paper">
+  <h3>四、版本演化本體圖（derivedFrom 邊）</h3>
+  <pre class="ttl-snip">sg:zhouyuexiao  sg:derivedFrom  sg:jiajing       # 演義系同承祖本
+sg:lizhuowu     sg:derivedFrom  sg:zhouyuexiao   # 合 240 則為 120 回
+sg:zhongbojing  sg:derivedFrom  sg:lizhuowu      # 鍾評分支
+sg:maozonggang  sg:derivedFrom  sg:zhongbojing   # 毛宗崗全面評改，取代一切舊本
+sg:liyu         sg:derivedFrom  sg:lizhuowu      # 李漁另行評點
+sg:renwen       sg:derivedFrom  sg:maozonggang   # 現代校點本
+sg:shenbojun    sg:derivedFrom  sg:maozonggang   # 沈伯俊校理
+sg:yefengchun   ——志傳系獨立發展，與演義系並列——
+sg:yuxiangdou   sg:derivedFrom  sg:yefengchun    # 志傳繁本
+sg:huangzhengfu sg:derivedFrom  sg:yefengchun    # 志傳簡本（或為更早狀態）</pre>
+  <p>此即《三國演義》版本本體論的核心「世系圖」——毛本並非羅貫中原本直系，而是經李卓吾評本、鍾伯敬評本兩次改造後的第三手文本。</p>
+</section>
+
+<section class="paper">
+  <h3>五、OWL 2 DL 推理約束</h3>
   <ul class="cls-list">
-    <li><b>sg:zi</b>（字）、<b>sg:hao</b>（号）、<b>sg:birthYear</b>、<b>sg:deathYear</b>、<b>sg:hometown</b>、<b>sg:fictionalFlag</b>（0正史/1半虚构/2虚构）</li>
-    <li><b>sg:year</b>（公元纪年）、<b>sg:chapterNo</b>、<b>sg:longitude/latitude</b>、<b>sg:outcome</b>、<b>sg:sourceText</b>（原文片段）</li>
+    <li><b>類不相交（DisjointClasses）：</b>Person / Faction / Battle / Place / Event / Scholar / AcademicWork / Adaptation / Artifact / LiteraryWork 互為不相交類，推理可檢測跨類實例衝突。</li>
+    <li><b>函數/反函數屬性：</b>versionId / personId / forceId / battleId / locationId / eventId / scholarId / paperId / adaptId / artifactId 均為 <code>owl:InverseFunctionalProperty</code>，確保全局主鍵唯一。</li>
+    <li><b>對稱屬性：</b>swornBrotherOf / enemyOf_person / kinOf / alliedWith / enemyOf_force / debatesWith / correspondsTo。</li>
+    <li><b>傳遞屬性：</b>derivedFrom（版本演化可追溯）。</li>
+    <li><b>互逆屬性：</b>masterOf↔apprenticeOf、lordOf↔ministerOf。</li>
+    <li><b>跨本體聯動：</b>聲明 <code>sh:</code> 命名空間（水滸本體），人物/地名 ID 可跨棧 JOIN（例如 sg:person_caocao 與 sh: 中相關人物若有歷史關聯，可附加 owl:sameAs 鏈接）。</li>
   </ul>
 </section>
+
+<section class="paper">
+  <h3>六、本體論文件位置（靜態託管）</h3>
+  <table class="data-table">
+    <thead><tr><th>文件</th><th>格式</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><a href="ontology/sanguo_kg_ontology.ttl">sanguo_kg_ontology.ttl</a></td><td>Turtle (OWL 2 DL)</td><td>完整 TBox+ABox（1248 行），包含 12 版本、16 學者、31 核心異文個體</td></tr>
+      <tr><td><a href="ontology/vocabularies.yaml">vocabularies.yaml</a></td><td>YAML 1.2</td><td>11 族受控詞表，用於數據錄入校驗</td></tr>
+      <tr><td>data/*.parquet</td><td>Apache Parquet</td><td>剩餘 ABox 數據（455 人物/115 戰役/107 事件/191 地名/12 論著/17 改編等），供 DuckDB-WASM 瀏覽器端查詢</td></tr>
+      <tr><td>data/*.json</td><td>JSON</td><td>同數據 JSON 鏡像，瀏覽器端直接 fetch</td></tr>
+    </tbody>
+  </table>
+  <p class="note">工程完全無服務器：所有知識圖譜查詢由 DuckDB-WASM 在瀏覽器本地執行，無後端、無數據庫、無 API，符合 GitHub Pages 靜態託管約束。</p>
+</section>
+
 </main>
 <footer class="site-footer">
   <div class="footer-inner">

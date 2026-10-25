@@ -1,483 +1,453 @@
 # ============================================================
-# 《三國演義》本體論 · 受控詞表（與 OWL TBox 同步）
-# 兼容水滸本體棧（sg_ / sh_ 統一前綴規則）
+# 《三國演義》本體論受控詞表 v3.1
+# 對應 sanguo_kg_ontology.ttl，所有枚舉值與 owl:NamedIndividual 對齊。
+# 可直接用於前端搜索、數據錄入校驗、本體推理。
 # ============================================================
 
-ontology:
-  uri: "http://localhost/sanguo-kg#"
-  prefix: "sg"
-  title: "《三國演義》知識本體 · 受控詞表"
-  version: "3.0-complete"
-  cross_ontology:
-    - name: "水滸傳本體"
-      prefix: "sh"
-      uri: "http://localhost/outlaws-kg#"
-      join_key: ["person_id", "place_id", "artifact_id"]
+# ---------- 1. 版本族系 ----------
+version_family:
+  yanyi:
+    label: 演義系統（24 卷本）
+    description: 以嘉靖壬午本為代表，24 卷 240 則單題，文字較近羅貫中原本面貌
+    members: [jiajing, zhouyuexiao, xiazhenyu]
+  zhizhuan:
+    label: 志傳系統（20 卷本）
+    description: 建陽書坊刻本群，獨有花關索故事，上圖下文，葉逢春本為首
+    members: [yefengchun, yuxiangdou, huangzhengfu, liulongtian, zhudingchen]
+  pingdian:
+    label: 評點改造本（120 回本）
+    description: 明末清初評點家合 240 則為 120 回，增加評點，改寫文字
+    members: [lizhuowu, zhongbojing, liyu, maozonggang]
+  modern:
+    label: 現代整理本
+    description: 現代學者校點/校注/校理本
+    members: [renwen, shenbojun, zhonghua_huiping]
+  sequel:
+    label: 續書衍生
+    description: 續三國/反三國/後三國等
+    members: [fan, xu, hou]
 
-# ---- 頂層實體類與全局主鍵 ----
-entity_classes:
-  LiteraryWork:
-    label: "文學作品（版本）"
-    pk: "version_id"
-    id_prefix: "sg_version_"
-    subclasses:
-      AncientEdition:      "古本系統（明刊及更早）"
-      AnnotatedEdition:    "評點改造本"
-      ModernCollation:     "現代整理本"
-      SequelWork:          "續書衍生本"
-    properties:
-      - version_id
-      - version_name
-      - edition_year
-      - publisher
-      - survival_status
-      - source_text
-      - chapter_count
-      - variant_feature
-      - family_lineage
-      - has_fulltext
+# ---------- 2. 版本個體 ----------
+editions:
+  jiajing:
+    id: sg_version_jiajing
+    name: 嘉靖壬午本《三國志通俗演義》
+    short: 嘉靖本
+    family: yanyi
+    year: 1522
+    publisher: 明嘉靖元年刻本
+    survival: 全本（影印存世）
+    chapters: 24 卷 240 則
+    has_fulltext: False
+    feature: 現存最早刻本；240 則單題七言；尊曹傾向明顯；無《臨江仙》開篇；曹操形象未被臉譜化；含「孔明燒魏延於上方谷」等被毛本刪去之段落。
+  zhouyuexiao:
+    id: sg_version_zhouyuexiao
+    name: 周曰校本《新刊校正古本大字音釋三國志通俗演義》
+    short: 周曰校本
+    family: yanyi
+    year: 1591
+    publisher: 明萬曆十九年金陵周曰校萬卷樓刊
+    survival: 全本（有影印，識典古籍在線）
+    chapters: 12 卷 240 則
+    has_fulltext: False
+    feature: 演義系代表本；增補插圖、音注、釋義、考證；與嘉靖本同屬演義系統，文字高度一致。
+  yefengchun:
+    id: sg_version_yefengchun
+    name: 葉逢春本《新刊通俗演義三國志傳》
+    short: 葉逢春本
+    family: zhizhuan
+    year: 1548
+    publisher: 明嘉靖二十七年建陽葉逢春刊
+    survival: 殘本（分藏數館）
+    chapters: 10 卷 240 段
+    has_fulltext: False
+    feature: 志傳系統最早刻本；獨有『花關索』四傳（出身/征西川/下荊州/認父）；上圖下文版式。
+  yuxiangdou:
+    id: sg_version_yuxiangdou
+    name: 余象斗雙峰堂本《音釋補遺按鑑批點三國志傳》
+    short: 余象斗本
+    family: zhizhuan
+    year: 1592
+    publisher: 明萬曆二十年建陽余象斗雙峰堂刊
+    survival: 全本（英國博物院/早稻田藏）
+    chapters: 20 卷
+    has_fulltext: False
+    feature: 開『評林』本之風；余氏自加評點；葉逢春本系統繁本代表。
+  huangzhengfu:
+    id: sg_version_huangzhengfu
+    name: 黃正甫本《新刻考訂按鑑通俗演義全像三國志傳》
+    short: 黃正甫本
+    family: zhizhuan
+    year: 1623
+    publisher: 明天啟三年閩建黃正甫刊
+    survival: 全本（日本內閣文庫藏）
+    chapters: 20 卷 240 則
+    has_fulltext: False
+    feature: 志傳系統簡本；文字極簡淨；與繁本（余象斗）孰先孰後學界仍有爭論（小川環樹等主簡本為先）。
+  lizhuowu:
+    id: sg_version_lizhuowu
+    name: 李卓吾評本《李卓吾先生批評三國志》
+    short: 李卓吾評本
+    family: pingdian
+    year: ~1607
+    publisher: 明萬曆間吳觀明容與堂刊
+    survival: 全本
+    chapters: 120 回（首合 240 則為 120 回）
+    has_fulltext: False
+    feature: 首次將 240 則合併為 120 回；回目由單題改為雙題；葉晝偽託李贄評點；尊劉貶曹傾向加強。
+  zhongbojing:
+    id: sg_version_zhongbojing
+    name: 鍾伯敬評本《鍾伯敬先生批評三國志》
+    short: 鍾伯敬評本
+    family: pingdian
+    year: ~1627
+    publisher: 明天啟間積慶堂刊
+    survival: 全本
+    chapters: 120 回
+    has_fulltext: False
+    feature: 繼李評本之評點系統；評語較李評簡潔；明末清初流傳較廣。
+  liyu:
+    id: sg_version_liyu
+    name: 李笠翁評本《笠翁批評三國志》
+    short: 李漁評本
+    family: pingdian
+    year: ~1670
+    publisher: 清康熙間刊
+    survival: 全本
+    chapters: 120 回
+    has_fulltext: False
+    feature: 毛宗崗同時代之評本；李漁為清初戲曲大家；評點偏向小說結構與文法。
+  maozonggang:
+    id: sg_version_maozonggang
+    name: 毛宗崗評本《四大奇書第一種——三國志演義》
+    short: 毛本（通行本）
+    family: pingdian
+    year: 1679
+    publisher: 清康熙十八年醉畊堂刊（毛綸、毛宗崗父子評改）
+    survival: 全本（通行本）
+    chapters: 120 回
+    has_fulltext: True
+    feature: 現今通行本；首冠楊慎《臨江仙·滾滾長江東逝水》；整頓回目為對偶聯語；刪改嘉靖本尊曹字句，強化尊劉貶曹；刪去『上方谷燒魏延』等段落；加毛氏回前總評、夾批；此本一出『一切舊本乃不復行』。本站在線全文即毛本（590,968 字）。
+  renwen:
+    id: sg_version_renwen
+    name: 人民文學出版社校訂本
+    short: 人文社本
+    family: modern
+    year: 1953
+    publisher: 人民文學出版社（初版顧學頡等整理，1973 第三版）
+    survival: 全本
+    chapters: 120 回
+    has_fulltext: False
+    feature: 以毛本為底本，參照明嘉靖本、清一些評本校勘標點；大陸最通行現代整理本；國內發行量最大。
+  shenbojun:
+    id: sg_version_shenbojun
+    name: 沈伯俊校理本《三國演義（新校理本）》
+    short: 沈伯俊校理本
+    family: modern
+    year: 1992
+    publisher: 江蘇古籍出版社/巴蜀書社多版
+    survival: 全本
+    chapters: 120 回
+    has_fulltext: False
+    feature: 當代三國權威沈伯俊以毛本為底本、參校多個明刊本之校理本；對毛本地理/官職/人物訛誤多所校正。
+  fan:
+    id: sg_version_fan
+    name: 反三國演義（周大荒）
+    short: 反三國
+    family: sequel
+    year: 1924
+    publisher: 民國時期初刊
+    survival: 全本
+    chapters: 60 回
+    has_fulltext: False
+    feature: 續書/翻案之作；為蜀漢翻案，令劉備諸葛亮統一天下；結尾『薦杜預老將獻新謀』不同毛本。
 
-  Person:
-    label: "人物"
-    pk: "person_id"
-    id_prefix: "sg_person_"
-    subclasses:
-      CivilOfficial:     "核心文臣（謀士/宰輔）"
-      General:           "武將"
-      Royalty:           "皇族（帝王/宗室）"
-      Commoner:          "民間角色"
-      MinorityFigure:    "少數民族人物"
-      Woman:             "女性角色"
-      FictionalFigure:   "虛構人物"
-    properties:
-      - person_id
-      - name
-      - zi
-      - hao
-      - nickname
-      - alias_set
-      - first_chapter
-      - death_chapter
-      - official_history
-      - weapon
-      - ending
-      - fictional_flag
-      - birth_year
-      - death_year
-      - gender
-      - mention_count
+# ---------- 3. 虛實標註 ----------
+fictional_flag:
+  0:
+    label: 正史有載
+    description: 《三國志》/《後漢書》/《資治通鑑》有明確記載，與小說大體一致
+    examples: [官渡之戰, 赤壁之戰, 夷陵之戰, 諸葛亮北伐, 曹操, 劉備, 孫權]
+  1:
+    label: 正史有載·小說加工
+    description: 正史有原型，但細節、動機、形象被小說家美化/醜化/神化
+    examples: [三顧茅廬, 草船借箭(原為孫權), 溫酒斬華雄(原為孫堅), 刮骨療毒(醫者非華佗)]
+  2:
+    label: 純虛構
+    description: 正史完全無載，為民間傳說或小說家原創
+    examples: [桃園結義, 過五關斬六將, 諸葛亮祭東風, 三英戰呂布, 貂蟬連環計, 八陣圖困陸遜, 周倉, 關索]
 
-  Faction:
-    label: "政治勢力"
-    pk: "force_id"
-    id_prefix: "sg_force_"
-    subclasses:
-      HanCourt:          "東漢朝廷"
-      CaoWei:            "曹魏"
-      ShuHan:            "蜀漢"
-      EasternWu:         "東吳"
-      Warlord:           "割據諸侯"
-      MinorityPower:     "少數民族政權"
-    properties:
-      - force_id
-      - faction_name
-      - founder
-      - period_start
-      - period_end
-      - capital
-      - core_officials
-      - territory
-      - reign_title
-
-  Battle:
-    label: "戰爭戰役"
-    pk: "battle_id"
-    id_prefix: "sg_battle_"
-    subclasses:
-      MajorBattle:       "大型會戰"
-      LocalBattle:       "局部戰役"
-      Ambush:            "伏擊戰"
-      NavalBattle:       "水戰"
-      Raid:              "奇襲戰"
-      Siege:             "圍城戰"
-    properties:
-      - battle_id
-      - battle_name
-      - battle_chapter
-      - battle_year
-      - side_a
-      - side_b
-      - key_tactic
-      - outcome
-      - impact
-      - casualties
-
-  Place:
-    label: "空間地理"
-    pk: "location_id"
-    id_prefix: "sg_place_"
-    subclasses:
-      AncientPlace:      "古地名（州郡）"
-      ModernSite:        "當代對應地點"
-      Pass:              "戰略關隘"
-      Capital:           "都城"
-      Battlefield:       "戰場遺址"
-      Mountain:          "山嶽"
-      River:             "江河"
-    properties:
-      - location_id
-      - ancient_name
-      - modern_name
-      - prefecture
-      - longitude
-      - latitude
-      - strategic_value
-      - related_battle
-      - modern_ruins
-
-  Event:
-    label: "事件"
-    pk: "event_id"
-    id_prefix: "sg_event_"
-    subclasses:
-      PersonalEvent:     "個人事件"
-      PoliticalEvent:    "政治事件"
-      DiplomaticEvent:   "外交事件"
-      AllusionEvent:     "典故事件"
-    properties:
-      - event_id
-      - event_name
-      - event_chapter
-      - event_year
-      - participants
-      - event_location
-      - narrative_weight
-      - fictional_event
-
-  Scholar:
-    label: "學術主體"
-    pk: "scholar_id"
-    id_prefix: "sg_scholar_"
-    subclasses:
-      AncientCommentator: "古代評點家"
-      ModernScholar:      "近現代三國學者"
-      ResearchInstitute:  "當代研究機構"
-    properties:
-      - scholar_id
-      - scholar_name
-      - birth_year
-      - death_year
-      - school
-      - research_field
-      - major_works
-
-  AcademicWork:
-    label: "學術成果"
-    pk: "paper_id"
-    id_prefix: "sg_paper_"
-    subclasses:
-      CommentaryEdition: "古代評點本"
-      ModernMonograph:   "現代研究論著"
-      AcademicPaper:     "學術論文"
-      CollatedEdition:   "校理校本"
-    properties:
-      - paper_id
-      - paper_title
-      - pub_year
-      - core_argument
-      - citations
-      - research_topic
-      - base_edition
-
-  Adaptation:
-    label: "衍生作品"
-    pk: "adapt_id"
-    id_prefix: "sg_adapt_"
-    subclasses:
-      FilmTV:            "影視改編"
-      Opera:             "戲曲改編"
-      Anime:             "動漫改編"
-      Game:              "遊戲改編"
-      FanWork:           "同人作品"
-    properties:
-      - adapt_id
-      - adapt_name
-      - adapt_type
-      - release_year
-      - core_change
-      - creator_team
-      - douban_score
-
-  Artifact:
-    label: "器物"
-    pk: "artifact_id"
-    id_prefix: "sg_artifact_"
-    subclasses:
-      Weapon:            "兵器"
-      FamousHorse:       "名馬"
-      Formation:         "陣法"
-      Invention:         "發明創造"
-      SealTalisman:      "印綬符節"
-    properties:
-      - artifact_id
-      - artifact_name
-      - owner
-      - artifact_chapter
-      - function
-      - allusion
-
-  # ---- 枚舉層（輔助）----
-  Stratagem:
-    label: "計謀"
-    pk: "stratagem_id"
-    id_prefix: "sg_strat_"
-
-  Prophecy:
-    label: "讖緯"
-    pk: "prophecy_id"
-    id_prefix: "sg_proph_"
-
-  Office:
-    label: "官職"
-    pk: "office_id"
-    id_prefix: "sg_office_"
-
-# ---- 24 種核心關係（6 三國專屬 + 18 通用）----
-relations:
-  # 人-人通用
-  swornBrotherOf:
-    label: "結拜為兄弟"
-    domain: Person
-    range: Person
-    shared_with_shuihu: true
-    attrs: ["oath_chapter", "rank_order"]
-    features: [symmetric]
-
-  enemyOf_person:
-    label: "敵對（人-人）"
-    domain: Person
-    range: Person
-    shared_with_shuihu: true
-    attrs: ["first_clash_chapter", "intensity"]
-    features: [symmetric]
-
-  masterOf:
-    label: "師徒（師→徒）"
-    domain: Person
-    range: Person
-    shared_with_shuihu: true
-    attrs: ["teaching_content", "appear_chapter"]
-    inverse: apprenticeOf
-
-  kinOf:
-    label: "親屬"
-    domain: Person
-    range: Person
-    shared_with_shuihu: true
-    attrs: ["kinship_type", "generation"]
-    features: [symmetric]
-
-  # 人-人專屬
-  lordOf:
-    label: "主臣（君→臣）"
-    domain: Person
-    range: Person
-    sanguo_only: true
-    attrs: ["service_period", "trust_level", "office_at"]
-    inverse: ministerOf
-
-  # 人-勢力專屬
-  belongsToForce:
-    label: "所屬（人物→勢力）"
-    domain: Person
-    range: Faction
-    sanguo_only: true
-    attrs: ["join_time", "office_history"]
-
-  # 人-戰役專屬
-  commands:
-    label: "指揮（人物→戰役）"
-    domain: Person
-    range: Battle
-    sanguo_only: true
-    attrs: ["role", "tactic_contribution"]
-
-  fightsIn:
-    label: "參戰（人物→戰役）"
-    domain: Person
-    range: Battle
-    sanguo_only: true
-    attrs: ["identity", "ending"]
-
-  # 勢力-勢力專屬
-  alliedWith:
-    label: "結盟"
-    domain: Faction
-    range: Faction
-    sanguo_only: true
-    attrs: ["period", "treaty"]
-    features: [symmetric]
-
-  enemyOf_force:
-    label: "敵對（勢力-勢力）"
-    domain: Faction
-    range: Faction
-    sanguo_only: true
-    attrs: ["war_period"]
-    features: [symmetric]
-
-  # 戰役-地點專屬
-  battleAt:
-    label: "發生於（戰役→地點）"
-    domain: Battle
-    range: Place
-    sanguo_only: true
-    attrs: ["battlefield_scope", "coordinates"]
-
-  # 版本-版本通用
-  derivedFrom:
-    label: "演化自"
-    domain: LiteraryWork
-    range: LiteraryWork
-    shared_with_shuihu: true
-    attrs: ["year_diff", "inheritance_rate"]
-    features: [transitive]
-
-  # 版本-版本專屬
-  annotatedBy:
-    label: "評點改造"
-    domain: LiteraryWork
-    range: Scholar
-    sanguo_only: true
-    attrs: ["modify_scale", "key_plot_changes"]
-
-  # 版本-人物通用
-  appearsIn:
-    label: "登場於（人物→版本）"
-    domain: Person
-    range: LiteraryWork
-    shared_with_shuihu: true
-    attrs: ["ending_diff", "text_variant"]
-
-  # 版本-事件通用
-  includedIn:
-    label: "收錄於（事件→版本）"
-    domain: Event
-    range: LiteraryWork
-    shared_with_shuihu: true
-    attrs: ["plot_cut", "text_variant"]
-
-  # 學者-成果通用
-  authored:
-    label: "創作"
-    domain: Scholar
-    range: AcademicWork
-    shared_with_shuihu: true
-    attrs: ["pub_time", "abstract"]
-
-  # 學者-學者通用
-  debatesWith:
-    label: "學術論戰"
-    domain: Scholar
-    range: Scholar
-    shared_with_shuihu: true
-    attrs: ["topic", "time"]
-    features: [symmetric]
-
-  # 版本-學者通用
-  studiesEdition:
-    label: "研究"
-    domain: Scholar
-    range: LiteraryWork
-    shared_with_shuihu: true
-    attrs: ["findings", "core_conclusion"]
-
-  # 事件-地點通用
-  eventAt:
-    label: "發生於（事件→地點）"
-    domain: Event
-    range: Place
-    shared_with_shuihu: true
-    attrs: ["event_time", "coordinates"]
-
-  # 衍生-版本通用
-  adaptedFrom:
-    label: "改編自"
-    domain: Adaptation
-    range: LiteraryWork
-    shared_with_shuihu: true
-    attrs: ["modify_scale", "key_plot_changes"]
-
-  # 人-器物專屬
-  possesses:
-    label: "持有（人物→器物）"
-    domain: Person
-    range: Artifact
-    sanguo_only: true
-    attrs: ["hold_period", "chapter"]
-
-  # 戰役-器物專屬
-  usesArtifact:
-    label: "使用（戰役→器物）"
-    domain: Battle
-    range: Artifact
-    sanguo_only: true
-    attrs: ["scene", "tactical_effect"]
-
-  # 人-事件通用
-  participatesIn:
-    label: "參與"
-    domain: Person
-    range: Event
-    shared_with_shuihu: true
-    attrs: ["role", "narrative_weight"]
-
-  # 人-地點通用
-  activeAt:
-    label: "活動於"
-    domain: Person
-    range: Place
-    shared_with_shuihu: true
-    attrs: ["chapters", "related_events"]
-
-# ---- 受控詞枚舉 ----
-verification_status:
-  - {id: verified,  label: "已核實"}
-  - {id: doubtful,  label: "存疑"}
-  - {id: pending,   label: "待核實"}
-  - {id: conflict,  label: "版本間衝突"}
-
+# ---------- 4. 異文類型 ----------
 variant_type:
-  - typo         # 訛字
-  - missing      # 脫文
-  - extra        # 衍文
-  - rewrite      # 改寫
-  - poetry       # 詩文增刪
-  - plot         # 情節增刪
-  - commentary   # 評點增刪
+  vt_typo:
+    label: 訛字（形近/音近而誤）
+    examples: [范彊→范疆, 舁→抬]
+  vt_missing:
+    label: 脫文（後本脫漏原文）
+    examples: [嘉靖本『好英雄』被毛本刪去]
+  vt_extra:
+    label: 衍文（後本增字）
+    examples: [毛本加《臨江仙》開篇, 『為成都王』]
+  vt_rewrite:
+    label: 改寫（文字潤色、對仗、語氣變動）
+    examples: [『寧使』→『寧教』, 『阿斗』→『後主』]
+  vt_poetry:
+    label: 詩文增刪
+    examples: [毛本大量加入唐詩宋詞與後人吊詩]
+  vt_plot:
+    label: 情節增刪
+    examples: [毛本刪「上方谷燒魏延」, 華佗為關公刮骨(張冠李戴)]
+  vt_commentary:
+    label: 評點增刪
+    examples: [毛宗崗回前總評、夾批、夾評]
 
-relation_weight:
-  - {id: core,    label: "核心（主線）"}
-  - {id: major,   label: "重要"}
-  - {id: minor,   label: "次要"}
+# ---------- 5. 人物類別（受控枚舉） ----------
+person_category:
+  civil_official: 文臣/謀士/宰輔
+  general: 武將
+  royalty: 帝王/后妃/宗室
+  commoner: 平民/隱士/醫者/匠人
+  minority: 少數民族（南蠻/羌/匈奴/山越/鮮卑/烏桓）
+  woman: 女性
+  fictional: 純虛構人物
+  eunuch: 宦官
+  consort: 外戚
+  scholar: 文士/學者
+  monk: 方士/僧人
+  rebel: 起義者（黃巾等）
 
-family_lineage:
-  - {id: yanyi,    label: "演義系"}
-  - {id: zhizhuan, label: "志傳系"}
-  - {id: modern,   label: "現代整理本"}
-  - {id: sequel,   label: "續書衍生"}
+# ---------- 6. 勢力枚舉 ----------
+factions:
+  han: 東漢朝廷
+  wei: 曹魏
+  shu: 蜀漢
+  wu: 東吳
+  jin: 晉
+  yellow_turban: 黃巾軍
+  nanman: 南蠻
+  qiang: 羌
+  xiongnu: 匈奴
+  shanyue: 山越
+  xianbei: 鮮卑
+  wuhuan: 烏桓
+  warlord_yuan_shao: 袁紹
+  warlord_yuan_shu: 袁術
+  warlord_lv_bu: 呂布
+  warlord_liu_biao: 劉表
+  warlord_liu_zhang: 劉璋
+  warlord_ma_teng: 馬騰/韓遂
+  warlord_gongsun_zan: 公孫瓚
+  warlord_zhang_lu: 張魯
+  warlord_tao_qian: 陶謙
+  warlord_kong_rong: 孔融
+  warlord_liu_du: 劉度等零陵桂陽長沙武陵四郡
 
-faction_system:
-  - {id: HanCourt, label: "東漢朝廷", color: "#8b6f47"}
-  - {id: CaoWei,   label: "曹魏", color: "#4a5d8f"}
-  - {id: ShuHan,   label: "蜀漢", color: "#a8322a"}
-  - {id: Wu,       label: "東吳", color: "#3d6b5c"}
-  - {id: Warlord,  label: "群雄", color: "#7d6b5c"}
-  - {id: Other,    label: "其他", color: "#999"}
+# ---------- 7. 計謀（三十六計語境下三國用到的） ----------
+stratagems:
+  empty_city: 空城計
+  burning_camp: 火燒連營
+  chain_strategy: 連環計
+  self_injury: 苦肉計
+  false_desertion: 詐降
+  east_west: 聲東擊西
+  beauty_trap: 美人計（連環計）
+  chain_boat: 連環船
+  borrow_arrow: 草船借箭
+  capture_release: 七擒七縱
+  feint: 佯攻/疑兵
+  ambush: 埋伏/十面埋伏
+  burning_xinye: 火燒新野
+  burning_chibi: 火燒赤壁
+  drowning: 水淹七軍
+  lost_tingjie: 失街亭
+  empty_path: 華容道
+  ruse_zhouyu: 三氣周瑜
+  letter_trap: 反間計（蔣幹盜書）
+  empty_fort: 空城計（西城）
 
-five_phases:
-  - {id: yellow_turban,  label: "黃巾之亂",     start: 184, end: 189}
-  - {id: dong_zhuo,      label: "董卓之亂",     start: 189, end: 192}
-  - {id: warlords,       label: "群雄逐鹿",     start: 192, end: 208}
-  - {id: tripartite,     label: "三國鼎立",     start: 208, end: 263}
-  - {id: unification,    label: "三國歸晉",     start: 263, end: 280}
+# ---------- 8. 五大敘事階段 ----------
+narrative_phases:
+  yellow_turban:
+    label: 黃巾之亂
+    period: 184-189
+    chapters: [1, 2]
+  dong_zhuo:
+    label: 董卓之亂
+    period: 189-192
+    chapters: [3, 9]
+  warlords:
+    label: 群雄逐鹿
+    period: 192-208
+    chapters: [10, 42]
+  tripod:
+    label: 三國鼎立
+    period: 208-234
+    chapters: [43, 104]
+  unification:
+    label: 三國歸晉
+    period: 234-280
+    chapters: [105, 120]
+
+# ---------- 9. 評點家/學者 ----------
+scholars:
+  lizhuo:
+    id: sg_scholar_lizhuo
+    name: 李贄（卓吾）
+    birth: 1527
+    death: 1602
+    school: 明末左派王學
+    field: 小說評點
+  zhongxing:
+    id: sg_scholar_zhongxing
+    name: 鍾惺（伯敬）
+    birth: 1574
+    death: 1625
+    school: 竟陵派
+    field: 詩文評點
+  liyu:
+    id: sg_scholar_liyu
+    name: 李漁（笠翁）
+    birth: 1611
+    death: 1680
+    school: 清初戲曲家
+    field: 小說戲曲評點
+  maolun:
+    id: sg_scholar_maolun
+    name: 毛綸（聲山）
+    birth: ~1610
+    death: ~1690
+    school: 清初評點派
+    field: 三國/琵琶記評點
+  maozonggang:
+    id: sg_scholar_maozonggang
+    name: 毛宗崗（序始）
+    birth: 1632
+    death: 1709
+    school: 清初評點派
+    field: 三國評點
+  jinshengtan:
+    id: sg_scholar_jinshengtan
+    name: 金聖歎
+    birth: 1608
+    death: 1661
+    school: 明末評點派
+    field: 水滸/西廂評點
+  luxun:
+    id: sg_scholar_luxun
+    name: 魯迅
+    birth: 1881
+    death: 1936
+    school: 現代文學
+    field: 中國小說史略論三國
+  huishi:
+    id: sg_scholar_huishi
+    name: 胡適
+    birth: 1891
+    death: 1962
+    school: 現代國學
+    field: 三國志演義序
+  zhengzhenduo:
+    id: sg_scholar_zhengzhenduo
+    name: 鄭振鐸
+    birth: 1898
+    death: 1958
+    school: 現代文學史
+    field: 三國版本學
+  sunkaidi:
+    id: sg_scholar_sunkaidi
+    name: 孫楷第
+    birth: 1898
+    death: 1986
+    school: 版本目錄學
+    field: 中國通俗小說書目
+  liucunren:
+    id: sg_scholar_liucunren
+    name: 柳存仁
+    birth: 1917
+    death: 2009
+    school: 海外漢學
+    field: 三國版本考
+  xiaobo:
+    id: sg_scholar_xiaobo
+    name: 小川環樹
+    birth: 1910
+    death: 1993
+    school: 日本漢學
+    field: 三國演義版本研究
+  zhongchuanyu:
+    id: sg_scholar_zhongchuanyu
+    name: 中川諭
+    birth: 1948
+    death: ?
+    school: 日本漢學
+    field: 三國演義版本研究
+  shenbojun:
+    id: sg_scholar_shenbojun
+    name: 沈伯俊
+    birth: 1946
+    death: ?
+    school: 當代三國學
+    field: 三國演義校理、版本與人物研究
+  tanliangxiao:
+    id: sg_scholar_tanliangxiao
+    name: 譚良嘯
+    birth: 1944
+    death: ?
+    school: 當代三國學
+    field: 三國文化研究
+  guxuejie:
+    id: sg_scholar_guxuejie
+    name: 顧學頡
+    birth: 1913
+    death: 1999
+    school: 古典文獻
+    field: 人文社三國校注
+
+# ---------- 10. 正史文獻 ----------
+historical_sources:
+  sanguozhi:
+    label: 陳壽《三國志》
+    era: 西晉（約 280-290）
+    description: 正史，三國題材最核心史源
+  pei_note:
+    label: 裴松之注《三國志》
+    era: 南朝宋（429）
+    description: 裴注引書 200 餘種，保存大量魏晉雜史，為《三國演義》最主要的情節來源
+  houhanshu:
+    label: 范曄《後漢書》
+    era: 南朝宋
+  zitongjian:
+    label: 司馬光《資治通鑑》
+    era: 北宋
+  weishu:
+    label: 王沈《魏書》
+    era: 曹魏
+  weilve:
+    label: 魚豢《魏略》
+    era: 曹魏
+  jiuyangong:
+    label: 《漢晉春秋》
+    era: 東晉
+  huayangguo:
+    label: 常璩《華陽國志》
+    era: 東晉
+  shanyang:
+    label: 《山陽公載記》
+    era: 曹魏
+  jiangbiao:
+    label: 《江表傳》
+    era: 西晉
+  zhaoyun_biezhuan:
+    label: 《趙雲別傳》
+    era: 西晉
+  xiangyang:
+    label: 《襄陽記》
+    era: 東晉
+
+# ---------- 11. 器物類型 ----------
+artifact_type:
+  weapon: 兵器
+  horse: 名馬
+  formation: 陣法
+  invention: 發明創造
+  seal: 印綬符節

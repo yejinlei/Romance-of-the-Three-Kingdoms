@@ -177,7 +177,8 @@ def header(title, active="", desc=""):
   <h1 class="site-title"><a href="index.html">三國演義本體論</a></h1>
   <p class="site-sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p>
   {nav_html}
-</header><main>'''
+</header><main>
+{desc_html}'''
 
 FOOTER = '''
 </main>
@@ -244,70 +245,210 @@ def page_index():
 
 # ========== 页面：本体论 ==========
 def page_ontology():
-    html = header("本体论规范","ontology.html") + '''
+    # 自動從 TTL 統計 TBox 規模
+    import re as _re
+    _ttl_text = open(ROOT/'03_本体论规范/sanguo_kg_ontology.ttl',encoding='utf-8').read()
+    _n_classes = len(_re.findall(r'a\s+owl:Class', _ttl_text))
+    _n_obj = len(_re.findall(r'a\s+owl:ObjectProperty', _ttl_text))
+    _n_data = len(_re.findall(r'a\s+owl:DatatypeProperty', _ttl_text))
+    _n_inst = len(_re.findall(r'^sg:\w+\s+a\s+sg:', _ttl_text, _re.M))
+    _ttl_lines = _ttl_text.count('\n')+1
+    # 計算 ABox 實例規模（從 parquet/json 合計）
+    n_persons = len(persons)
+    n_factions = len(factions)
+    n_places = len(places)
+    n_battles = len(battles)
+    n_events = len(events)
+    n_artifacts = len(artifacts)
+    n_strat = len(stratagems)
+    n_prop = len(prophecies)
+    n_editions = len(editions)
+    n_scholars_t = scholars if isinstance(scholars,list) else []
+    n_scholars = len(n_scholars_t)
+    n_papers = len(papers)
+    n_adapts = len(adaptations)
+
+    html = header("本體論規範","ontology.html",
+        f"OWL 2 DL 描述邏輯本體，含 {_n_classes} 個類、{_n_obj} 個對象屬性、{_n_data} 個數據屬性；TBox+ABox {_ttl_lines} 行 Turtle，兼容 Protégé/rdflib/GraphDB/Apache Jena。") + f'''
 <section class="paper">
-  <h2>本体论 OWL 2 规范</h2>
-  <p>本体文件采用 Turtle 语法，兼容 Protégé / rdflib 等工具直接打开。词表采用 YAML 受控词表。</p>
+  <h2>本體論 OWL 2 規範 v3.1-multiversion</h2>
+  <p>本體文件採用 Turtle 語法，詞表採用 YAML 受控詞表，兼容 Protégé / rdflib / GraphDB / Apache Jena 直接導入。
+  與《水滸傳》本體（<code>sh:</code> 前綴）統一 <code>sg:</code> 命名空間，跨本體可按人物/地名 ID JOIN。</p>
   <div class="btn-row">
-    <a class="btn primary" href="ontology/sanguo_kg_ontology.ttl">📥 下载本体 TTL（12 版本 / 12 类）</a>
-    <a class="btn" href="ontology/vocabularies.yaml">📥 下载受控词表 YAML</a>
+    <a class="btn primary" href="ontology/sanguo_kg_ontology.ttl" download>📥 下載本體 TTL（{_ttl_lines} 行 Turtle · {n_editions} 版本 / {_n_classes} 類 / 31 核心異文）</a>
+    <a class="btn" href="ontology/vocabularies.yaml" download>📥 下載受控詞表 YAML（11 大詞族）</a>
+    <a class="btn" href="query.html">🔍 在瀏覽器查詢本體（DuckDB-WASM）</a>
   </div>
+</section>
 
-  <h3>顶级类（Classes）</h3>
-  <ul class="cls-list">
-    <li><b>sg:Thing</b> — 顶层抽象事物</li>
-    <li><b>sg:Wu / Shi / ShiJian / Di</b> — 四范域：物 / 事 / 时 / 地</li>
-    <li><b>sg:VersionFamily</b> — 版本族（演义系/志传系）</li>
-    <li><b>sg:Edition</b> — 具体版本（刊本/抄本/评本/现代整理本）</li>
-    <li><b>sg:Chapter</b> — 回/则（叙事单元）</li>
-    <li><b>sg:Paragraph</b> — 段落（文本原子）</li>
-    <li><b>sg:VariantReading</b> — 异文（跨版本文字差异）</li>
-    <li><b>sg:Commentary</b> — 评点（毛评/李评/李渔评/钟评）</li>
-    <li><b>sg:Person / Faction / Office / Place</b> — 人物 / 势力 / 官职 / 地点</li>
-    <li><b>sg:Artifact / Stratagem / Battle / Event</b> — 器物 / 计谋 / 战役 / 事件</li>
-    <li><b>sg:Prophecy</b> — 谶纬预言</li>
-    <li><b>sg:Scholar / Paper / Adaptation</b> — 学者 / 论著 / 改编作品</li>
-  </ul>
+<section class="paper">
+  <h3>〇、ABox 實例統計（已導入知識庫）</h3>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-num">{n_persons}</div><div class="kpi-lab">人物</div></div>
+    <div class="kpi"><div class="kpi-num">{n_factions}</div><div class="kpi-lab">政治勢力</div></div>
+    <div class="kpi"><div class="kpi-num">{n_places}</div><div class="kpi-lab">地理地名</div></div>
+    <div class="kpi"><div class="kpi-num">{n_battles}</div><div class="kpi-lab">戰役</div></div>
+    <div class="kpi"><div class="kpi-num">{n_events}</div><div class="kpi-lab">事件</div></div>
+    <div class="kpi"><div class="kpi-num">{n_strat}</div><div class="kpi-lab">計謀</div></div>
+    <div class="kpi"><div class="kpi-num">{n_artifacts}</div><div class="kpi-lab">器物</div></div>
+    <div class="kpi"><div class="kpi-num">{n_prop}</div><div class="kpi-lab">讖緯</div></div>
+    <div class="kpi"><div class="kpi-num">{n_editions}</div><div class="kpi-lab">版本</div></div>
+    <div class="kpi"><div class="kpi-num">31</div><div class="kpi-lab">核心異文</div></div>
+    <div class="kpi"><div class="kpi-num">{n_scholars}</div><div class="kpi-lab">學者</div></div>
+    <div class="kpi"><div class="kpi-num">{n_papers}+{n_adapts}</div><div class="kpi-lab">論著+改編</div></div>
+  </div>
+</section>
 
-  <h3>24 种有向关系（Object Properties）</h3>
+<section class="paper">
+  <h3>一、頂層類層級（TBox Classes · 10 大範疇 + 7 大附屬）</h3>
+  <div class="class-tree">
+    <div class="cls-branch"><b>sg:Thing</b> — 頂層抽象事物
+      <ul>
+        <li><b>sg:LiteraryWork</b> — 文學作品（版本實體）
+          <ul>
+            <li>sg:AncientEdition — 古本系統（明刊及更早刻本）：演義系、志傳系</li>
+            <li>sg:AnnotatedEdition — 評點改造本（李卓吾/鍾伯敬/李漁/毛宗崗）</li>
+            <li>sg:ModernCollation — 現代整理本（人文社/沈伯俊校理本）</li>
+            <li>sg:SequelWork — 續書衍生本（反三國/續三國）</li>
+          </ul>
+        </li>
+        <li>文本結構單元
+          <ul>
+            <li>sg:Volume 卷 · sg:Chapter 回/則 · sg:Paragraph 段落</li>
+            <li>sg:VariantReading 異文 · sg:Commentary 評點</li>
+          </ul>
+        </li>
+        <li><b>sg:Person</b> — 人物
+          <ul>
+            <li>sg:CivilOfficial 文臣/謀士 · sg:General 武將 · sg:Royalty 皇族</li>
+            <li>sg:Commoner 平民 · sg:MinorityFigure 少數民族 · sg:Woman 女性 · sg:FictionalFigure 純虛構</li>
+          </ul>
+        </li>
+        <li><b>sg:Faction</b> — 政治勢力
+          <ul><li>sg:HanCourt 東漢 · sg:CaoWei 曹魏 · sg:ShuHan 蜀漢 · sg:EasternWu 東吳 · sg:Warlord 割據諸侯 · sg:MinorityPower 少數民族</li></ul>
+        </li>
+        <li><b>sg:Battle</b> — 戰役
+          <ul><li>sg:MajorBattle 大型會戰 · sg:LocalBattle 局部 · sg:Ambush 伏擊 · sg:NavalBattle 水戰 · sg:Raid 奇襲 · sg:Siege 圍城</li></ul>
+        </li>
+        <li><b>sg:Place</b> — 地點
+          <ul><li>sg:AncientPlace 古地名 · sg:ModernSite 今址 · sg:Pass 關隘 · sg:Capital 都城 · sg:Battlefield 戰場遺址 · sg:Mountain 山 · sg:River 江河</li></ul>
+        </li>
+        <li><b>sg:Event</b> — 事件
+          <ul><li>sg:PersonalEvent 個人 · sg:PoliticalEvent 政治 · sg:DiplomaticEvent 外交 · sg:AllusionEvent 典故</li></ul>
+        </li>
+        <li><b>sg:Scholar</b> — 學術主體（古代評點家/近現代學者/研究機構）</li>
+        <li><b>sg:AcademicWork</b> — 學術成果（評點本/專著/論文/校理本）</li>
+        <li><b>sg:Adaptation</b> — 衍生作品（影視/戲曲/動漫/遊戲/同人）</li>
+        <li><b>sg:Artifact</b> — 器物（兵器/名馬/陣法/發明/印綬）</li>
+        <li><b>sg:HistoricalSource</b> — 正史文獻（文史互證層）
+          <ul><li>sg:RecordsOfThreeKingdoms 陳壽《三國志》 · sg:PeiAnnotation 裴松之注 · sg:HouHanShu 《後漢書》 · sg:ZizhiTongjian 《資治通鑑》</li></ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="paper">
+  <h3>二、24 種核心有向關係（Object Properties · 按場景分組）</h3>
   <table class="data-table">
-    <thead><tr><th>属性</th><th>域</th><th>值域</th><th>说明</th></tr></thead><tbody>
+    <thead><tr><th>屬性</th><th>域 → 值域</th><th>語義</th><th>屬性特徵</th></tr></thead>
+    <tbody>
 '''
     rels = [
-      ('allyOf','结为同盟','Person/Faction','Person/Faction'),
-      ('appearsIn','出场于','Person/Place','Chapter'),
-      ('belongsTo','归属','Person/Artifact','Faction'),
-      ('defeats','战胜','Person/Faction','Person/Faction'),
-      ('fatherOf','生父','Person','Person'),
-      ('motherOf','生母','Person','Person'),
-      ('swornBrotherOf','结义兄弟','Person','Person'),
-      ('swornSisterOf','结义姐妹','Person','Person'),
-      ('spouseOf','配偶','Person','Person'),
-      ('siblingOf','同胞兄弟/姐妹','Person','Person'),
-      ('sonOf','子（父/母）','Person','Person'),
-      ('lordOf','君主','Person','Person'),
-      ('subjectOf','臣属','Person','Person'),
-      ('kills','诛杀','Person','Person'),
-      ('serves','事奉/效力','Person','Person/Faction'),
-      ('locatesIn','位于','Battle/Event/Place','Place'),
-      ('participatesIn','参与','Person','Battle/Event'),
-      ('uses','使用','Person/Battle','Artifact/Stratagem'),
-      ('mentions','提及','Paragraph/Commentary','Person/Place/Thing'),
-      ('variantOf','异文于','VariantReading','Paragraph'),
-      ('basedOn','底本','Edition','Edition'),
-      ('commentsOn','评点','Commentary','Paragraph/Chapter'),
-      ('predicts','预言','Prophecy','Event/Person'),
-      ('cites','引用/论述','Paper','Edition/Person/Event'),
+      ('swornBrotherOf','Person→Person','結拜兄弟','對稱 Symmetric'),
+      ('enemyOf_person','Person→Person','敵對（人）','對稱'),
+      ('masterOf / apprenticeOf','Person→Person','師徒（師↔徒）','互逆 inverseOf'),
+      ('kinOf','Person→Person','親屬','對稱'),
+      ('lordOf / ministerOf','Person→Person','主臣（君↔臣）','三國專屬·互逆'),
+      ('belongsToForce','Person→Faction','所屬（人物→勢力）','三國專屬'),
+      ('commands / fightsIn','Person→Battle','指揮/參戰','三國專屬'),
+      ('alliedWith / enemyOf_force','Faction→Faction','結盟/敵對（勢力）','對稱·三國專屬'),
+      ('battleAt','Battle→Place','發生於','三國專屬'),
+      ('derivedFrom','Edition→Edition','版本演化自','傳遞 Transitive'),
+      ('annotatedBy','Edition→Scholar','評點改造','三國專屬'),
+      ('appearsIn','Person→Edition','登場於（版本隔離）','多版本核心'),
+      ('includedIn','Event→Edition','收錄於（版本隔離）','多版本核心'),
+      ('authored','Scholar→AcademicWork','著作',''),
+      ('debatesWith','Scholar→Scholar','學術論戰','對稱'),
+      ('studiesEdition','Scholar→Edition','研究',''),
+      ('eventAt','Event→Place','發生於（事件）',''),
+      ('adaptedFrom','Adaptation→Edition','改編自',''),
+      ('possesses','Person→Artifact','持有','三國專屬'),
+      ('usesArtifact','Battle→Artifact','使用（戰術器物）','三國專屬'),
+      ('participatesIn','Person→Event','參與',''),
+      ('activeAt','Person→Place','活動於',''),
+      ('attestedIn / contradicts / embellishedFrom','Person/Event/Battle→HistoricalSource','正史互證（0/1/2 虛實）','文史互證專屬'),
+      ('correspondsTo','Chapter→Chapter','跨版本對應回目','對稱·多版本核心'),
     ]
-    for r,label,d,rn in rels:
-        html += f'<tr><td><code>sg:{r}</code></td><td>{esc(d)}</td><td>{esc(rn)}</td><td>{esc(label)}</td></tr>'
+    for r,d,label,feat in rels:
+        html += f'<tr><td><code>sg:{r}</code></td><td><code>{esc(d)}</code></td><td>{esc(label)}</td><td>{esc(feat)}</td></tr>'
     html += '''</tbody></table>
-  <h3>数据属性（Datatype Properties）</h3>
+</section>
+
+<section class="paper">
+  <h3>三、受控詞表（11 族·摘錄）</h3>
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <h4>版本族系 <code>version_family</code></h4>
+      <ul><li>yanyi 演義系（24 卷）</li><li>zhizhuan 志傳系（20 卷）</li><li>pingdian 評點本（120 回）</li><li>modern 現代整理本</li><li>sequel 續書</li></ul>
+    </div>
+    <div class="vocab-card">
+      <h4>虛實標註 <code>fictional_flag</code></h4>
+      <ul><li><b>0</b> 正史有載（官渡/赤壁等）</li><li><b>1</b> 正史有載·小說加工（草船借箭/溫酒斬華雄）</li><li><b>2</b> 純虛構（桃園結義/過五關/祭東風）</li></ul>
+    </div>
+    <div class="vocab-card">
+      <h4>異文類型 <code>variant_type</code></h4>
+      <ul><li>vt_typo 訛字（范彊→范疆）</li><li>vt_missing 脫文</li><li>vt_extra 衍文（加《臨江仙》）</li><li>vt_rewrite 改寫（寧使→寧教）</li><li>vt_poetry 詩文增刪</li><li>vt_plot 情節增刪（刪燒魏延）</li><li>vt_commentary 評點</li></ul>
+    </div>
+    <div class="vocab-card">
+      <h4>敘事階段 <code>narrative_phases</code></h4>
+      <ul><li>黃巾之亂 184-189（1-2 回）</li><li>董卓之亂 189-192（3-9 回）</li><li>群雄逐鹿 192-208（10-42 回）</li><li>三國鼎立 208-234（43-104 回）</li><li>三國歸晉 234-280（105-120 回）</li></ul>
+    </div>
+  </div>
+  <p class="note">完整詞表請 <a href="ontology/vocabularies.yaml">下載 YAML</a> 查看，包含人物類別、勢力、計謀、器物、正史文獻等全部枚舉。</p>
+</section>
+
+<section class="paper">
+  <h3>四、版本演化本體圖（derivedFrom 邊）</h3>
+  <pre class="ttl-snip">sg:zhouyuexiao  sg:derivedFrom  sg:jiajing       # 演義系同承祖本
+sg:lizhuowu     sg:derivedFrom  sg:zhouyuexiao   # 合 240 則為 120 回
+sg:zhongbojing  sg:derivedFrom  sg:lizhuowu      # 鍾評分支
+sg:maozonggang  sg:derivedFrom  sg:zhongbojing   # 毛宗崗全面評改，取代一切舊本
+sg:liyu         sg:derivedFrom  sg:lizhuowu      # 李漁另行評點
+sg:renwen       sg:derivedFrom  sg:maozonggang   # 現代校點本
+sg:shenbojun    sg:derivedFrom  sg:maozonggang   # 沈伯俊校理
+sg:yefengchun   ——志傳系獨立發展，與演義系並列——
+sg:yuxiangdou   sg:derivedFrom  sg:yefengchun    # 志傳繁本
+sg:huangzhengfu sg:derivedFrom  sg:yefengchun    # 志傳簡本（或為更早狀態）</pre>
+  <p>此即《三國演義》版本本體論的核心「世系圖」——毛本並非羅貫中原本直系，而是經李卓吾評本、鍾伯敬評本兩次改造後的第三手文本。</p>
+</section>
+
+<section class="paper">
+  <h3>五、OWL 2 DL 推理約束</h3>
   <ul class="cls-list">
-    <li><b>sg:zi</b>（字）、<b>sg:hao</b>（号）、<b>sg:birthYear</b>、<b>sg:deathYear</b>、<b>sg:hometown</b>、<b>sg:fictionalFlag</b>（0正史/1半虚构/2虚构）</li>
-    <li><b>sg:year</b>（公元纪年）、<b>sg:chapterNo</b>、<b>sg:longitude/latitude</b>、<b>sg:outcome</b>、<b>sg:sourceText</b>（原文片段）</li>
+    <li><b>類不相交（DisjointClasses）：</b>Person / Faction / Battle / Place / Event / Scholar / AcademicWork / Adaptation / Artifact / LiteraryWork 互為不相交類，推理可檢測跨類實例衝突。</li>
+    <li><b>函數/反函數屬性：</b>versionId / personId / forceId / battleId / locationId / eventId / scholarId / paperId / adaptId / artifactId 均為 <code>owl:InverseFunctionalProperty</code>，確保全局主鍵唯一。</li>
+    <li><b>對稱屬性：</b>swornBrotherOf / enemyOf_person / kinOf / alliedWith / enemyOf_force / debatesWith / correspondsTo。</li>
+    <li><b>傳遞屬性：</b>derivedFrom（版本演化可追溯）。</li>
+    <li><b>互逆屬性：</b>masterOf↔apprenticeOf、lordOf↔ministerOf。</li>
+    <li><b>跨本體聯動：</b>聲明 <code>sh:</code> 命名空間（水滸本體），人物/地名 ID 可跨棧 JOIN（例如 sg:person_caocao 與 sh: 中相關人物若有歷史關聯，可附加 owl:sameAs 鏈接）。</li>
   </ul>
-</section>'''
+</section>
+
+<section class="paper">
+  <h3>六、本體論文件位置（靜態託管）</h3>
+  <table class="data-table">
+    <thead><tr><th>文件</th><th>格式</th><th>說明</th></tr></thead>
+    <tbody>
+      <tr><td><a href="ontology/sanguo_kg_ontology.ttl">sanguo_kg_ontology.ttl</a></td><td>Turtle (OWL 2 DL)</td><td>完整 TBox+ABox（1248 行），包含 12 版本、16 學者、31 核心異文個體</td></tr>
+      <tr><td><a href="ontology/vocabularies.yaml">vocabularies.yaml</a></td><td>YAML 1.2</td><td>11 族受控詞表，用於數據錄入校驗</td></tr>
+      <tr><td>data/*.parquet</td><td>Apache Parquet</td><td>剩餘 ABox 數據（455 人物/115 戰役/107 事件/191 地名/12 論著/17 改編等），供 DuckDB-WASM 瀏覽器端查詢</td></tr>
+      <tr><td>data/*.json</td><td>JSON</td><td>同數據 JSON 鏡像，瀏覽器端直接 fetch</td></tr>
+    </tbody>
+  </table>
+  <p class="note">工程完全無服務器：所有知識圖譜查詢由 DuckDB-WASM 在瀏覽器本地執行，無後端、無數據庫、無 API，符合 GitHub Pages 靜態託管約束。</p>
+</section>
+'''
     write("ontology.html", html)
 
 # ========== 页面：全文阅读 ==========
@@ -414,11 +555,188 @@ def render_prophecy(p):
     return f'<article class="list-card"><h3>{esc(p.get("target","") or p.get("text","")[:20])}</h3><p><b>出处：</b>第{esc(str(p.get("chapter","")))}回 · <b>言者：</b>{esc(p.get("speaker","") or "")}</p><p class="small"><q>{esc(p.get("text","") or "")}</q></p><p class="small">{esc(p.get("meaning","") or p.get("note","") or "")}</p></article>'
 
 def render_edition(e):
-    return f'<article class="list-card"><h3>{esc(e.get("name","") or e.get("title",""))}</h3><p><b>家族：</b>{esc(e.get("family","") or "")} · <b>年代：</b>{esc(e.get("year","") or e.get("era","") or "")}</p><p class="small">{esc(e.get("desc","") or e.get("note","") or "")}</p></article>'
+    fam_map={"yanyi":"演義系","zhizhuan":"志傳系","pingdian":"評點本","modern":"現代本","sequel":"續書"}
+    fam_col={"yanyi":"#9e2b25","zhizhuan":"#b08d57","pingdian":"#3f6b5e","modern":"#3b4a6b","sequel":"#6b4a8a"}
+    fam = e.get("family","")
+    full = ' <span class="badge full">★全文</span>' if e.get('hasFulltext') else ' <span class="badge empty">元數據</span>'
+    return f'''<article class="edition-card" style="border-left:4px solid {fam_col.get(fam,'#999')}">
+<h3>{esc(e.get("name","") or e.get("title",""))}{full}</h3>
+<p class="edition-meta"><b>簡稱：</b>{esc(e.get("short",""))} · <b>族系：</b>{fam_map.get(fam,fam)} · <b>年代：</b>{esc(str(e.get("year","")))} · <b>存世：</b>{esc(e.get("survival",""))} · <b>卷回：</b>{esc(e.get("chapters",""))}</p>
+<p class="small"><b>刊者：</b>{esc(e.get("publisher",""))}</p>
+<p class="edition-feature">{esc(e.get("feature","") or e.get("desc","") or "")}</p>
+</article>'''
+
+# 載入 variants.json（31 條專業異文+版本+學者）
+VARIANTS_DATA = json.load(open(DATA/'variants.json', encoding='utf-8'))
+VARIANTS = VARIANTS_DATA['variants']
+VT_LABEL = {"vt_typo":"訛字","vt_missing":"脫文","vt_extra":"衍文","vt_rewrite":"改寫","vt_poetry":"詩文增刪","vt_plot":"情節增刪","vt_commentary":"評點增刪"}
+EDITIONS_V = VARIANTS_DATA['editions']
 
 def render_variant(v):
-    # variants 直接用固定示例
-    return f'<article class="list-card"><h3>{esc(v.get("title",""))}</h3><p><b>毛本：</b><q>{esc(v.get("mao",""))}</q></p><p><b>嘉靖本：</b><q>{esc(v.get("jiajing",""))}</q></p><p class="small">{esc(v.get("note","") or "")}</p></article>'
+    vt = v.get("type","")
+    vt_label = VT_LABEL.get(vt, vt)
+    ch = v.get("chapter",0)
+    sec = v.get("section","")
+    yef = v.get("yefengtext","")
+    huang = v.get("huangtext","")
+    extra = ""
+    if yef:
+        extra += f'<div class="vr-row"><span class="vr-tag yef">葉逢春本</span><q class="vr-text">{esc(yef)}</q></div>'
+    if huang:
+        extra += f'<div class="vr-row"><span class="vr-tag huang">黃正甫本</span><q class="vr-text">{esc(huang)}</q></div>'
+    return f'''<article class="variant-card">
+<header class="vr-head">
+  <span class="vr-ch">第{ch}回</span>
+  <span class="vr-sec">{esc(sec)}</span>
+  <span class="vr-type">{esc(vt_label)}</span>
+</header>
+<div class="vr-body">
+  <div class="vr-row"><span class="vr-tag mao">毛宗崗本（通行）</span><q class="vr-text">{esc(v.get("maotext",""))}</q></div>
+  <div class="vr-row"><span class="vr-tag jia">嘉靖壬午本</span><q class="vr-text">{esc(v.get("jiajingtext",""))}</q></div>
+  {extra}
+</div>
+<footer class="vr-foot"><b>校勘意義：</b>{esc(v.get("significance",""))}</footer>
+</article>'''
+
+def page_variants():
+    # 專門的異文對勘頁，帶用戶自助對勘工具
+    var_types = {}
+    for v in VARIANTS:
+        t = v.get("type","")
+        var_types[t]=var_types.get(t,0)+1
+    type_filter = "".join(f'<button class="btn small" data-type="{t}" onclick="filterVariants(\'{t}\')">{VT_LABEL.get(t,t)}（{c}）</button>' for t,c in var_types.items())
+    VT_LABEL_JSON = json.dumps(VT_LABEL, ensure_ascii=False)
+    VS_JSON = json.dumps(VARIANTS, ensure_ascii=False)
+    html = header("異文對勘","variants.html",f"嘉靖壬午本 vs 毛宗崗本核心異文 {len(VARIANTS)} 則，覆蓋 7 種異文類型；提供版本演化系譜圖與用戶自助對勘入口。") + f'''
+<section class="paper">
+  <h2>版本演化系譜</h2>
+  <p>《三國演義》現存明刊本約 30 種、清刊本約 70 餘種，按文本系統可分「演義系」（24 卷 240 則單題）、「志傳系」（20 卷，含花關索故事）兩大平行系統，再由明末評點家合併為 120 回雙題評本，至毛宗崗本定型為通行本。下圖繪出 12 個主要版本的演化關係：</p>
+  <div class="stemma">
+    <svg viewBox="0 0 880 430" width="100%" style="max-width:900px;font-family:'Noto Serif SC',serif;font-size:12px;">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9e2b25"/></marker>
+      </defs>
+      <!-- 祖本 -->
+      <rect x="360" y="10" width="160" height="36" rx="4" fill="#faf6ed" stroke="#2f2a25" stroke-width="1.5"/>
+      <text x="440" y="33" text-anchor="middle">羅貫中原本（元末明初·佚）</text>
+      <!-- 分叉 -->
+      <line x1="400" y1="46" x2="200" y2="90" stroke="#2f2a25" stroke-width="1" marker-end="url(#arrow)"/>
+      <line x1="480" y1="46" x2="680" y2="90" stroke="#2f2a25" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="270" y="75" fill="#9e2b25" font-weight="bold">演義系</text>
+      <text x="590" y="75" fill="#b08d57" font-weight="bold">志傳系</text>
+      <!-- 演义系 -->
+      <rect x="120" y="90" width="160" height="32" rx="4" fill="#fdf3e9" stroke="#9e2b25"/><text x="200" y="110" text-anchor="middle">嘉靖壬午本（1522）★</text>
+      <line x1="200" y1="122" x2="200" y2="170" stroke="#9e2b25" marker-end="url(#arrow)"/>
+      <rect x="120" y="170" width="160" height="32" rx="4" fill="#fdf3e9" stroke="#9e2b25"/><text x="200" y="190" text-anchor="middle">周曰校本（1591）</text>
+      <line x1="200" y1="202" x2="200" y2="250" stroke="#9e2b25" marker-end="url(#arrow)"/>
+      <rect x="120" y="250" width="160" height="32" rx="4" fill="#eaf2ee" stroke="#3f6b5e"/><text x="200" y="270" text-anchor="middle">李卓吾評本（~1607）</text>
+      <text x="210" y="246" fill="#3f6b5e" font-size="10">（合 240→120 回）</text>
+      <!-- 志传系 -->
+      <rect x="600" y="90" width="160" height="32" rx="4" fill="#fbf5e6" stroke="#b08d57"/><text x="680" y="110" text-anchor="middle">葉逢春本（~1548）☆</text>
+      <line x1="640" y1="122" x2="560" y2="170" stroke="#b08d57" marker-end="url(#arrow)"/>
+      <line x1="720" y1="122" x2="800" y2="170" stroke="#b08d57" marker-end="url(#arrow)"/>
+      <rect x="480" y="170" width="160" height="32" rx="4" fill="#fbf5e6" stroke="#b08d57"/><text x="560" y="190" text-anchor="middle">余象斗本（~1592）</text>
+      <rect x="720" y="170" width="160" height="32" rx="4" fill="#fbf5e6" stroke="#b08d57"/><text x="800" y="190" text-anchor="middle">黃正甫本（~1623）</text>
+      <text x="810" y="166" fill="#b08d57" font-size="10">（簡本）</text>
+      <!-- 评点系汇聚 -->
+      <line x1="200" y1="282" x2="200" y2="320" stroke="#3f6b5e"/>
+      <line x1="200" y1="300" x2="100" y2="300" stroke="#3f6b5e"/>
+      <rect x="20" y="285" width="160" height="32" rx="4" fill="#eaf2ee" stroke="#3f6b5e"/><text x="100" y="305" text-anchor="middle">鍾伯敬評本（~1627）</text>
+      <line x1="200" y1="320" x2="400" y2="370" stroke="#3f6b5e" stroke-width="2" marker-end="url(#arrow)"/>
+      <rect x="320" y="370" width="160" height="36" rx="4" fill="#fbe9e7" stroke="#9e2b25" stroke-width="2"/>
+      <text x="400" y="393" text-anchor="middle" font-weight="bold" fill="#9e2b25">毛宗崗評本（1679）★</text>
+      <text x="400" y="420" text-anchor="middle" fill="#666" font-size="11">——三百餘年通行本；本站全文即此本</text>
+      <!-- 现代整理本 -->
+      <line x1="480" y1="405" x2="580" y2="405" stroke="#3b4a6b" stroke-dasharray="3,2"/>
+      <rect x="580" y="388" width="150" height="34" rx="4" fill="#ebedf4" stroke="#3b4a6b"/>
+      <text x="655" y="409" text-anchor="middle">人民文學出版社本（1953）</text>
+      <line x1="480" y1="380" x2="580" y2="350" stroke="#3b4a6b" stroke-dasharray="3,2"/>
+      <rect x="580" y="333" width="150" height="34" rx="4" fill="#ebedf4" stroke="#3b4a6b"/>
+      <text x="655" y="354" text-anchor="middle">沈伯俊校理本（1992）</text>
+      <!-- 李渔评本侧支 -->
+      <rect x="200" y="320" width="150" height="0" fill="none"/>
+      <line x1="280" y1="265" x2="340" y2="265" stroke="#3f6b5e" stroke-dasharray="3,2"/>
+      <rect x="340" y="249" width="140" height="32" rx="4" fill="#eaf2ee" stroke="#3f6b5e"/>
+      <text x="410" y="269" text-anchor="middle">李漁評本（~1670）</text>
+    </svg>
+    <p class="note">★ = 本站已收錄全文；☆ = 殘本/無電子全文可公開取用。實線為直接繼承關係，虛線為參校/並行關係。</p>
+  </div>
+</section>
+
+<section class="paper">
+  <h2>核心異文對照 · {len(VARIANTS)} 則</h2>
+  <p>以下異文全部基於版本學校勘結論，涵蓋訛字、脫文、衍文、改寫、詩文增刪、情節增刪、評點增刪七大類。按類型過濾：</p>
+  <div class="btn-row" id="type-filter">
+    <button class="btn small active" data-type="all" onclick="filterVariants(\'all\')">全部（{len(VARIANTS)}）</button>
+    {type_filter}
+  </div>
+  <div class="variant-list" id="variant-list">
+    {''.join(render_variant(v) for v in VARIANTS)}
+  </div>
+</section>
+
+<section class="paper">
+  <h2>自助對勘：貼入異文，即時比對</h2>
+  <p>如果你手頭有其他版本原文（嘉靖本某段、黃正甫本、葉逢春本殘卷、李卓吾評本等），可在此處分別粘貼毛本與對照本文字，系統將即時顯示差異高亮（純前端，不上傳任何數據）：</p>
+  <div class="collate-tool">
+    <div class="collate-col">
+      <label>毛宗崗本（底本）</label>
+      <textarea id="txtA" rows="8" placeholder="粘貼毛本原文，例如：寧教我負天下人，休教天下人負我！"></textarea>
+    </div>
+    <div class="collate-col">
+      <label>對照版本（嘉靖本/葉逢春本/黃正甫本等）</label>
+      <textarea id="txtB" rows="8" placeholder="粘貼另一版本原文，例如：寧使我負天下人，休教天下人負我！"></textarea>
+    </div>
+  </div>
+  <div class="btn-row"><button class="btn primary" onclick="doDiff()">比對差異</button><button class="btn" onclick="document.getElementById(\'diff-out\').innerHTML=\'\'">清空</button></div>
+  <div id="diff-out" class="diff-out"></div>
+  <p class="note">說明：本工具採用最長公共子序列（LCS）算法做字符級 diff，適用於句/段級短文本對比。若你有完整版本全文，可按 <code>raw/&lt;version_id&gt;.txt</code> 命名放入倉庫，重新運行構建腳本即可入本體知識庫。</p>
+</section>
+
+<script>
+const VT_MAP = {VT_LABEL_JSON};
+const VS = {VS_JSON};
+document.querySelectorAll('.variant-card').forEach((c,i)=>{{
+  c.dataset.type = VS[i].type;
+}});
+function filterVariants(t){{
+  document.querySelectorAll('#type-filter .btn').forEach(b=>b.classList.toggle('active', b.dataset.type===t));
+  document.querySelectorAll('.variant-card').forEach((c,i)=>{{
+    c.style.display = (t==='all'||VS[i].type===t) ? '' : 'none';
+  }});
+}}
+function doDiff(){{
+  const a=document.getElementById('txtA').value;
+  const b=document.getElementById('txtB').value;
+  if(!a||!b){{document.getElementById('diff-out').innerHTML='<p style="color:#9e2b25">請在兩側都輸入文本。</p>';return;}}
+  // LCS char-level diff
+  const m=a.length,n=b.length;
+  const dp=Array.from({{length:m+1}},()=>new Array(n+1).fill(0));
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++){{
+    if(a[i-1]===b[j-1])dp[i][j]=dp[i-1][j-1]+1;
+    else dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+  }}
+  let i=m,j=n,out=[];
+  while(i>0&&j>0){{
+    if(a[i-1]===b[j-1]){{out.unshift(['eq',a[i-1]]);i--;j--;}}
+    else if(dp[i-1][j]>=dp[i][j-1]){{out.unshift(['del',a[i-1]]);i--;}}
+    else{{out.unshift(['ins',b[j-1]]);j--;}}
+  }}
+  while(i>0){{out.unshift(['del',a[i-1]]);i--;}}
+  while(j>0){{out.unshift(['ins',b[j-1]]);j--;}}
+  // merge consecutive
+  let htmlA='<div class="diff-col"><h4>毛本</h4><p>',htmlB='<div class="diff-col"><h4>對照本</h4><p>';
+  for(const [t,ch] of out){{
+    const safe=ch==='<'?'&lt;':ch==='>'?'&gt;':ch==='\\n'?'<br/>':ch;
+    if(t==='eq'){{htmlA+=safe;htmlB+=safe;}}
+    else if(t==='del'){{htmlA+='<mark class="diff-del">'+safe+'</mark>';}}
+    else{{htmlB+='<mark class="diff-ins">'+safe+'</mark>';}}
+  }}
+  htmlA+='</p></div>';htmlB+='</p></div>';
+  document.getElementById('diff-out').innerHTML='<h4>比對結果（紅色刪除／綠色新增）</h4><div class="diff-grid">'+htmlA+htmlB+'</div>';
+}}
+</script>'''
+    write("variants.html", html)
 
 def render_scholar(s):
     return f'<article class="list-card"><h3>{esc(s.get("name",""))} <small>{esc(s.get("era","") or "")}</small></h3><p>{esc(s.get("role","") or "")} · {esc(s.get("type","") or "")}</p><p><b>代表作：</b>{esc(s.get("work","") or "")}</p><p>{esc(s.get("view","") or s.get("desc","") or "")}</p><p class="small">{esc(s.get("note","") or "")}</p></article>'
@@ -440,18 +758,6 @@ POEMS = [
 # 从 chapters 加前 30 回回目
 for c in chapters[:30]:
     POEMS.append({"title":f"第{str(c['no']).zfill(3)}回  {c['title']}","text":"","note":""})
-
-# 异文对勘：8 组经典异文
-VARIANTS = [
-    {"title":"卷首词（临江仙）","mao":"滚滚长江东逝水……（杨慎词）","jiajing":"（无此词；嘉靖本以『祭天地桃园结义』起头）","note":"毛宗岗评本新增，借杨慎词为全书定调。"},
-    {"title":"回目对偶","mao":"严格 120 回七言对偶回目","jiajing":"240 则，以『则』分，单句七字，不对偶","note":"毛本参照李卓吾评本改造回目。"},
-    {"title":"刘备形象 · 初见孔明","mao":"玄德拱立阶下半晌，先生未醒……玄德犹然侍立","jiajing":"玄德叉手立于阶下，先生仰卧于堂上，玄德见先生翻身将起，忽又朝里壁睡着","note":"毛本强化刘备『虔诚仁厚』。"},
-    {"title":"诸葛亮欲烧魏延（上方谷）","mao":"（此段删去）","jiajing":"孔明于上方谷（葫芦谷）设计火攻，欲连魏延一并烧死，天降大雨未果","note":"毛宗岗删此段以纯化孔明形象。地名是『上方谷/葫芦谷』，非『子午谷』（子午谷是魏延请兵奇袭长安之地）。"},
-    {"title":"关羽「华容道义释曹操」","mao":"关羽放曹后自缚请罪，孔明欲斩，刘备求情","jiajing":"基本同毛本，但文字多口语化","note":"嘉靖本有张辽求情关羽的更多细节。"},
-    {"title":"曹操杀吕伯奢","mao":"『宁教我负天下人，休教天下人负我』","jiajing":"『宁使我负天下人，休教天下人负我』（一字之差，语境略异）","note":"毛本作『教』，嘉靖本作『使』；今通行引用多为毛本。"},
-    {"title":"刘备『妻子如衣服』论","mao":"『兄弟如手足，妻子如衣服。衣服破，尚可缝；手足断，安可续？』","jiajing":"文字略同，但置于张飞自责之后更直接","note":"毛本删削部分口语，文气更顺。"},
-    {"title":"结尾诗","mao":"鼎足三分已成梦，后人凭吊空牢骚","jiajing":"一篇古风，详述三分终归一统，以『再受禅依样画葫芦』作结","note":"毛本改尾为七绝，余韵更足。"},
-]
 
 # 时空地图（Leaflet）
 def page_map():
@@ -696,8 +1002,8 @@ if __name__ == "__main__":
     page_list("stratagems.html","计谋鉴","计",stratagems,render_stratagem,sort_key=lambda x:x.get('chapter',0) or 0)
     page_list("artifacts.html","器物簿","物",artifacts,render_artifact)
     page_list("prophecies.html","谶纬考","谶",prophecies,render_prophecy)
-    page_list("versions.html","版本族谱","版",editions,render_edition)
-    page_list("variants.html","异文对勘","勘",VARIANTS,render_variant,subtitle="8 组经典异文，对比毛本与嘉靖本/志传系文字差异")
+    page_list("versions.html","版本族谱","版",editions,render_edition,subtitle="12 个主要版本，按族系（演義/志傳/評點/現代/續書）分色顯示。★=全文已收錄")
+    page_variants()
     page_map(); page_graph(); page_query(); page_stats()
     page_list("scholars.html","学术史","学",scholars,render_scholar)
     page_list("papers.html","论著举要","论",papers,render_paper,sort_key=lambda x:x.get('year',0) or 0)
