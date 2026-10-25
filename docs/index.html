@@ -3,29 +3,39 @@
 <title>首页 · 三国演义数字人文研究</title>
 <link rel="stylesheet" href="assets/app.css">
 </head><body>
-<header class="site-header"><div class="header-inner">
-<div class="brand"><span class="seal big">三</span><div class="brand-txt"><h1>三国演义 · 数字人文研究</h1><p class="subtitle">Romance of the Three Kingdoms — An Ontology-driven Digital Edition</p></div></div>
-<p class="tagline">滚滚长江东逝水，浪花淘尽英雄。以本体论重构毛宗岗评本一百二十回，做文本、图谱、版本、地理、学术五维校勘。</p>
-<div class="nav-grid"><a class="nav-card active" href="index.html"><span class="seal">卷</span><span>首页</span></a><a class="nav-card" href="ontology.html"><span class="seal">元</span><span>本体论</span></a><a class="nav-card" href="read.html"><span class="seal">读</span><span>全文阅读</span></a><a class="nav-card" href="persons.html"><span class="seal">人</span><span>人物志</span></a><a class="nav-card" href="factions.html"><span class="seal">势</span><span>势力谱</span></a><a class="nav-card" href="places.html"><span class="seal">地</span><span>地理志</span></a><a class="nav-card" href="battles.html"><span class="seal">战</span><span>战役史</span></a><a class="nav-card" href="events.html"><span class="seal">事</span><span>事件录</span></a><a class="nav-card" href="stratagems.html"><span class="seal">计</span><span>计谋鉴</span></a><a class="nav-card" href="artifacts.html"><span class="seal">物</span><span>器物簿</span></a><a class="nav-card" href="prophecies.html"><span class="seal">谶</span><span>谶纬考</span></a><a class="nav-card" href="versions.html"><span class="seal">版</span><span>版本族谱</span></a><a class="nav-card" href="variants.html"><span class="seal">勘</span><span>异文对勘</span></a><a class="nav-card" href="graph.html"><span class="seal">系</span><span>人物关系</span></a><a class="nav-card" href="map.html"><span class="seal">图</span><span>时空地图</span></a><a class="nav-card" href="query.html"><span class="seal">问</span><span>查询台</span></a><a class="nav-card" href="stats.html"><span class="seal">数</span><span>统计析</span></a><a class="nav-card" href="scholars.html"><span class="seal">学</span><span>学术史</span></a><a class="nav-card" href="papers.html"><span class="seal">论</span><span>论著举要</span></a><a class="nav-card" href="adaptations.html"><span class="seal">艺</span><span>衍生改编</span></a><a class="nav-card" href="poetry.html"><span class="seal">诗</span><span>诗词回目</span></a><a class="nav-card" href="mirror.html"><span class="seal">虚</span><span>虚实对照</span></a><a class="nav-card" href="destiny.html"><span class="seal">命</span><span>天命叙事</span></a><a class="nav-card" href="guide.html"><span class="seal">引</span><span>阅读指南</span></a></div>
-</div></header><main><section class="hero"><div class="hero-paper"><div class="hero-frame"><p class="hero-motto">滚滚长江东逝水，浪花淘尽英雄。<br/>是非成败转头空，青山依旧在，几度夕阳红。</p><p class="hero-sub">—— 明·杨慎《临江仙》，毛宗岗评本卷首词</p><div class="hero-meta"><span>底本：毛宗岗评本一百二十回</span><span>字数：590,968</span><span>实体：455 人 · 191 地 · 115 战</span></div></div></div></section><section class="cards"><a class="card" href="persons.html">
-        <div class="card-seal">人</div>
-        <div class="card-num">455</div>
-        <h3>人物志</h3><p>四百五十五位人物，标注正史/半虚/纯虚构三档</p></a><a class="card" href="battles.html">
-        <div class="card-seal">战</div>
-        <div class="card-num">115</div>
-        <h3>战役史</h3><p>从黄巾到三国归晋，一百一十五场战事</p></a><a class="card" href="places.html">
-        <div class="card-seal">地</div>
-        <div class="card-num">191</div>
-        <h3>地理志</h3><p>一百九十一处地名，带古今经纬度坐标</p></a><a class="card" href="read.html">
-        <div class="card-seal">读</div>
-        <div class="card-num">120回</div>
-        <h3>全文阅读</h3><p>毛宗岗评本 590,968 字，分回带人物出场标引</p></a><a class="card" href="ontology.html">
-        <div class="card-seal">元</div>
-        <div class="card-num">OWL2</div>
-        <h3>本体论</h3><p>TBox/ABox 分离，10 大类 24 关系</p></a><a class="card" href="query.html">
-        <div class="card-seal">问</div>
-        <div class="card-num">SQL</div>
-        <h3>查询台</h3><p>无服务器 DuckDB-WASM 直接查 19 张 Parquet</p></a></section><section class="intro-paper"><h2>研究说明</h2><p>本站参照《<a href="https://yejinlei.github.io/The-Story-of-the-Stone" target="_blank">The Story of the Stone</a>》与《<a href="https://yejinlei.github.io/the-journey-to-the-west/" target="_blank">The Journey to the West</a>》两个数字人文工程的构建范式——宣纸式阅读视觉、24 研究入口、OWL 2 本体驱动、多版本异文对勘、学术成果层——以明罗贯中《三国演义》毛宗岗评本为底本，做「文本 + 本体 + 图谱 + 地图 + 查询」五位一体的可复现数字人文研究。</p><p>技术栈：<strong>纯静态</strong>、<strong>无服务器</strong>、<strong>DuckDB-WASM + Parquet</strong> 浏览器端列式查询（不使用 Neo4j）；<strong>sg_</strong> 前缀 ID 体系与《水浒传》本体 <code>sh_</code> 技术栈完全兼容，可跨本体联动。</p><ul class="dim-list"><li><b>TBox 本体层：</b>sg:Character / sg:Faction / sg:Place / sg:Battle / sg:Event / sg:Stratagem / sg:Artifact / sg:Prophecy / sg:Version / sg:Scholarship 十大类 + 24 种对象属性（含 6 种三国专属：效忠/割据/联姻/诈降/挟令/禅代）</li><li><b>ABox 实例层：</b>455 位人物（337 正史 / 64 半虚构 / 54 纯虚构）· 191 处地名（191 带坐标）· 115 场战役 · 107 件事件 · 27 计 · 12 谶语 · 17 器物 · 15 学者 · 12 论著 · 17 衍生作品</li><li><b>版本族谱：</b>16 个版本节点，从嘉靖壬午本（1522）到今本沈伯俊校理本；嘉靖本/李卓吾评本/毛本/沈校本四大核心版本。</li><li><b>虚实标注：</b>全部实体加注 <code>fictional_flag</code>：0=正史有其人其事，1=正史有其人但演义加工，2=纯虚构（如貂蝉、周仓、关索）。</li></ul></section></main><footer class="site-footer"><div class="footer-inner">
-<p>本项目以罗贯中《三国演义》毛宗岗评本为底本，参照 <em>The Story of the Stone</em> 与 <em>The Journey to the West</em> 数字人文工程构建。OWL 2 DL 本体 / 无服务器 DuckDB-WASM 查询 / 多版本异文对勘</p>
-<p class="small">© 数字人文研究 · 宣纸式阅读体验</p></div></footer>
-<script src="assets/app.js"></script></body></html>
+<header class="site-header">
+  <a class="site-seal" href="index.html">國三</a>
+  <h1 class="site-title"><a href="index.html">三國演義本體論</a></h1>
+  <p class="site-sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p>
+  <div class="nav-grid"><a class="nav-card active" href="index.html"><span class="seal">卷</span><span>首页</span></a><a class="nav-card" href="ontology.html"><span class="seal">元</span><span>本体论</span></a><a class="nav-card" href="read.html"><span class="seal">读</span><span>全文阅读</span></a><a class="nav-card" href="persons.html"><span class="seal">人</span><span>人物志</span></a><a class="nav-card" href="factions.html"><span class="seal">势</span><span>势力谱</span></a><a class="nav-card" href="places.html"><span class="seal">地</span><span>地理志</span></a><a class="nav-card" href="battles.html"><span class="seal">战</span><span>战役史</span></a><a class="nav-card" href="events.html"><span class="seal">事</span><span>事件录</span></a><a class="nav-card" href="stratagems.html"><span class="seal">计</span><span>计谋鉴</span></a><a class="nav-card" href="artifacts.html"><span class="seal">物</span><span>器物簿</span></a><a class="nav-card" href="prophecies.html"><span class="seal">谶</span><span>谶纬考</span></a><a class="nav-card" href="versions.html"><span class="seal">版</span><span>版本族谱</span></a><a class="nav-card" href="variants.html"><span class="seal">勘</span><span>异文对勘</span></a><a class="nav-card" href="graph.html"><span class="seal">系</span><span>人物关系</span></a><a class="nav-card" href="map.html"><span class="seal">图</span><span>时空地图</span></a><a class="nav-card" href="query.html"><span class="seal">问</span><span>查询台</span></a><a class="nav-card" href="stats.html"><span class="seal">数</span><span>统计析</span></a><a class="nav-card" href="scholars.html"><span class="seal">学</span><span>学术史</span></a><a class="nav-card" href="papers.html"><span class="seal">论</span><span>论著举要</span></a><a class="nav-card" href="adaptations.html"><span class="seal">艺</span><span>衍生改编</span></a><a class="nav-card" href="poetry.html"><span class="seal">诗</span><span>诗词回目</span></a><a class="nav-card" href="mirror.html"><span class="seal">虚</span><span>虚实对照</span></a><a class="nav-card" href="destiny.html"><span class="seal">命</span><span>天命叙事</span></a><a class="nav-card" href="guide.html"><span class="seal">引</span><span>阅读指南</span></a></div>
+</header><main>
+<section class="hero">
+  <div class="hero-inner">
+    <h2>滚滚长江东逝水，浪花淘尽英雄</h2>
+    <p>这是一份关于《三国演义》的数字人文工程：以 OWL 2 本体论建模全书实体，
+    覆盖人物、势力、地名、战役、事件、计谋、器物、谶纬、版本、异文十类名录，
+    提供浏览器端无服务器（DuckDB-WASM）知识图谱查询台，以及面向 12 个主要版本的谱系与异文对勘。</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="read.html">开始阅读</a>
+      <a class="btn" href="ontology.html">本体论规范</a>
+      <a class="btn" href="query.html">查询台</a>
+    </div>
+  </div>
+</section>
+<section class="paper">
+  <h2>二十四个研究入口</h2>
+  <div class="nav-grid stats-grid"><a class="nav-card stat-card" href="persons.html"><span class="seal">人</span><div><div class="big">455 位人物</div><div class="lab">人物志</div><div class="small">含 337 位正史 / 64 半虚构 / 54 纯虚构</div></div></a><a class="nav-card stat-card" href="battles.html"><span class="seal">战</span><div><div class="big">115 场战事</div><div class="lab">战役史</div><div class="small">自黄巾起义(184)至三分归晋(280)</div></div></a><a class="nav-card stat-card" href="places.html"><span class="seal">地</span><div><div class="big">191 处地名</div><div class="lab">地理志</div><div class="small">全部标注经纬度</div></div></a><a class="nav-card stat-card" href="events.html"><span class="seal">事</span><div><div class="big">107 件事件</div><div class="lab">事件录</div><div class="small">政治/外交/谋略关节</div></div></a><a class="nav-card stat-card" href="versions.html"><span class="seal">版</span><div><div class="big">12 个版本</div><div class="lab">版本族谱</div><div class="small">演义系/志传系/评本/现代整理本四大族</div></div></a><a class="nav-card stat-card" href="stratagems.html"><span class="seal">计</span><div><div class="big">27 条计谋</div><div class="lab">计谋鉴</div><div class="small">火攻/伏兵/离间/诈降</div></div></a><a class="nav-card stat-card" href="artifacts.html"><span class="seal">物</span><div><div class="big">17 件名物</div><div class="lab">器物簿</div><div class="small">玉玺/青龙刀/蛇矛/铜雀台</div></div></a><a class="nav-card stat-card" href="prophecies.html"><span class="seal">谶</span><div><div class="big">12 条预言</div><div class="lab">谶纬考</div><div class="small">分久必合、卧龙凤雏等</div></div></a><a class="nav-card stat-card" href="scholars.html"><span class="seal">学</span><div><div class="big">15 位学者</div><div class="lab">学术史</div><div class="small">毛宗岗/金圣叹/鲁迅/沈伯俊</div></div></a><a class="nav-card stat-card" href="adaptations.html"><span class="seal">艺</span><div><div class="big">17 部改编</div><div class="lab">衍生改编</div><div class="small">戏曲/影视/游戏/绘本</div></div></a></div>
+</section>
+<section class="paper">
+  <h2>人物出场频次 · TOP12</h2>
+  <div class="bars"><div class="bar-row"><span class="bar-name">刘备</span><span class="bar-wrap"><span class="bar-fill" style="width:100.0%"></span></span><span class="bar-num">2293</span></div><div class="bar-row"><span class="bar-name">诸葛亮</span><span class="bar-wrap"><span class="bar-fill" style="width:86.8%"></span></span><span class="bar-num">1990</span></div><div class="bar-row"><span class="bar-name">曹操</span><span class="bar-wrap"><span class="bar-fill" style="width:64.3%"></span></span><span class="bar-num">1474</span></div><div class="bar-row"><span class="bar-name">关羽</span><span class="bar-wrap"><span class="bar-fill" style="width:39.9%"></span></span><span class="bar-num">914</span></div><div class="bar-row"><span class="bar-name">张飞</span><span class="bar-wrap"><span class="bar-fill" style="width:17.6%"></span></span><span class="bar-num">403</span></div><div class="bar-row"><span class="bar-name">赵云</span><span class="bar-wrap"><span class="bar-fill" style="width:16.8%"></span></span><span class="bar-num">385</span></div><div class="bar-row"><span class="bar-name">吕布</span><span class="bar-wrap"><span class="bar-fill" style="width:16.6%"></span></span><span class="bar-num">380</span></div><div class="bar-row"><span class="bar-name">魏延</span><span class="bar-wrap"><span class="bar-fill" style="width:14.3%"></span></span><span class="bar-num">327</span></div><div class="bar-row"><span class="bar-name">孙权</span><span class="bar-wrap"><span class="bar-fill" style="width:14.0%"></span></span><span class="bar-num">320</span></div><div class="bar-row"><span class="bar-name">周瑜</span><span class="bar-wrap"><span class="bar-fill" style="width:13.8%"></span></span><span class="bar-num">316</span></div><div class="bar-row"><span class="bar-name">司马懿</span><span class="bar-wrap"><span class="bar-fill" style="width:13.3%"></span></span><span class="bar-num">304</span></div><div class="bar-row"><span class="bar-name">姜维</span><span class="bar-wrap"><span class="bar-fill" style="width:12.6%"></span></span><span class="bar-num">290</span></div></div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>本站以毛宗岗评本百二十回为在线全文（590,968字）；本体论（OWL 2）兼容嘉靖本/周曰校本/叶逢春本/黄正甫本/余象斗本/李卓吾评本/李渔评本/毛宗岗本/人民文学出版社本等12个主要版本。</p>
+    <p>工程以 yejinlei 西游记本体论（jtw_kg_ontology.ttl）为范式，面向多版本对照与异文比对场景扩展；视觉系统参考《石头记》数字人文站。</p>
+  </div>
+</footer>
+</body></html>

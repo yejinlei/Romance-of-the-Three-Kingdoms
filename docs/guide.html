@@ -3,23 +3,39 @@
 <title>阅读指南 · 三国演义数字人文研究</title>
 <link rel="stylesheet" href="assets/app.css">
 </head><body>
-<header class="site-header"><div class="header-inner">
-<div class="brand"><span class="seal big">三</span><div class="brand-txt"><h1>三国演义 · 数字人文研究</h1><p class="subtitle">Romance of the Three Kingdoms — An Ontology-driven Digital Edition</p></div></div>
-<p class="tagline">滚滚长江东逝水，浪花淘尽英雄。以本体论重构毛宗岗评本一百二十回，做文本、图谱、版本、地理、学术五维校勘。</p>
-<div class="nav-grid"><a class="nav-card" href="index.html"><span class="seal">卷</span><span>首页</span></a><a class="nav-card" href="ontology.html"><span class="seal">元</span><span>本体论</span></a><a class="nav-card" href="read.html"><span class="seal">读</span><span>全文阅读</span></a><a class="nav-card" href="persons.html"><span class="seal">人</span><span>人物志</span></a><a class="nav-card" href="factions.html"><span class="seal">势</span><span>势力谱</span></a><a class="nav-card" href="places.html"><span class="seal">地</span><span>地理志</span></a><a class="nav-card" href="battles.html"><span class="seal">战</span><span>战役史</span></a><a class="nav-card" href="events.html"><span class="seal">事</span><span>事件录</span></a><a class="nav-card" href="stratagems.html"><span class="seal">计</span><span>计谋鉴</span></a><a class="nav-card" href="artifacts.html"><span class="seal">物</span><span>器物簿</span></a><a class="nav-card" href="prophecies.html"><span class="seal">谶</span><span>谶纬考</span></a><a class="nav-card" href="versions.html"><span class="seal">版</span><span>版本族谱</span></a><a class="nav-card" href="variants.html"><span class="seal">勘</span><span>异文对勘</span></a><a class="nav-card" href="graph.html"><span class="seal">系</span><span>人物关系</span></a><a class="nav-card" href="map.html"><span class="seal">图</span><span>时空地图</span></a><a class="nav-card" href="query.html"><span class="seal">问</span><span>查询台</span></a><a class="nav-card" href="stats.html"><span class="seal">数</span><span>统计析</span></a><a class="nav-card" href="scholars.html"><span class="seal">学</span><span>学术史</span></a><a class="nav-card" href="papers.html"><span class="seal">论</span><span>论著举要</span></a><a class="nav-card" href="adaptations.html"><span class="seal">艺</span><span>衍生改编</span></a><a class="nav-card" href="poetry.html"><span class="seal">诗</span><span>诗词回目</span></a><a class="nav-card" href="mirror.html"><span class="seal">虚</span><span>虚实对照</span></a><a class="nav-card" href="destiny.html"><span class="seal">命</span><span>天命叙事</span></a><a class="nav-card active" href="guide.html"><span class="seal">引</span><span>阅读指南</span></a></div>
-</div></header><main><section class="paper"><h2>阅读指南</h2><h3>如何使用本站</h3>
-<ol>
-<li><b>新手入门：</b>先读<a href="index.html">首页</a>的五个卡片入口，了解整体结构；可从<a href="read.html">全文阅读</a>开始，120 回分回展开。</li>
-<li><b>研究者：</b>先看<a href="ontology.html">本体论</a>理解数据模型，然后去<a href="query.html">查询台</a>用 SQL 直接查询 19 张 Parquet 表，或下载 graph.json 做网络分析。</li>
-<li><b>文学爱好者：</b>推荐<a href="persons.html">人物志</a>（支持筛选正史/虚构）、<a href="battles.html">战役史</a>、<a href="poetry.html">诗词回目</a>、<a href="destiny.html">天命叙事</a>四个入口。</li>
-<li><b>版本学/校勘学：</b><a href="versions.html">版本族谱</a>+<a href="variants.html">异文对勘</a>，展示嘉万旧本与毛宗岗本的改写差异。</li>
-<li><b>可视化探索：</b><a href="graph.html">人物关系网络</a>、<a href="map.html">时空地图</a>提供 D3 力导向图与 Leaflet 地图。</li>
-<li><b>数据复用：</b>19 张 Parquet 表位于 <code>docs/data/*.parquet</code>，可直接被 pandas/DuckDB/PyArrow 读取；TBox 本体 TTL 可导入 Protegé 做推理。</li>
-</ol>
-<h3>与姊妹项目的关系</h3>
-<p>本工程是继《红楼梦》（<em>The Story of the Stone</em>）与《西游记》（<em>The Journey to the West</em>）之后的第三部数字人文经典重构建，与《水浒传》All Men Are Brothers 本体共用 <code>*_</code> 前缀 ID 体系（三国为 <code>sg_</code>，水浒为 <code>sh_</code>），未来可做跨本体联动查询（如"关羽与武松的忠义叙事比较""诸葛亮与吴用的军师形象"）。</p>
-<h3>致谢与许可</h3>
-<p>文本来自 Project Gutenberg #23950 公版《三國志演義》；CSS 设计受 yeinlei 红楼未完启发；本项目所有代码与数据以 MIT 许可开源。</p></section></main><footer class="site-footer"><div class="footer-inner">
-<p>本项目以罗贯中《三国演义》毛宗岗评本为底本，参照 <em>The Story of the Stone</em> 与 <em>The Journey to the West</em> 数字人文工程构建。OWL 2 DL 本体 / 无服务器 DuckDB-WASM 查询 / 多版本异文对勘</p>
-<p class="small">© 数字人文研究 · 宣纸式阅读体验</p></div></footer>
-<script src="assets/app.js"></script></body></html>
+<header class="site-header">
+  <a class="site-seal" href="index.html">國三</a>
+  <h1 class="site-title"><a href="index.html">三國演義本體論</a></h1>
+  <p class="site-sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p>
+  <div class="nav-grid"><a class="nav-card" href="index.html"><span class="seal">卷</span><span>首页</span></a><a class="nav-card" href="ontology.html"><span class="seal">元</span><span>本体论</span></a><a class="nav-card" href="read.html"><span class="seal">读</span><span>全文阅读</span></a><a class="nav-card" href="persons.html"><span class="seal">人</span><span>人物志</span></a><a class="nav-card" href="factions.html"><span class="seal">势</span><span>势力谱</span></a><a class="nav-card" href="places.html"><span class="seal">地</span><span>地理志</span></a><a class="nav-card" href="battles.html"><span class="seal">战</span><span>战役史</span></a><a class="nav-card" href="events.html"><span class="seal">事</span><span>事件录</span></a><a class="nav-card" href="stratagems.html"><span class="seal">计</span><span>计谋鉴</span></a><a class="nav-card" href="artifacts.html"><span class="seal">物</span><span>器物簿</span></a><a class="nav-card" href="prophecies.html"><span class="seal">谶</span><span>谶纬考</span></a><a class="nav-card" href="versions.html"><span class="seal">版</span><span>版本族谱</span></a><a class="nav-card" href="variants.html"><span class="seal">勘</span><span>异文对勘</span></a><a class="nav-card" href="graph.html"><span class="seal">系</span><span>人物关系</span></a><a class="nav-card" href="map.html"><span class="seal">图</span><span>时空地图</span></a><a class="nav-card" href="query.html"><span class="seal">问</span><span>查询台</span></a><a class="nav-card" href="stats.html"><span class="seal">数</span><span>统计析</span></a><a class="nav-card" href="scholars.html"><span class="seal">学</span><span>学术史</span></a><a class="nav-card" href="papers.html"><span class="seal">论</span><span>论著举要</span></a><a class="nav-card" href="adaptations.html"><span class="seal">艺</span><span>衍生改编</span></a><a class="nav-card" href="poetry.html"><span class="seal">诗</span><span>诗词回目</span></a><a class="nav-card" href="mirror.html"><span class="seal">虚</span><span>虚实对照</span></a><a class="nav-card" href="destiny.html"><span class="seal">命</span><span>天命叙事</span></a><a class="nav-card active" href="guide.html"><span class="seal">引</span><span>阅读指南</span></a></div>
+</header><main>
+<section class="paper">
+  <h2>阅读指南</h2>
+  <h3>底本选择</h3>
+  <p>本文在线全文采用<b>毛宗岗评本（1679年刊）</b>整理，回目对偶、开篇临江仙、尊刘贬曹倾向均为毛本特征；
+  若要读更接近罗贯中原始版本，请参看「版本族谱」中的<b>嘉靖本《三国志通俗演义》（1522）</b>。
+  学术阅读推荐<b>沈伯俊校理本</b>（凤凰出版社），订正了毛本若干地理与人物讹误。</p>
+  <h3>工程导航</h3>
+  <ul>
+    <li><b>卷·首页</b>：总体入口与 KPI 概览</li>
+    <li><b>元·本体论</b>：OWL 2 规范（TTL/YAML 下载）</li>
+    <li><b>读·全文阅读</b>：毛本 120 回在线阅读</li>
+    <li><b>人/势/地/战/事/计/物/谶</b>：八大实体名录</li>
+    <li><b>版·版本族谱 / 勘·异文对勘</b>：多版本研究入口</li>
+    <li><b>系·人物关系 / 图·时空地图</b>：可视化</li>
+    <li><b>问·查询台</b>：DuckDB-WASM 无服务器 SQL</li>
+    <li><b>学·学术史 / 论·论著举要</b>：学术脉络</li>
+    <li><b>艺·衍生改编 / 诗·诗词回目</b>：文学与衍生</li>
+    <li><b>虚·虚实对照 / 命·天命叙事</b>：文学批评专题</li>
+  </ul>
+  <h3>数据与接口</h3>
+  <p>所有数据均开放在 <code>docs/data/</code> 目录下，可直接以 JSON / Parquet 两种格式下载复用。Parquet 可直接在查询台通过 SQL 调用。本体 TTL/YAML 从「本体论」页下载，可在 Protégé 中打开。</p>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>本站以毛宗岗评本百二十回为在线全文（590,968字）；本体论（OWL 2）兼容嘉靖本/周曰校本/叶逢春本/黄正甫本/余象斗本/李卓吾评本/李渔评本/毛宗岗本/人民文学出版社本等12个主要版本。</p>
+    <p>工程以 yejinlei 西游记本体论（jtw_kg_ontology.ttl）为范式，面向多版本对照与异文比对场景扩展；视觉系统参考《石头记》数字人文站。</p>
+  </div>
+</footer>
+</body></html>

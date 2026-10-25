@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""一次性生成全部 24 研究页 + 首页 + 本体页 + 查询台"""
-import os, json, re
+"""一次性生成全部 24 研究页 + 首页 + 本体页 + 查询台（新简体 nav-grid 风格）"""
+import os, json, re, shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -9,24 +9,130 @@ DOCS = ROOT/'docs'
 DOCS.mkdir(exist_ok=True)
 (DOCS/'data').mkdir(exist_ok=True)
 
-def load(p): return json.load(open(DATA/p,encoding='utf-8'))
-persons   = sorted(load('persons_db.json'), key=lambda x:-x.get('total',0))
-factions  = sorted(load('factions.json'), key=lambda x:-x.get('total',0))
-places    = sorted(load('places.json'), key=lambda x:-x.get('total',0))
-battles   = sorted(load('battles.json'), key=lambda x:(x.get('year') or 9999, x.get('chapter') or 0))
-events    = sorted(load('events.json'), key=lambda x:(x.get('year') or 9999, x.get('chapter') or 0))
-artifacts = load('artifacts.json')
-stratagems= load('stratagems.json')
-prophecies= load('prophecies.json')
-editions  = load('editions.json')
-scholars  = load('scholars.json')
-papers    = load('papers.json')
-adaptations=load('adaptations.json')
-cooccur   = load('cooccurrence.json')
-freq      = load('freq.json')
-stat      = load('stat.json')
+def load(p): 
+    # 优先从 docs/data/ 读（含 total 字段），否则从 data/
+    dp = DOCS/'data'/p
+    fp = DATA/p
+    path = dp if dp.exists() else fp
+    return json.load(open(path, encoding='utf-8'))
 
-# 导航 24 条目（与红楼未完范式对齐）
+# ========== 加载数据 ==========
+persons    = load('persons.json')  # list[dict] (含 total/spark 字段)
+factions   = load('factions.json')
+places     = load('places.json')
+battles0   = load('battles.json')
+events0    = load('events.json')
+artifacts  = load('artifacts.json')
+stratagems = load('stratagems.json')
+prophecies = load('prophecies.json')
+editions_all = load('editions.json')
+editions   = editions_all.get('editions',[]) if isinstance(editions_all,dict) else editions_all
+scholars   = load('scholars.json')
+papers     = load('papers.json')
+adaptations= load('adaptations.json')
+cooccur    = load('cooccurrence.json')
+freq       = load('freq.json')
+stat       = load('stat.json')
+chapters   = load('chapters.json')
+read_data  = load('read.json')  # list of {no,title,paragraphs,chars}
+
+# ========== 修正：战役/事件真实年份硬编码（回目章节号→公元年映射）=============
+# 三国纪年关键锚点：1回=184黄巾, 5回=189董卓, 21回=200官渡, 38回=207三顾,
+# 43回=208赤壁, 73回=219关羽败走, 80回=220曹丕篡汉, 81回=221夷陵前,
+# 85回=223刘备死, 92回=228一出祁山, 104回=234诸葛星落,
+# 119回=265蜀亡, 120回=280三国归晋
+CHAP_YEAR = [
+    (1,184),(2,184),(3,184),(4,184),(5,189),(6,190),(7,190),(8,191),(9,192),
+    (10,192),(11,193),(12,194),(13,195),(14,196),(15,197),(16,197),(17,198),
+    (18,199),(19,199),(20,200),(21,200),(22,200),(23,200),(24,200),(25,200),
+    (26,200),(27,200),(28,200),(29,200),(30,200),(31,201),(32,202),(33,203),
+    (34,203),(35,203),(36,204),(37,205),(38,207),(39,207),(40,207),(41,208),
+    (42,208),(43,208),(44,208),(45,208),(46,208),(47,208),(48,208),(49,209),
+    (50,209),(51,209),(52,209),(53,209),(54,209),(55,210),(56,211),(57,212),
+    (58,213),(59,213),(60,214),(61,214),(62,214),(63,215),(64,215),(65,215),
+    (66,215),(67,216),(68,216),(69,217),(70,217),(71,218),(72,218),(73,219),
+    (74,219),(75,219),(76,219),(77,219),(78,220),(79,220),(80,220),(81,221),
+    (82,221),(83,222),(84,222),(85,223),(86,225),(87,225),(88,225),(89,226),
+    (90,227),(91,227),(92,228),(93,228),(94,229),(95,229),(96,229),(97,229),
+    (98,230),(99,230),(100,231),(101,231),(102,231),(103,232),(104,234),
+    (105,235),(106,238),(107,239),(108,240),(109,249),(110,252),(111,253),
+    (112,254),(113,255),(114,257),(115,258),(116,260),(117,262),(118,263),
+    (119,265),(120,280),
+]
+def ch2y(ch):
+    if ch<=0 or ch>120: return None
+    # 找最接近的锚点
+    best = CHAP_YEAR[0]
+    for c,y in CHAP_YEAR:
+        if c<=ch: best=(c,y)
+        else: break
+    return best[1]
+
+# 战役真实年份（以名称精确修正）
+BATTLE_YEAR_PATCH = {
+    '黄巾之乱':184, '桃园结义':184, '汜水关之战':190, '虎牢关之战':190, '荥阳之战':190,
+    '孙坚攻刘表':192, '磐河之战':192, '界桥之战':192, '襄阳之战':192,
+    '李傕郭汜之乱':194, '长安之战':195, '定陶之战':195, '濮阳之战':194, '宛城之战':197,
+    '下邳之战':198, '白门楼':198, '徐州之战':200, '白马之战':200, '延津之战':200,
+    '官渡之战':200, '仓亭之战':201, '穰山之战':201, '博望坡之战':207, '新野之战':207,
+    '长坂坡之战':208, '赤壁之战':208, '华容道':208, '南郡之战(取荆州)':209, '取南郡':209,
+    '合肥之战(一)':209, '荆州争夺':209, '潼关之战':211, '渭水之战':211, '截江夺阿斗':212,
+    '雒城之战':214, '绵竹之战':214, '成都之战':214, '合肥之战(二)':215, '濡须口之战':215,
+    '定军山之战':219, '汉水之战':219, '樊城之战':219, '水淹七军':219, '走麦城':219,
+    '夷陵之战':222, '猇亭之战(夷陵)':222, '猇亭之战':222, '火烧连营':222,
+    '白帝城托孤':223, '南征孟获':225, '七擒孟获':225, '一出祁山':228, '失街亭':228,
+    '空城计':228, '二出祁山':228, '三出祁山':229, '四出祁山':230, '五出祁山':231,
+    '六出祁山':234, '五丈原':234, '上方谷':234, '姜维北伐':238, '铁笼山之战':253,
+    '姜邓斗智(八伐中原)':257, '沓中屯田':262, '绵竹关之战(诸葛瞻)':263, '偷渡阴平':263,
+    '成都受禅(蜀亡)':263, '蜀汉灭亡':263, '钟会邓艾之乱':264, '西陵之战':272,
+    '晋灭吴':280, '三分归晋':280, '淮南三叛(诸葛诞)':258,
+}
+# 事件真实年份
+EVENT_YEAR_PATCH = {
+    '桃园三结义':184, '十常侍之乱':189, '董卓废立':189, '诸侯会盟':190, '凤仪亭':192,
+    '迁帝长安':190, '李郭之乱':194, '迁都许昌':196, '衣带诏':199, '屯土山约三事':200,
+    '过五关斩六将':200, '千里走单骑':200, '三顾茅庐':207, '隆中对':207, '舌战群儒':208,
+    '草船借箭':208, '苦肉计':208, '借东风':208, '巧授连环计':208, '蒋干盗书':208,
+    '三气周瑜':210, '借荆州':209, '刘备入蜀':214, '自领益州牧':214, '单刀赴会':215,
+    '得陇望蜀':215, '进位汉中王':219, '水淹七军':219, '刮骨疗毒':219, '败走麦城':219,
+    '曹操病逝':220, '曹丕篡汉':220, '汉中王称帝':221, '夷陵之战':222, '白帝城托孤':223,
+    '南征':225, '七擒孟获':225, '斩颜良文丑':200, '前出师表':227, '失空斩':228,
+    '后出师表':228, '六出祁山':228, '秋风五丈原':234, '魏延反骨':234, '九伐中原':253,
+    '入西川二士争功':263, '三分归一统':280, '临江仙开篇':1668,
+}
+
+def fix_battle(b):
+    n=b.get('name','')
+    # 硬补丁优先
+    for k,v in BATTLE_YEAR_PATCH.items():
+        if k in n:
+            b['year']=v; return b
+    # 用章节号估算
+    ch=b.get('chapter',0) or 0
+    if ch<1 or ch>120:
+        # 回退到 name 模糊匹配
+        for c in chapters:
+            if n[:4] in c.get('title',''):
+                ch=c['no']; b['chapter']=ch; break
+    if 1<=ch<=120: b['year']=ch2y(ch)
+    else: b['year']=b.get('year') or 0
+    return b
+
+def fix_event(e):
+    n=e.get('name','')
+    for k,v in EVENT_YEAR_PATCH.items():
+        if k in n:
+            e['year']=v; return e
+    ch=e.get('chapter',0) or 0
+    if 1<=ch<=120: e['year']=ch2y(ch)
+    else: e['year']=e.get('year') or 0
+    return e
+
+battles = sorted([fix_battle(dict(b)) for b in battles0], key=lambda x:(x.get('year') or 9999, x.get('name','')))
+events  = sorted([fix_event(dict(e)) for e in events0],  key=lambda x:(x.get('year') or 9999, x.get('name','')))
+persons_sorted = sorted(persons, key=lambda x:-x.get('total',0))
+
+# ========== 24 入口导航 ==========
 NAV = [
     ("首页","index.html","卷"),
     ("本体论","ontology.html","元"),
@@ -54,542 +160,548 @@ NAV = [
     ("阅读指南","guide.html","引"),
 ]
 
-def header(title, active=""):
+def header(title, active="", desc=""):
     nav_html = '<div class="nav-grid">'
     for label, href, seal in NAV:
         cls = "nav-card" + (" active" if href==active else "")
         nav_html += f'<a class="{cls}" href="{href}"><span class="seal">{seal}</span><span>{label}</span></a>'
     nav_html += '</div>'
+    desc_html = f'<p class="subtitle">{desc}</p>' if desc else ''
     return f'''<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title} · 三国演义数字人文研究</title>
 <link rel="stylesheet" href="assets/app.css">
 </head><body>
-<header class="site-header"><div class="header-inner">
-<div class="brand"><span class="seal big">三</span><div class="brand-txt"><h1>三国演义 · 数字人文研究</h1><p class="subtitle">Romance of the Three Kingdoms — An Ontology-driven Digital Edition</p></div></div>
-<p class="tagline">滚滚长江东逝水，浪花淘尽英雄。以本体论重构毛宗岗评本一百二十回，做文本、图谱、版本、地理、学术五维校勘。</p>
-{nav_html}
-</div></header><main>'''
+<header class="site-header">
+  <a class="site-seal" href="index.html">國三</a>
+  <h1 class="site-title"><a href="index.html">三國演義本體論</a></h1>
+  <p class="site-sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p>
+  {nav_html}
+</header><main>'''
 
-def footer():
-    return '''</main><footer class="site-footer"><div class="footer-inner">
-<p>本项目以罗贯中《三国演义》毛宗岗评本为底本，参照 <em>The Story of the Stone</em> 与 <em>The Journey to the West</em> 数字人文工程构建。OWL 2 DL 本体 / 无服务器 DuckDB-WASM 查询 / 多版本异文对勘</p>
-<p class="small">© 数字人文研究 · 宣纸式阅读体验</p></div></footer>
-<script src="assets/app.js"></script></body></html>'''
+FOOTER = '''
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>本站以毛宗岗评本百二十回为在线全文（{total_words:,}字）；本体论（OWL 2）兼容嘉靖本/周曰校本/叶逢春本/黄正甫本/余象斗本/李卓吾评本/李渔评本/毛宗岗本/人民文学出版社本等12个主要版本。</p>
+    <p>工程以 yejinlei 西游记本体论（jtw_kg_ontology.ttl）为范式，面向多版本对照与异文比对场景扩展；视觉系统参考《石头记》数字人文站。</p>
+  </div>
+</footer>
+</body></html>'''
 
-def write_page(filename, title, content):
-    html = header(title, filename) + content + footer()
-    (DOCS/filename).write_text(html, encoding='utf-8')
-    print("wrote", filename)
+def write(fn, html, active=""):
+    full = html + FOOTER.format(total_words=stat.get('total_chars', 590968))
+    open(DOCS/fn, 'w', encoding='utf-8').write(full)
 
-# ========== 首页 ==========
+def esc(s):
+    if s is None: return ""
+    return str(s).replace('&','&amp;').replace('<','&lt;').replace('>','&gt;').replace('"','&quot;')
+
+# ========== 页面：首页 ==========
 def page_index():
-    total_chars = stat.get('total_chars', 590968)
-    cards = [
-        ('人物志', 'persons.html', '人', f'{len(persons)}', '四百五十五位人物，标注正史/半虚/纯虚构三档'),
-        ('战役史', 'battles.html', '战', f'{len(battles)}', '从黄巾到三国归晋，一百一十五场战事'),
-        ('地理志', 'places.html', '地', f'{len(places)}', '一百九十一处地名，带古今经纬度坐标'),
-        ('全文阅读', 'read.html', '读', f'120回', f'毛宗岗评本 {total_chars:,} 字，分回带人物出场标引'),
-        ('本体论', 'ontology.html', '元', 'OWL2', 'TBox/ABox 分离，10 大类 24 关系'),
-        ('查询台', 'query.html', '问', 'SQL', '无服务器 DuckDB-WASM 直接查 19 张 Parquet'),
+    cards = []
+    highlights = [
+        ('人','人物志',f"{len(persons)} 位人物",f"含 {sum(1 for p in persons if p.get('fiction',p.get('fictional_flag',0))==0)} 位正史 / {sum(1 for p in persons if p.get('fiction',p.get('fictional_flag',0))==1)} 半虚构 / {sum(1 for p in persons if p.get('fiction',p.get('fictional_flag',0))==2)} 纯虚构", "persons.html"),
+        ("战","战役史",f"{len(battles)} 场战事","自黄巾起义(184)至三分归晋(280)", "battles.html"),
+        ("地","地理志",f"{len(places)} 处地名","全部标注经纬度", "places.html"),
+        ("事","事件录",f"{len(events)} 件事件","政治/外交/谋略关节", "events.html"),
+        ("版","版本族谱",f"{len(editions)} 个版本","演义系/志传系/评本/现代整理本四大族", "versions.html"),
+        ("计","计谋鉴",f"{len(stratagems)} 条计谋","火攻/伏兵/离间/诈降", "stratagems.html"),
+        ("物","器物簿",f"{len(artifacts)} 件名物","玉玺/青龙刀/蛇矛/铜雀台", "artifacts.html"),
+        ("谶","谶纬考",f"{len(prophecies)} 条预言", "分久必合、卧龙凤雏等", "prophecies.html"),
+        ("学","学术史",f"{len(scholars)} 位学者","毛宗岗/金圣叹/鲁迅/沈伯俊", "scholars.html"),
+        ("艺","衍生改编",f"{len(adaptations)} 部改编","戏曲/影视/游戏/绘本", "adaptations.html"),
     ]
-    blocks = '<section class="hero"><div class="hero-paper"><div class="hero-frame">'
-    blocks += '<p class="hero-motto">滚滚长江东逝水，浪花淘尽英雄。<br/>是非成败转头空，青山依旧在，几度夕阳红。</p>'
-    blocks += '<p class="hero-sub">—— 明·杨慎《临江仙》，毛宗岗评本卷首词</p>'
-    blocks += '<div class="hero-meta"><span>底本：毛宗岗评本一百二十回</span><span>字数：{:,}</span><span>实体：{} 人 · {} 地 · {} 战</span></div>'.format(total_chars, len(persons), len(places), len(battles))
-    blocks += '</div></div></section>'
-    blocks += '<section class="cards">'
-    for title,href,seal,num,desc in cards:
-        blocks += f'''<a class="card" href="{href}">
-        <div class="card-seal">{seal}</div>
-        <div class="card-num">{num}</div>
-        <h3>{title}</h3><p>{desc}</p></a>'''
-    blocks += '</section>'
-    blocks += '<section class="intro-paper"><h2>研究说明</h2>'
-    blocks += '<p>本站参照《<a href="https://yejinlei.github.io/The-Story-of-the-Stone" target="_blank">The Story of the Stone</a>》与《<a href="https://yejinlei.github.io/the-journey-to-the-west/" target="_blank">The Journey to the West</a>》两个数字人文工程的构建范式——宣纸式阅读视觉、24 研究入口、OWL 2 本体驱动、多版本异文对勘、学术成果层——以明罗贯中《三国演义》毛宗岗评本为底本，做「文本 + 本体 + 图谱 + 地图 + 查询」五位一体的可复现数字人文研究。</p>'
-    blocks += '<p>技术栈：<strong>纯静态</strong>、<strong>无服务器</strong>、<strong>DuckDB-WASM + Parquet</strong> 浏览器端列式查询（不使用 Neo4j）；<strong>sg_</strong> 前缀 ID 体系与《水浒传》本体 <code>sh_</code> 技术栈完全兼容，可跨本体联动。</p>'
-    blocks += '<ul class="dim-list"><li><b>TBox 本体层：</b>sg:Character / sg:Faction / sg:Place / sg:Battle / sg:Event / sg:Stratagem / sg:Artifact / sg:Prophecy / sg:Version / sg:Scholarship 十大类 + 24 种对象属性（含 6 种三国专属：效忠/割据/联姻/诈降/挟令/禅代）</li>'
-    blocks += '<li><b>ABox 实例层：</b>{} 位人物（337 正史 / 64 半虚构 / 54 纯虚构）· {} 处地名（191 带坐标）· {} 场战役 · {} 件事件 · {} 计 · {} 谶语 · 17 器物 · 15 学者 · 12 论著 · 17 衍生作品</li>'.format(
-        len(persons), len(places), len(battles), len(events), len(stratagems), len(prophecies))
-    blocks += '<li><b>版本族谱：</b>16 个版本节点，从嘉靖壬午本（1522）到今本沈伯俊校理本；嘉靖本/李卓吾评本/毛本/沈校本四大核心版本。</li>'
-    blocks += '<li><b>虚实标注：</b>全部实体加注 <code>fictional_flag</code>：0=正史有其人其事，1=正史有其人但演义加工，2=纯虚构（如貂蝉、周仓、关索）。</li></ul></section>'
-    write_page('index.html','首页', blocks)
+    for seal,label,big,small,href in highlights:
+        cards.append(f'<a class="nav-card stat-card" href="{href}"><span class="seal">{seal}</span><div><div class="big">{big}</div><div class="lab">{label}</div><div class="small">{small}</div></div></a>')
+    html = header("首页","index.html") + f'''
+<section class="hero">
+  <div class="hero-inner">
+    <h2>滚滚长江东逝水，浪花淘尽英雄</h2>
+    <p>这是一份关于《三国演义》的数字人文工程：以 OWL 2 本体论建模全书实体，
+    覆盖人物、势力、地名、战役、事件、计谋、器物、谶纬、版本、异文十类名录，
+    提供浏览器端无服务器（DuckDB-WASM）知识图谱查询台，以及面向 12 个主要版本的谱系与异文对勘。</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="read.html">开始阅读</a>
+      <a class="btn" href="ontology.html">本体论规范</a>
+      <a class="btn" href="query.html">查询台</a>
+    </div>
+  </div>
+</section>
+<section class="paper">
+  <h2>二十四个研究入口</h2>
+  <div class="nav-grid stats-grid">{''.join(cards)}</div>
+</section>
+<section class="paper">
+  <h2>人物出场频次 · TOP12</h2>
+  <div class="bars">{''.join(
+    f'<div class="bar-row"><span class="bar-name">{esc(p.get("name",""))}</span><span class="bar-wrap"><span class="bar-fill" style="width:{min(100,p.get("total",0)*100/persons_sorted[0].get("total",1)):.1f}%"></span></span><span class="bar-num">{p.get("total",0)}</span></div>'
+    for p in persons_sorted[:12]
+  )}</div>
+</section>
+'''
+    write("index.html", html, "index.html")
 
-# ========== 本体页 ==========
+# ========== 页面：本体论 ==========
 def page_ontology():
-    html = '<section class="paper"><h2>本体论构建 · Ontology</h2>'
-    html += '<p>本工程采用 OWL 2 DL 形式化建模，TBox 与 ABox 严格分离。TBox 文件位于 <code>03_本体论规范/sanguo_kg_ontology.ttl</code>，受控词表位于 <code>03_本体论规范/vocabularies.yaml</code>。</p>'
-    classes = [
-        ('sg:Character','人物/角色', f'{len(persons)}','含姓名/字/号/生卒年/籍贯/阵营/官职/虚实标注等'),
-        ('sg:Faction','势力/集团', f'{len(factions)}','含创始人/起止年/都城/代表色'),
-        ('sg:Place','地理实体', f'{len(places)}','含类型/古今名/经纬度/战略价值'),
-        ('sg:Battle','战役/会战', f'{len(battles)}','含交战方/主帅/时间/战术/胜负/影响'),
-        ('sg:Event','政治/外交事件', f'{len(events)}','含时间/地点/参与者/虚实/描述'),
-        ('sg:Stratagem','计谋/策略', f'{len(stratagems)}','含施用者/章回/描述'),
-        ('sg:Artifact','器物/信物', f'{len(artifacts)}','含所有者/功能/典故'),
-        ('sg:Prophecy','谶纬/童谣/卦象', f'{len(prophecies)}','含文本/言者/对象/应验解释'),
-        ('sg:Version','版本/刊本/评点', f'{len(editions)}','版本族谱系节点'),
-        ('sg:Scholarship','学术成果', f'{len(scholars)+len(papers)}','学者+论著'),
-    ]
-    html += '<h3>1. 十 大 顶 级 实 体 类</h3><table class="onto-table"><thead><tr><th>类</th><th>释义</th><th>实例数</th><th>核心属性</th></tr></thead><tbody>'
-    for c,n,num,d in classes:
-        html += f'<tr><td><code>{c}</code></td><td>{n}</td><td class="num">{num}</td><td>{d}</td></tr>'
-    html += '</tbody></table>'
+    html = header("本体论规范","ontology.html") + '''
+<section class="paper">
+  <h2>本体论 OWL 2 规范</h2>
+  <p>本体文件采用 Turtle 语法，兼容 Protégé / rdflib 等工具直接打开。词表采用 YAML 受控词表。</p>
+  <div class="btn-row">
+    <a class="btn primary" href="ontology/sanguo_kg_ontology.ttl">📥 下载本体 TTL（12 版本 / 12 类）</a>
+    <a class="btn" href="ontology/vocabularies.yaml">📥 下载受控词表 YAML</a>
+  </div>
+
+  <h3>顶级类（Classes）</h3>
+  <ul class="cls-list">
+    <li><b>sg:Thing</b> — 顶层抽象事物</li>
+    <li><b>sg:Wu / Shi / ShiJian / Di</b> — 四范域：物 / 事 / 时 / 地</li>
+    <li><b>sg:VersionFamily</b> — 版本族（演义系/志传系）</li>
+    <li><b>sg:Edition</b> — 具体版本（刊本/抄本/评本/现代整理本）</li>
+    <li><b>sg:Chapter</b> — 回/则（叙事单元）</li>
+    <li><b>sg:Paragraph</b> — 段落（文本原子）</li>
+    <li><b>sg:VariantReading</b> — 异文（跨版本文字差异）</li>
+    <li><b>sg:Commentary</b> — 评点（毛评/李评/李渔评/钟评）</li>
+    <li><b>sg:Person / Faction / Office / Place</b> — 人物 / 势力 / 官职 / 地点</li>
+    <li><b>sg:Artifact / Stratagem / Battle / Event</b> — 器物 / 计谋 / 战役 / 事件</li>
+    <li><b>sg:Prophecy</b> — 谶纬预言</li>
+    <li><b>sg:Scholar / Paper / Adaptation</b> — 学者 / 论著 / 改编作品</li>
+  </ul>
+
+  <h3>24 种有向关系（Object Properties）</h3>
+  <table class="data-table">
+    <thead><tr><th>属性</th><th>域</th><th>值域</th><th>说明</th></tr></thead><tbody>
+'''
     rels = [
-        ('sg:swornTo','结义','桃园结义类兄弟关系，对称、传递'),
-        ('sg:swearsAllegianceTo','效忠','臣对君/将对主，Functional'),
-        ('sg:relatedByBloodTo','血缘','父子/兄弟/叔侄'),
-        ('sg:marries','联姻','婚姻关系，对称'),
-        ('sg:surrendersTo','归降','含主动投降与被迫归降'),
-        ('sg:defectsTo','叛降','★三国专属，背主投敌（如吕布反复）'),
-        ('sg:schemesAgainst','谋害','阴谋加害'),
-        ('sg:participatesIn','参与','人物参与事件/战役'),
-        ('sg:commands','指挥','主帅指挥战役'),
-        ('sg:usesStratagem','用计','人物使用某计谋'),
-        ('sg:occursAt','发生于','事件/战役发生在地点'),
-        ('sg:occursIn','发生于回目','事件发生在第几回'),
-        ('sg:holdsArtifact','持有','人物持有器物'),
-        ('sg:uttersProphecy','出谶','人物/童谣作谶语'),
-        ('sg:prophecyTargets','谶指','谶语指向某人物/势力'),
-        ('sg:foundsFaction','创立','人物创立势力'),
-        ('sg:servesFaction','从属','人物从属势力'),
-        ('sg:controlsPlace','割据','★三国专属，势力占据要地'),
-        ('sg:holdsEmperor','挟帝','★三国专属，挟天子以令诸侯'),
-        ('sg:usurps','禅代','★三国专属，汉魏魏晋嬗代'),
-        ('sg:feignsSurrender','诈降','★三国专属，黄盖诈降/姜维诈降'),
-        ('sg:arrangesMarriage','联姻外交','★三国专属，政治联姻'),
-        ('sg:variantOf','异文','版本间异文关系'),
-        ('sg:annotates','评点','评注本对原文的评点'),
+      ('allyOf','结为同盟','Person/Faction','Person/Faction'),
+      ('appearsIn','出场于','Person/Place','Chapter'),
+      ('belongsTo','归属','Person/Artifact','Faction'),
+      ('defeats','战胜','Person/Faction','Person/Faction'),
+      ('fatherOf','生父','Person','Person'),
+      ('motherOf','生母','Person','Person'),
+      ('swornBrotherOf','结义兄弟','Person','Person'),
+      ('swornSisterOf','结义姐妹','Person','Person'),
+      ('spouseOf','配偶','Person','Person'),
+      ('siblingOf','同胞兄弟/姐妹','Person','Person'),
+      ('sonOf','子（父/母）','Person','Person'),
+      ('lordOf','君主','Person','Person'),
+      ('subjectOf','臣属','Person','Person'),
+      ('kills','诛杀','Person','Person'),
+      ('serves','事奉/效力','Person','Person/Faction'),
+      ('locatesIn','位于','Battle/Event/Place','Place'),
+      ('participatesIn','参与','Person','Battle/Event'),
+      ('uses','使用','Person/Battle','Artifact/Stratagem'),
+      ('mentions','提及','Paragraph/Commentary','Person/Place/Thing'),
+      ('variantOf','异文于','VariantReading','Paragraph'),
+      ('basedOn','底本','Edition','Edition'),
+      ('commentsOn','评点','Commentary','Paragraph/Chapter'),
+      ('predicts','预言','Prophecy','Event/Person'),
+      ('cites','引用/论述','Paper','Edition/Person/Event'),
     ]
-    html += '<h3>2. 二 十 四 种 对 象 属 性（含 6 种 三 国 专 属 ★）</h3><table class="onto-table"><thead><tr><th>属性</th><th>语义</th><th>约束</th></tr></thead><tbody>'
-    for r,s,c in rels:
-        html += f'<tr><td><code>{r}</code></td><td>{s}</td><td>{c}</td></tr>'
-    html += '</tbody></table>'
-    html += '<h3>3. 数 据 属 性 与 受 控 词 表</h3>'
-    html += '<p>四级核实度：<code>verified_primary</code>（原文可证）/ <code>verified_commentary</code>（毛评可证）/ <code>scholarly_consensus</code>（学界共识）/ <code>inferred</code>（推理得出）。</p>'
-    html += '<p>虚实标注 <code>fictional_flag</code>：0 正史有其人其事；1 正史有其人但演义有艺术加工；2 纯虚构人物/事件。</p>'
-    html += '<h3>4. 版 本 族 谱 层</h3><p>新增 VersionFamily / Edition / Volume / Chapter / Paragraph / VariantReading / Commentary 七类，构成多版本异文对勘的谱系基础。目前毛本有全本（★），其余版本保留元数据与 8 组学术考证异文。</p>'
-    html += '<h3>5. 下 载</h3><ul>'
-    html += '<li>TBox 本体：<a href="ontology/sanguo_kg_ontology.ttl">sanguo_kg_ontology.ttl</a></li>'
-    html += '<li>受控词表：<a href="ontology/vocabularies.yaml">vocabularies.yaml</a></li>'
-    html += '<li>知识图谱：<a href="data/graph.json">graph.json</a>（nodes + edges，可导入 Gephi/Cytoscape）</li>'
-    html += '<li>Parquet 表：19 张列式表，可直接被 DuckDB/PyArrow/pandas 读取（详见查询台示例）</li></ul>'
-    write_page('ontology.html','本体论', html)
+    for r,label,d,rn in rels:
+        html += f'<tr><td><code>sg:{r}</code></td><td>{esc(d)}</td><td>{esc(rn)}</td><td>{esc(label)}</td></tr>'
+    html += '''</tbody></table>
+  <h3>数据属性（Datatype Properties）</h3>
+  <ul class="cls-list">
+    <li><b>sg:zi</b>（字）、<b>sg:hao</b>（号）、<b>sg:birthYear</b>、<b>sg:deathYear</b>、<b>sg:hometown</b>、<b>sg:fictionalFlag</b>（0正史/1半虚构/2虚构）</li>
+    <li><b>sg:year</b>（公元纪年）、<b>sg:chapterNo</b>、<b>sg:longitude/latitude</b>、<b>sg:outcome</b>、<b>sg:sourceText</b>（原文片段）</li>
+  </ul>
+</section>'''
+    write("ontology.html", html)
 
-# ========== 全文阅读 ==========
+# ========== 页面：全文阅读 ==========
 def page_read():
-    html = '<section class="paper"><h2>全文阅读 · Read</h2>'
-    html += '<p>底本：毛宗岗评本《三国演义》一百二十回，繁体排印本为参照，简体整理。点击章回展开阅读。</p>'
-    html += '<div class="chapter-select"><label>跳转到第 <input type="number" id="chapJump" min="1" max="120" value="1"> 回</label><button onclick="jumpChap()">前往</button></div>'
-    html += '<div id="chapterList"></div></section>'
-    html += '''<script>
-async function loadRead(){const r=await fetch('data/read.json');const d=await r.json();window.READ=d;
- const list=document.getElementById('chapterList');
- d.chapters.forEach((c,i)=>{const div=document.createElement('details');div.className='chapter';
-  div.innerHTML=`<summary><span class="ch-no">第${String(c.no).padStart(3,'0')}回</span><span class="ch-title">${c.title}</span><span class="ch-meta">${c.paras.length}段</span></summary><div class="ch-body"></div>`;
-  div.addEventListener('toggle',e=>{if(div.open){const body=div.querySelector('.ch-body');if(!body.dataset.loaded){body.innerHTML=c.paras.map(p=>'<p>'+p+'</p>').join('');body.dataset.loaded=1;}}});
-  list.appendChild(div);});}
-function jumpChap(){const n=parseInt(document.getElementById('chapJump').value);const all=document.querySelectorAll('#chapterList details');if(all[n-1]){all[n-1].open=true;all[n-1].scrollIntoView({behavior:'smooth'});}}
-loadRead();
-</script>'''
-    write_page('read.html','全文阅读', html)
-
-# ========== 人物 ==========
-def page_persons():
-    html = '<section class="paper"><h2>人物志 · Persons</h2>'
-    html += f'<p>共 {len(persons)} 位人物：其中 <span class="tag real">正史 {sum(1 for p in persons if p.get("fictional")==0)}</span> <span class="tag half">半虚构 {sum(1 for p in persons if p.get("fictional")==1)}</span> <span class="tag fic">纯虚构 {sum(1 for p in persons if p.get("fictional")==2)}</span></p>'
-    html += '<div class="filter-bar"><button class="fbtn active" data-f="all">全部</button><button class="fbtn" data-f="0">正史</button><button class="fbtn" data-f="1">半虚构</button><button class="fbtn" data-f="2">纯虚构</button><input type="search" id="pSearch" placeholder="搜姓名 / 字 / 籍贯…"></div>'
-    html += '<div class="person-grid" id="pGrid">'
-    for p in persons:
-        fic = p.get('fictional',0)
-        cls = ['real','half','fic'][fic]
-        tag = ['正史','半虚','虚构'][fic]
-        html += f'''<div class="person-card {cls}" data-fic="{fic}" data-name="{p['name']}{p.get('zi','')}{p.get('hometown','')}">
-        <div class="p-head"><h3>{p['name']}</h3><span class="fic-tag">{tag}</span></div>
-        <p class="p-zi">{p.get('zi','') or '—'} · {p.get('hao','') or ''} · {p.get('hometown','') or '籍贯不详'}</p>
-        <p class="p-fac">{p.get('faction','') or '—'} · {p.get('category','')}</p>
-        <p class="p-meta">生卒：{p.get('birth') or '?'}—{p.get('death') or '?'} · 提及 {p.get('total',0)} 次 · 首见第 {p.get('first',0)} 回</p>
-        <p class="p-desc">{p.get('desc','') or ''}</p>
-        </div>'''
-    html += '</div></section>'
-    html += '''<script>
-document.querySelectorAll('.fbtn').forEach(b=>b.onclick=()=>{document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');const f=b.dataset.f;document.querySelectorAll('.person-card').forEach(c=>{c.style.display=(f==='all'||c.dataset.fic===f)?'':'none';});});
-document.getElementById('pSearch').oninput=e=>{const q=e.target.value.trim();document.querySelectorAll('.person-card').forEach(c=>{c.style.display=(!q||c.dataset.name.includes(q))?'':'none';});};
-</script>'''
-    write_page('persons.html','人物志', html)
-
-# ========== 势力 ==========
-def page_factions():
-    html = '<section class="paper"><h2>势力谱 · Factions</h2>'
-    html += '<p>从东汉朝廷到晋朝，大小集团十九家。</p>'
-    html += '<div class="faction-grid">'
-    for f in factions:
-        color = f.get('color','#b08d57')
-        html += f'''<div class="faction-card" style="border-left-color:{color}">
-        <h3>{f['name']}</h3>
-        <p>{f.get('type','')} · 创始人：{f.get('founder','—')} · 都城：{f.get('capital','—')}</p>
-        <p>起：{f.get('start_year','?')} — 终：{f.get('end_year','?')}</p>
-        <p>{f.get('desc','')}</p>
-        <p class="small">提及 {f.get('total',0)} 次</p>
-        </div>'''
-    html += '</div></section>'
-    write_page('factions.html','势力谱', html)
-
-# ========== 地理 ==========
-def page_places():
-    html = '<section class="paper"><h2>地理志 · Places</h2>'
-    html += f'<p>共 {len(places)} 处地名，全部标注经纬度，可跳转至「时空地图」可视化。</p>'
-    html += '<table class="data-table"><thead><tr><th>地名</th><th>类型</th><th>今址</th><th>经度</th><th>纬度</th><th>战略价值</th><th>提及</th></tr></thead><tbody>'
-    for pl in places:
-        html += f'<tr><td>{pl["name"]}</td><td>{pl.get("type","")}</td><td>{pl.get("modern","")}</td><td>{pl.get("lng","")}</td><td>{pl.get("lat","")}</td><td>{pl.get("note","")}</td><td>{pl.get("total",0)}</td></tr>'
-    html += '</tbody></table></section>'
-    write_page('places.html','地理志', html)
-
-# ========== 战役 ==========
-def page_battles():
-    html = '<section class="paper"><h2>战役史 · Battles</h2>'
-    html += f'<p>共 {len(battles)} 场战事，按年份排序。</p>'
-    html += '<div class="timeline">'
-    for b in battles:
-        y = b.get('year')
-        html += f'''<div class="tl-item">
-        <div class="tl-year">{y or '—'}</div>
-        <div class="tl-card">
-        <h3>{b['name']}</h3>
-        <p class="tl-meta">第 {b.get('chapter',0)} 回 · {b.get('side_a','')} vs {b.get('side_b','')}</p>
-        <p>主帅：{b.get('commander_a','—')} / {b.get('commander_b','—')}</p>
-        <p>结果：{b.get('outcome','')}</p>
-        <p class="small">{b.get('desc','')}</p>
-        </div></div>'''
-    html += '</div></section>'
-    write_page('battles.html','战役史', html)
-
-# ========== 事件 ==========
-def page_events():
-    html = '<section class="paper"><h2>事件录 · Events</h2>'
-    html += f'<p>共 {len(events)} 件政治/外交事件，按年份排序。</p>'
-    html += '<div class="timeline">'
-    for e in events:
-        html += f'''<div class="tl-item">
-        <div class="tl-year">{e.get('year','—')}</div>
-        <div class="tl-card">
-        <h3>{e['name']} <span class="fic-tag {['real','half','fic'][int(e.get('fictional',0))]}">{['正史','半虚','虚构'][int(e.get('fictional',0))]}</span></h3>
-        <p class="tl-meta">第 {e.get('chapter',0)} 回 · {e.get('place','')}</p>
-        <p>参与者：{e.get('participants','')}</p>
-        <p class="small">{e.get('desc','')}</p>
-        </div></div>'''
-    html += '</div></section>'
-    write_page('events.html','事件录', html)
-
-# ========== 计谋/器物/谶纬（列表通用）==========
-def page_list(filename, title, items, title_field='name', extra_fn=None):
-    html = f'<section class="paper"><h2>{title}</h2><p>共 {len(items)} 条。</p><div class="list-grid">'
-    for it in items:
-        html += '<div class="list-card"><h3>'+str(it.get(title_field,it.get('name','')))+'</h3>'
-        if extra_fn: html += extra_fn(it)
-        html += '</div>'
-    html += '</div></section>'
-    write_page(filename, title, html)
-
-def strat_extra(s):
-    return f'<p>施用者：{s.get("user","—")} · 第 {s.get("chapter",0)} 回</p><p>{s.get("desc","")}</p>'
-def art_extra(a):
-    return f'<p>类型：{a.get("type","")} · 持有者：{a.get("owner","—")}</p><p>{a.get("anecdote","")}</p>'
-def pro_extra(p):
-    return f'<blockquote>{p.get("text","")}</blockquote><p>{p.get("type","")} · 第 {p.get("chapter",0)} 回 · 指：{p.get("target","")}</p><p>{p.get("meaning","")}</p>'
-
-# ========== 版本族谱 ==========
-def page_versions():
-    html = '<section class="paper"><h2>版本族谱 · Versions</h2>'
-    html += '<p>《三国演义》版本源流复杂：从明代嘉靖壬午本（1522）到清初毛宗岗评本，再到当代沈伯俊校理本。本工程以毛本为唯一全本底本（★），其余版本保留元数据以待扩展。</p>'
-    html += '<div class="version-tree"><ol>'
-    eds = editions.get('editions', []) if isinstance(editions,dict) else editions
-    fm = editions.get('family_meta', {}) if isinstance(editions,dict) else {}
-    html += '<li><h3>版本系统</h3><ul>'
-    for fid,fmeta in fm.items():
-        html += f'<li><b>{fmeta["name"]}</b>（{fmeta["stem"]}）：{fmeta["feature"]}</li>'
-    html += '</ul></li>'
-    # 按朝代分组
-    groups = {}
-    for e in eds:
-        y = e.get('year',0) or 0
-        era = '元明以前' if y<1500 else ('明嘉靖-万历' if y<1620 else ('明末-清' if y<1800 else ('近现代' if y<1950 else '当代')))
-        groups.setdefault(era, []).append(e)
-    for era, lst in groups.items():
-        html += f'<li><h3>{era}</h3><ul>'
-        for e in lst:
-            mark = ' ★' if e.get('full_text') else ''
-            html += f'<li><b>{e["name"]}</b>{mark} · {e.get("year","")} · {e.get("editor","")}<br/><span class="small">{e.get("desc","")}</span></li>'
-        html += '</ul></li>'
-    html += '</ol></div>'
-    html += '<h3>全文入库接口</h3><p>将其他版本全文 TXT 放入 <code>raw/&lt;edition_id&gt;.txt</code>（文件名与 editions.json 的 id 一致），执行 <code>python3 build/build_parquet.py</code> 即可自动合并入 lines 表并启用多版本异文对勘。</p>'
-    write_page('versions.html','版本族谱', html)
-
-# ========== 异文对勘（8 组学术考证）==========
-def page_variants():
-    variants = [
-        ('第5回','关羽温酒斩华雄','嘉靖本/李卓吾本：华雄为孙坚所杀（《三国志·孙破虏传》）；毛本：关羽温酒斩华雄（虚构武功，树立武圣形象）'),
-        ('第39-50回','诸葛亮赤壁之战','嘉靖本：周瑜主战、诸葛亮仅外交；毛本：增加舌战群儒/草船借箭/借东风，神化孔明'),
-        ('第36-38回','三顾茅庐','《三国志》"凡三往乃见"五字；演义扩展为 36/37/38 三回浓墨重彩'),
-        ('第41-42回','赵云长坂坡','《三国志》仅"云身抱弱子…保护甘夫人…皆得免难"；演义七进七出、斩曹营名将五十余员'),
-        ('第50回','华容道义释曹操','《三国志》曹操败走华容道，刘备追之不及；演义改为关羽义释，立"义绝"'),
-        ('第89-90回','诸葛亮七擒孟获','《三国志》仅"亮率众南征，其秋悉平"；演义七擒七纵，加入木鹿大王/藤甲兵奇幻情节'),
-        ('第95回','空城计','《三国志》裴松之注引郭冲五事已驳；演义作为孔明"多智近妖"代表情节'),
-        ('第104回','遗计斩魏延','《三国志》魏延与杨仪争权被杀，无关诸葛遗计；演义改为"反骨"谶言应验'),
-    ]
-    html = '<section class="paper"><h2>异文对勘 · Variants</h2>'
-    html += '<p>列出 8 组学界公认的重要版本异文，对比嘉万旧本（嘉靖壬午本/李卓吾评本）与毛宗岗评本的叙事增删，揭示毛氏父子"尊刘贬曹、强化忠义"的改写倾向。</p>'
-    html += '<table class="data-table"><thead><tr><th>位置</th><th>情节</th><th>版本差异 / 学术考证</th></tr></thead><tbody>'
-    for ch, plot, diff in variants:
-        html += f'<tr><td>{ch}</td><td>{plot}</td><td>{diff}</td></tr>'
-    html += '</tbody></table><p class="small">注：因公开可获取的嘉靖本/李卓吾本电子全文暂不可得，本工程暂列学术考证异文；待全文入库后将开放逐段对勘。</p></section>'
-    write_page('variants.html','异文对勘', html)
-
-# ========== 关系图 ==========
-def page_graph():
-    html = '<section class="paper"><h2>人物关系 · Network</h2>'
-    html += '<p>基于共同出现（co-occurrence）构建人物共现网络，边宽代表共现段落数。共 454 条共现关系。</p>'
-    html += '<div class="graph-wrap"><canvas id="graphCv" width="1000" height="700"></canvas></div>'
-    html += '''<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    # 直接把章节列表渲染为 <details>，默认第一回展开，顶部提供下拉快速跳转
+    opts_html = ''.join(f'<option value="{c["no"]}">第{c["no"]}回 {esc(c["title"])}</option>' for c in read_data)
+    chap_html = []
+    for i,c in enumerate(read_data):
+        paras = c.get('paragraphs') or c.get('paras') or []
+        paras_html = ''.join(f'<p>{esc(p)}</p>' for p in paras if p.strip())
+        open_attr = ' open' if i==0 else ''
+        chap_html.append(f'''<details class="chapter"{open_attr} data-ch="{c["no"]}">
+<summary><span class="ch-no">第{str(c["no"]).zfill(3)}回</span><span class="ch-title">{esc(c["title"])}</span><span class="ch-meta">{len(paras)}段 · {c.get("chars",len("".join(paras)))}字</span></summary>
+<div class="ch-body">{paras_html}</div>
+</details>''')
+    html = header("全文阅读","read.html") + f'''
+<section class="paper">
+  <h2>正文閱讀</h2>
+  <div class="read-toolbar">
+    <select id="chapSel" onchange="jumpSel(this.value)">
+      <option value="">— 選擇章回跳轉 —</option>
+      {opts_html}
+    </select>
+    <span class="small">版本：毛宗崗評本百二十回</span>
+  </div>
+  <div id="chapterList">{''.join(chap_html)}</div>
+</section>
 <script>
-(async()=>{
-const g=await(await fetch('data/graph.json')).json();
-const persons=await(await fetch('data/persons.json')).json();
-const tot=new Map(persons.map(p=>[p.name,p.total||0]));
-const fic=new Map(persons.map(p=>[p.name,p.fictional||0]));
-const fac=new Map(persons.map(p=>[p.name,p.faction||'']));
-const W=1000,H=700;const cv=document.getElementById('graphCv');const ctx=cv.getContext('2d');
-const nodes=g.nodes.slice(0,120).map(n=>({...n,r:Math.sqrt(tot.get(n.id)||3)*1.2+3}));
-const ids=new Set(nodes.map(n=>n.id));
-const edges=g.edges.filter(e=>ids.has(e.source)&&ids.has(e.target)).slice(0,400);
-const sim=d3.forceSimulation(nodes).force('link',d3.forceLink(edges).distance(60).strength(0.3)).force('charge',d3.forceManyBody().strength(-80)).force('center',d3.forceCenter(W/2,H/2)).force('collide',d3.forceCollide(d=>d.r+2));
-const colors={'曹魏':'#9e2b25','蜀汉':'#3f6b5e','东吴':'#3b4a6b','群雄':'#b08d57','东汉':'#6a4e78','其他':'#888','晋':'#555'};
-let hover=null;
-cv.onmousemove=e=>{const rect=cv.getBoundingClientRect();const x=(e.clientX-rect.left)*(W/rect.width),y=(e.clientY-rect.top)*(H/rect.height);hover=null;for(const n of nodes){if((n.x-x)**2+(n.y-y)**2<n.r*n.r){hover=n;break;}}};
-sim.on('tick',()=>{ctx.clearRect(0,0,W,H);
- for(const e of edges){ctx.strokeStyle='rgba(110,80,60,0.15)';ctx.lineWidth=Math.sqrt(e.weight||1)*0.3;ctx.beginPath();ctx.moveTo(e.source.x,e.source.y);ctx.lineTo(e.target.x,e.target.y);ctx.stroke();}
- for(const n of nodes){ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=colors[fac.get(n.id)]||'#888';if(n.fictional===2)ctx.fillStyle='#c88';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.stroke();if(n.r>8){ctx.fillStyle='#2f2a25';ctx.font='12px Kaiti, STKaiti, serif';ctx.textAlign='center';ctx.fillText(n.id,n.x,n.y+n.r+12);}}
- if(hover){ctx.fillStyle='rgba(255,250,240,0.95)';ctx.fillRect(hover.x-hover.r,hover.y-hover.r-30,120,26);ctx.fillStyle='#9e2b25';ctx.font='bold 13px Kaiti';ctx.textAlign='left';ctx.fillText(hover.id+' ('+(tot.get(hover.id)||0)+'次)',hover.x-hover.r+4,hover.y-hover.r-12);}
- cv.style.cursor=hover?'pointer':'default';
-});
-})();
+function jumpSel(n){{
+  if(!n)return;
+  var all=document.querySelectorAll('#chapterList details');
+  all.forEach(d=>d.open=false);
+  var t=document.querySelector('#chapterList details[data-ch="'+n+'"]');
+  if(t){{t.open=true;t.scrollIntoView({{behavior:'smooth',block:'start'}});document.getElementById('chapSel').value='';}}
+}}
 </script>'''
-    write_page('graph.html','人物关系', html)
+    write("read.html", html)
 
-# ========== 地图 ==========
+# ========== 页面：人物志 ==========
+def page_persons():
+    cards = []
+    for p in persons_sorted[:200]:
+        fic = p.get('fiction',p.get('fictional_flag',0))
+        fic_cls = ['tag-real','tag-half','tag-fic'][fic] if fic in (0,1,2) else 'tag-real'
+        fic_lbl = ['正史','半虚构','虚构'][fic] if fic in (0,1,2) else '正史'
+        fact = p.get('faction','') or ''
+        zi = p.get('zi','') or ''
+        labels = []
+        if zi: labels.append(f'字 {esc(zi)}')
+        if fact: labels.append(esc(fact))
+        life = ''
+        if p.get('birth') or p.get('death'):
+            life = f'{p.get("birth","?")}—{p.get("death","?")}'
+        desc = p.get('desc','') or ''
+        cards.append(f'''<article class="person-card">
+<h4><span class="{fic_cls}">{fic_lbl}</span> {esc(p.get("name",""))} <small>{' · '.join(labels)}</small></h4>
+<div class="person-meta">提及 {p.get("total",0)} 次 · 首现第{p.get("first",0)}回 {f'· {life}' if life else ''}</div>
+{('<p>'+esc(desc)+'</p>') if desc else ''}
+</article>''')
+    html = header("人物志","persons.html") + f'''
+<section class="paper">
+  <h2>人物志 · Persons</h2>
+  <p>共 <b>{len(persons)}</b> 位人物。<span class="tag-real">正史</span>={sum(1 for p in persons if p.get('fiction',p.get('fictional_flag',0))==0)} · <span class="tag-half">半虚构</span>={sum(1 for p in persons if p.get('fiction',p.get('fictional_flag',0))==1)} · <span class="tag-fic">虚构</span>={sum(1 for p in persons if p.get('fiction',p.get('fictional_flag',0))==2)}。按提及总数排序，展示前 200 位。</p>
+  <div class="person-grid">{''.join(cards)}</div>
+</section>'''
+    write("persons.html", html)
+
+# ========== 通用卡片页 ==========
+def page_list(fn, title, seal, items, render_item, subtitle=None, sort_key=None):
+    if sort_key:
+        items = sorted(items, key=sort_key)
+    if subtitle is None:
+        subtitle = f"共 {len(items)} 条记录"
+    html = header(title, fn) + f'<section class="paper"><h2>{title}</h2><p>{subtitle}</p><div class="list-grid">'
+    for it in items:
+        html += render_item(it)
+    html += '</div></section>'
+    write(fn, html)
+
+# ========== 通用时间线页 ==========
+def page_timeline(fn, title, items, name_getter, year_getter, extra_getter=None):
+    items_sorted = sorted(items, key=lambda x:(year_getter(x) or 9999, name_getter(x)))
+    html = header(title, fn) + f'<section class="paper"><h2>{title}</h2><p>共 {len(items_sorted)} 条，按公元纪年排序。</p><div class="timeline">'
+    for it in items_sorted:
+        y = year_getter(it) or '—'
+        n = name_getter(it)
+        extra = extra_getter(it) if extra_getter else ''
+        html += f'<div class="tl-item"><div class="tl-year">{y}</div><div class="tl-card"><h3>{esc(n)}</h3>{extra}</div></div>'
+    html += '</div></section>'
+    write(fn, html)
+
+# ========== 各列表页 ==========
+def render_faction(f):
+    tot = f.get('total',0)
+    return f'<article class="list-card"><h3>{esc(f.get("name",""))}</h3><p>提及 {tot} 次</p><p class="small">{esc(f.get("desc","") or "")}</p></article>'
+
+def render_stratagem(s):
+    return f'<article class="list-card"><h3>{esc(s.get("name",""))}</h3><p><b>分类：</b>{esc(s.get("type","") or "")}</p><p><b>章回：</b>第{esc(str(s.get("chapter","")))}回</p><p class="small">{esc(s.get("desc","") or "")}</p></article>'
+
+def render_artifact(a):
+    return f'<article class="list-card"><h3>{esc(a.get("name",""))}</h3><p><b>类型：</b>{esc(a.get("type","") or "")}</p><p><b>持有者：</b>{esc(a.get("owner","") or "")}</p><p class="small">提及 {a.get("total",0)} 次</p></article>'
+
+def render_prophecy(p):
+    return f'<article class="list-card"><h3>{esc(p.get("target","") or p.get("text","")[:20])}</h3><p><b>出处：</b>第{esc(str(p.get("chapter","")))}回 · <b>言者：</b>{esc(p.get("speaker","") or "")}</p><p class="small"><q>{esc(p.get("text","") or "")}</q></p><p class="small">{esc(p.get("meaning","") or p.get("note","") or "")}</p></article>'
+
+def render_edition(e):
+    return f'<article class="list-card"><h3>{esc(e.get("name","") or e.get("title",""))}</h3><p><b>家族：</b>{esc(e.get("family","") or "")} · <b>年代：</b>{esc(e.get("year","") or e.get("era","") or "")}</p><p class="small">{esc(e.get("desc","") or e.get("note","") or "")}</p></article>'
+
+def render_variant(v):
+    # variants 直接用固定示例
+    return f'<article class="list-card"><h3>{esc(v.get("title",""))}</h3><p><b>毛本：</b><q>{esc(v.get("mao",""))}</q></p><p><b>嘉靖本：</b><q>{esc(v.get("jiajing",""))}</q></p><p class="small">{esc(v.get("note","") or "")}</p></article>'
+
+def render_scholar(s):
+    return f'<article class="list-card"><h3>{esc(s.get("name",""))} <small>{esc(s.get("era","") or "")}</small></h3><p>{esc(s.get("role","") or "")} · {esc(s.get("type","") or "")}</p><p><b>代表作：</b>{esc(s.get("work","") or "")}</p><p>{esc(s.get("view","") or s.get("desc","") or "")}</p><p class="small">{esc(s.get("note","") or "")}</p></article>'
+
+def render_paper(p):
+    return f'<article class="list-card"><h3>{esc(p.get("title",""))}</h3><p><b>作者：</b>{esc(p.get("author","") or "")} · <b>年代：</b>{esc(str(p.get("year","")))}</p><p class="small">{esc(p.get("desc","") or "")}</p></article>'
+
+def render_adapt(a):
+    return f'<article class="list-card"><h3>{esc(a.get("name","") or a.get("title",""))} <small>{esc(str(a.get("year","")))}</small></h3><p><b>类型：</b>{esc(a.get("type","") or "")}</p><p class="small">{esc(a.get("note","") or a.get("desc","") or "")}</p></article>'
+
+def render_poem(p):
+    return f'<article class="poem-card"><h3>{esc(p.get("title",""))}</h3><div class="card-body"><pre class="poem-text">{esc(p.get("text",""))}</pre><p class="small">{esc(p.get("note","") or "")}</p></div></article>'
+
+# 诗词回目：从 chapters 取前20回回目+开篇临江仙
+POEMS = [
+    {"title":"临江仙·滚滚长江东逝水","text":"滚滚长江东逝水，浪花淘尽英雄。是非成败转头空。\n青山依旧在，几度夕阳红。\n白发渔樵江渚上，惯看秋月春风。一壶浊酒喜相逢。\n古今多少事，都付笑谈中。","note":"杨慎《廿一史弹词》第三段说秦汉开场词，毛宗岗取为《三国演义》开篇。"},
+    {"title":"第001回 宴桃园豪杰三结义　斩黄巾英雄首立功","text":"话说天下大势，分久必合，合久必分。","note":"毛本著名开卷语，奠定循环史观基调。"},
+]
+# 从 chapters 加前 30 回回目
+for c in chapters[:30]:
+    POEMS.append({"title":f"第{str(c['no']).zfill(3)}回  {c['title']}","text":"","note":""})
+
+# 异文对勘：8 组经典异文
+VARIANTS = [
+    {"title":"卷首词（临江仙）","mao":"滚滚长江东逝水……（杨慎词）","jiajing":"（无此词；嘉靖本以『祭天地桃园结义』起头）","note":"毛宗岗评本新增，借杨慎词为全书定调。"},
+    {"title":"回目对偶","mao":"严格 120 回七言对偶回目","jiajing":"240 则，以『则』分，单句七字，不对偶","note":"毛本参照李卓吾评本改造回目。"},
+    {"title":"刘备形象 · 初见孔明","mao":"玄德拱立阶下半晌，先生未醒……玄德犹然侍立","jiajing":"玄德叉手立于阶下，先生仰卧于堂上，玄德见先生翻身将起，忽又朝里壁睡着","note":"毛本强化刘备『虔诚仁厚』。"},
+    {"title":"诸葛亮欲烧魏延（子午谷）","mao":"（删去）","jiajing":"孔明在襄阳会后欲于山僻处烧杀魏延","note":"毛宗岗删除此段以纯化孔明形象，鲁迅所谓『状诸葛之多智而近妖』有此一层。"},
+    {"title":"关羽「华容道义释曹操」","mao":"关羽放曹后自缚请罪，孔明欲斩，刘备求情","jiajing":"基本同毛本，但文字多口语化","note":"嘉靖本有张辽求情关羽的更多细节。"},
+    {"title":"曹操杀吕伯奢","mao":"『宁使我负天下人，休教天下人负我』","jiajing":"『宁教我负天下人，休教天下人负我』（一字之差，语境略异）","note":"毛本改『使』为『教』，更具口语霸气。"},
+    {"title":"刘备『妻子如衣服』论","mao":"『兄弟如手足，妻子如衣服。衣服破，尚可缝；手足断，安可续？』","jiajing":"文字略同，但置于张飞自责之后更直接","note":"毛本删削部分口语，文气更顺。"},
+    {"title":"结尾诗","mao":"鼎足三分已成梦，后人凭吊空牢骚","jiajing":"一篇古风，详述三分终归一统，以『再受禅依样画葫芦』作结","note":"毛本改尾为七绝，余韵更足。"},
+]
+
+# 时空地图（Leaflet）
 def page_map():
-    html = '<section class="paper"><h2>时空地图 · Map</h2>'
-    html += '<p>全部 191 处地名标注古今位置，点击标记查看；色点代表势力控制区颜色。</p>'
-    html += '<div id="map" style="height:600px;border:1px solid var(--border);background:#f3ead7;"></div>'
-    html += '''<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    pts_json = json.dumps([{
+        'name':p['name'],'lng':p.get('lng') or p.get('longitude'),
+        'lat':p.get('lat') or p.get('latitude'),'type':p.get('type',''),
+        'total':p.get('total',0)
+    } for p in places if (p.get('lng') or p.get('longitude')) and (p.get('lat') or p.get('latitude'))], ensure_ascii=False)
+    html = header("时空地图","map.html") + f'''
+<section class="paper">
+  <h2>时空地图</h2>
+  <p>共标注 <b>{sum(1 for p in places if p.get("lng") or p.get("longitude"))}</b> 处三国地名，以 Leaflet 加载 OpenStreetMap 瓦片。点击气泡查看提及次数。</p>
+  <div id="map" style="height:600px;border:1px solid var(--border);border-radius:4px;"></div>
+</section>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-(async()=>{
-const places=await(await fetch('data/places.json')).json();
-const battles=await(await fetch('data/battles.json')).json();
-const map=L.map('map').setView([33,112],5);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(map);
-const placeLayer=L.layerGroup().addTo(map);
-places.forEach(p=>{if(p.lat&&p.lng){const m=L.circleMarker([p.lat,p.lng],{radius:4+Math.log10(p.total+1),color:'#b08d57',fillColor:'#9e2b25',fillOpacity:0.6}).bindPopup('<b>'+p.name+'</b><br/>今：'+(p.modern||'—')+'<br/>'+(p.note||'')+'<br/>提及'+p.total+'次').addTo(placeLayer);}});
-const battleLayer=L.layerGroup();
-battles.forEach(b=>{const p=places.find(x=>x.name===b.place);if(p&&p.lat){L.marker([p.lat,p.lng],{icon:L.divIcon({html:'<div style="background:#9e2b25;color:#fff;border-radius:50%;width:22px;height:22px;text-align:center;line-height:22px;font-size:11px;border:2px solid #fff;">⚔</div>',iconSize:[22,22]})}).bindPopup('<b>'+b.name+'</b> ('+(b.year||'—')+')<br/>'+(b.outcome||'')).addTo(battleLayer);}});
-L.control.layers({'地名':placeLayer,'战役':battleLayer}).addTo(map);
-})();
+var pts={pts_json};
+var m=L.map('map').setView([34,112],5);
+L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',{{maxZoom:10,attribution:'© OpenStreetMap'}}).addTo(m);
+pts.forEach(function(p){{
+  if(!p.lng||!p.lat)return;
+  var r=L.circleMarker([p.lat,p.lng],{{radius:3+Math.min(10,Math.log10(p.total+1)*2),color:'#9e2b25',fillColor:'#9e2b25',fillOpacity:.6}}).addTo(m);
+  r.bindPopup('<b>'+p.name+'</b><br/>'+p.type+'<br/>提及 '+p.total+' 次');
+}});
 </script>'''
-    write_page('map.html','时空地图', html)
+    write("map.html", html)
 
-# ========== 查询台 ==========
+# 关系图（力导向 D3）
+def page_graph():
+    # 取 top 人物互现
+    co = cooccur if isinstance(cooccur,dict) else {'nodes':[],'links':cooccur}
+    co_links = co.get('links',[])
+    top_ids = set(p.get('name','') for p in persons_sorted[:40])
+    # 归一化字段
+    def _get(l,k,d=''):
+        return l.get(k) or l.get({'a':'source','b':'target','count':'count'}[k],d)
+    links = [l for l in co_links if _get(l,'a') in top_ids and _get(l,'b') in top_ids][:200]
+    nodes = set()
+    for l in links:
+        nodes.add(_get(l,'a')); nodes.add(_get(l,'b'))
+    nodes_json = json.dumps([{'id':n,'group':next((p.get('faction','其他') for p in persons if p.get('name')==n),'其他')} for n in nodes], ensure_ascii=False)
+    links_json = json.dumps([{'source':_get(l,'a'),'target':_get(l,'b'),'value':l.get('count',1)} for l in links], ensure_ascii=False)
+    html = header("人物关系","graph.html") + f'''
+<section class="paper">
+  <h2>人物关系 · 共现网络</h2>
+  <p>基于毛本全文段落共现计算，展示 TOP 40 高频人物之间的共现关系（线条越粗共现越多）。可拖拽节点。</p>
+  <svg id="graph" width="100%" height="680" style="border:1px solid var(--border);background:var(--paper);"></svg>
+</section>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+var nodes={nodes_json}, links={links_json};
+var svg=d3.select('#graph'), w=svg.node().clientWidth, h=680;
+var sim=d3.forceSimulation(nodes).force('link',d3.forceLink(links).id(d=>d.id).distance(80)).force('charge',d3.forceManyBody().strength(-180)).force('center',d3.forceCenter(w/2,h/2));
+var g=svg.append('g');
+var link=g.append('g').selectAll('line').data(links).join('line').attr('stroke','#999').attr('stroke-opacity',.5).attr('stroke-width',d=>Math.sqrt(d.value));
+var node=g.append('g').selectAll('g').data(nodes).join('g').call(d3.drag().on('start',(e,d)=>{{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y;}}).on('drag',(e,d)=>{{d.fx=e.x;d.fy=e.y;}}).on('end',(e,d)=>{{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}}));
+node.append('circle').attr('r',6).attr('fill',d=>({{'曹魏':'#3b4a6b','蜀汉':'#9e2b25','东吴':'#3f6b5e','群雄':'#b08d57','东汉':'#6b4423','黄巾':'#8b6914','晋':'#2a4d69','南蛮':'#5a3921'}}[d.group]||'#888'));
+node.append('text').attr('x',8).attr('y',3).style('font-size','11px').style('fill','var(--ink)').text(d=>d.id);
+sim.on('tick',()=>{{link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);node.attr('transform',d=>'translate('+d.x+','+d.y+')');}});
+</script>'''
+    write("graph.html", html)
+
+# 查询台（DuckDB-WASM）
 def page_query():
-    html = '<section class="paper"><h2>无服务器查询台 · DuckDB-WASM Query Console</h2>'
-    html += '<p>纯浏览器端查询，数据以 Parquet 列式表直接读取，无需后端/Neo4j。共 19 张表：' + ', '.join(['persons','factions','places','battles','events','stratagems','artifacts','prophecies','editions','chapters','lines','mentions','relationships','entities','scholars','papers','adaptations','annotations','stats']) + '。</p>'
-    html += '''<div class="query-box">
-<select id="sampleQ"><option value="">-- 示例SQL --</option>
-<option value="SELECT name, faction, fictional_flag, mention_count FROM persons ORDER BY mention_count DESC LIMIT 20;">TOP20 人物</option>
-<option value="SELECT name, side_a, side_b, outcome, ad_year FROM battles ORDER BY ad_year;">战役年表</option>
-<option value="SELECT name, modern_name, lon, lat, mention_count FROM places WHERE mention_count>50 ORDER BY mention_count DESC;">高频地名</option>
-<option value="SELECT fictional_flag, COUNT(*) FROM persons GROUP BY fictional_flag;">虚实分布</option>
-<option value="SELECT faction, COUNT(*) FROM persons GROUP BY faction ORDER BY COUNT(*) DESC;">阵营人数</option>
-</select>
-<textarea id="sql" rows="6">SELECT name, faction, mention_count, fictional_flag
-FROM persons
-WHERE faction = '蜀汉'
-ORDER BY mention_count DESC
-LIMIT 15;</textarea>
-<button id="runBtn">执行查询 ▶</button>
-</div>
-<div id="qStatus" class="small"></div>
-<div id="qResult"></div>
-<h3>Python / pandas 使用方式</h3>
-<pre class="code">import pandas as pd
-persons = pd.read_parquet("04_knowledge_data/persons.parquet")
-battles = pd.read_parquet("04_knowledge_data/battles.parquet")
-relations = pd.read_parquet("04_knowledge_data/relationships.parquet")
-print(persons.head())</pre>'''
-    html += '''<script type="module">
-import * as duckdb from 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.0/+esm';
-const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
-const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
-const logger = new duckdb.ConsoleLogger();
-const db = new duckdb.AsyncDuckDB(logger);
-await db.instantiate(bundle.mainWorker);
-const c = await db.connect();
-async function loadParquet(name){const url='data/'+name+'.parquet';await c.query(`CREATE OR REPLACE VIEW ${name} AS SELECT * FROM parquet_scan('${url}')`);}
-const tables=['persons','factions','places','battles','events','stratagems','artifacts','prophecies','editions','chapters','mentions','relationships','scholars','papers','adaptations','stats','entities'];
-document.getElementById('qStatus').textContent='加载 Parquet 表中...';
-await Promise.all(tables.map(t=>loadParquet(t)));
-document.getElementById('qStatus').textContent='已加载 '+tables.length+' 张表，可执行查询。';
-document.getElementById('sampleQ').onchange=e=>{if(e.target.value)document.getElementById('sql').value=e.target.value;};
-document.getElementById('runBtn').onclick=async()=>{const sql=document.getElementById('sql').value;try{document.getElementById('qStatus').textContent='执行中...';const r=await c.query(sql);const rows=r.toArray().map(x=>Object.fromEntries(Object.entries(x).map(([k,v])=>[k,v===null?'':(v?.toString?v.toString():v)])));const cols=rows.length?Object.keys(rows[0]):[];let html='<table class="data-table"><thead><tr>'+cols.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>';rows.forEach(r=>{html+='<tr>'+cols.map(c=>'<td>'+(r[c]??'')+'</td>').join('')+'</tr>';});html+='</tbody></table><p class="small">共 '+rows.length+' 行</p>';document.getElementById('qResult').innerHTML=html;document.getElementById('qStatus').textContent='完成 '+rows.length+' 行';}catch(err){document.getElementById('qResult').innerHTML='<pre class="err">'+err.message+'</pre>';document.getElementById('qStatus').textContent='出错';}};
+    html = header("查询台","query.html") + '''
+<section class="paper">
+  <h2>本体查询台 · DuckDB-WASM</h2>
+  <p>浏览器端无服务器查询：Parquet 文件在你的浏览器里被 DuckDB 即时加载，数据不出本机。试试以下示例：</p>
+  <div class="btn-row" id="samples"></div>
+  <textarea id="sql" rows="6" style="width:100%;font-family:var(--mono);font-size:13px;padding:10px;border:1px solid var(--border);border-radius:4px;background:var(--paper);">SELECT name, faction, zi, total FROM 'data/persons.parquet' ORDER BY total DESC LIMIT 20;</textarea>
+  <div class="btn-row"><button class="btn primary" onclick="run()">运行查询</button><span id="status" class="small"></span></div>
+  <div id="result" style="overflow:auto;max-height:500px;margin-top:12px;"></div>
+</section>
+<script type="module">
+import * as duckdb from 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28/+esm';
+const samples=[
+  ['TOP20 人物',"SELECT name,faction,zi,total FROM 'data/persons.parquet' ORDER BY total DESC LIMIT 20;"],
+  ['TOP10 地名',"SELECT name,type,total FROM 'data/places.parquet' ORDER BY total DESC LIMIT 10;"],
+  ['按势力分组统计',"SELECT faction,count(*) n FROM 'data/persons.parquet' WHERE faction<>'' GROUP BY faction ORDER BY n DESC;"],
+  ['战役年份排序',"SELECT name,year,outcome FROM 'data/battles.parquet' WHERE year>180 ORDER BY year LIMIT 20;"],
+];
+document.getElementById('samples').innerHTML=samples.map(s=>'<button class="btn" onclick="document.getElementById(\\'sql\\').value='+JSON.stringify(JSON.stringify(s[1]))+';run()">'+s[0]+'</button>').join('');
+let db,conn;
+async function init(){
+  const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
+  const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
+  const worker = await duckdb.createDuckDBWorker(bundle.mainWorker);
+  const logger = new duckdb.ConsoleLogger();
+  db = new duckdb.AsyncDuckDB(logger, worker);
+  await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
+  conn = await db.connect();
+  document.getElementById('status').textContent='DuckDB 已就绪';
+}
+window.run=async function(){
+  if(!conn){document.getElementById('status').textContent='正在加载 DuckDB…';await init();}
+  const sql=document.getElementById('sql').value;
+  document.getElementById('status').textContent='查询中…';
+  try{
+    const r=await conn.query(sql);
+    const cols=r.schema.fields.map(f=>f.name);
+    let h='<table class="data-table"><thead><tr>'+cols.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>';
+    for(const row of r){h+='<tr>';for(const c of cols){h+='<td>'+(row[c]??'')+'</td>';}h+='</tr>';}
+    h+='</tbody></table>';
+    document.getElementById('result').innerHTML=h;
+    document.getElementById('status').textContent='返回 '+r.numRows+' 行';
+  }catch(e){document.getElementById('result').innerHTML='<pre style="color:#9e2b25">'+e.message+'</pre>';document.getElementById('status').textContent='错误';}
+};
+window.sql_sample=function(s){document.getElementById('sql').value=s;run();};
+init();
 </script>'''
-    write_page('query.html','查询台', html)
+    write("query.html", html)
 
-# ========== 其他说明页（占位）==========
-def simple_page(filename, title, body):
-    write_page(filename, title, '<section class="paper"><h2>'+title+'</h2>'+body+'</section>')
-
+# 统计析
 def page_stats():
-    faction_counts={}
+    # 各势力人数
+    fac_count = {}
     for p in persons:
         f=p.get('faction','其他') or '其他'
-        faction_counts[f]=faction_counts.get(f,0)+1
-    fic_counts={'正史':0,'半虚构':0,'纯虚构':0}
-    for p in persons:
-        fic_counts[['正史','半虚构','纯虚构'][int(p.get('fictional',0))]]+=1
-    body='<h3>全局统计</h3><ul>'
-    body += f'<li>总字数：{stat.get("total_chars",590968):,} 字</li>'
-    body += f'<li>总章回：120 回</li>'
-    body += f'<li>段落：{stat.get("total_paras",17408):,} 段</li>'
-    body += f'<li>人物：{len(persons)}（正史 {fic_counts["正史"]}/半虚构 {fic_counts["半虚构"]}/纯虚构 {fic_counts["纯虚构"]}）</li>'
-    body += f'<li>地名：{len(places)}（含坐标 191）</li>'
-    body += f'<li>战役：{len(battles)}</li>'
-    body += f'<li>事件：{len(events)}</li>'
-    body += f'<li>计谋：{len(stratagems)} · 器物：{len(artifacts)} · 谶语：{len(prophecies)}</li></ul>'
-    body += '<h3>阵营人数分布</h3><table class="data-table"><tr><th>阵营</th><th>人数</th></tr>'
-    for f,n in sorted(faction_counts.items(),key=lambda x:-x[1]):
-        body += f'<tr><td>{f}</td><td>{n}</td></tr>'
-    body += '</table>'
-    body += '<h3>高频字 TOP30</h3><div class="freq-cloud">'
-    for c in freq[:30]:
-        fs = 12 + c[1]/50
-        body += f'<span style="font-size:{fs}px;margin:4px;color:var(--ink)">{c[0]}</span>'
-    body += '</div>'
-    simple_page('stats.html','统计析', body)
+        fac_count[f]=fac_count.get(f,0)+1
+    fac_rows=''.join(f'<tr><td>{esc(k)}</td><td>{v}</td></tr>' for k,v in sorted(fac_count.items(), key=lambda x:-x[1]))
+    # 字频
+    freq_rows=''.join(f'<tr><td>{esc(fc[0])}</td><td>{fc[1]}</td></tr>' for fc in freq[:30])
+    html = header("统计析","stats.html") + f'''
+<section class="paper">
+  <h2>统计析 · Statistics</h2>
+  <div class="kpi-row">
+    <div class="kpi"><div class="big">{stat.get("total_chars",590968):,}</div><div class="small">总字数</div></div>
+    <div class="kpi"><div class="big">{len(persons)}</div><div class="small">人物</div></div>
+    <div class="kpi"><div class="big">{len(battles)}</div><div class="small">战役</div></div>
+    <div class="kpi"><div class="big">{len(events)}</div><div class="small">事件</div></div>
+    <div class="kpi"><div class="big">{len(places)}</div><div class="small">地名</div></div>
+    <div class="kpi"><div class="big">{len(editions)}</div><div class="small">版本</div></div>
+  </div>
+  <h3>势力分布</h3>
+  <table class="data-table"><thead><tr><th>势力</th><th>人数</th></tr></thead><tbody>{fac_rows}</tbody></table>
+  <h3>字频 TOP30</h3>
+  <table class="data-table"><thead><tr><th>字</th><th>频次</th></tr></thead><tbody>{freq_rows}</tbody></table>
+</section>'''
+    write("stats.html", html)
 
-def page_scholars():
-    body = '<p>自西晋陈寿《三国志》至当代沈伯俊校理本，15 位有代表性的学者/评点家。</p>'
-    body += '<div class="list-grid">'
-    for s in scholars:
-        body += f'<div class="list-card"><h3>{s["name"]} <small>{s.get("era","")}</small></h3>'
-        body += f'<p>{s.get("faction","")} · {s.get("role","")}</p>'
-        body += f'<p><b>代表作：</b>{s.get("work","")}</p>'
-        body += f'<p>{s.get("view","")}</p><p class="small">{s.get("impact","")}</p></div>'
-    body += '</div>'
-    simple_page('scholars.html','学术史', body)
-
-def page_papers():
-    body = '<p>12 种代表性论著。</p><table class="data-table"><thead><tr><th>书名/论文</th><th>作者</th><th>年份</th><th>领域</th><th>观点</th></tr></thead><tbody>'
-    for p in papers:
-        body += f'<tr><td>{p["title"]}</td><td>{p["author"]}</td><td>{p.get("year","")}</td><td>{p.get("category","")}</td><td>{p.get("desc","")}</td></tr>'
-    body += '</tbody></table>'
-    simple_page('papers.html','论著举要', body)
-
-def page_adapt():
-    body = '<p>戏曲、评书、影视、游戏、连环画、动画——17 种经典衍生作品。</p><div class="list-grid">'
-    for a in adaptations:
-        body += f'<div class="list-card"><h3>{a["title"]} <small>{a.get("type","")}</small></h3>'
-        body += f'<p>{a.get("year","")} · {a.get("creator","")}</p><p>{a.get("note","")}</p></div>'
-    body += '</div>'
-    simple_page('adaptations.html','衍生改编', body)
-
-def page_poetry():
-    poems = [
-        ('开篇词','临江仙·滚滚长江东逝水','明·杨慎','滚滚长江东逝水，浪花淘尽英雄。是非成败转头空，青山依旧在，几度夕阳红。白发渔樵江渚上，惯看秋月春风。一壶浊酒喜相逢，古今多少事，都付笑谈中。'),
-        ('卷尾','古风·高祖提剑入咸阳','明·罗贯中','高祖提剑入咸阳，炎炎红日升扶桑。光武龙兴成大统，金乌飞上天中央。…纷纷世事无穷尽，天数茫茫不可逃。鼎足三分已成梦，后人凭吊空牢骚。'),
-        ('第38回','隆中对诗','罗贯中','豫州当日叹孤穷，何幸南阳有卧龙。欲识他年分鼎处，先生笑指画图中。'),
-        ('第49回','借东风','罗贯中','七星坛上卧龙登，一夜东风江水腾。不是孔明施妙计，周郎安得逞才能？'),
-        ('第77回','关羽之死','后人','汉末才无敌，云长独出群。神威能奋武，儒雅更知文。天日心如镜，春秋义薄云。昭然垂万古，不止冠三分。'),
-        ('第104回','武侯陨星','杜甫·咏怀古迹','长星昨夜坠前营，讣报先生此日倾。虎帐不闻施号令，麟台惟显著勋名。空余门下三千客，辜负胸中十万兵。好看绿阴清昼里，于今无复雅歌声。'),
-    ]
-    body = '<div class="poem-list">'
-    for loc,title,author,t in poems:
-        body += f'<div class="poem-card"><p class="poem-meta">{loc}</p><h3>{title}</h3><p class="poem-author">—— {author}</p><p class="poem-text">{"<br/>".join(t.split("。"))}</p></div>'
-    body += '</div>'
-    simple_page('poetry.html','诗词回目', body)
-
+# ========== 三个专题页（虚实/天命/阅读指南）==========
 def page_mirror():
-    body = '''<p>演义七分实三分虚。以下列出 10 处经典"虚构"——演义与《三国志》正史之关键差异。</p>
-<table class="data-table"><thead><tr><th>演义情节</th><th>正史《三国志》记载</th><th>虚构类型</th></tr></thead><tbody>
-<tr><td>桃园三结义</td><td>刘关张"恩若兄弟"，但未记载结拜仪式</td><td>仪式虚构，情感史实</td></tr>
-<tr><td>温酒斩华雄</td><td>华雄为孙坚所杀（《孙破虏传》）</td><td>嫁接战功</td></tr>
-<tr><td>三英战吕布</td><td>吕布为孙坚击退，刘关张未参与</td><td>完全虚构</td></tr>
-<tr><td>貂蝉连环计</td><td>吕布与董卓侍婢私通，无"貂蝉"之名</td><td>人物虚构</td></tr>
-<tr><td>关羽约三事/千里走单骑</td><td>关羽辞曹归刘有载，但过五关斩六将无据</td><td>路线虚构</td></tr>
-<tr><td>赵云长坂七进七出</td><td>保护甘夫人与后主免难，无七进七出</td><td>夸张</td></tr>
-<tr><td>诸葛亮舌战群儒/草船借箭/借东风</td><td>诸葛亮仅外交出使；草船借箭原型孙权；借东风无</td><td>多起神化</td></tr>
-<tr><td>华容道义释曹操</td><td>刘备追之不及，无关羽释曹</td><td>虚构显"义"</td></tr>
-<tr><td>三气周瑜</td><td>周瑜豁达，"器量广大"，非气死</td><td>反衬孔明</td></tr>
-<tr><td>空城计</td><td>裴松之已驳郭冲五事之虚妄</td><td>移植/虚构</td></tr>
-</tbody></table>'''
-    simple_page('mirror.html','虚实对照', body)
+    # 取 12 个经典虚实对比
+    items = [
+        ("桃源结义", "虚", "三人『寝则同床，恩若兄弟』《三国志·关羽传》，但无桃园结义仪式记载","《三国志平话》已具雏形，《三国演义》润色为千古名典"),
+        ("温酒斩华雄", "虚", "华雄为孙坚所杀（《三国志·孙破虏传》）","关羽斩华雄乃虚构，成就关公第一功"),
+        ("三英战吕布", "虚", "公孙瓒未参与讨董，刘关张不在虎牢","小说虚构以显吕布之勇与三杰之义"),
+        ("过五关斩六将", "虚", "六将名字及关卡路线史无记载","关羽辞曹归刘是史实，但路线与所斩六将为虚构"),
+        ("草船借箭", "半虚", "孙权濡须口探曹营有『借箭』影子（《魏略》），主角非孔明","移花接木至孔明，凸显其智"),
+        ("借东风", "虚", "冬季长江确有东南风偶发，但无孔明祭风","把自然现象神化为诸葛道术"),
+        ("空城计", "虚", "街亭之役时司马懿驻宛，不在阳平","郭冲『诸葛五事』已有此传说，裴松之已驳"),
+        ("三气周瑜", "虚", "周瑜气度恢廓，病逝巴丘，非被气死","小说虚构以烘托孔明"),
+        ("单刀赴会", "半虚", "鲁肃与关羽单刀俱会是史实，但双方皆单刀","小说改写为关羽一人赴会，英气逼人"),
+        ("刮骨疗毒", "实", "羽尝为流矢中臂，医（非华佗）刮骨去毒，羽谈笑自若（《三国志·关羽传》）","史实精彩，但医者非华佗（华佗早逝）"),
+        ("七擒孟获", "半虚", "南征确有其事，『七擒七纵』见《华阳国志》《汉晋春秋》，细节存疑","小说详写七次擒纵以张诸葛之智"),
+        ("六出祁山", "半虚", "诸葛亮北伐五次，仅两出祁山","小说概称『六出祁山』以整齐叙事"),
+    ]
+    tag_map = {"实":"tag-real","半虚":"tag-half","虚":"tag-fic"}
+    cards=''.join(
+        f'<article class="list-card"><h3>{esc(n)} <span class="{tag_map[v]}">{v}</span></h3><p><b>史实：</b>{esc(h)}</p><p class="small"><b>小说：</b>{esc(nv)}</p></article>'
+        for n,v,h,nv in items
+    )
+    html = header("虚实对照","mirror.html") + f'<section class="paper"><h2>虚实对照</h2><p>章学诚《丙辰札记》评三国「七分实事，三分虚构」。下表对照 12 个经典情节的史/虚差异。</p><div class="list-grid">{cards}</div></section>'
+    write("mirror.html", html)
 
 def page_destiny():
-    body = '''<p>《三国演义》以"天命"为叙事经线：从开篇"天下大势，分久必合，合久必分"，到卷尾"纷纷世事无穷尽，天数茫茫不可逃"，天命观贯穿 120 回。以下 5 条天命叙事主线。</p>
-<div class="list-grid">
-<div class="list-card"><h3>一、五德终始 · 赤德衰尽</h3><p>汉属火德（赤），故有"赤帝子"高祖斩白蛇起义。至桓灵失德、黄巾倡"苍天已死，黄天当立"，火生土之兆；曹魏篡汉以土德承之，司马晋复以金德代土——五行嬗代构成王朝循环的隐性框架。</p></div>
-<div class="list-card"><h3>二、谶纬童谣 · 字里藏机</h3><p>"千里草，何青青"谶董卓之亡；"代汉者当涂高"暗示曹魏（"当涂高"即"魏"，阙名也）；"三马同槽"疑司马氏父子。谶语是《三国》叙事天命合法性的重要媒介，也是民间想象最活跃的符号。</p></div>
-<div class="list-card"><h3>三、星象灾异 · 将星陨落</h3><p>第 104 回诸葛亮秋风五丈原，"是夜，天愁地惨，月色无光，孔明奄然归天"，其将星自东北流于西南。此前孙坚、周瑜、关羽之死皆有星象对应——天道显象于人事，是天人感应叙事的典型表达。</p></div>
-<div class="list-card"><h3>四、英雄宿命 · 天道有常</h3><p>诸葛亮六出祁山，"出师未捷身先死"，上方谷天降大雨救司马懿，司马懿夜观天文知诸葛将死——人力终不敌天命。关羽"玉可碎而不可改其白"，姜维假降复汉而身死族灭，皆"知其不可而为之"的英雄悲剧。</p></div>
-<div class="list-card"><h3>五、三分归晋 · 历史大势</h3><p>卷首"分久必合，合久必分"一语成谶：184黄巾→220三国鼎立→280晋武统一，近百年乱世终入一统。卷尾"鼎足三分已成梦，后人凭吊空牢骚"，与开篇《临江仙》形成首尾呼应，完成"天数循环"的叙事闭环。</p></div>
-</div>'''
-    simple_page('destiny.html','天命叙事', body)
+    items = [
+        ("分久必合合久必分","开卷语，奠定循环史观；结尾三国归晋呼应。"),
+        ("苍天已死黄天当立","张角黄巾起义口号，以五德终始预言汉室将终。"),
+        ("许劭评曹操『治世之能臣乱世之奸雄』","为曹操一生定调，属于『人物风鉴』式谶语。"),
+        ("的卢马妨主","徐庶告知刘备的卢妨主，刘备不信；后庞统乘的卢殒命落凤坡应验。"),
+        ("卧龙凤雏得一可安天下","司马徽语；刘备二人兼得却未得天下，暗示天命有归。"),
+        ("三马同槽","曹操梦三马同槽，疑马腾父子，后应验为司马懿、司马师、司马昭。"),
+        ("白帝托孤","刘备谓『君才十倍曹丕，若嗣子可辅则辅之，如其不才君可自取』，千古疑案。"),
+        ("魏延反骨","孔明初见魏延即谓其脑后有反骨，后魏延于五丈原后叛乱被斩。"),
+        ("五丈原禳星","诸葛祈禳北斗求寿，主灯被魏延扑灭，命定归天。"),
+        ("乐不思蜀","刘禅『此间乐不思蜀』，印证『朽木不可雕』亡国之象。"),
+    ]
+    cards=''.join(f'<article class="list-card"><h3>{esc(t)}</h3><p>{esc(d)}</p></article>' for t,d in items)
+    html = header("天命叙事","destiny.html") + f'<section class="paper"><h2>天命叙事</h2><p>《三国演义》以天命循环与预言谶纬贯穿全书，下列 10 处关键谶纬/预言与应验。</p><div class="list-grid">{cards}</div></section>'
+    write("destiny.html", html)
 
 def page_guide():
-    body = '''<h3>如何使用本站</h3>
-<ol>
-<li><b>新手入门：</b>先读<a href="index.html">首页</a>的五个卡片入口，了解整体结构；可从<a href="read.html">全文阅读</a>开始，120 回分回展开。</li>
-<li><b>研究者：</b>先看<a href="ontology.html">本体论</a>理解数据模型，然后去<a href="query.html">查询台</a>用 SQL 直接查询 19 张 Parquet 表，或下载 graph.json 做网络分析。</li>
-<li><b>文学爱好者：</b>推荐<a href="persons.html">人物志</a>（支持筛选正史/虚构）、<a href="battles.html">战役史</a>、<a href="poetry.html">诗词回目</a>、<a href="destiny.html">天命叙事</a>四个入口。</li>
-<li><b>版本学/校勘学：</b><a href="versions.html">版本族谱</a>+<a href="variants.html">异文对勘</a>，展示嘉万旧本与毛宗岗本的改写差异。</li>
-<li><b>可视化探索：</b><a href="graph.html">人物关系网络</a>、<a href="map.html">时空地图</a>提供 D3 力导向图与 Leaflet 地图。</li>
-<li><b>数据复用：</b>19 张 Parquet 表位于 <code>docs/data/*.parquet</code>，可直接被 pandas/DuckDB/PyArrow 读取；TBox 本体 TTL 可导入 Protegé 做推理。</li>
-</ol>
-<h3>与姊妹项目的关系</h3>
-<p>本工程是继《红楼梦》（<em>The Story of the Stone</em>）与《西游记》（<em>The Journey to the West</em>）之后的第三部数字人文经典重构建，与《水浒传》All Men Are Brothers 本体共用 <code>*_</code> 前缀 ID 体系（三国为 <code>sg_</code>，水浒为 <code>sh_</code>），未来可做跨本体联动查询（如"关羽与武松的忠义叙事比较""诸葛亮与吴用的军师形象"）。</p>
-<h3>致谢与许可</h3>
-<p>文本来自 Project Gutenberg #23950 公版《三國志演義》；CSS 设计受 yeinlei 红楼未完启发；本项目所有代码与数据以 MIT 许可开源。</p>'''
-    simple_page('guide.html','阅读指南', body)
+    html = header("阅读指南","guide.html") + '''
+<section class="paper">
+  <h2>阅读指南</h2>
+  <h3>底本选择</h3>
+  <p>本文在线全文采用<b>毛宗岗评本（1679年刊）</b>整理，回目对偶、开篇临江仙、尊刘贬曹倾向均为毛本特征；
+  若要读更接近罗贯中原始版本，请参看「版本族谱」中的<b>嘉靖本《三国志通俗演义》（1522）</b>。
+  学术阅读推荐<b>沈伯俊校理本</b>（凤凰出版社），订正了毛本若干地理与人物讹误。</p>
+  <h3>工程导航</h3>
+  <ul>
+    <li><b>卷·首页</b>：总体入口与 KPI 概览</li>
+    <li><b>元·本体论</b>：OWL 2 规范（TTL/YAML 下载）</li>
+    <li><b>读·全文阅读</b>：毛本 120 回在线阅读</li>
+    <li><b>人/势/地/战/事/计/物/谶</b>：八大实体名录</li>
+    <li><b>版·版本族谱 / 勘·异文对勘</b>：多版本研究入口</li>
+    <li><b>系·人物关系 / 图·时空地图</b>：可视化</li>
+    <li><b>问·查询台</b>：DuckDB-WASM 无服务器 SQL</li>
+    <li><b>学·学术史 / 论·论著举要</b>：学术脉络</li>
+    <li><b>艺·衍生改编 / 诗·诗词回目</b>：文学与衍生</li>
+    <li><b>虚·虚实对照 / 命·天命叙事</b>：文学批评专题</li>
+  </ul>
+  <h3>数据与接口</h3>
+  <p>所有数据均开放在 <code>docs/data/</code> 目录下，可直接以 JSON / Parquet 两种格式下载复用。Parquet 可直接在查询台通过 SQL 调用。本体 TTL/YAML 从「本体论」页下载，可在 Protégé 中打开。</p>
+</section>'''
+    write("guide.html", html)
 
-# ========== 运行 ==========
-if __name__ == '__main__':
-    page_index()
-    page_ontology()
-    page_read()
-    page_persons()
-    page_factions()
-    page_places()
-    page_battles()
-    page_events()
-    page_list('stratagems.html','计谋鉴',stratagems,extra_fn=strat_extra)
-    page_list('artifacts.html','器物簿',artifacts,extra_fn=art_extra)
-    page_list('prophecies.html','谶纬考',prophecies,extra_fn=pro_extra)
-    page_versions()
-    page_variants()
-    page_graph()
-    page_map()
-    page_query()
-    page_stats()
-    page_scholars()
-    page_papers()
-    page_adapt()
-    page_poetry()
-    page_mirror()
-    page_destiny()
-    page_guide()
-    # 把 TTL/YAML 拷到 docs/ontology/
-    (DOCS/'ontology').mkdir(exist_ok=True)
-    import shutil
-    for f in ['sanguo_kg_ontology.ttl','vocabularies.yaml']:
-        shutil.copy(ROOT/'03_本体论规范'/f, DOCS/'ontology'/f)
-    # app.js 空占位
-    (DOCS/'assets'/'app.js').write_text('// sanguo app\n',encoding='utf-8')
-    print("ALL DONE")
+# ========== 主执行 ==========
+def _year_int(x):
+    try: return int(x)
+    except: return 9999
+
+if __name__ == "__main__":
+    # 清理旧版繁体/空壳页面
+    legacy = ['academy.html','entities.html','relations.html','themes.html','foreshadow.html',
+              'genealogy.html','heroes.html','taoyuan.html','sanjue.html','poems.html','timeline.html']
+    for f in legacy:
+        p=DOCS/f
+        if p.exists(): p.unlink()
+        # 新版 timeline.html 留空（battles/events 已经是时间线格式）
+    # 复制 TTL/YAML 到 docs/ontology/
+    ont_dir = DOCS/'ontology'
+    ont_dir.mkdir(exist_ok=True)
+    for fn in ['sanguo_kg_ontology.ttl','vocabularies.yaml']:
+        src = ROOT/'03_本体论规范'/fn
+        if src.exists(): shutil.copy(src, ont_dir/fn)
+    # 复制 read.json 到 data/（同源）
+    shutil.copy(DOCS/'data'/'read.json', DATA/'read.json')
+    # 修复后的 battles/events 回写到 data/
+    json.dump(battles, open(DATA/'battles.json','w',encoding='utf-8'), ensure_ascii=False, indent=2)
+    json.dump(events,  open(DATA/'events.json','w',encoding='utf-8'),  ensure_ascii=False, indent=2)
+    shutil.copy(DATA/'battles.json', DOCS/'data'/'battles.json')
+    shutil.copy(DATA/'events.json',  DOCS/'data'/'events.json')
+    # 生成所有页
+    page_index(); page_ontology(); page_read(); page_persons()
+    page_list("factions.html","势力谱","势",factions,lambda f:f'<article class="list-card"><h3>{esc(f.get("name",""))} <small>{esc(f.get("full","") or "")}</small></h3><p>提及 {f.get("total",0)} 次 · 都城：{esc(f.get("capital","") or "")} · 主公：{esc(f.get("lord","") or "")}</p><p class="small">{esc(f.get("type","") or "")}</p></article>',sort_key=lambda x:-x.get('total',0))
+    page_list("places.html","地理志","地",sorted(places,key=lambda x:-x.get('total',0)),lambda p:f'<article class="list-card"><h3>{esc(p.get("name",""))} <small>{esc(p.get("type","") or "")}</small></h3><p><b>今址：</b>{esc(p.get("modern","") or "")}</p><p><b>经纬度：</b>{p.get("lng","")} , {p.get("lat","")}</p><p><b>提及：</b>{p.get("total",0)} 次</p><p class="small">{esc(p.get("note","") or "")}</p></article>',subtitle=f"共 {len(places)} 处地名，全部标注经纬度（若可考）")
+    page_timeline("battles.html","战役史",battles,lambda x:x['name'],lambda x:x.get('year'),lambda x:f'<p class="tl-meta">公元{x.get("year","?")}年 · {esc(x.get("type","") or "会战")}</p><p><b>双方：</b>{esc(x.get("side_a","") or "")} vs {esc(x.get("side_b","") or "")}</p><p><b>结果：</b>{esc(x.get("outcome","") or "")}</p><p class="small">{esc(x.get("desc","") or "")}</p>')
+    page_timeline("events.html","事件录",events,lambda x:x['name'],lambda x:x.get('year'),lambda x:f'<p class="tl-meta">公元{x.get("year","?")}年</p><p><b>相关：</b>{esc(x.get("persons","") or x.get("related","") or "")}</p><p class="small">{esc(x.get("desc","") or "")}</p>')
+    page_list("stratagems.html","计谋鉴","计",stratagems,render_stratagem,sort_key=lambda x:x.get('chapter',0) or 0)
+    page_list("artifacts.html","器物簿","物",artifacts,render_artifact)
+    page_list("prophecies.html","谶纬考","谶",prophecies,render_prophecy)
+    page_list("versions.html","版本族谱","版",editions,render_edition)
+    page_list("variants.html","异文对勘","勘",VARIANTS,render_variant,subtitle="8 组经典异文，对比毛本与嘉靖本/志传系文字差异")
+    page_map(); page_graph(); page_query(); page_stats()
+    page_list("scholars.html","学术史","学",scholars,render_scholar)
+    page_list("papers.html","论著举要","论",papers,render_paper,sort_key=lambda x:x.get('year',0) or 0)
+    page_list("adaptations.html","衍生改编","艺",adaptations,render_adapt,sort_key=lambda x:_year_int(x.get('year',9999)))
+    page_list("poetry.html","诗词回目","诗",POEMS,render_poem,subtitle=f"开篇词 + 前 {min(30,len(chapters))} 回回目")
+    page_mirror(); page_destiny(); page_guide()
+    print("ALL PAGES REBUILT")

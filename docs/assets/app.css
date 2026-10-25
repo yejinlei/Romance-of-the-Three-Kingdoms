@@ -441,3 +441,60 @@ table code{background:none;padding:0}
 .tag{display:inline-block;padding:2px 8px;border-radius:2px;font-size:0.82em;margin-right:4px;color:#fff;}
 .tag.real{background:var(--jade);}.tag.half{background:var(--gold);}.tag.fic{background:var(--cinnabar);}
 .small{font-size:0.85em;color:#7a6c53;}
+
+/* ========== 新增：虚实标签 ========== */
+.tag-real,.tag-half,.tag-fic{display:inline-block;font-size:11px;padding:1px 6px;border-radius:3px;margin-right:4px;vertical-align:middle;font-weight:normal;}
+.tag-real{background:#e8e0d0;color:#5a3921;border:1px solid #c8b88a;}
+.tag-half{background:#fbe9d0;color:#8b4513;border:1px solid #e0a060;}
+.tag-fic{background:#f5d6d4;color:#9e2b25;border:1px solid #d08080;}
+
+/* ========== 新增：details/summary 章回阅读 ========== */
+details.chapter{border-bottom:1px dashed var(--border,#d0c8b8);margin-bottom:4px;}
+details.chapter>summary{cursor:pointer;padding:10px 4px;list-style:none;display:flex;align-items:center;gap:12px;}
+details.chapter>summary::-webkit-details-marker{display:none;}
+details.chapter>summary::before{content:"▸";color:var(--cinnabar,#9e2b25);display:inline-block;width:1.2em;transition:transform .15s;}
+details.chapter[open]>summary::before{transform:rotate(90deg);}
+details.chapter .ch-body{padding:0 4px 14px 24px;}
+details.chapter .ch-body p{margin:0 0 6px 0;line-height:1.9;text-indent:2em;color:var(--ink,#2f2a25);font-size:15px;}
+.read-toolbar{display:flex;gap:12px;align-items:center;margin-bottom:14px;padding:10px 12px;background:rgba(255,255,255,.5);border:1px solid var(--border,#d0c8b8);border-radius:4px;flex-wrap:wrap;}
+.read-toolbar select{padding:6px 10px;border:1px solid var(--border,#d0c8b8);background:var(--paper,#faf3e3);font-family:inherit;font-size:14px;min-width:320px;max-width:100%;}
+
+/* ========== 新增：条形图 ========== */
+.bars{margin-top:10px;}
+.bar-row{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:13px;}
+.bar-name{width:80px;text-align:right;color:var(--ink,#2f2a25);flex-shrink:0;}
+.bar-wrap{flex:1;background:rgba(158,43,37,.08);height:18px;border-radius:2px;overflow:hidden;}
+.bar-fill{height:100%;background:linear-gradient(90deg,#9e2b25,#b08d57);}
+.bar-num{width:50px;color:var(--muted,#8a7d6a);font-size:12px;}
+
+/* ========== 新增：KPI 卡 ========== */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin:16px 0;}
+.kpi{background:linear-gradient(135deg,rgba(158,43,37,.05),rgba(176,141,87,.08));border:1px solid var(--border,#d0c8b8);border-radius:4px;padding:14px;text-align:center;}
+.kpi .big{font-size:26px;font-weight:600;color:var(--cinnabar,#9e2b25);font-family:var(--title-font,STKaiti,KaiTi,"Kaiti SC",serif);}
+.kpi .small{font-size:12px;color:var(--muted,#8a7d6a);margin-top:4px;}
+
+/* ========== 新增：列表卡 grid 适配 ========== */
+.list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.list-card{background:rgba(255,255,255,.5);border:1px solid var(--border,#d0c8b8);border-radius:4px;padding:12px 14px;}
+.list-card h3{margin:0 0 6px 0;font-family:var(--title-font,STKaiti,KaiTi,"Kaiti SC",serif);color:var(--cinnabar,#9e2b25);font-size:17px;font-weight:600;}
+.list-card h3 small{font-weight:normal;color:var(--muted,#8a7d6a);font-size:12px;font-family:var(--mono,Menlo,monospace);margin-left:6px;}
+.list-card p{margin:4px 0;font-size:13px;line-height:1.7;}
+.list-card p.small{color:var(--muted,#8a7d6a);font-size:12px;line-height:1.6;}
+.list-card q{color:var(--jade,#3f6b5e);font-style:italic;}
+
+/* stats-grid 更紧凑 */
+.stats-grid .stat-card .big{font-size:22px;color:var(--cinnabar,#9e2b25);font-weight:600;font-family:var(--title-font,STKaiti,KaiTi,"Kaiti SC",serif);}
+.stats-grid .stat-card .lab{font-size:14px;color:var(--ink,#2f2a25);margin-top:2px;}
+.stats-grid .stat-card .small{font-size:11px;color:var(--muted,#8a7d6a);margin-top:2px;}
+
+/* ========== 诗词卡 ========== */
+.poem-text{white-space:pre-wrap;font-family:var(--title-font,STKaiti,KaiTi,"Kaiti SC",serif);font-size:15px;line-height:2;color:var(--ink,#2f2a25);margin:4px 0;padding:10px;background:rgba(0,0,0,.02);border-left:3px solid var(--cinnabar,#9e2b25);}
+
+/* ========== data-table 修正 ========== */
+.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px;}
+.data-table th,.data-table td{padding:6px 10px;border-bottom:1px solid var(--border,#d0c8b8);text-align:left;}
+.data-table th{background:rgba(158,43,37,.06);color:var(--cinnabar,#9e2b25);font-weight:600;}
+.data-table tr:hover td{background:rgba(176,141,87,.06);}
+.cls-list li{margin:6px 0;font-size:14px;line-height:1.7;}
+.cls-list code{background:rgba(0,0,0,.04);padding:1px 5px;border-radius:3px;font-size:12px;color:var(--jade,#3f6b5e);}
+.btn-row{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;}
