@@ -79,7 +79,7 @@
       <button data-sql="SELECT name, year, side_a, side_b, outcome FROM battles ORDER BY year;">⚔️ 戰役時間線</button>
       <button data-sql="SELECT source_id, target_id, relation_type, weight FROM relationships WHERE relation_type='kinship' LIMIT 30;">👨‍👩‍👧 親屬關係</button>
       <button data-sql="SELECT name, type, owner, mention_count FROM artifacts ORDER BY mention_count DESC;">⚔️ 器物譜</button>
-      <button data-sql="SELECT l.chapter_no, COUNT(*) AS 提及次數 FROM mentions m JOIN lines l ON m.line_id=l.line_id WHERE m.entity_id='sg_person_諸葛亮' GROUP BY l.chapter_no ORDER BY 提及次數 DESC LIMIT 20;">📈 諸葛亮登場回次分佈</button>
+      <button data-sql="SELECT l.chapter_no, COUNT(*) AS 提及次數 FROM mentions m JOIN lines l ON m.line_id=l.line_id WHERE m.entity_id='sg_person_诸葛亮' GROUP BY l.chapter_no ORDER BY 提及次數 DESC LIMIT 20;">📈 諸葛亮登場回次分佈</button>
       <button data-sql="SELECT c.chapter_no, c.title, c.char_count FROM chapters c ORDER BY c.char_count DESC LIMIT 10;">📏 字數最長 TOP10 回</button>
     </div>
 
@@ -144,22 +144,24 @@ async function initDB() {
     const CDN_BASE = 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.0/dist/';
     const BUNDLES = {
       mvp: {
-        mainModule: CDN_BASE + 'duckdb-mvp.wasm',
-        mainWorker: CDN_BASE + 'duckdb-browser-mvp.worker.js'
+        mainModule: LOCAL_BASE + 'duckdb-mvp.wasm',
+        mainWorker: LOCAL_BASE + 'duckdb-browser-mvp.worker.js'
       },
       eh: {
         mainModule: LOCAL_BASE + 'duckdb-eh.wasm',
         mainWorker: LOCAL_BASE + 'duckdb-browser-eh.worker.js'
       }
     };
-    // 站內檔案若缺失（如尚未放入），自動回退到 CDN 的 eh 版
-    try {
-      const probe = await fetch(LOCAL_BASE + 'duckdb-eh.wasm', {method: 'HEAD'});
-      if (!probe.ok) {
-        BUNDLES.eh.mainModule = CDN_BASE + 'duckdb-eh.wasm';
-        BUNDLES.eh.mainWorker = CDN_BASE + 'duckdb-browser-eh.worker.js';
+    // 站內檔案若缺失（尚未放入），各自回退到 CDN 同名版本
+    await Promise.all(['mvp','eh'].map(async k => {
+      try {
+        const r = await fetch(BUNDLES[k].mainModule, {method: 'HEAD'});
+        if (!r.ok) throw new Error('missing');
+      } catch (e) {
+        BUNDLES[k].mainModule = CDN_BASE + 'duckdb-' + k + '.wasm';
+        BUNDLES[k].mainWorker = CDN_BASE + 'duckdb-browser-' + k + '.worker.js';
       }
-    } catch (e) { /* 探測失敗則維持站內路徑 */ }
+    }));
     const bundle = await duckdb.selectBundle(BUNDLES);
 
     // worker URL
@@ -173,6 +175,9 @@ async function initDB() {
     URL.revokeObjectURL(worker_url);
 
     conn = await db.connect();
+    // 嘗試啟用擴展自動加載（json/httpfs 等）；失敗亦不影響核心查詢
+    try { await conn.query("SET autoinstall_known_extensions=1;"); } catch (e) {}
+    try { await conn.query("SET autoload_known_extensions=1;"); } catch (e) {}
     setStatus('ld', '注册 HTTPFS 并加载 Parquet 文件…');
     // duckdb-wasm 1.28+ 已内置 httpfs，无需 INSTALL；直接 read_parquet 即可
 
@@ -218,20 +223,20 @@ function renderExamples() {
   const EXAMPLES = [
     ["查找「諸葛亮」的直接關係網", `
 SELECT
-  CASE WHEN r.source_id = 'sg_person_諸葛亮' THEN '→' ELSE '←' END AS dir,
-  CASE WHEN r.source_id <> 'sg_person_諸葛亮' THEN (SELECT name FROM persons WHERE person_id=r.source_id)
+  CASE WHEN r.source_id = 'sg_person_诸葛亮' THEN '→' ELSE '←' END AS dir,
+  CASE WHEN r.source_id <> 'sg_person_诸葛亮' THEN (SELECT name FROM persons WHERE person_id=r.source_id)
        ELSE (SELECT name FROM persons WHERE person_id=r.target_id) END AS 對象,
   r.relation_type AS 關係類型,
-  json_extract_string(r.attribute, '$') AS 屬性
+  r.attribute AS 屬性
 FROM relationships r
-WHERE r.source_id = 'sg_person_諸葛亮' OR r.target_id = 'sg_person_諸葛亮';`],
+WHERE r.source_id = 'sg_person_诸葛亮' OR r.target_id = 'sg_person_诸葛亮';`],
     ["三國君主人物關係密度", `
 SELECT p.name AS 君主, p.faction AS 勢力,
        COUNT(DISTINCT r.target_id) AS 直接關係數,
        p.mention_count AS 提及數
 FROM persons p
 LEFT JOIN relationships r ON r.source_id=p.person_id
-WHERE p.category = '君主' AND p.faction IN ('曹魏','蜀漢','東吳')
+WHERE p.faction IN ('曹魏','蜀汉','东吴')
 GROUP BY p.name,p.faction,p.mention_count
 ORDER BY 直接關係數 DESC;`],
     ["版本源流（演化自誰）", `
@@ -239,23 +244,22 @@ SELECT
   (SELECT name FROM editions WHERE edition_id=r.source_id) AS 版本,
   r.relation_type AS 關係,
   (SELECT name FROM editions WHERE edition_id=r.target_id) AS 源自,
-  json_extract_string(r.attribute,'$.note') AS 說明
+  r.attribute AS 說明
 FROM relationships r
 WHERE r.source_id LIKE 'sg_edition_%' AND r.target_id LIKE 'sg_edition_%';`],
     ["赤壁之戰參戰人物（兩步 JOIN）", `
 SELECT p.name AS 人物, p.faction AS 所屬,
-       json_extract_string(r.attribute,'$.role') AS 角色定位,
-       json_extract_string(r.attribute,'$.side') AS 陣營
+       r.attribute AS 屬性
 FROM relationships r
 JOIN persons p ON r.source_id=p.person_id
-WHERE r.target_id='sg_battle_赤壁之戰' AND r.relation_type='commanded';`],
+WHERE r.target_id='sg_battle_赤壁之战' AND r.relation_type='commanded';`],
     ["諸葛亮活躍地理 Top10", `
 SELECT
   (SELECT name FROM places WHERE place_id=r.target_id) AS 地點,
   p.mention_count AS 人物提及
 FROM relationships r
 JOIN persons p ON r.source_id=p.person_id
-WHERE r.source_id='sg_person_諸葛亮' AND r.relation_type='active_in';`],
+WHERE r.source_id='sg_person_诸葛亮' AND r.relation_type='active_in';`],
     ["人物按勢力的平均提及數", `
 SELECT faction AS 勢力,
        COUNT(*) AS 人數,
