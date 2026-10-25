@@ -223,89 +223,130 @@ for pr in prophecies:
     })
 
 # ===================== 5. persons （人物详细属性）=====================
+# ===================== 5. 人物扩展表 =====================
 person_rows = []
-# 扩充更多人物属性（字、号、生卒年、阵营、官职、结局、正史/虚构）
-PERSON_EXTRA = {
-    "曹操":   {"hao":"","birth":155,"death":220,"official":"丞相/魏王","weapon":"倚天剑","ending":"病逝","fictional":0},
-    "刘备":   {"hao":"","birth":161,"death":223,"official":"左将军/蜀汉昭烈帝","weapon":"双股剑","ending":"夷陵兵败病逝白帝城","fictional":0},
-    "诸葛亮": {"hao":"卧龙","birth":181,"death":234,"official":"丞相/武乡侯","weapon":"羽扇","ending":"秋风五丈原病逝","fictional":0},
-    "关羽":   {"hao":"美髯公","birth":None,"death":220,"official":"汉寿亭侯/前将军","weapon":"青龙偃月刀","ending":"败走麦城被斩","fictional":0},
-    "张飞":   {"hao":"燕人张翼德","birth":None,"death":221,"official":"车骑将军/西乡侯","weapon":"丈八蛇矛","ending":"被部将刺杀","fictional":0},
-    "孙权":   {"hao":"紫髯儿","birth":182,"death":252,"official":"吴大帝","weapon":"","ending":"病逝","fictional":0},
-    "周瑜":   {"hao":"公瑾","birth":175,"death":210,"official":"大都督","weapon":"","ending":"病逝（非气死）","fictional":0},
-    "吕布":   {"hao":"飞将","birth":None,"death":199,"official":"温侯","weapon":"方天画戟","ending":"白门楼被缢","fictional":0},
-    "司马懿": {"hao":"冢虎","birth":179,"death":251,"official":"太傅/宣王","weapon":"","ending":"病逝","fictional":0},
-    "赵云":   {"hao":"常山赵子龙","birth":None,"death":229,"official":"翊军将军/顺平侯","weapon":"涯角枪/青釭剑","ending":"病逝","fictional":0},
-}
 for p in persons:
-    extra = PERSON_EXTRA.get(p["name"], {})
-    # 结局粗分
     person_rows.append({
         "person_id": pid(p["name"]),
         "name": p["name"],
-        "zi": p.get("zi", ""),
-        "hao": extra.get("hao", ""),
-        "nickname": (p.get("alias","").split("/")[0] if p.get("alias") else ""),
-        "gender": "男" if p["name"] not in {"貂蝉","孙尚香","大乔","小乔","蔡文姬","甄宓","黄月英","祝融夫人","甘夫人","糜夫人","孙夫人","徐母","吴国太","伏皇后","董贵妃"} else "女",
-        "birth_year": extra.get("birth"),
-        "death_year": extra.get("death"),
+        "zi": p.get("zi",""),
+        "hao": p.get("hao",""),
+        "nickname": p.get("nickname",""),
+        "gender": p.get("gender","男"),
+        "birth_year": p.get("birth"),
+        "death_year": p.get("death"),
+        "hometown": p.get("hometown",""),
         "faction": p.get("faction",""),
-        "official_title_history": extra.get("official", p.get("category","")),
-        "weapon": extra.get("weapon", ""),
-        "ending": extra.get("ending", ""),
-        "fictional_flag": extra.get("fictional", 0),  # 0=正史有，1=虚构
+        "category": p.get("category","其他"),
+        "official_title_history": p.get("official",""),
+        "weapon": p.get("weapon",""),
+        "ending": p.get("ending",""),
+        "fictional_flag": int(p.get("fictional",0)),
         "first_chapter": p.get("first",0),
-        "death_chapter": 0,
+        "death_chapter": p.get("death_ch",0),
         "mention_count": p.get("total",0),
+        "desc": p.get("desc",""),
     })
 
 # ===================== 6-12 其他实体扩展表 =====================
 faction_rows = [{"faction_id": fid(f["name"]), "name":f["name"], "type":f.get("type",""), "capital":f.get("capital",""),
-                 "founder":f.get("lord",""), "start_year":None,"end_year":None,"core_members_count":f.get("members",0),
-                 "mention_count":f.get("total",0),"color":f.get("color","")} for f in factions]
-place_rows = [{"place_id": lid(pl["name"]), "name":pl["name"], "type":pl.get("type",""),
-               "modern_name":"","prefecture":"","lon":None,"lat":None,"strategic_value":"",
-               "related_battle":"","modern_ruins":"","mention_count":pl.get("total",0)} for pl in places]
-battle_rows = [{"battle_id": bid(b["name"]), "name":b["name"], "type":"会战","chapter":b.get("chapter",0),
-                "ad_year":int(b.get("year") or 0) if str(b.get("year","")).isdigit() else None,
-                "side_a":b.get("side_a",""),"side_b":b.get("side_b",""),"commander_a":"","commander_b":"",
-                "tactic":"","outcome":b.get("outcome",""),"historical_impact":""} for b in battles]
-artifact_rows = [{"artifact_id": aid(a["name"]), "name":a["name"], "type":a.get("type",""),
-                  "owner":a.get("owner",""),"first_chapter":0,"function":a.get("type",""),
-                  "anecdote":"","mention_count":a.get("total",0)} for a in artifacts]
-event_rows = [{"event_id": eid(e["name"]), "name":e["name"], "type":e.get("type",""),
-               "chapter":e.get("chapter",0),"ad_year":None,"participants":"",
-               "place":e.get("place",""),"weight":0,"fictional_flag":0,"description":e.get("desc","")} for e in events]
-stratagem_rows = [{"stratagem_id": stid(s["name"]), "name":s["name"], "type":s.get("type",""),
-                   "user":s.get("user",""),"chapter":s.get("chapter",0),"description":s.get("desc","")} for s in stratagems]
-prophecy_rows = [{"prophecy_id": prid(p["text"]), "text":p["text"], "kind":p.get("kind",""),
-                  "target":p.get("target",""),"chapter":p.get("chapter",0),"note":p.get("note","")} for p in prophecies]
+                 "founder":f.get("founder",""), "start_year":f.get("start_year"),"end_year":f.get("end_year"),
+                 "color":f.get("color",""),"desc":f.get("desc",""),"mention_count":f.get("total",0)} for f in factions]
 
-# ===================== 学者/学术成果/衍生 =====================
+place_rows = [{"place_id": lid(pl["name"]), "name":pl["name"], "type":pl.get("type",""),
+               "modern_name":pl.get("modern",""),"prefecture":pl.get("ancient",""),
+               "lon":pl.get("lng"),"lat":pl.get("lat"),
+               "related_battle":pl.get("related_battle",""),"note":pl.get("note",""),
+               "mention_count":pl.get("total",0)} for pl in places]
+
+battle_rows = [{"battle_id": bid(b["name"]), "name":b["name"], "type":b.get("type","会战"),"chapter":b.get("chapter",0),
+                "ad_year":b.get("year"),"side_a":b.get("side_a",""),"side_b":b.get("side_b",""),
+                "commander_a":b.get("commander_a",""),"commander_b":b.get("commander_b",""),
+                "tactic":b.get("tactic",""),"outcome":b.get("outcome",""),"historical_impact":b.get("impact",""),
+                "strength_a":b.get("strength_a",""),"strength_b":b.get("strength_b",""),"desc":b.get("desc","")} for b in battles]
+
+artifact_rows = [{"artifact_id": aid(a["name"]), "name":a["name"], "type":a.get("type",""),
+                  "owner":a.get("owner",""),"first_chapter":a.get("first",0),
+                  "function":a.get("function",a.get("type","")),
+                  "anecdote":a.get("anecdote",""),"mention_count":a.get("total",0)} for a in artifacts]
+
+event_rows = [{"event_id": eid(e["name"]), "name":e["name"], "type":e.get("type",""),
+               "chapter":e.get("chapter",0),"ad_year":e.get("year"),
+               "participants":e.get("participants",""),"place":e.get("place",""),
+               "weight":e.get("weight",0),"fictional_flag":int(e.get("fictional",0)),
+               "description":e.get("desc","")} for e in events]
+
+stratagem_rows = [{"stratagem_id": stid(s["name"]), "name":s["name"], "type":s.get("type",""),
+                   "user":s.get("user",""),"chapter":s.get("chapter",0),"desc":s.get("desc","")} for s in stratagems]
+
+
+
+
+# ===================== 学者/论著/改编 =====================
 scholar_rows = [
-    {"scholar_id":sid("毛宗岗"),"name":"毛宗岗","birth":1632,"death":1709,"school":"评点派","research_direction":"小说评点/正统辨","representative_works":"读三国志法/第一才子书评"},
-    {"scholar_id":sid("金圣叹"),"name":"金圣叹","birth":1608,"death":1661,"school":"评点派","research_direction":"才子书系统","representative_works":"第五才子书施耐庵水浒传"},
-    {"scholar_id":sid("李贽"),"name":"李贽（李卓吾）","birth":1527,"death":1602,"school":"明代评点","research_direction":"童心说/小说评点","representative_works":"焚书/藏书/李卓吾批评三国志"},
-    {"scholar_id":sid("胡适"),"name":"胡适","birth":1891,"death":1962,"school":"新红学/新考证","research_direction":"版本考证/作者考证","representative_works":"《三国演义》序"},
-    {"scholar_id":sid("鲁迅"),"name":"鲁迅","birth":1881,"death":1936,"school":"现代文学研究","research_direction":"小说史","representative_works":"中国小说史略"},
-    {"scholar_id":sid("沈伯俊"),"name":"沈伯俊","birth":1946,"death":None,"school":"当代三国学","research_direction":"版本校理/人物研究","representative_works":"校理本三国演义/三国演义新探"},
-    {"scholar_id":sid("谭良啸"),"name":"谭良啸","birth":1944,"death":None,"school":"当代","research_direction":"诸葛亮研究","representative_works":"诸葛亮研究文集"},
-    {"scholar_id":sid("易中天"),"name":"易中天","birth":1947,"death":None,"school":"大众学术","research_direction":"三国史普及","representative_works":"品三国"},
+    {"scholar_id":sid("maozonggang"),"name":"毛宗岗","zi":"序始","era":"清康熙(1632-1709)","school":"评点","research_direction":"评点家","representative_works":"《四大奇书第一种三国演义》（评本）","view":"尊刘贬曹正统论；强调三绝（奸绝曹操/智绝诸葛/义绝关羽）；增删回目对偶；加临江仙开篇；删去孔明欲烧魏延、关公改印等情节。","impact":"通行三百年，今本《三国演义》的塑造者。"},
+    {"scholar_id":sid("maolun"),"name":"毛纶","zi":"声山","era":"清初","school":"评点","research_direction":"评点家","representative_works":"与子毛宗岗共评","view":"与子合作评定四大奇书第一种；托金圣叹之名。","impact":"毛评本的共同作者。"},
+    {"scholar_id":sid("jin shengtan"),"name":"金圣叹","zi":"圣叹","era":"明末清初(1608-1661)","school":"评点","research_direction":"文学批评家","representative_works":"毛本托名『圣叹外书』","view":"本人未评三国，但毛氏借其名。金评水浒、西厢确立小说评点传统。","impact":"小说评点学的开创者。"},
+    {"scholar_id":sid("lizhuowu"),"name":"李贽","zi":"卓吾","era":"明万历(1527-1602)","school":"评点","research_direction":"思想家/评点家","representative_works":"《李卓吾先生批评三国志》（伪托）","view":"反道学、童心说，对曹刘诸葛皆有调侃；开三国评点之先河。","impact":"120回对偶回目的始创者（据叶昼伪托本）。"},
+    {"scholar_id":sid("zhongbojing"),"name":"钟惺","zi":"伯敬","era":"明末(1574-1624)","school":"评点","research_direction":"文学家/评点家","representative_works":"《钟伯敬先生批评三国志》（真伪存疑）","view":"竟陵派文论风格，与李评共同构成毛本评点资源。","impact":"汇评本四大家之一。"},
+    {"scholar_id":sid("liyu"),"name":"李渔","zi":"笠鸿/笠翁","era":"明末清初(1611-1680)","school":"评点","research_direction":"文学家/评点家","representative_works":"《李笠翁批阅三国志》","view":"以毛本为底本加点评，文学鉴赏性强。","impact":"汇评本四大家之一。"},
+    {"scholar_id":sid("jiangdaqi"),"name":"蒋大器","zi":"庸愚子","era":"明弘治","school":"序跋","research_direction":"序者","representative_works":"嘉靖本《三国志通俗演义序》(1494)","view":"最早的三国批评文本，认为三国是『忠孝节义』之书，可『羽翼信史』。","impact":"确立演义的历史教化价值。"},
+    {"scholar_id":sid("zhangshangde"),"name":"张尚德","zi":"修髯子","era":"明嘉靖","school":"序跋","research_direction":"序者","representative_works":"嘉靖本《三国志通俗演义引》(1522)","view":"强调三国『据正史、采小说』的史学价值与通俗传播价值。","impact":"演义系刊本早期重要文献。"},
+    {"scholar_id":sid("zhangxuecheng"),"name":"章学诚","zi":"实斋","era":"清(1738-1801)","school":"史学","research_direction":"史学家","representative_works":"《丙辰札记》","view":"提出三国『七分实事，三分虚构』，为后世讨论史虚比例的基准。","impact":"史/虚研究经典论断。"},
+    {"scholar_id":sid("luxun"),"name":"鲁迅","zi":"豫才","era":"近代(1881-1936)","school":"现代学术","research_direction":"文学家/文学史家","representative_works":"《中国小说史略》《中国小说的历史的变迁》","view":"评罗贯中『皆据旧史，杂以稗说』；『至于写人，亦颇有失，以致欲显刘备之长厚而似伪，状诸葛之多智而近妖』。","impact":"现代三国研究的奠基论断。"},
+    {"scholar_id":sid("hushi"),"name":"胡适","zi":"适之","era":"近代(1891-1962)","school":"现代学术","research_direction":"学者","representative_works":"《<三国志演义>序》《水浒传考证》","view":"以考据学方法厘清版本源流，认为三国是数百年民间累积最后由罗贯中写定。","impact":"现代版本学的开创。"},
+    {"scholar_id":sid("zhengzhenduo"),"name":"郑振铎","zi":"","era":"现代(1898-1958)","school":"现代学术","research_direction":"文学史家","representative_works":"《插图本中国文学史》《三国志演义的演化》","view":"考订嘉靖本为最古本，梳理志传系/演义系的版本演变。","impact":"版本谱系奠基者。"},
+    {"scholar_id":sid("niegannu"),"name":"聂绀弩","zi":"","era":"现代(1903-1986)","school":"现代学术","research_direction":"学者/作家","representative_works":"《中国古典小说论集》","view":"重视嘉靖本孔明欲烧魏延等情节，认为毛本神化诸葛反而削弱人物复杂性。","impact":"文本细读的代表。"},
+    {"scholar_id":sid("shenbojun"),"name":"沈伯俊","zi":"","era":"当代(1946-)","school":"当代","research_direction":"三国研究专家","representative_works":"《三国演义校理本》《三国演义新探》《三国演义大辞典》","view":"毕生校理三国版本，校订毛本讹误；论述三国三大奇谋、三绝形象。","impact":"当代最权威的三国整理者。"},
+    {"scholar_id":sid("yitianzhong"),"name":"易中天","zi":"","era":"当代(1947-)","school":"普及","research_direction":"学者/普及者","representative_works":"《品三国》","view":"大众史学路径，还原曹操、诸葛亮等历史形象，提出『曹操是真小人，刘备是伪君子？』等讨论。","impact":"2006年百家讲坛《品三国》引发全民三国热。"},
 ]
 paper_rows = [
-    {"paper_id":paid("读三国志法"),"title":"读三国志法","author":"毛宗岗","year":1679,"viewpoint":"尊刘抑曹正统观/首尾大照应/六起六结","citation":"","research_field":"评点学","edition_note":"毛本卷首"},
-    {"paper_id":paid("中国小说史略"),"title":"中国小说史略·元明传来之讲史","author":"鲁迅","year":1924,"viewpoint":"论罗贯中《三国》七实三虚","citation":"","research_field":"小说史","edition_note":""},
-    {"paper_id":paid("三国演义新探"),"title":"三国演义新探","author":"沈伯俊","year":2002,"viewpoint":"重新校理毛本讹误/人物新论","citation":"","research_field":"校勘学","edition_note":""},
-    {"paper_id":paid("三国史话"),"title":"三国史话","author":"吕思勉","year":1943,"viewpoint":"文史互证·辨析虚构","citation":"","research_field":"史学","edition_note":""},
+    {"paper_id":paid("lu_xun_xiaoshuo"),"title":"中国小说史略·元明传来之讲史(下)","author":"鲁迅","year":1923,"viewpoint":"现代学术史上首次系统论述三国源流与艺术得失，提出『状诸葛之多智而近妖』。","citation":"","research_field":"专论","publisher":"新潮社/北新书局","edition_note":""},
+    {"paper_id":paid("hu_shi_sanguo"),"title":"《三国志演义》序","author":"胡适","year":1922,"viewpoint":"以实验主义考证版本与成书，主张罗贯中为写定者，为现代三国研究奠基。","citation":"","research_field":"序跋","publisher":"亚东图书馆排印本","edition_note":""},
+    {"paper_id":paid("zheng_zhenduo_yanhua"),"title":"三国志演义的演化","author":"郑振铎","year":1929,"viewpoint":"首次刊出多个版本比较，奠定演义系/志传系二分的版本谱系。","citation":"","research_field":"版本考","publisher":"《小说月报》20卷10号","edition_note":""},
+    {"paper_id":paid("zhangxuecheng_bingchen"),"title":"丙辰札记","author":"章学诚","year":1796,"viewpoint":"提出三国『七分实事，三分虚构』论断，为史虚关系研究之祖。","citation":"","research_field":"史学评论","publisher":"章氏遗书","edition_note":""},
+    {"paper_id":paid("shenbojun_dacidian"),"title":"三国演义大辞典","author":"沈伯俊、谭良啸","year":2007,"viewpoint":"最全面的三国百科，涵盖人物、版本、故实、评点、研究史。","citation":"","research_field":"工具书","publisher":"中华书局","edition_note":""},
+    {"paper_id":paid("shenbojun_xiaoli"),"title":"三国演义新探","author":"沈伯俊","year":2002,"viewpoint":"集沈先生数十年校勘、版本、人物、主题研究。","citation":"","research_field":"论文集","publisher":"四川人民出版社","edition_note":""},
+    {"paper_id":paid("liushicun_banben"),"title":"三国演义版本考","author":"[日]中川谕/刘世德等","year":2000,"viewpoint":"系统梳理二十余种存世版本，区分演义系/志传系。","citation":"","research_field":"版本考","publisher":"上海古籍","edition_note":""},
+    {"paper_id":paid("chenxianghua_banben"),"title":"《花关索传》与《三国演义》版本","author":"陈翔华","year":1995,"viewpoint":"介绍西班牙藏叶逢春本、花关索故事的版本学意义。","citation":"","research_field":"版本考","publisher":"书目文献出版社","edition_note":""},
+    {"paper_id":paid("niegannu_lun"),"title":"中国古典小说论集·论三国演义","author":"聂绀弩","year":1981,"viewpoint":"从人物心理与版本变迁切入，推崇嘉靖本的复杂人物。","citation":"","research_field":"论文集","publisher":"上海古籍","edition_note":""},
+    {"paper_id":paid("yintianzhong_pinsanguo"),"title":"品三国（上下）","author":"易中天","year":2006,"viewpoint":"百家讲坛讲稿，以平民视角重新解读三国人物，销量破五百万。","citation":"","research_field":"普及著作","publisher":"上海文艺出版社","edition_note":""},
+    {"paper_id":paid("xiaoshuo_kaogu"),"title":"三国演义考古录","author":"盛巽昌等","year":2000,"viewpoint":"逐条考辨演义情节与正史的差异。","citation":"","research_field":"史实考辨","publisher":"上海书店","edition_note":""},
+    {"paper_id":paid("shenrenwei_zhuge"),"title":"诸葛亮形象史研究","author":"沈伯俊","year":1992,"viewpoint":"从史传、小说、戏曲、民间信仰四层面研究诸葛亮形象演变。","citation":"","research_field":"专题","publisher":"陕西人民","edition_note":""},
 ]
 adapt_rows = [
-    {"adapt_id":adid("1994央视三国"),"name":"三国演义（央视1994）","type":"电视剧","year":1994,"creator":"王扶林","feature":"唐国强版诸葛亮/鲍国安版曹操/84集","douban":9.6},
-    {"adapt_id":adid("2010新三国"),"name":"三国（高希希2010）","type":"电视剧","year":2010,"creator":"高希希","feature":"陈建斌/陆毅/于和伟/95集","douban":7.9},
-    {"adapt_id":adid("赤壁"),"name":"赤壁（吴宇森）","type":"电影","year":2008,"creator":"吴宇森","feature":"梁朝伟/金城武/上下集","douban":6.4},
-    {"adapt_id":adid("真三国无双"),"name":"真·三国无双","type":"游戏","year":1997,"creator":"光荣特库摩","feature":"系列销量2000万","douban":8.5},
-    {"adapt_id":adid("三国志"),"name":"三国志","type":"游戏","year":1985,"creator":"光荣特库摩","feature":"历史模拟系列/14部正作","douban":9.0},
-    {"adapt_id":adid("卧龙"),"name":"苍天航路","type":"动漫","year":1994,"creator":"王欣太/李学仁","feature":"以曹操为主角的青年漫画","douban":9.0},
-    {"adapt_id":adid("皮影"),"name":"定军山（京剧）","type":"戏曲","year":1905,"creator":"谭鑫培","feature":"中国第一部电影/黄忠故事","douban":9.4},
+    {"adapt_id":adid("diao_chan_xiqu"),"name":"貂蝉/凤仪亭","type":"戏曲/元杂剧","year":"元明","creator":"元杂剧·无名氏","feature":"元杂剧《锦云堂暗定连环计》，貂蝉故事成熟于戏曲。","douban":None},
+    {"adapt_id":adid("guanyu_xiqu"),"name":"单刀会","type":"戏曲/元杂剧","year":"1300","creator":"元·关汉卿","feature":"关汉卿杂剧，关羽单刀赴会，与《三国演义》版本不同（主角本为鲁肃）。","douban":None},
+    {"adapt_id":adid("sanbao_taijian"),"name":"连环计","type":"戏曲/明传奇","year":"1500","creator":"明王济","feature":"明王济《连环记》传奇，奠定貂蝉吕布故事戏曲形态。","douban":None},
+    {"adapt_id":adid("guanyu_daxi"),"name":"关公戏系列","type":"戏曲/京剧","year":"1800","creator":"京剧传统戏","feature":"《千里走单骑》《华容道》《水淹七军》《走麦城》构成关公戏完整序列。","douban":None},
+    {"adapt_id":adid("peking_opera"),"name":"三国戏几十出","type":"戏曲/京剧","year":"1790-今","creator":"京剧","feature":"《失空斩》《群英会》《借东风》《长坂坡》《定军山》《龙凤呈祥》《白帝城》等，京剧最重要的戏码群。","douban":None},
+    {"adapt_id":adid("dingjunshan_film"),"name":"定军山","type":"电影/默片","year":"1905","creator":"任庆泰执导/谭鑫培主演","feature":"中国第一部电影，京剧《定军山》片段。","douban":None},
+    {"adapt_id":adid("1994sanguo_tv"),"name":"三国演义（1994电视剧）","type":"电视剧","year":"1994","creator":"王扶林/中央电视台","feature":"84集经典，鲍国安饰曹操、唐国强饰诸葛亮、陆树铭饰关羽、孙彦军饰刘备；90年代国人集体记忆。","douban":None},
+    {"adapt_id":adid("2010sanguo_tv"),"name":"三国（2010电视剧）","type":"电视剧","year":"2010","creator":"高希希导演","feature":"95集新三国，陈建斌饰曹操、于和伟饰刘备、陆毅饰诸葛亮、聂远饰赵云，重新解读曹操形象。","douban":None},
+    {"adapt_id":adid("romance_of_three_kingdoms_novel"),"name":"Romance of the Three Kingdoms（英译本）","type":"译本","year":"1925","creator":"C.H. Brewitt-Taylor 译","feature":"最通行英译本；另 Moss Roberts 1991 译本 Three Kingdoms 学术价值高。","douban":None},
+    {"adapt_id":adid("koei_sangokushi"),"name":"三國志系列游戏","type":"游戏/策略","year":"1985-今","creator":"日本光荣（Koei/Tecmo）","feature":"《三国志》1-14代策略游戏，全球累计销量超千万；《真·三国无双》动作游戏系列；是日本及全球年轻人接触三国的主要途径。","douban":None},
+    {"adapt_id":adid("sanguosha_cardgame"),"name":"三国杀","type":"游戏/卡牌","year":"2008","creator":"游卡桌游（Yoka）","feature":"中国最流行的桌面卡牌游戏，后改编手游；人物/技能/锦囊大量取典于演义。","douban":None},
+    {"adapt_id":adid("yaoboying_sanguo"),"name":"三国演义连环画","type":"连环画","year":"-4","creator":"上海人民美术出版社，刘锡永/赵三岛等绘","feature":"60册套书，几代中国人的三国启蒙。","douban":None},
+    {"adapt_id":adid("cai_zhi_zhong_manhua"),"name":"《三國志》漫画","type":"漫画","year":"1971-1987","creator":"日本·横山光辉","feature":"60卷长篇漫画，是日本几代人的三国启蒙。","douban":None},
+    {"adapt_id":adid("chen_mou_manhua"),"name":"《火鳳燎原》","type":"漫画","year":"2001-今","creator":"香港·陈某","feature":"港漫经典，以司马懿为主角，水镜八奇虚构设定颠覆传统三国叙事。","douban":None},
+    {"adapt_id":adid("realloy_hanwei"),"name":"大军师司马懿之军师联盟/虎啸龙吟","type":"电视剧","year":"2017","creator":"张永新/吴秀波主演","feature":"86集，以司马懿视角重讲三国，引发对司马氏历史评价的讨论。","douban":None},
+    {"adapt_id":adid("diaochan_film"),"name":"貂蝉、关公、赤壁等影视剧","type":"电影","year":"多版本","creator":"华语影视","feature":"吴宇森《赤壁》(2008-2009)、李仁港《见龙卸甲》(2008)、麦庄《关云长》(2011)等。","douban":None},
+    {"adapt_id":adid("koudai_sanguozhi"),"name":"三国志大战","type":"游戏/街机卡","year":"2005-今","creator":"世嘉(SEGA)","feature":"街机即时策略卡牌游戏，在日本与华语圈有稳定玩家群。","douban":None},
+]
+
+prophecy_rows = [
+    {"prophecy_id":prid("prophecy_0"),"text":"千里草，何青青；十日卜，不得生","type":"童谣","chapter":9,"speaker":"","target":"董卓","meaning":"董卓字里藏『卓』，预言其暴亡"},
+    {"prophecy_id":prid("prophecy_1"),"text":"代汉者当涂高","type":"图谶","chapter":3,"speaker":"","target":"袁术/曹魏","meaning":"袁术自谓应之而僭号；后解为魏"},
+    {"prophecy_id":prid("prophecy_2"),"text":"汉行气尽，黄家当立","type":"图谶","chapter":1,"speaker":"","target":"黄巾","meaning":"黄巾起事之谶"},
+    {"prophecy_id":prid("prophecy_3"),"text":"苍天已死，黄天当立；岁在甲子，天下大吉","type":"童谣","chapter":1,"speaker":"","target":"黄巾","meaning":"张角起兵的口号"},
+    {"prophecy_id":prid("prophecy_4"),"text":"三马同槽","type":"梦兆","chapter":78,"speaker":"","target":"司马懿父子","meaning":"曹操梦三马同槽，实指司马氏三代"},
+    {"prophecy_id":prid("prophecy_5"),"text":"绯衣小儿来灭魏","type":"谶语","chapter":109,"speaker":"","target":"司马氏","meaning":"预示司马代魏"},
+    {"prophecy_id":prid("prophecy_6"),"text":"秃头小儿来灭魏，杨花飘荡落谁家","type":"诗谶","chapter":109,"speaker":"","target":"司马氏","meaning":"暗指司马"},
+    {"prophecy_id":prid("prophecy_7"),"text":"左龙右凤，飞入西川","type":"童谣","chapter":57,"speaker":"","target":"庞统","meaning":"凤雏殒于落凤坡之谶"},
+    {"prophecy_id":prid("prophecy_8"),"text":"凤凰坠羽落凤坡","type":"诗谶","chapter":63,"speaker":"","target":"庞统","meaning":"庞统殒命之地应其号『凤雏』"},
+    {"prophecy_id":prid("prophecy_9"),"text":"若要捉曹操，大刀手中擎","type":"童谣","chapter":50,"speaker":"","target":"关羽","meaning":"赤壁后关公华容道释曹"},
+    {"prophecy_id":prid("prophecy_10"),"text":"非衣小儿，岂得成人","type":"谶语","chapter":80,"speaker":"","target":"刘禅","meaning":"暗合蜀汉后主之弱"},
+    {"prophecy_id":prid("prophecy_11"),"text":"姜维死，汉亡","type":"谶语","chapter":117,"speaker":"","target":"姜维","meaning":"蜀汉覆亡之应"},
 ]
 
 # ===================== 13. mentions （人物/实体在各行的提及）=====================

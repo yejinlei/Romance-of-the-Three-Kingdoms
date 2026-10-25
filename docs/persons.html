@@ -1,559 +1,2746 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>人物譜 · 三國演義本體論</title>
-<link rel="stylesheet" href="assets/app.css"></head><body>
-<header>
-  <span class="seal">演義</span>
-  <h1>三國演義</h1>
-  <div class="sub">Romance of the Three Kingdoms · Ontology Project · 132 位人物</div>
-  <nav><a href="index.html">總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
-</header>
-<main>
-
-<h2>人物譜 · 132 位</h2>
-<p class="lead">人物按全書提及次數排序。<span class="zhu">硃紅卡片</span>為蜀漢核心，<span class="mo" style="color:var(--indigo-d)">鐵青</span>為曹魏，<span class="mo" style="color:var(--jade-d)">竹青</span>為東吳，<span class="mo">青銅</span>為東漢，<span class="mo">鋼灰</span>為割據諸侯。字、號、綽號、陣營、角色類別見卡片標籤。</p>
-<div class="search-box"><input id="ps" placeholder="輸入姓名/字/號/綽號檢索……" oninput="filterPs(this.value)"></div>
-<div class="grid" id="ps-grid"><div class="card indigo">
-          <h3>曹操</h3>
-          <div class="meta">登場第 1 回 · 提及 2,543</div>
-          <div class="desc"><span class="tag">字孟德</span><span class="tag cinnabar">阿瞒</span><span class="tag jade">君主</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>刘备</h3>
-          <div class="meta">登場第 1 回 · 提及 2,509</div>
-          <div class="desc"><span class="tag">字玄德</span><span class="tag cinnabar">大耳儿</span><span class="tag jade">君主</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card ">
-          <h3>诸葛亮</h3>
-          <div class="meta">登場第 36 回 · 提及 1,861</div>
-          <div class="desc"><span class="tag">字孔明</span><span class="tag cinnabar">卧龙</span><span class="tag jade">谋士</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card ">
-          <h3>关羽</h3>
-          <div class="meta">登場第 1 回 · 提及 943</div>
-          <div class="desc"><span class="tag">字云长</span><span class="tag cinnabar">美髯公</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card steel">
-          <h3>吕布</h3>
-          <div class="meta">登場第 3 回 · 提及 858</div>
-          <div class="desc"><span class="tag">字奉先</span><span class="tag cinnabar">飞将</span><span class="tag jade">武将</span><span class="tag bronze">吕布</span></div>
-        </div><div class="card jade">
-          <h3>孙权</h3>
-          <div class="meta">登場第 29 回 · 提及 777</div>
-          <div class="desc"><span class="tag">字仲谋</span><span class="tag cinnabar">碧眼儿</span><span class="tag jade">君主</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card jade">
-          <h3>周瑜</h3>
-          <div class="meta">登場第 15 回 · 提及 651</div>
-          <div class="desc"><span class="tag">字公瑾</span><span class="tag cinnabar">美周郎</span><span class="tag jade">谋士</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card steel">
-          <h3>袁绍</h3>
-          <div class="meta">登場第 4 回 · 提及 583</div>
-          <div class="desc"><span class="tag">字本初</span><span class="tag jade">君主</span><span class="tag bronze">袁绍</span></div>
-        </div><div class="card ">
-          <h3>张飞</h3>
-          <div class="meta">登場第 1 回 · 提及 432</div>
-          <div class="desc"><span class="tag">字翼德</span><span class="tag cinnabar">燕人</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card ">
-          <h3>赵云</h3>
-          <div class="meta">登場第 7 回 · 提及 413</div>
-          <div class="desc"><span class="tag">字子龙</span><span class="tag cinnabar">常山赵子龙</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card ">
-          <h3>魏延</h3>
-          <div class="meta">登場第 41 回 · 提及 329</div>
-          <div class="desc"><span class="tag">字文长</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card steel">
-          <h3>刘表</h3>
-          <div class="meta">登場第 6 回 · 提及 323</div>
-          <div class="desc"><span class="tag">字景升</span><span class="tag jade">君主</span><span class="tag bronze">刘表</span></div>
-        </div><div class="card indigo">
-          <h3>司马懿</h3>
-          <div class="meta">登場第 39 回 · 提及 305</div>
-          <div class="desc"><span class="tag">字仲达</span><span class="tag cinnabar">冢虎</span><span class="tag jade">谋士</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>姜维</h3>
-          <div class="meta">登場第 93 回 · 提及 293</div>
-          <div class="desc"><span class="tag">字伯约</span><span class="tag cinnabar">幼麟</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card jade">
-          <h3>孙策</h3>
-          <div class="meta">登場第 7 回 · 提及 290</div>
-          <div class="desc"><span class="tag">字伯符</span><span class="tag cinnabar">小霸王</span><span class="tag jade">君主</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card ">
-          <h3>刘禅</h3>
-          <div class="meta">登場第 34 回 · 提及 241</div>
-          <div class="desc"><span class="tag">字公嗣</span><span class="tag cinnabar">阿斗</span><span class="tag jade">君主</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card ">
-          <h3>马超</h3>
-          <div class="meta">登場第 10 回 · 提及 221</div>
-          <div class="desc"><span class="tag">字孟起</span><span class="tag cinnabar">锦马超</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card ">
-          <h3>黄忠</h3>
-          <div class="meta">登場第 53 回 · 提及 209</div>
-          <div class="desc"><span class="tag">字汉升</span><span class="tag cinnabar">老将军</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card jade">
-          <h3>鲁肃</h3>
-          <div class="meta">登場第 29 回 · 提及 203</div>
-          <div class="desc"><span class="tag">字子敬</span><span class="tag jade">谋士</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card indigo">
-          <h3>张郃</h3>
-          <div class="meta">登場第 22 回 · 提及 187</div>
-          <div class="desc"><span class="tag">字儁乂</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>张辽</h3>
-          <div class="meta">登場第 11 回 · 提及 160</div>
-          <div class="desc"><span class="tag">字文远</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>邓艾</h3>
-          <div class="meta">登場第 110 回 · 提及 160</div>
-          <div class="desc"><span class="tag">字士载</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card steel">
-          <h3>孟获</h3>
-          <div class="meta">登場第 87 回 · 提及 156</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">南蛮</span></div>
-        </div><div class="card indigo">
-          <h3>曹仁</h3>
-          <div class="meta">登場第 5 回 · 提及 146</div>
-          <div class="desc"><span class="tag">字子孝</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>徐晃</h3>
-          <div class="meta">登場第 13 回 · 提及 138</div>
-          <div class="desc"><span class="tag">字公明</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>许褚</h3>
-          <div class="meta">登場第 12 回 · 提及 135</div>
-          <div class="desc"><span class="tag">字仲康</span><span class="tag cinnabar">虎痴</span><span class="tag jade">武将</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>马岱</h3>
-          <div class="meta">登場第 57 回 · 提及 127</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>庞德</h3>
-          <div class="meta">登場第 58 回 · 提及 123</div>
-          <div class="desc"><span class="tag">字令明</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card jade">
-          <h3>孙坚</h3>
-          <div class="meta">登場第 2 回 · 提及 123</div>
-          <div class="desc"><span class="tag">字文台</span><span class="tag jade">君主</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card steel">
-          <h3>董卓</h3>
-          <div class="meta">登場第 1 回 · 提及 119</div>
-          <div class="desc"><span class="tag">字仲颖</span><span class="tag jade">君主</span><span class="tag bronze">董卓</span></div>
-        </div><div class="card ">
-          <h3>庞统</h3>
-          <div class="meta">登場第 57 回 · 提及 111</div>
-          <div class="desc"><span class="tag">字士元</span><span class="tag cinnabar">凤雏</span><span class="tag jade">谋士</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>曹真</h3>
-          <div class="meta">登場第 56 回 · 提及 111</div>
-          <div class="desc"><span class="tag">字子丹</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card steel">
-          <h3>刘璋</h3>
-          <div class="meta">登場第 59 回 · 提及 110</div>
-          <div class="desc"><span class="tag">字季玉</span><span class="tag jade">君主</span><span class="tag bronze">刘璋</span></div>
-        </div><div class="card ">
-          <h3>关兴</h3>
-          <div class="meta">登場第 81 回 · 提及 109</div>
-          <div class="desc"><span class="tag">字安国</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>夏侯惇</h3>
-          <div class="meta">登場第 5 回 · 提及 109</div>
-          <div class="desc"><span class="tag">字元让</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card steel">
-          <h3>袁术</h3>
-          <div class="meta">登場第 3 回 · 提及 109</div>
-          <div class="desc"><span class="tag">字公路</span><span class="tag jade">君主</span><span class="tag bronze">袁术</span></div>
-        </div><div class="card jade">
-          <h3>吕蒙</h3>
-          <div class="meta">登場第 38 回 · 提及 106</div>
-          <div class="desc"><span class="tag">字子明</span><span class="tag cinnabar">吴下阿蒙</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card jade">
-          <h3>甘宁</h3>
-          <div class="meta">登場第 38 回 · 提及 106</div>
-          <div class="desc"><span class="tag">字兴霸</span><span class="tag cinnabar">锦帆贼</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card jade">
-          <h3>陆逊</h3>
-          <div class="meta">登場第 83 回 · 提及 105</div>
-          <div class="desc"><span class="tag">字伯言</span><span class="tag jade">谋士</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card ">
-          <h3>王平</h3>
-          <div class="meta">登場第 71 回 · 提及 100</div>
-          <div class="desc"><span class="tag">字子均</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>曹洪</h3>
-          <div class="meta">登場第 5 回 · 提及 93</div>
-          <div class="desc"><span class="tag">字子廉</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>夏侯渊</h3>
-          <div class="meta">登場第 5 回 · 提及 91</div>
-          <div class="desc"><span class="tag">字妙才</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>徐庶</h3>
-          <div class="meta">登場第 35 回 · 提及 89</div>
-          <div class="desc"><span class="tag">字元直</span><span class="tag cinnabar">单福</span><span class="tag jade">谋士</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>于禁</h3>
-          <div class="meta">登場第 10 回 · 提及 88</div>
-          <div class="desc"><span class="tag">字文则</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>曹丕</h3>
-          <div class="meta">登場第 32 回 · 提及 84</div>
-          <div class="desc"><span class="tag">字子桓</span><span class="tag cinnabar">魏文帝</span><span class="tag jade">君主</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card jade">
-          <h3>黄盖</h3>
-          <div class="meta">登場第 5 回 · 提及 84</div>
-          <div class="desc"><span class="tag">字公覆</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card ">
-          <h3>张苞</h3>
-          <div class="meta">登場第 81 回 · 提及 83</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>李典</h3>
-          <div class="meta">登場第 5 回 · 提及 80</div>
-          <div class="desc"><span class="tag">字曼成</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>廖化</h3>
-          <div class="meta">登場第 27 回 · 提及 78</div>
-          <div class="desc"><span class="tag">字元俭</span><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card jade">
-          <h3>张昭</h3>
-          <div class="meta">登場第 15 回 · 提及 76</div>
-          <div class="desc"><span class="tag">字子布</span><span class="tag jade">文臣</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card steel">
-          <h3>张鲁</h3>
-          <div class="meta">登場第 59 回 · 提及 76</div>
-          <div class="desc"><span class="tag">字公祺</span><span class="tag jade">君主</span><span class="tag bronze">张鲁</span></div>
-        </div><div class="card ">
-          <h3>关平</h3>
-          <div class="meta">登場第 28 回 · 提及 73</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card steel">
-          <h3>韩遂</h3>
-          <div class="meta">登場第 10 回 · 提及 70</div>
-          <div class="desc"><span class="tag">字文约</span><span class="tag jade">将领</span><span class="tag bronze">马腾</span></div>
-        </div><div class="card jade">
-          <h3>程普</h3>
-          <div class="meta">登場第 5 回 · 提及 69</div>
-          <div class="desc"><span class="tag">字德谋</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card ">
-          <h3>法正</h3>
-          <div class="meta">登場第 60 回 · 提及 66</div>
-          <div class="desc"><span class="tag">字孝直</span><span class="tag jade">谋士</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card jade">
-          <h3>周泰</h3>
-          <div class="meta">登場第 15 回 · 提及 65</div>
-          <div class="desc"><span class="tag">字幼平</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card jade">
-          <h3>韩当</h3>
-          <div class="meta">登場第 5 回 · 提及 64</div>
-          <div class="desc"><span class="tag">字义公</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card jade">
-          <h3>徐盛</h3>
-          <div class="meta">登場第 38 回 · 提及 63</div>
-          <div class="desc"><span class="tag">字文向</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card steel">
-          <h3>张任</h3>
-          <div class="meta">登場第 60 回 · 提及 63</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">刘璋</span></div>
-        </div><div class="card jade">
-          <h3>太史慈</h3>
-          <div class="meta">登場第 11 回 · 提及 62</div>
-          <div class="desc"><span class="tag">字子义</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card ">
-          <h3>严颜</h3>
-          <div class="meta">登場第 63 回 · 提及 61</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>钟会</h3>
-          <div class="meta">登場第 107 回 · 提及 61</div>
-          <div class="desc"><span class="tag">字士季</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card steel">
-          <h3>貂蝉</h3>
-          <div class="meta">登場第 8 回 · 提及 61</div>
-          <div class="desc"><span class="tag jade">女性</span><span class="tag bronze">吕布</span></div>
-        </div><div class="card steel">
-          <h3>蔡瑁</h3>
-          <div class="meta">登場第 6 回 · 提及 61</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">刘表</span></div>
-        </div><div class="card ">
-          <h3>糜竺</h3>
-          <div class="meta">登場第 11 回 · 提及 58</div>
-          <div class="desc"><span class="tag">字子仲</span><span class="tag jade">文臣</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>贾诩</h3>
-          <div class="meta">登場第 9 回 · 提及 58</div>
-          <div class="desc"><span class="tag">字文和</span><span class="tag cinnabar">毒士</span><span class="tag jade">谋士</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card steel">
-          <h3>文丑</h3>
-          <div class="meta">登場第 22 回 · 提及 58</div>
-          <div class="desc"><span class="tag jade">武将</span><span class="tag bronze">袁绍</span></div>
-        </div><div class="card ">
-          <h3>刘封</h3>
-          <div class="meta">登場第 36 回 · 提及 57</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card steel">
-          <h3>陈宫</h3>
-          <div class="meta">登場第 4 回 · 提及 57</div>
-          <div class="desc"><span class="tag">字公台</span><span class="tag jade">谋士</span><span class="tag bronze">吕布</span></div>
-        </div><div class="card indigo">
-          <h3>荀彧</h3>
-          <div class="meta">登場第 10 回 · 提及 56</div>
-          <div class="desc"><span class="tag">字文若</span><span class="tag cinnabar">荀令君</span><span class="tag jade">谋士</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card steel">
-          <h3>马腾</h3>
-          <div class="meta">登場第 5 回 · 提及 55</div>
-          <div class="desc"><span class="tag">字寿成</span><span class="tag jade">君主</span><span class="tag bronze">马腾</span></div>
-        </div><div class="card steel">
-          <h3>审配</h3>
-          <div class="meta">登場第 7 回 · 提及 54</div>
-          <div class="desc"><span class="tag">字正南</span><span class="tag jade">谋士</span><span class="tag bronze">袁绍</span></div>
-        </div><div class="card indigo">
-          <h3>夏侯霸</h3>
-          <div class="meta">登場第 106 回 · 提及 53</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card jade">
-          <h3>丁奉</h3>
-          <div class="meta">登場第 38 回 · 提及 53</div>
-          <div class="desc"><span class="tag">字承渊</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card ">
-          <h3>马谡</h3>
-          <div class="meta">登場第 87 回 · 提及 51</div>
-          <div class="desc"><span class="tag">字幼常</span><span class="tag jade">谋士</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>乐进</h3>
-          <div class="meta">登場第 5 回 · 提及 51</div>
-          <div class="desc"><span class="tag">字文谦</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card jade">
-          <h3>诸葛瑾</h3>
-          <div class="meta">登場第 43 回 · 提及 48</div>
-          <div class="desc"><span class="tag">字子瑜</span><span class="tag jade">文臣</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card indigo">
-          <h3>郭嘉</h3>
-          <div class="meta">登場第 10 回 · 提及 47</div>
-          <div class="desc"><span class="tag">字奉孝</span><span class="tag jade">谋士</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>典韦</h3>
-          <div class="meta">登場第 10 回 · 提及 46</div>
-          <div class="desc"><span class="tag cinnabar">古之恶来</span><span class="tag jade">武将</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>程昱</h3>
-          <div class="meta">登場第 10 回 · 提及 45</div>
-          <div class="desc"><span class="tag">字仲德</span><span class="tag jade">谋士</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card steel">
-          <h3>陶谦</h3>
-          <div class="meta">登場第 5 回 · 提及 45</div>
-          <div class="desc"><span class="tag">字恭祖</span><span class="tag jade">君主</span><span class="tag bronze">陶谦</span></div>
-        </div><div class="card jade">
-          <h3>凌统</h3>
-          <div class="meta">登場第 38 回 · 提及 44</div>
-          <div class="desc"><span class="tag">字公绩</span><span class="tag jade">将领</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card ">
-          <h3>汉献帝</h3>
-          <div class="meta">登場第 2 回 · 提及 43</div>
-          <div class="desc"><span class="tag">字伯和</span><span class="tag cinnabar">刘协</span><span class="tag jade">君主</span><span class="tag bronze">东汉</span></div>
-        </div><div class="card jade">
-          <h3>公孙瓒</h3>
-          <div class="meta">登場第 2 回 · 提及 43</div>
-          <div class="desc"><span class="tag">字伯圭</span><span class="tag cinnabar">白马将军</span><span class="tag jade">君主</span><span class="tag bronze">公孙瓒</span></div>
-        </div><div class="card steel">
-          <h3>颜良</h3>
-          <div class="meta">登場第 22 回 · 提及 43</div>
-          <div class="desc"><span class="tag jade">武将</span><span class="tag bronze">袁绍</span></div>
-        </div><div class="card steel">
-          <h3>陈登</h3>
-          <div class="meta">登場第 11 回 · 提及 40</div>
-          <div class="desc"><span class="tag">字元龙</span><span class="tag jade">文臣</span><span class="tag bronze">陶谦</span></div>
-        </div><div class="card steel">
-          <h3>张绣</h3>
-          <div class="meta">登場第 16 回 · 提及 39</div>
-          <div class="desc"><span class="tag jade">君主</span><span class="tag bronze">张绣</span></div>
-        </div><div class="card indigo">
-          <h3>许攸</h3>
-          <div class="meta">登場第 30 回 · 提及 37</div>
-          <div class="desc"><span class="tag">字子远</span><span class="tag jade">谋士</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>王允</h3>
-          <div class="meta">登場第 3 回 · 提及 35</div>
-          <div class="desc"><span class="tag">字子师</span><span class="tag jade">文臣</span><span class="tag bronze">东汉</span></div>
-        </div><div class="card ">
-          <h3>简雍</h3>
-          <div class="meta">登場第 11 回 · 提及 34</div>
-          <div class="desc"><span class="tag">字宪和</span><span class="tag jade">文臣</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>满宠</h3>
-          <div class="meta">登場第 10 回 · 提及 33</div>
-          <div class="desc"><span class="tag">字伯宁</span><span class="tag jade">文臣</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>何进</h3>
-          <div class="meta">登場第 1 回 · 提及 33</div>
-          <div class="desc"><span class="tag">字遂高</span><span class="tag jade">文臣</span><span class="tag bronze">东汉</span></div>
-        </div><div class="card ">
-          <h3>李严</h3>
-          <div class="meta">登場第 64 回 · 提及 32</div>
-          <div class="desc"><span class="tag">字正方</span><span class="tag jade">文臣</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card steel">
-          <h3>沮授</h3>
-          <div class="meta">登場第 7 回 · 提及 32</div>
-          <div class="desc"><span class="tag">字公与</span><span class="tag jade">谋士</span><span class="tag bronze">袁绍</span></div>
-        </div><div class="card ">
-          <h3>孙尚香</h3>
-          <div class="meta">登場第 54 回 · 提及 31</div>
-          <div class="desc"><span class="tag cinnabar">孙夫人</span><span class="tag jade">女性</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>郝昭</h3>
-          <div class="meta">登場第 96 回 · 提及 31</div>
-          <div class="desc"><span class="tag">字伯道</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>管辂</h3>
-          <div class="meta">登場第 69 回 · 提及 31</div>
-          <div class="desc"><span class="tag">字公明</span><span class="tag jade">方士</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card indigo">
-          <h3>荀攸</h3>
-          <div class="meta">登場第 19 回 · 提及 30</div>
-          <div class="desc"><span class="tag">字公达</span><span class="tag jade">谋士</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>黄权</h3>
-          <div class="meta">登場第 80 回 · 提及 29</div>
-          <div class="desc"><span class="tag">字公衡</span><span class="tag jade">文臣</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card jade">
-          <h3>于吉</h3>
-          <div class="meta">登場第 29 回 · 提及 28</div>
-          <div class="desc"><span class="tag jade">方士</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card steel">
-          <h3>郭图</h3>
-          <div class="meta">登場第 22 回 · 提及 28</div>
-          <div class="desc"><span class="tag">字公则</span><span class="tag jade">谋士</span><span class="tag bronze">袁绍</span></div>
-        </div><div class="card ">
-          <h3>蒋琬</h3>
-          <div class="meta">登場第 63 回 · 提及 27</div>
-          <div class="desc"><span class="tag">字公琰</span><span class="tag jade">文臣</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card ">
-          <h3>周仓</h3>
-          <div class="meta">登場第 28 回 · 提及 27</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card steel">
-          <h3>田丰</h3>
-          <div class="meta">登場第 7 回 · 提及 27</div>
-          <div class="desc"><span class="tag">字元皓</span><span class="tag jade">谋士</span><span class="tag bronze">袁绍</span></div>
-        </div><div class="card indigo">
-          <h3>文聘</h3>
-          <div class="meta">登場第 34 回 · 提及 26</div>
-          <div class="desc"><span class="tag">字仲业</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card steel">
-          <h3>张角</h3>
-          <div class="meta">登場第 1 回 · 提及 25</div>
-          <div class="desc"><span class="tag cinnabar">天公将军</span><span class="tag jade">方士</span><span class="tag bronze">黄巾</span></div>
-        </div><div class="card steel">
-          <h3>张宝</h3>
-          <div class="meta">登場第 1 回 · 提及 25</div>
-          <div class="desc"><span class="tag cinnabar">地公将军</span><span class="tag jade">方士</span><span class="tag bronze">黄巾</span></div>
-        </div><div class="card indigo">
-          <h3>王双</h3>
-          <div class="meta">登場第 97 回 · 提及 23</div>
-          <div class="desc"><span class="tag jade">武将</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>华佗</h3>
-          <div class="meta">登場第 78 回 · 提及 22</div>
-          <div class="desc"><span class="tag">字元化</span><span class="tag cinnabar">神医</span><span class="tag jade">方士</span><span class="tag bronze">东汉</span></div>
-        </div><div class="card steel">
-          <h3>逢纪</h3>
-          <div class="meta">登場第 7 回 · 提及 21</div>
-          <div class="desc"><span class="tag">字元图</span><span class="tag jade">谋士</span><span class="tag bronze">袁绍</span></div>
-        </div><div class="card ">
-          <h3>甘夫人</h3>
-          <div class="meta">登場第 15 回 · 提及 19</div>
-          <div class="desc"><span class="tag jade">女性</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card steel">
-          <h3>徐母</h3>
-          <div class="meta">登場第 37 回 · 提及 19</div>
-          <div class="desc"><span class="tag cinnabar">徐庶之母</span><span class="tag jade">女性</span><span class="tag bronze">隐逸</span></div>
-        </div><div class="card ">
-          <h3>吉平</h3>
-          <div class="meta">登場第 23 回 · 提及 18</div>
-          <div class="desc"><span class="tag cinnabar">吉太醫</span><span class="tag jade">文臣</span><span class="tag bronze">东汉</span></div>
-        </div><div class="card indigo">
-          <h3>曹彰</h3>
-          <div class="meta">登場第 68 回 · 提及 17</div>
-          <div class="desc"><span class="tag">字子文</span><span class="tag cinnabar">黄须儿</span><span class="tag jade">将领</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card ">
-          <h3>左慈</h3>
-          <div class="meta">登場第 68 回 · 提及 17</div>
-          <div class="desc"><span class="tag cinnabar">乌角先生</span><span class="tag jade">方士</span><span class="tag bronze">东汉</span></div>
-        </div><div class="card steel">
-          <h3>蒯越</h3>
-          <div class="meta">登場第 6 回 · 提及 16</div>
-          <div class="desc"><span class="tag">字异度</span><span class="tag jade">谋士</span><span class="tag bronze">刘表</span></div>
-        </div><div class="card ">
-          <h3>费祎</h3>
-          <div class="meta">登場第 65 回 · 提及 14</div>
-          <div class="desc"><span class="tag">字文伟</span><span class="tag jade">文臣</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card ">
-          <h3>糜夫人</h3>
-          <div class="meta">登場第 15 回 · 提及 14</div>
-          <div class="desc"><span class="tag jade">女性</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card steel">
-          <h3>张梁</h3>
-          <div class="meta">登場第 1 回 · 提及 12</div>
-          <div class="desc"><span class="tag cinnabar">人公将军</span><span class="tag jade">方士</span><span class="tag bronze">黄巾</span></div>
-        </div><div class="card steel">
-          <h3>司马徽</h3>
-          <div class="meta">登場第 35 回 · 提及 10</div>
-          <div class="desc"><span class="tag">字德操</span><span class="tag cinnabar">水镜先生</span><span class="tag jade">隐逸</span><span class="tag bronze">隐逸</span></div>
-        </div><div class="card jade">
-          <h3>步骘</h3>
-          <div class="meta">登場第 44 回 · 提及 9</div>
-          <div class="desc"><span class="tag">字子山</span><span class="tag jade">文臣</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card steel">
-          <h3>祝融夫人</h3>
-          <div class="meta">登場第 90 回 · 提及 6</div>
-          <div class="desc"><span class="tag jade">女性</span><span class="tag bronze">南蛮</span></div>
-        </div><div class="card steel">
-          <h3>沙摩柯</h3>
-          <div class="meta">登場第 82 回 · 提及 6</div>
-          <div class="desc"><span class="tag jade">将领</span><span class="tag bronze">南蛮</span></div>
-        </div><div class="card steel">
-          <h3>陈宫_吕布</h3>
-          <div class="meta">登場第 4 回 · 提及 6</div>
-          <div class="desc"><span class="tag">字公台</span><span class="tag jade">谋士</span><span class="tag bronze">吕布</span></div>
-        </div><div class="card steel">
-          <h3>严白虎</h3>
-          <div class="meta">登場第 15 回 · 提及 5</div>
-          <div class="desc"><span class="tag jade">君主</span><span class="tag bronze">群雄</span></div>
-        </div><div class="card steel">
-          <h3>黄承彦</h3>
-          <div class="meta">登場第 37 回 · 提及 4</div>
-          <div class="desc"><span class="tag jade">隐逸</span><span class="tag bronze">隐逸</span></div>
-        </div><div class="card jade">
-          <h3>小乔</h3>
-          <div class="meta">登場第 34 回 · 提及 3</div>
-          <div class="desc"><span class="tag jade">女性</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card steel">
-          <h3>庞德公</h3>
-          <div class="meta">登場第 35 回 · 提及 3</div>
-          <div class="desc"><span class="tag jade">隐逸</span><span class="tag bronze">隐逸</span></div>
-        </div><div class="card jade">
-          <h3>大乔</h3>
-          <div class="meta">登場第 29 回 · 提及 2</div>
-          <div class="desc"><span class="tag jade">女性</span><span class="tag bronze">东吴</span></div>
-        </div><div class="card ">
-          <h3>孙乾</h3>
-          <div class="meta">登場第 11 回 · 提及 1</div>
-          <div class="desc"><span class="tag">字公祐</span><span class="tag jade">文臣</span><span class="tag bronze">蜀汉</span></div>
-        </div><div class="card indigo">
-          <h3>曹睿</h3>
-          <div class="meta">登場第 91 回 · 提及 1</div>
-          <div class="desc"><span class="tag">字元仲</span><span class="tag cinnabar">魏明帝</span><span class="tag jade">君主</span><span class="tag bronze">曹魏</span></div>
-        </div><div class="card jade">
-          <h3>孙尚香_吴</h3>
-          <div class="meta">登場第 54 回 · 提及 0</div>
-          <div class="desc"><span class="tag jade">女性</span><span class="tag bronze">东吴</span></div>
-        </div></div>
-<script>
-function filterPs(q){
-  q=q.trim(); const cards=document.querySelectorAll('#ps-grid .card');
-  cards.forEach(c=>{c.style.display=(!q||c.textContent.includes(q))?'':'none'});
-}
-</script>
-
-</main>
-<footer>
-  <span class="seal">千秋</span>
-  <div>《三國演義》本體論工程 · 以 OWL 2 DL 建構本體 · DuckDB-WASM 瀏覽器端查詢 · 無服務器靜態站<br>
-  參考 yejinlei《紅樓未完》與《西遊記》本體論範式 · 兼容《水滸傳》本體 sg/sh 前綴</div>
-</footer>
-<script src="assets/common.js"></script>
-</body></html>
+<title>人物志 · 三国演义数字人文研究</title>
+<link rel="stylesheet" href="assets/app.css">
+</head><body>
+<header class="site-header"><div class="header-inner">
+<div class="brand"><span class="seal big">三</span><div class="brand-txt"><h1>三国演义 · 数字人文研究</h1><p class="subtitle">Romance of the Three Kingdoms — An Ontology-driven Digital Edition</p></div></div>
+<p class="tagline">滚滚长江东逝水，浪花淘尽英雄。以本体论重构毛宗岗评本一百二十回，做文本、图谱、版本、地理、学术五维校勘。</p>
+<div class="nav-grid"><a class="nav-card" href="index.html"><span class="seal">卷</span><span>首页</span></a><a class="nav-card" href="ontology.html"><span class="seal">元</span><span>本体论</span></a><a class="nav-card" href="read.html"><span class="seal">读</span><span>全文阅读</span></a><a class="nav-card active" href="persons.html"><span class="seal">人</span><span>人物志</span></a><a class="nav-card" href="factions.html"><span class="seal">势</span><span>势力谱</span></a><a class="nav-card" href="places.html"><span class="seal">地</span><span>地理志</span></a><a class="nav-card" href="battles.html"><span class="seal">战</span><span>战役史</span></a><a class="nav-card" href="events.html"><span class="seal">事</span><span>事件录</span></a><a class="nav-card" href="stratagems.html"><span class="seal">计</span><span>计谋鉴</span></a><a class="nav-card" href="artifacts.html"><span class="seal">物</span><span>器物簿</span></a><a class="nav-card" href="prophecies.html"><span class="seal">谶</span><span>谶纬考</span></a><a class="nav-card" href="versions.html"><span class="seal">版</span><span>版本族谱</span></a><a class="nav-card" href="variants.html"><span class="seal">勘</span><span>异文对勘</span></a><a class="nav-card" href="graph.html"><span class="seal">系</span><span>人物关系</span></a><a class="nav-card" href="map.html"><span class="seal">图</span><span>时空地图</span></a><a class="nav-card" href="query.html"><span class="seal">问</span><span>查询台</span></a><a class="nav-card" href="stats.html"><span class="seal">数</span><span>统计析</span></a><a class="nav-card" href="scholars.html"><span class="seal">学</span><span>学术史</span></a><a class="nav-card" href="papers.html"><span class="seal">论</span><span>论著举要</span></a><a class="nav-card" href="adaptations.html"><span class="seal">艺</span><span>衍生改编</span></a><a class="nav-card" href="poetry.html"><span class="seal">诗</span><span>诗词回目</span></a><a class="nav-card" href="mirror.html"><span class="seal">虚</span><span>虚实对照</span></a><a class="nav-card" href="destiny.html"><span class="seal">命</span><span>天命叙事</span></a><a class="nav-card" href="guide.html"><span class="seal">引</span><span>阅读指南</span></a></div>
+</div></header><main><section class="paper"><h2>人物志 · Persons</h2><p>共 455 位人物：其中 <span class="tag real">正史 0</span> <span class="tag half">半虚构 0</span> <span class="tag fic">纯虚构 0</span></p><div class="filter-bar"><button class="fbtn active" data-f="all">全部</button><button class="fbtn" data-f="0">正史</button><button class="fbtn" data-f="1">半虚构</button><button class="fbtn" data-f="2">纯虚构</button><input type="search" id="pSearch" placeholder="搜姓名 / 字 / 籍贯…"></div><div class="person-grid" id="pGrid"><div class="person-card real" data-fic="0" data-name="刘宏">
+        <div class="p-head"><h3>刘宏</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 君主</p>
+        <p class="p-meta">生卒：157—189 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">汉灵帝，汉末衰乱之始</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘协伯和">
+        <div class="p-head"><h3>刘协</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯和 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 君主</p>
+        <p class="p-meta">生卒：181—234 · 提及 0 次 · 首见第 2 回</p>
+        <p class="p-desc">汉献帝，董卓所立，后被曹丕篡</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘辩">
+        <div class="p-head"><h3>刘辩</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 君主</p>
+        <p class="p-meta">生卒：176—190 · 提及 0 次 · 首见第 2 回</p>
+        <p class="p-desc">汉少帝，被董卓废杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="何进遂高">
+        <div class="p-head"><h3>何进</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">遂高 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 外戚</p>
+        <p class="p-meta">生卒：?—189 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">何进，引董卓入京致乱</p>
+        </div><div class="person-card real" data-fic="0" data-name="何太后">
+        <div class="p-head"><h3>何太后</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 女性</p>
+        <p class="p-meta">生卒：?—189 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">灵帝后，何进之妹</p>
+        </div><div class="person-card real" data-fic="0" data-name="董太后">
+        <div class="p-head"><h3>董太后</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 女性</p>
+        <p class="p-meta">生卒：?—189 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">桓帝后，灵帝母</p>
+        </div><div class="person-card real" data-fic="0" data-name="蹇硕">
+        <div class="p-head"><h3>蹇硕</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 宦官</p>
+        <p class="p-meta">生卒：?—189 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">小黄门蹇硕，谋立刘协被杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="张让">
+        <div class="p-head"><h3>张让</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 宦官</p>
+        <p class="p-meta">生卒：?—189 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">十常侍之首</p>
+        </div><div class="person-card real" data-fic="0" data-name="赵忠">
+        <div class="p-head"><h3>赵忠</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 宦官</p>
+        <p class="p-meta">生卒：?—189 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">十常侍</p>
+        </div><div class="person-card real" data-fic="0" data-name="段珪">
+        <div class="p-head"><h3>段珪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 宦官</p>
+        <p class="p-meta">生卒：?—189 · 提及 0 次 · 首见第 2 回</p>
+        <p class="p-desc">十常侍</p>
+        </div><div class="person-card real" data-fic="0" data-name="皇甫嵩义真">
+        <div class="p-head"><h3>皇甫嵩</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">义真 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 将领</p>
+        <p class="p-meta">生卒：?—195 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">平定黄巾第一名将</p>
+        </div><div class="person-card real" data-fic="0" data-name="朱儁公伟">
+        <div class="p-head"><h3>朱儁</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公伟 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 将领</p>
+        <p class="p-meta">生卒：?—195 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">平黄巾功臣</p>
+        </div><div class="person-card real" data-fic="0" data-name="卢植子干">
+        <div class="p-head"><h3>卢植</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子干 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—192 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">刘备、公孙瓒之师</p>
+        </div><div class="person-card real" data-fic="0" data-name="王允子师">
+        <div class="p-head"><h3>王允</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子师 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：137—192 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">连环计诛董卓，正史无貂蝉</p>
+        </div><div class="person-card real" data-fic="0" data-name="蔡邕伯喈">
+        <div class="p-head"><h3>蔡邕</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯喈 · 蔡中郎 · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：133—192 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">蔡文姬父，经学大师</p>
+        </div><div class="person-card real" data-fic="0" data-name="蔡琰文姬">
+        <div class="p-head"><h3>蔡琰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文姬 · 蔡文姬 · 籍贯不详</p>
+        <p class="p-fac">其他 · 女性</p>
+        <p class="p-meta">生卒：177—? · 提及 0 次 · 首见第 71 回</p>
+        <p class="p-desc">蔡邕女，作悲愤诗</p>
+        </div><div class="person-card real" data-fic="0" data-name="杨彪文先">
+        <div class="p-head"><h3>杨彪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文先 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：142—225 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">杨修之父，汉室老臣</p>
+        </div><div class="person-card real" data-fic="0" data-name="黄琬子琰">
+        <div class="p-head"><h3>黄琬</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子琰 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：141—192 · 提及 0 次 · 首见第 6 回</p>
+        <p class="p-desc">被董卓杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="马日磾翁叔">
+        <div class="p-head"><h3>马日磾</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">翁叔 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—194 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc">经学世家</p>
+        </div><div class="person-card real" data-fic="0" data-name="赵岐邠卿">
+        <div class="p-head"><h3>赵岐</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">邠卿 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—201 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="周毖仲远">
+        <div class="p-head"><h3>周毖</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲远 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—190 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">荐袁绍韩馥，被董卓杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="伍琼德瑜">
+        <div class="p-head"><h3>伍琼</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德瑜 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—190 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">被董卓杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="伍孚德瑜">
+        <div class="p-head"><h3>伍孚</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德瑜 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—191 · 提及 0 次 · 首见第 4 回</p>
+        <p class="p-desc">刺董卓未遂</p>
+        </div><div class="person-card real" data-fic="0" data-name="士孙瑞君荣">
+        <div class="p-head"><h3>士孙瑞</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">君荣 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—195 · 提及 0 次 · 首见第 9 回</p>
+        <p class="p-desc">参与诛董卓</p>
+        </div><div class="person-card real" data-fic="0" data-name="伏完">
+        <div class="p-head"><h3>伏完</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—209 · 提及 0 次 · 首见第 20 回</p>
+        <p class="p-desc">伏皇后父</p>
+        </div><div class="person-card real" data-fic="0" data-name="伏皇后寿">
+        <div class="p-head"><h3>伏皇后</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">寿 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 女性</p>
+        <p class="p-meta">生卒：?—214 · 提及 0 次 · 首见第 20 回</p>
+        <p class="p-desc">被曹操弑杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="董承">
+        <div class="p-head"><h3>董承</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 20 回</p>
+        <p class="p-desc">衣带诏主谋</p>
+        </div><div class="person-card real" data-fic="0" data-name="董贵妃">
+        <div class="p-head"><h3>董贵妃</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 女性</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 24 回</p>
+        <p class="p-desc">董承女，被曹操杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="王子服子由">
+        <div class="p-head"><h3>王子服</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子由 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 20 回</p>
+        <p class="p-desc">衣带诏</p>
+        </div><div class="person-card real" data-fic="0" data-name="种辑">
+        <div class="p-head"><h3>种辑</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 20 回</p>
+        <p class="p-desc">衣带诏</p>
+        </div><div class="person-card real" data-fic="0" data-name="吴硕">
+        <div class="p-head"><h3>吴硕</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 20 回</p>
+        <p class="p-desc">衣带诏</p>
+        </div><div class="person-card real" data-fic="0" data-name="吴子兰">
+        <div class="p-head"><h3>吴子兰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 20 回</p>
+        <p class="p-desc">衣带诏</p>
+        </div><div class="person-card real" data-fic="0" data-name="吉平">
+        <div class="p-head"><h3>吉平</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 其他</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 23 回</p>
+        <p class="p-desc">本名吉本，演义改吉平并加咬指为誓</p>
+        </div><div class="person-card real" data-fic="0" data-name="吉邈文然">
+        <div class="p-head"><h3>吉邈</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文然 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 其他</p>
+        <p class="p-meta">生卒：?—218 · 提及 0 次 · 首见第 69 回</p>
+        <p class="p-desc">吉平子反曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="吉穆思然">
+        <div class="p-head"><h3>吉穆</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">思然 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 其他</p>
+        <p class="p-meta">生卒：?—218 · 提及 0 次 · 首见第 69 回</p>
+        <p class="p-desc">吉平子反曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="耿纪季行">
+        <div class="p-head"><h3>耿纪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">季行 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—218 · 提及 0 次 · 首见第 69 回</p>
+        <p class="p-desc">反曹失败被族</p>
+        </div><div class="person-card real" data-fic="0" data-name="韦晃">
+        <div class="p-head"><h3>韦晃</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—218 · 提及 0 次 · 首见第 69 回</p>
+        <p class="p-desc">反曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="金祎德伟">
+        <div class="p-head"><h3>金祎</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德伟 ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 文臣</p>
+        <p class="p-meta">生卒：?—218 · 提及 0 次 · 首见第 69 回</p>
+        <p class="p-desc">反曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="郑玄康成">
+        <div class="p-head"><h3>郑玄</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">康成 · 经神 · 籍贯不详</p>
+        <p class="p-fac">其他 · 隐士</p>
+        <p class="p-meta">生卒：127—200 · 提及 0 次 · 首见第 22 回</p>
+        <p class="p-desc">经学大师</p>
+        </div><div class="person-card real" data-fic="0" data-name="董卓仲颖">
+        <div class="p-head"><h3>董卓</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲颖 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：139—192 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">西凉军阀，废立天子</p>
+        </div><div class="person-card real" data-fic="0" data-name="李儒">
+        <div class="p-head"><h3>李儒</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 谋士</p>
+        <p class="p-meta">生卒：?—192 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">演义为卓婿首席谋士，正史有李儒但非卓婿</p>
+        </div><div class="person-card real" data-fic="0" data-name="吕布奉先">
+        <div class="p-head"><h3>吕布</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">奉先 · 飞将 · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—198 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">人中吕布，演义加三英战吕布等戏</p>
+        </div><div class="person-card real" data-fic="0" data-name="严氏">
+        <div class="p-head"><h3>严氏</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 女性</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 8 回</p>
+        <p class="p-desc">吕布正妻</p>
+        </div><div class="person-card real" data-fic="0" data-name="貂蝉">
+        <div class="p-head"><h3>貂蝉</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 女性</p>
+        <p class="p-meta">生卒：?—192 · 提及 0 次 · 首见第 8 回</p>
+        <p class="p-desc">纯虚构，原型为董卓婢女</p>
+        </div><div class="person-card real" data-fic="0" data-name="陈宫公台">
+        <div class="p-head"><h3>陈宫</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公台 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 谋士</p>
+        <p class="p-meta">生卒：?—198 · 提及 0 次 · 首见第 4 回</p>
+        <p class="p-desc">叛曹迎吕，正史确有但辞令多虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="高顺">
+        <div class="p-head"><h3>高顺</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—198 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc">陷阵营统帅</p>
+        </div><div class="person-card real" data-fic="0" data-name="张辽文远">
+        <div class="p-head"><h3>张辽</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文远 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：169—222 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc">合肥一战威震逍遥津</p>
+        </div><div class="person-card real" data-fic="0" data-name="臧霸宣高">
+        <div class="p-head"><h3>臧霸</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">宣高 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—230 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc">泰山寇出身</p>
+        </div><div class="person-card real" data-fic="0" data-name="侯成">
+        <div class="p-head"><h3>侯成</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—198 · 提及 0 次 · 首见第 19 回</p>
+        <p class="p-desc">吕布部将，盗马降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="宋宪">
+        <div class="p-head"><h3>宋宪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—198 · 提及 0 次 · 首见第 19 回</p>
+        <p class="p-desc">吕布部将，绑陈宫降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="魏续">
+        <div class="p-head"><h3>魏续</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—198 · 提及 0 次 · 首见第 19 回</p>
+        <p class="p-desc">吕布部将，绑吕布降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹豹">
+        <div class="p-head"><h3>曹豹</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—196 · 提及 0 次 · 首见第 14 回</p>
+        <p class="p-desc">陶谦部将，演义为吕布岳父</p>
+        </div><div class="person-card real" data-fic="0" data-name="华雄">
+        <div class="p-head"><h3>华雄</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—191 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">正史被孙坚斩，演义改关羽温酒斩华雄</p>
+        </div><div class="person-card real" data-fic="0" data-name="胡轸文才">
+        <div class="p-head"><h3>胡轸</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文才 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—191 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">董卓将</p>
+        </div><div class="person-card real" data-fic="0" data-name="李肃">
+        <div class="p-head"><h3>李肃</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—192 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">说吕布降董卓，后被吕布杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="李傕稚然">
+        <div class="p-head"><h3>李傕</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">稚然 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—198 · 提及 0 次 · 首见第 9 回</p>
+        <p class="p-desc">董卓部将，攻陷长安</p>
+        </div><div class="person-card real" data-fic="0" data-name="郭汜">
+        <div class="p-head"><h3>郭汜</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—197 · 提及 0 次 · 首见第 9 回</p>
+        <p class="p-desc">李傕同党</p>
+        </div><div class="person-card real" data-fic="0" data-name="樊稠">
+        <div class="p-head"><h3>樊稠</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—195 · 提及 0 次 · 首见第 9 回</p>
+        <p class="p-desc">李傕同党</p>
+        </div><div class="person-card real" data-fic="0" data-name="张济">
+        <div class="p-head"><h3>张济</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—196 · 提及 0 次 · 首见第 9 回</p>
+        <p class="p-desc">张绣之叔</p>
+        </div><div class="person-card real" data-fic="0" data-name="李蒙">
+        <div class="p-head"><h3>李蒙</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—192 · 提及 0 次 · 首见第 9 回</p>
+        <p class="p-desc">被马超擒斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="王方">
+        <div class="p-head"><h3>王方</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—192 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">被马超斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="袁绍本初">
+        <div class="p-head"><h3>袁绍</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">本初 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：154—202 · 提及 0 次 · 首见第 2 回</p>
+        <p class="p-desc">四世三公，官渡败北</p>
+        </div><div class="person-card real" data-fic="0" data-name="袁术公路">
+        <div class="p-head"><h3>袁术</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公路 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—199 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">僭号称帝，呕血而亡</p>
+        </div><div class="person-card real" data-fic="0" data-name="袁谭显思">
+        <div class="p-head"><h3>袁谭</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">显思 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—205 · 提及 0 次 · 首见第 24 回</p>
+        <p class="p-desc">袁绍长子</p>
+        </div><div class="person-card real" data-fic="0" data-name="袁熙显奕">
+        <div class="p-head"><h3>袁熙</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">显奕 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—207 · 提及 0 次 · 首见第 24 回</p>
+        <p class="p-desc">袁绍次子</p>
+        </div><div class="person-card real" data-fic="0" data-name="袁尚显甫">
+        <div class="p-head"><h3>袁尚</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">显甫 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—207 · 提及 0 次 · 首见第 24 回</p>
+        <p class="p-desc">袁绍三子，嗣位</p>
+        </div><div class="person-card real" data-fic="0" data-name="审配正南">
+        <div class="p-head"><h3>审配</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">正南 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 谋士</p>
+        <p class="p-meta">生卒：?—204 · 提及 0 次 · 首见第 22 回</p>
+        <p class="p-desc">死守邺城，面北而死</p>
+        </div><div class="person-card real" data-fic="0" data-name="逢纪元图">
+        <div class="p-head"><h3>逢纪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元图 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 谋士</p>
+        <p class="p-meta">生卒：?—202 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc">拥立袁尚</p>
+        </div><div class="person-card real" data-fic="0" data-name="郭图公则">
+        <div class="p-head"><h3>郭图</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公则 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 谋士</p>
+        <p class="p-meta">生卒：?—205 · 提及 0 次 · 首见第 22 回</p>
+        <p class="p-desc">力主攻曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="田丰元皓">
+        <div class="p-head"><h3>田丰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元皓 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 谋士</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc">谏袁绍被下狱赐死</p>
+        </div><div class="person-card real" data-fic="0" data-name="沮授">
+        <div class="p-head"><h3>沮授</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 谋士</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc">官渡被擒不降死</p>
+        </div><div class="person-card real" data-fic="0" data-name="许攸子远">
+        <div class="p-head"><h3>许攸</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子远 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 谋士</p>
+        <p class="p-meta">生卒：?—204 · 提及 0 次 · 首见第 22 回</p>
+        <p class="p-desc">叛袁投曹，后被曹操处死</p>
+        </div><div class="person-card real" data-fic="0" data-name="颜良">
+        <div class="p-head"><h3>颜良</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">关羽于万军之中斩颜良为正史</p>
+        </div><div class="person-card real" data-fic="0" data-name="文丑">
+        <div class="p-head"><h3>文丑</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 6 回</p>
+        <p class="p-desc">正史被徐晃部斩，演义为关羽斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="张郃儁乂">
+        <div class="p-head"><h3>张郃</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">儁乂 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—231 · 提及 0 次 · 首见第 22 回</p>
+        <p class="p-desc">木门中箭</p>
+        </div><div class="person-card real" data-fic="0" data-name="高览">
+        <div class="p-head"><h3>高览</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 30 回</p>
+        <p class="p-desc">与张郃同降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="淳于琼仲简">
+        <div class="p-head"><h3>淳于琼</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲简 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 30 回</p>
+        <p class="p-desc">守乌巢醉失粮草</p>
+        </div><div class="person-card real" data-fic="0" data-name="审荣">
+        <div class="p-head"><h3>审荣</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—204 · 提及 0 次 · 首见第 32 回</p>
+        <p class="p-desc">审配侄，开邺城东门</p>
+        </div><div class="person-card real" data-fic="0" data-name="辛评仲治">
+        <div class="p-head"><h3>辛评</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲治 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 文臣</p>
+        <p class="p-meta">生卒：?—204 · 提及 0 次 · 首见第 22 回</p>
+        <p class="p-desc">袁谭谋臣</p>
+        </div><div class="person-card real" data-fic="0" data-name="高干元才">
+        <div class="p-head"><h3>高干</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元才 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—206 · 提及 0 次 · 首见第 31 回</p>
+        <p class="p-desc">袁绍甥</p>
+        </div><div class="person-card real" data-fic="0" data-name="沮鹄">
+        <div class="p-head"><h3>沮鹄</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—204 · 提及 0 次 · 首见第 32 回</p>
+        <p class="p-desc">沮授子</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩猛">
+        <div class="p-head"><h3>韩猛</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 30 回</p>
+        <p class="p-desc">袁绍将，运粮被徐晃败</p>
+        </div><div class="person-card real" data-fic="0" data-name="吕旷">
+        <div class="p-head"><h3>吕旷</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—205 · 提及 0 次 · 首见第 32 回</p>
+        <p class="p-desc">降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="吕翔">
+        <div class="p-head"><h3>吕翔</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—205 · 提及 0 次 · 首见第 32 回</p>
+        <p class="p-desc">降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="纪灵">
+        <div class="p-head"><h3>纪灵</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—199 · 提及 0 次 · 首见第 14 回</p>
+        <p class="p-desc">袁术大将，辕门射戟</p>
+        </div><div class="person-card real" data-fic="0" data-name="桥蕤">
+        <div class="p-head"><h3>桥蕤</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—197 · 提及 0 次 · 首见第 17 回</p>
+        <p class="p-desc">袁术将</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩胤">
+        <div class="p-head"><h3>韩胤</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 其他</p>
+        <p class="p-meta">生卒：?—197 · 提及 0 次 · 首见第 16 回</p>
+        <p class="p-desc">袁术使，被送许都斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="杨弘">
+        <div class="p-head"><h3>杨弘</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 其他</p>
+        <p class="p-meta">生卒：?—199 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc">袁术长史，演义误作杨大将</p>
+        </div><div class="person-card real" data-fic="0" data-name="陈兰">
+        <div class="p-head"><h3>陈兰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—209 · 提及 0 次 · 首见第 48 回</p>
+        <p class="p-desc">袁术将叛为寇</p>
+        </div><div class="person-card real" data-fic="0" data-name="雷薄">
+        <div class="p-head"><h3>雷薄</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 21 回</p>
+        <p class="p-desc">袁术将</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘表景升">
+        <div class="p-head"><h3>刘表</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">景升 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：142—208 · 提及 0 次 · 首见第 6 回</p>
+        <p class="p-desc">荆州八俊</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘琦">
+        <div class="p-head"><h3>刘琦</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 其他</p>
+        <p class="p-meta">生卒：?—209 · 提及 0 次 · 首见第 34 回</p>
+        <p class="p-desc">刘表长子</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘琮">
+        <div class="p-head"><h3>刘琮</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 其他</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 40 回</p>
+        <p class="p-desc">刘表次子，降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="蔡瑁德珪">
+        <div class="p-head"><h3>蔡瑁</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德珪 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 34 回</p>
+        <p class="p-desc">刘表妻弟，被曹操杀为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="张允">
+        <div class="p-head"><h3>张允</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 34 回</p>
+        <p class="p-desc">蔡瑁同党，被曹操杀为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="蒯良子柔">
+        <div class="p-head"><h3>蒯良</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子柔 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 文臣</p>
+        <p class="p-meta">生卒：?—192 · 提及 0 次 · 首见第 6 回</p>
+        <p class="p-desc">刘表谋臣</p>
+        </div><div class="person-card real" data-fic="0" data-name="蒯越异度">
+        <div class="p-head"><h3>蒯越</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">异度 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—214 · 提及 0 次 · 首见第 6 回</p>
+        <p class="p-desc">刘表谋臣，降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="黄祖">
+        <div class="p-head"><h3>黄祖</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc">刘表部将，杀祢衡、孙坚</p>
+        </div><div class="person-card real" data-fic="0" data-name="苏飞">
+        <div class="p-head"><h3>苏飞</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 38 回</p>
+        <p class="p-desc">黄祖都督，荐甘宁</p>
+        </div><div class="person-card real" data-fic="0" data-name="文聘仲业">
+        <div class="p-head"><h3>文聘</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲业 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—226 · 提及 0 次 · 首见第 34 回</p>
+        <p class="p-desc">刘表降将，守江夏</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩玄">
+        <div class="p-head"><h3>韩玄</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 53 回</p>
+        <p class="p-desc">被魏延杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="赵范">
+        <div class="p-head"><h3>赵范</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—214 · 提及 0 次 · 首见第 52 回</p>
+        <p class="p-desc">赵云拒嫂</p>
+        </div><div class="person-card real" data-fic="0" data-name="樊氏">
+        <div class="p-head"><h3>樊氏</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 女性</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 52 回</p>
+        <p class="p-desc">赵范寡嫂</p>
+        </div><div class="person-card real" data-fic="0" data-name="金旋元机">
+        <div class="p-head"><h3>金旋</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元机 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—209 · 提及 0 次 · 首见第 53 回</p>
+        <p class="p-desc">被从事巩志射杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘度">
+        <div class="p-head"><h3>刘度</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 52 回</p>
+        <p class="p-desc">降刘备</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘贤">
+        <div class="p-head"><h3>刘贤</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 其他</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 52 回</p>
+        <p class="p-desc">刘度子</p>
+        </div><div class="person-card real" data-fic="0" data-name="巩志">
+        <div class="p-head"><h3>巩志</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 文臣</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 53 回</p>
+        <p class="p-desc">金旋从事，献城（虚构）</p>
+        </div><div class="person-card real" data-fic="0" data-name="邢道荣">
+        <div class="p-head"><h3>邢道荣</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 52 回</p>
+        <p class="p-desc">虚构，被赵云刺</p>
+        </div><div class="person-card real" data-fic="0" data-name="杨龄">
+        <div class="p-head"><h3>杨龄</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 53 回</p>
+        <p class="p-desc">虚构，被关羽斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹操孟德">
+        <div class="p-head"><h3>曹操</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">孟德 · 阿瞒/魏武帝 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 君主</p>
+        <p class="p-meta">生卒：155—220 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">魏武帝，正史奸雄兼具，演义强化奸雄面向</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹丕子桓">
+        <div class="p-head"><h3>曹丕</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子桓 · 魏文帝 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 君主</p>
+        <p class="p-meta">生卒：187—226 · 提及 0 次 · 首见第 32 回</p>
+        <p class="p-desc">篡汉称帝</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹睿元仲">
+        <div class="p-head"><h3>曹睿</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元仲 · 魏明帝 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 君主</p>
+        <p class="p-meta">生卒：204—239 · 提及 0 次 · 首见第 91 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="曹芳兰卿">
+        <div class="p-head"><h3>曹芳</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">兰卿 · 邵陵厉公 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 君主</p>
+        <p class="p-meta">生卒：232—274 · 提及 0 次 · 首见第 106 回</p>
+        <p class="p-desc">被司马师废</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹髦彦士">
+        <div class="p-head"><h3>曹髦</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">彦士 · 高贵乡公 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 君主</p>
+        <p class="p-meta">生卒：241—260 · 提及 0 次 · 首见第 109 回</p>
+        <p class="p-desc">司马昭之心路人皆知</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹奂景明">
+        <div class="p-head"><h3>曹奂</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">景明 · 陈留王 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 君主</p>
+        <p class="p-meta">生卒：246—302 · 提及 0 次 · 首见第 114 回</p>
+        <p class="p-desc">禅位司马炎</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹昂子修">
+        <div class="p-head"><h3>曹昂</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子修 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 其他</p>
+        <p class="p-meta">生卒：?—197 · 提及 0 次 · 首见第 16 回</p>
+        <p class="p-desc">宛城战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹彰子文">
+        <div class="p-head"><h3>曹彰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子文 · 黄须儿 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—223 · 提及 0 次 · 首见第 68 回</p>
+        <p class="p-desc">勇将</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹植子建">
+        <div class="p-head"><h3>曹植</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子建 · 陈思王 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：192—232 · 提及 0 次 · 首见第 32 回</p>
+        <p class="p-desc">七步诗为演义虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹熊">
+        <div class="p-head"><h3>曹熊</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 其他</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 32 回</p>
+        <p class="p-desc">早薨</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹仁子孝">
+        <div class="p-head"><h3>曹仁</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子孝 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：168—223 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">曹操从弟</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹洪子廉">
+        <div class="p-head"><h3>曹洪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子廉 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—232 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">曹操从弟</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹纯子和">
+        <div class="p-head"><h3>曹纯</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子和 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—210 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">曹仁弟，虎豹骑督</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹休文烈">
+        <div class="p-head"><h3>曹休</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文烈 · 千里驹 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—228 · 提及 0 次 · 首见第 56 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="曹真子丹">
+        <div class="p-head"><h3>曹真</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子丹 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—231 · 提及 0 次 · 首见第 56 回</p>
+        <p class="p-desc">演义加被诸葛气死，正史病死</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹爽昭伯">
+        <div class="p-head"><h3>曹爽</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">昭伯 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—249 · 提及 0 次 · 首见第 106 回</p>
+        <p class="p-desc">被司马懿诛</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹羲">
+        <div class="p-head"><h3>曹羲</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—249 · 提及 0 次 · 首见第 106 回</p>
+        <p class="p-desc">曹爽弟</p>
+        </div><div class="person-card real" data-fic="0" data-name="曹训">
+        <div class="p-head"><h3>曹训</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—249 · 提及 0 次 · 首见第 106 回</p>
+        <p class="p-desc">曹爽弟</p>
+        </div><div class="person-card real" data-fic="0" data-name="夏侯渊妙才">
+        <div class="p-head"><h3>夏侯渊</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">妙才 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—219 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">定军山被黄忠斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="夏侯惇元让">
+        <div class="p-head"><h3>夏侯惇</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元让 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">拔矢啖睛为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="夏侯楙子林">
+        <div class="p-head"><h3>夏侯楙</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子林 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 91 回</p>
+        <p class="p-desc">夏侯惇子，驸马</p>
+        </div><div class="person-card real" data-fic="0" data-name="夏侯霸仲权">
+        <div class="p-head"><h3>夏侯霸</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲权 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—259 · 提及 0 次 · 首见第 106 回</p>
+        <p class="p-desc">避司马氏投蜀</p>
+        </div><div class="person-card real" data-fic="0" data-name="夏侯玄太初">
+        <div class="p-head"><h3>夏侯玄</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">太初 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：209—254 · 提及 0 次 · 首见第 106 回</p>
+        <p class="p-desc">玄学宗主，被司马师杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="荀彧文若">
+        <div class="p-head"><h3>荀彧</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文若 · 荀令君 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 谋士</p>
+        <p class="p-meta">生卒：163—212 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">服毒自尽为演义，正史忧郁而亡</p>
+        </div><div class="person-card real" data-fic="0" data-name="荀攸公达">
+        <div class="p-head"><h3>荀攸</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公达 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 谋士</p>
+        <p class="p-meta">生卒：157—214 · 提及 0 次 · 首见第 19 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="郭嘉奉孝">
+        <div class="p-head"><h3>郭嘉</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">奉孝 · 鬼才 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 谋士</p>
+        <p class="p-meta">生卒：170—207 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">遗计定辽东为演义加</p>
+        </div><div class="person-card real" data-fic="0" data-name="程昱仲德">
+        <div class="p-head"><h3>程昱</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲德 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 谋士</p>
+        <p class="p-meta">生卒：141—220 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="贾诩文和">
+        <div class="p-head"><h3>贾诩</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文和 · 毒士 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 谋士</p>
+        <p class="p-meta">生卒：147—223 · 提及 0 次 · 首见第 9 回</p>
+        <p class="p-desc">乱长安者</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘晔子扬">
+        <div class="p-head"><h3>刘晔</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子扬 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 谋士</p>
+        <p class="p-meta">生卒：?—234 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">发石车</p>
+        </div><div class="person-card real" data-fic="0" data-name="满宠伯宁">
+        <div class="p-head"><h3>满宠</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯宁 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—242 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="毛玠孝先">
+        <div class="p-head"><h3>毛玠</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">孝先 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—216 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="任峻伯达">
+        <div class="p-head"><h3>任峻</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯达 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—204 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">屯田首倡</p>
+        </div><div class="person-card real" data-fic="0" data-name="吕虔子恪">
+        <div class="p-head"><h3>吕虔</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子恪 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="典韦">
+        <div class="p-head"><h3>典韦</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— · 古之恶来 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—197 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">宛城战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="许褚仲康">
+        <div class="p-head"><h3>许褚</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲康 · 虎痴/虎侯 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—227 · 提及 0 次 · 首见第 12 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="徐晃公明">
+        <div class="p-head"><h3>徐晃</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公明 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—227 · 提及 0 次 · 首见第 13 回</p>
+        <p class="p-desc">被孟达射杀为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="于禁文则">
+        <div class="p-head"><h3>于禁</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文则 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—221 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">水淹七军降关羽</p>
+        </div><div class="person-card real" data-fic="0" data-name="乐进文谦">
+        <div class="p-head"><h3>乐进</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文谦 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—218 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">五子良将</p>
+        </div><div class="person-card real" data-fic="0" data-name="李典曼成">
+        <div class="p-head"><h3>李典</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">曼成 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—209 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="庞德令明">
+        <div class="p-head"><h3>庞德</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">令明 · 白马将军 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—219 · 提及 0 次 · 首见第 58 回</p>
+        <p class="p-desc">抬棺战关羽被斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="庞会">
+        <div class="p-head"><h3>庞会</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 74 回</p>
+        <p class="p-desc">庞德子，灭关氏家</p>
+        </div><div class="person-card real" data-fic="0" data-name="邓艾士载">
+        <div class="p-head"><h3>邓艾</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">士载 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：197—264 · 提及 0 次 · 首见第 110 回</p>
+        <p class="p-desc">偷渡阴平灭蜀</p>
+        </div><div class="person-card real" data-fic="0" data-name="邓忠">
+        <div class="p-head"><h3>邓忠</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—264 · 提及 0 次 · 首见第 111 回</p>
+        <p class="p-desc">邓艾子</p>
+        </div><div class="person-card real" data-fic="0" data-name="钟会士季">
+        <div class="p-head"><h3>钟会</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">士季 · 子房 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 谋士</p>
+        <p class="p-meta">生卒：225—264 · 提及 0 次 · 首见第 107 回</p>
+        <p class="p-desc">谋反被诛</p>
+        </div><div class="person-card real" data-fic="0" data-name="钟繇元常">
+        <div class="p-head"><h3>钟繇</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元常 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：151—230 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">书法家，钟会父</p>
+        </div><div class="person-card real" data-fic="0" data-name="王朗景兴">
+        <div class="p-head"><h3>王朗</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">景兴 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—228 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc">被诸葛亮骂死为演义虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="华歆子鱼">
+        <div class="p-head"><h3>华歆</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子鱼 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：157—232 · 提及 0 次 · 首见第 29 回</p>
+        <p class="p-desc">逼献帝禅位为演义虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="陈群长文">
+        <div class="p-head"><h3>陈群</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">长文 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—236 · 提及 0 次 · 首见第 56 回</p>
+        <p class="p-desc">九品中正制</p>
+        </div><div class="person-card real" data-fic="0" data-name="辛毗佐治">
+        <div class="p-head"><h3>辛毗</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">佐治 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—235 · 提及 0 次 · 首见第 32 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="辛宪英">
+        <div class="p-head"><h3>辛宪英</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 女性</p>
+        <p class="p-meta">生卒：191—269 · 提及 0 次 · 首见第 107 回</p>
+        <p class="p-desc">辛毗女，预言曹爽必败</p>
+        </div><div class="person-card real" data-fic="0" data-name="贾逵梁道">
+        <div class="p-head"><h3>贾逵</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">梁道 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：174—228 · 提及 0 次 · 首见第 56 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="司马懿仲达">
+        <div class="p-head"><h3>司马懿</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲达 · 冢虎/宣王 · 籍贯不详</p>
+        <p class="p-fac">晋 · 谋士</p>
+        <p class="p-meta">生卒：179—251 · 提及 0 次 · 首见第 39 回</p>
+        <p class="p-desc">空城计/火熄上方谷为演义虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="司马师子元">
+        <div class="p-head"><h3>司马师</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子元 · 景王 · 籍贯不详</p>
+        <p class="p-fac">晋 · 诸侯</p>
+        <p class="p-meta">生卒：208—255 · 提及 0 次 · 首见第 106 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="司马昭子上">
+        <div class="p-head"><h3>司马昭</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子上 · 文王 · 籍贯不详</p>
+        <p class="p-fac">晋 · 君主</p>
+        <p class="p-meta">生卒：211—265 · 提及 0 次 · 首见第 109 回</p>
+        <p class="p-desc">司马昭之心路人皆知</p>
+        </div><div class="person-card real" data-fic="0" data-name="司马炎安世">
+        <div class="p-head"><h3>司马炎</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">安世 · 晋武帝 · 籍贯不详</p>
+        <p class="p-fac">晋 · 君主</p>
+        <p class="p-meta">生卒：236—290 · 提及 0 次 · 首见第 119 回</p>
+        <p class="p-desc">代魏称帝，三国归晋</p>
+        </div><div class="person-card real" data-fic="0" data-name="司马孚叔达">
+        <div class="p-head"><h3>司马孚</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">叔达 ·  · 籍贯不详</p>
+        <p class="p-fac">晋 · 文臣</p>
+        <p class="p-meta">生卒：180—272 · 提及 0 次 · 首见第 106 回</p>
+        <p class="p-desc">司马懿弟，终身自称魏臣</p>
+        </div><div class="person-card real" data-fic="0" data-name="王双子全">
+        <div class="p-head"><h3>王双</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子全 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—228 · 提及 0 次 · 首见第 97 回</p>
+        <p class="p-desc">被魏延斩，正史有王双但非大将</p>
+        </div><div class="person-card real" data-fic="0" data-name="郝昭伯道">
+        <div class="p-head"><h3>郝昭</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯道 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—228 · 提及 0 次 · 首见第 96 回</p>
+        <p class="p-desc">陈仓守将，拒诸葛</p>
+        </div><div class="person-card real" data-fic="0" data-name="郭淮伯济">
+        <div class="p-head"><h3>郭淮</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯济 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—255 · 提及 0 次 · 首见第 93 回</p>
+        <p class="p-desc">被姜维箭射面门死为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="陈泰玄伯">
+        <div class="p-head"><h3>陈泰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">玄伯 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—260 · 提及 0 次 · 首见第 107 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="孙礼德达">
+        <div class="p-head"><h3>孙礼</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德达 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—250 · 提及 0 次 · 首见第 95 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="张虎">
+        <div class="p-head"><h3>张虎</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 98 回</p>
+        <p class="p-desc">张辽子</p>
+        </div><div class="person-card real" data-fic="0" data-name="乐綝">
+        <div class="p-head"><h3>乐綝</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—257 · 提及 0 次 · 首见第 98 回</p>
+        <p class="p-desc">乐进子，被诸葛诞杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩浩元嗣">
+        <div class="p-head"><h3>韩浩</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元嗣 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">屯田</p>
+        </div><div class="person-card real" data-fic="0" data-name="史涣公刘">
+        <div class="p-head"><h3>史涣</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公刘 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 19 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="车胄">
+        <div class="p-head"><h3>车胄</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 21 回</p>
+        <p class="p-desc">徐州刺史，被关羽斩为演义加</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘馥元颖">
+        <div class="p-head"><h3>刘馥</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元颖 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 48 回</p>
+        <p class="p-desc">横槊赋诗被杀为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="杨修德祖">
+        <div class="p-head"><h3>杨修</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德祖 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：175—219 · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">一盒酥、鸡肋等典故有史实基础但演义戏剧化</p>
+        </div><div class="person-card real" data-fic="0" data-name="陈琳孔璋">
+        <div class="p-head"><h3>陈琳</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">孔璋 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—217 · 提及 0 次 · 首见第 22 回</p>
+        <p class="p-desc">讨曹檄文</p>
+        </div><div class="person-card real" data-fic="0" data-name="王粲仲宣">
+        <div class="p-head"><h3>王粲</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲宣 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：177—217 · 提及 0 次 · 首见第 40 回</p>
+        <p class="p-desc">建安七子</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘桢公干">
+        <div class="p-head"><h3>刘桢</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公干 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—217 · 提及 0 次 · 首见第 40 回</p>
+        <p class="p-desc">建安七子</p>
+        </div><div class="person-card real" data-fic="0" data-name="应玚德琏">
+        <div class="p-head"><h3>应玚</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德琏 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—217 · 提及 0 次 · 首见第 40 回</p>
+        <p class="p-desc">建安七子</p>
+        </div><div class="person-card real" data-fic="0" data-name="阮瑀元瑜">
+        <div class="p-head"><h3>阮瑀</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元瑜 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—212 · 提及 0 次 · 首见第 40 回</p>
+        <p class="p-desc">建安七子</p>
+        </div><div class="person-card real" data-fic="0" data-name="徐干伟长">
+        <div class="p-head"><h3>徐干</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伟长 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：170—217 · 提及 0 次 · 首见第 40 回</p>
+        <p class="p-desc">建安七子</p>
+        </div><div class="person-card real" data-fic="0" data-name="华佗元化">
+        <div class="p-head"><h3>华佗</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元化 · 神医 · 籍贯不详</p>
+        <p class="p-fac">其他 · 方士</p>
+        <p class="p-meta">生卒：145—208 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc">为关羽刮骨疗毒、要开曹操头为演义虚构治疗</p>
+        </div><div class="person-card real" data-fic="0" data-name="左慈元放">
+        <div class="p-head"><h3>左慈</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元放 · 乌角先生 · 籍贯不详</p>
+        <p class="p-fac">其他 · 方士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 68 回</p>
+        <p class="p-desc">掷杯戏曹操为演义神化</p>
+        </div><div class="person-card real" data-fic="0" data-name="管辂公明">
+        <div class="p-head"><h3>管辂</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公明 · 神卜 · 籍贯不详</p>
+        <p class="p-fac">其他 · 方士</p>
+        <p class="p-meta">生卒：209—256 · 提及 0 次 · 首见第 69 回</p>
+        <p class="p-desc">卜算神化加戏</p>
+        </div><div class="person-card real" data-fic="0" data-name="祢衡正平">
+        <div class="p-head"><h3>祢衡</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">正平 · 狂士 · 籍贯不详</p>
+        <p class="p-fac">其他 · 文臣</p>
+        <p class="p-meta">生卒：173—198 · 提及 0 次 · 首见第 23 回</p>
+        <p class="p-desc">裸衣骂曹正史有，演义加戏</p>
+        </div><div class="person-card real" data-fic="0" data-name="孔融文举">
+        <div class="p-head"><h3>孔融</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文举 · 孔北海 · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：153—208 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">孔子二十世孙，让梨、被曹操杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="李丰">
+        <div class="p-head"><h3>李丰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—254 · 提及 0 次 · 首见第 109 回</p>
+        <p class="p-desc">反司马师</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘备玄德">
+        <div class="p-head"><h3>刘备</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">玄德 · 先主/昭烈帝/大耳儿 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 君主</p>
+        <p class="p-meta">生卒：161—223 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">正史弘毅宽厚，演义加皇叔身份等渲染</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘禅公嗣">
+        <div class="p-head"><h3>刘禅</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公嗣 · 阿斗/后主 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 君主</p>
+        <p class="p-meta">生卒：207—271 · 提及 0 次 · 首见第 34 回</p>
+        <p class="p-desc">乐不思蜀有正史</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘永公寿">
+        <div class="p-head"><h3>刘永</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公寿 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 其他</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 65 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="刘理奉孝">
+        <div class="p-head"><h3>刘理</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">奉孝 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 其他</p>
+        <p class="p-meta">生卒：?—244 · 提及 0 次 · 首见第 65 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="刘封">
+        <div class="p-head"><h3>刘封</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 36 回</p>
+        <p class="p-desc">刘备义子，被赐死</p>
+        </div><div class="person-card real" data-fic="0" data-name="甘夫人">
+        <div class="p-head"><h3>甘夫人</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 女性</p>
+        <p class="p-meta">生卒：?—209 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc">正史卒于赤壁前，演义加投井情节</p>
+        </div><div class="person-card real" data-fic="0" data-name="糜夫人">
+        <div class="p-head"><h3>糜夫人</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 女性</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc">投井而死为演义虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙夫人">
+        <div class="p-head"><h3>孙夫人</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— · 孙尚香/枭姬 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 女性</p>
+        <p class="p-meta">生卒：?—211 · 提及 0 次 · 首见第 54 回</p>
+        <p class="p-desc">正史称孙夫人，孙尚香为后世戏曲名</p>
+        </div><div class="person-card real" data-fic="0" data-name="吴皇后">
+        <div class="p-head"><h3>吴皇后</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 女性</p>
+        <p class="p-meta">生卒：?—245 · 提及 0 次 · 首见第 65 回</p>
+        <p class="p-desc">吴懿妹</p>
+        </div><div class="person-card real" data-fic="0" data-name="关羽云长">
+        <div class="p-head"><h3>关羽</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">云长 · 美髯公/关公/武圣/汉寿亭侯 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：160—219 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">桃园结义、过五关斩六将、华容道义释曹操等为演义戏</p>
+        </div><div class="person-card real" data-fic="0" data-name="张飞翼德">
+        <div class="p-head"><h3>张飞</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">翼德 · 燕人张翼德 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—221 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">正史字益德，鞭打督邮本为刘备事</p>
+        </div><div class="person-card real" data-fic="0" data-name="诸葛亮孔明">
+        <div class="p-head"><h3>诸葛亮</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">孔明 · 卧龙/武侯/伏龙 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 谋士</p>
+        <p class="p-meta">生卒：181—234 · 提及 0 次 · 首见第 36 回</p>
+        <p class="p-desc">草船借箭、借东风、三气周瑜、空城计等为神化</p>
+        </div><div class="person-card real" data-fic="0" data-name="诸葛瞻思远">
+        <div class="p-head"><h3>诸葛瞻</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">思远 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：227—263 · 提及 0 次 · 首见第 105 回</p>
+        <p class="p-desc">诸葛亮子，绵竹战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="诸葛尚">
+        <div class="p-head"><h3>诸葛尚</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 武将</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 117 回</p>
+        <p class="p-desc">诸葛瞻子，绵竹战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="诸葛瑾子瑜">
+        <div class="p-head"><h3>诸葛瑾</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子瑜 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：174—241 · 提及 0 次 · 首见第 29 回</p>
+        <p class="p-desc">诸葛亮兄</p>
+        </div><div class="person-card real" data-fic="0" data-name="诸葛恪元逊">
+        <div class="p-head"><h3>诸葛恪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元逊 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：203—253 · 提及 0 次 · 首见第 98 回</p>
+        <p class="p-desc">诸葛瑾子，专权被诛</p>
+        </div><div class="person-card real" data-fic="0" data-name="诸葛乔伯松">
+        <div class="p-head"><h3>诸葛乔</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯松 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：204—228 · 提及 0 次 · 首见第 63 回</p>
+        <p class="p-desc">诸葛瑾子过继给诸葛</p>
+        </div><div class="person-card real" data-fic="0" data-name="庞统士元">
+        <div class="p-head"><h3>庞统</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">士元 · 凤雏 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 谋士</p>
+        <p class="p-meta">生卒：179—214 · 提及 0 次 · 首见第 35 回</p>
+        <p class="p-desc">落凤坡为演义虚构，正史在雒城中流矢</p>
+        </div><div class="person-card real" data-fic="0" data-name="徐庶元直">
+        <div class="p-head"><h3>徐庶</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元直 · 单福 · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 谋士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 35 回</p>
+        <p class="p-desc">走马荐诸葛、徐母骂曹为演义虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="徐母">
+        <div class="p-head"><h3>徐母</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 女性</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 36 回</p>
+        <p class="p-desc">徐庶之母，自缢情节为演义虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="赵云子龙">
+        <div class="p-head"><h3>赵云</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子龙 · 虎威将军 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—229 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc">七进七出长坂坡等神勇戏为演义加</p>
+        </div><div class="person-card real" data-fic="0" data-name="赵统">
+        <div class="p-head"><h3>赵统</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 97 回</p>
+        <p class="p-desc">赵云长子</p>
+        </div><div class="person-card real" data-fic="0" data-name="赵广">
+        <div class="p-head"><h3>赵广</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 97 回</p>
+        <p class="p-desc">赵云次子，沓中战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="马超孟起">
+        <div class="p-head"><h3>马超</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">孟起 · 锦马超 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：176—222 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">演义时序错乱（父在曹营时反）</p>
+        </div><div class="person-card real" data-fic="0" data-name="马岱">
+        <div class="p-head"><h3>马岱</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—235 · 提及 0 次 · 首见第 57 回</p>
+        <p class="p-desc">斩魏延为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="马铁">
+        <div class="p-head"><h3>马铁</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 其他</p>
+        <p class="p-meta">生卒：?—212 · 提及 0 次 · 首见第 57 回</p>
+        <p class="p-desc">马腾子</p>
+        </div><div class="person-card real" data-fic="0" data-name="马休">
+        <div class="p-head"><h3>马休</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 其他</p>
+        <p class="p-meta">生卒：?—212 · 提及 0 次 · 首见第 57 回</p>
+        <p class="p-desc">马腾子</p>
+        </div><div class="person-card real" data-fic="0" data-name="黄忠汉升">
+        <div class="p-head"><h3>黄忠</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">汉升 · 老将军 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 53 回</p>
+        <p class="p-desc">战长沙关黄对刀为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="魏延文长">
+        <div class="p-head"><h3>魏延</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文长 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—234 · 提及 0 次 · 首见第 41 回</p>
+        <p class="p-desc">反骨、被马岱斩为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="王平子均">
+        <div class="p-head"><h3>王平</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子均 · 何平 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—248 · 提及 0 次 · 首见第 71 回</p>
+        <p class="p-desc">无当飞军统帅</p>
+        </div><div class="person-card real" data-fic="0" data-name="廖化元俭">
+        <div class="p-head"><h3>廖化</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元俭 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—264 · 提及 0 次 · 首见第 27 回</p>
+        <p class="p-desc">蜀中无大将廖化作先锋非史实</p>
+        </div><div class="person-card real" data-fic="0" data-name="周仓">
+        <div class="p-head"><h3>周仓</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 武将</p>
+        <p class="p-meta">生卒：?—219 · 提及 0 次 · 首见第 28 回</p>
+        <p class="p-desc">虚构人物，关帝庙配像</p>
+        </div><div class="person-card real" data-fic="0" data-name="关平">
+        <div class="p-head"><h3>关平</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—219 · 提及 0 次 · 首见第 28 回</p>
+        <p class="p-desc">正史为关羽长子，演义写为义子</p>
+        </div><div class="person-card real" data-fic="0" data-name="关兴安国">
+        <div class="p-head"><h3>关兴</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">安国 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—234 · 提及 0 次 · 首见第 81 回</p>
+        <p class="p-desc">演义加为父报仇、夺回青龙刀等</p>
+        </div><div class="person-card real" data-fic="0" data-name="关索">
+        <div class="p-head"><h3>关索</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">虚构，见《花关索传》</p>
+        </div><div class="person-card real" data-fic="0" data-name="张苞">
+        <div class="p-head"><h3>张苞</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 81 回</p>
+        <p class="p-desc">正史早夭，演义加猛将戏</p>
+        </div><div class="person-card real" data-fic="0" data-name="张绍">
+        <div class="p-head"><h3>张绍</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 81 回</p>
+        <p class="p-desc">张飞次子，献降书</p>
+        </div><div class="person-card real" data-fic="0" data-name="马谡幼常">
+        <div class="p-head"><h3>马谡</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">幼常 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 谋士</p>
+        <p class="p-meta">生卒：190—228 · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">失街亭</p>
+        </div><div class="person-card real" data-fic="0" data-name="马良季常">
+        <div class="p-head"><h3>马良</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">季常 · 白眉 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：187—222 · 提及 0 次 · 首见第 53 回</p>
+        <p class="p-desc">马氏五常，白眉最良</p>
+        </div><div class="person-card real" data-fic="0" data-name="蒋琬公琰">
+        <div class="p-head"><h3>蒋琬</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公琰 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—246 · 提及 0 次 · 首见第 63 回</p>
+        <p class="p-desc">四英相</p>
+        </div><div class="person-card real" data-fic="0" data-name="费祎文伟">
+        <div class="p-head"><h3>费祎</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文伟 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—253 · 提及 0 次 · 首见第 65 回</p>
+        <p class="p-desc">四英相，被郭修刺</p>
+        </div><div class="person-card real" data-fic="0" data-name="董允休昭">
+        <div class="p-head"><h3>董允</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">休昭 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—246 · 提及 0 次 · 首见第 65 回</p>
+        <p class="p-desc">四英相</p>
+        </div><div class="person-card real" data-fic="0" data-name="郭攸之演长">
+        <div class="p-head"><h3>郭攸之</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">演长 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 91 回</p>
+        <p class="p-desc">《出师表》提及</p>
+        </div><div class="person-card real" data-fic="0" data-name="向宠">
+        <div class="p-head"><h3>向宠</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—240 · 提及 0 次 · 首见第 91 回</p>
+        <p class="p-desc">《出师表》提及</p>
+        </div><div class="person-card real" data-fic="0" data-name="向朗巨达">
+        <div class="p-head"><h3>向朗</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">巨达 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—247 · 提及 0 次 · 首见第 63 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="伊籍机伯">
+        <div class="p-head"><h3>伊籍</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">机伯 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—221 · 提及 0 次 · 首见第 34 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="邓芝伯苗">
+        <div class="p-head"><h3>邓芝</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯苗 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—251 · 提及 0 次 · 首见第 65 回</p>
+        <p class="p-desc">吴蜀复盟使者</p>
+        </div><div class="person-card real" data-fic="0" data-name="宗预德艳">
+        <div class="p-head"><h3>宗预</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德艳 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—264 · 提及 0 次 · 首见第 97 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="李恢德昂">
+        <div class="p-head"><h3>李恢</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德昂 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—231 · 提及 0 次 · 首见第 65 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="吕凯季平">
+        <div class="p-head"><h3>吕凯</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">季平 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—225 · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">平南中</p>
+        </div><div class="person-card real" data-fic="0" data-name="张翼伯恭">
+        <div class="p-head"><h3>张翼</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯恭 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—264 · 提及 0 次 · 首见第 64 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="张嶷伯岐">
+        <div class="p-head"><h3>张嶷</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯岐 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—254 · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">无当飞军</p>
+        </div><div class="person-card real" data-fic="0" data-name="吴班元雄">
+        <div class="p-head"><h3>吴班</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元雄 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 62 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="吴懿子远">
+        <div class="p-head"><h3>吴懿</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子远 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—237 · 提及 0 次 · 首见第 62 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="高翔">
+        <div class="p-head"><h3>高翔</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 91 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="陈式">
+        <div class="p-head"><h3>陈式</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—229 · 提及 0 次 · 首见第 71 回</p>
+        <p class="p-desc">被诸葛亮斩为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="简雍宪和">
+        <div class="p-head"><h3>简雍</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">宪和 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—214 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="孙乾公祐">
+        <div class="p-head"><h3>孙乾</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公祐 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—214 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="糜竺子仲">
+        <div class="p-head"><h3>糜竺</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子仲 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—221 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="糜芳子方">
+        <div class="p-head"><h3>糜芳</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子方 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—223 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc">降吴致关羽死</p>
+        </div><div class="person-card real" data-fic="0" data-name="黄权公衡">
+        <div class="p-head"><h3>黄权</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公衡 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—240 · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">降魏</p>
+        </div><div class="person-card real" data-fic="0" data-name="杨仪威公">
+        <div class="p-head"><h3>杨仪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">威公 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—235 · 提及 0 次 · 首见第 91 回</p>
+        <p class="p-desc">杀魏延，后自杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="李严正方">
+        <div class="p-head"><h3>李严</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">正方 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—234 · 提及 0 次 · 首见第 64 回</p>
+        <p class="p-desc">被诸葛废</p>
+        </div><div class="person-card real" data-fic="0" data-name="费观宾伯">
+        <div class="p-head"><h3>费观</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">宾伯 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 64 回</p>
+        <p class="p-desc">刘璋婿</p>
+        </div><div class="person-card real" data-fic="0" data-name="谯周允南">
+        <div class="p-head"><h3>谯周</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">允南 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：201—270 · 提及 0 次 · 首见第 65 回</p>
+        <p class="p-desc">劝后主降</p>
+        </div><div class="person-card real" data-fic="0" data-name="郤正令先">
+        <div class="p-head"><h3>郤正</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">令先 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—278 · 提及 0 次 · 首见第 91 回</p>
+        <p class="p-desc">教后主此间乐不思蜀</p>
+        </div><div class="person-card real" data-fic="0" data-name="秦宓子敕">
+        <div class="p-head"><h3>秦宓</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子敕 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—226 · 提及 0 次 · 首见第 65 回</p>
+        <p class="p-desc">辩才难张温</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘巴子初">
+        <div class="p-head"><h3>刘巴</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子初 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—222 · 提及 0 次 · 首见第 62 回</p>
+        <p class="p-desc">蜀之名士</p>
+        </div><div class="person-card real" data-fic="0" data-name="黄皓">
+        <div class="p-head"><h3>黄皓</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 宦官</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 102 回</p>
+        <p class="p-desc">亡蜀宦官</p>
+        </div><div class="person-card real" data-fic="0" data-name="阎宇文平">
+        <div class="p-head"><h3>阎宇</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文平 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 115 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="霍峻仲邈">
+        <div class="p-head"><h3>霍峻</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲邈 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—217 · 提及 0 次 · 首见第 62 回</p>
+        <p class="p-desc">守葭萌关</p>
+        </div><div class="person-card real" data-fic="0" data-name="罗宪令则">
+        <div class="p-head"><h3>罗宪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">令则 ·  · 籍贯不详</p>
+        <p class="p-fac">西晋 · 将领</p>
+        <p class="p-meta">生卒：?—270 · 提及 0 次 · 首见第 118 回</p>
+        <p class="p-desc">蜀亡后守永安</p>
+        </div><div class="person-card real" data-fic="0" data-name="傅肜">
+        <div class="p-head"><h3>傅肜</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 武将</p>
+        <p class="p-meta">生卒：?—222 · 提及 0 次 · 首见第 84 回</p>
+        <p class="p-desc">夷陵战死，演义名傅彤</p>
+        </div><div class="person-card real" data-fic="0" data-name="程畿季然">
+        <div class="p-head"><h3>程畿</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">季然 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—222 · 提及 0 次 · 首见第 84 回</p>
+        <p class="p-desc">夷陵战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="傅佥">
+        <div class="p-head"><h3>傅佥</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 武将</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 116 回</p>
+        <p class="p-desc">阳安关战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="蒋舒">
+        <div class="p-head"><h3>蒋舒</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 116 回</p>
+        <p class="p-desc">阳安关降</p>
+        </div><div class="person-card real" data-fic="0" data-name="张遵">
+        <div class="p-head"><h3>张遵</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 117 回</p>
+        <p class="p-desc">张苞子，绵竹战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="黄崇">
+        <div class="p-head"><h3>黄崇</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 117 回</p>
+        <p class="p-desc">黄权子，绵竹战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="李球">
+        <div class="p-head"><h3>李球</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 117 回</p>
+        <p class="p-desc">李恢侄，绵竹战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘谌">
+        <div class="p-head"><h3>刘谌</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— · 北地王 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 其他</p>
+        <p class="p-meta">生卒：?—263 · 提及 0 次 · 首见第 118 回</p>
+        <p class="p-desc">哭祖庙自杀殉国</p>
+        </div><div class="person-card real" data-fic="0" data-name="严颜">
+        <div class="p-head"><h3>严颜</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：?—214 · 提及 0 次 · 首见第 63 回</p>
+        <p class="p-desc">演义加宁做断头将军</p>
+        </div><div class="person-card real" data-fic="0" data-name="孟达子度">
+        <div class="p-head"><h3>孟达</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子度 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—228 · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">反魏被司马懿斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="樊建长元">
+        <div class="p-head"><h3>樊建</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">长元 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 文臣</p>
+        <p class="p-meta">生卒：?—264 · 提及 0 次 · 首见第 115 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="王累">
+        <div class="p-head"><h3>王累</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 文臣</p>
+        <p class="p-meta">生卒：?—211 · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">倒悬城门谏刘璋</p>
+        </div><div class="person-card real" data-fic="0" data-name="张松子乔">
+        <div class="p-head"><h3>张松</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子乔 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 谋士</p>
+        <p class="p-meta">生卒：?—213 · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">献西川地图</p>
+        </div><div class="person-card real" data-fic="0" data-name="张肃君矫">
+        <div class="p-head"><h3>张肃</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">君矫 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 文臣</p>
+        <p class="p-meta">生卒：?—213 · 提及 0 次 · 首见第 62 回</p>
+        <p class="p-desc">张松兄，告发张松</p>
+        </div><div class="person-card real" data-fic="0" data-name="张任">
+        <div class="p-head"><h3>张任</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—213 · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">落凤坡射死庞统为演义加戏</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘璝">
+        <div class="p-head"><h3>刘璝</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">刘璋将</p>
+        </div><div class="person-card real" data-fic="0" data-name="泠苞">
+        <div class="p-head"><h3>泠苞</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—213 · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">被擒杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="邓贤">
+        <div class="p-head"><h3>邓贤</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—213 · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">被黄忠斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="吴兰">
+        <div class="p-head"><h3>吴兰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—218 · 提及 0 次 · 首见第 62 回</p>
+        <p class="p-desc">被曹彰斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="雷铜">
+        <div class="p-head"><h3>雷铜</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 武将</p>
+        <p class="p-meta">生卒：?—218 · 提及 0 次 · 首见第 62 回</p>
+        <p class="p-desc">被张郃斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="法正孝直">
+        <div class="p-head"><h3>法正</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">孝直 ·  · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 谋士</p>
+        <p class="p-meta">生卒：176—220 · 提及 0 次 · 首见第 60 回</p>
+        <p class="p-desc">谋主，定军山献策</p>
+        </div><div class="person-card real" data-fic="0" data-name="杨松">
+        <div class="p-head"><h3>杨松</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 文臣</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 64 回</p>
+        <p class="p-desc">虚构张鲁谋士，贪金卖马超</p>
+        </div><div class="person-card real" data-fic="0" data-name="张鲁公祺">
+        <div class="p-head"><h3>张鲁</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公祺 · 师君 · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—216 · 提及 0 次 · 首见第 59 回</p>
+        <p class="p-desc">汉中五斗米道</p>
+        </div><div class="person-card real" data-fic="0" data-name="阎圃">
+        <div class="p-head"><h3>阎圃</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 59 回</p>
+        <p class="p-desc">张鲁功曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="马腾寿成">
+        <div class="p-head"><h3>马腾</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">寿成 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—212 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">马超父，被曹操杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩遂文约">
+        <div class="p-head"><h3>韩遂</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文约 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">西凉军阀</p>
+        </div><div class="person-card real" data-fic="0" data-name="成宜">
+        <div class="p-head"><h3>成宜</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—211 · 提及 0 次 · 首见第 58 回</p>
+        <p class="p-desc">韩遂将战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="杨秋">
+        <div class="p-head"><h3>杨秋</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 58 回</p>
+        <p class="p-desc">韩遂将降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="李堪">
+        <div class="p-head"><h3>李堪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—211 · 提及 0 次 · 首见第 58 回</p>
+        <p class="p-desc">韩遂将战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙坚文台">
+        <div class="p-head"><h3>孙坚</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文台 · 江东猛虎 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 君主</p>
+        <p class="p-meta">生卒：155—191 · 提及 0 次 · 首见第 2 回</p>
+        <p class="p-desc">江左基业之始</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙策伯符">
+        <div class="p-head"><h3>孙策</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯符 · 小霸王 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 君主</p>
+        <p class="p-meta">生卒：175—200 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc">江东小霸王</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙权仲谋">
+        <div class="p-head"><h3>孙权</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲谋 · 碧眼儿/吴大帝 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 君主</p>
+        <p class="p-meta">生卒：182—252 · 提及 0 次 · 首见第 29 回</p>
+        <p class="p-desc">生子当如孙仲谋</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙亮子明">
+        <div class="p-head"><h3>孙亮</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子明 · 会稽王 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 君主</p>
+        <p class="p-meta">生卒：243—260 · 提及 0 次 · 首见第 108 回</p>
+        <p class="p-desc">被废</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙休子烈">
+        <div class="p-head"><h3>孙休</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子烈 · 景皇帝 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 君主</p>
+        <p class="p-meta">生卒：235—264 · 提及 0 次 · 首见第 113 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="孙皓元宗">
+        <div class="p-head"><h3>孙皓</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元宗 · 乌程侯/末帝 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 君主</p>
+        <p class="p-meta">生卒：242—284 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc">暴虐归晋</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙登子高">
+        <div class="p-head"><h3>孙登</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子高 · 宣太子 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 其他</p>
+        <p class="p-meta">生卒：209—241 · 提及 0 次 · 首见第 98 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="孙和子孝">
+        <div class="p-head"><h3>孙和</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子孝 · 南阳王 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 其他</p>
+        <p class="p-meta">生卒：224—253 · 提及 0 次 · 首见第 98 回</p>
+        <p class="p-desc">孙皓父</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙綝子通">
+        <div class="p-head"><h3>孙綝</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子通 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 诸侯</p>
+        <p class="p-meta">生卒：231—258 · 提及 0 次 · 首见第 111 回</p>
+        <p class="p-desc">专权被诛</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙峻子远">
+        <div class="p-head"><h3>孙峻</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子远 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 诸侯</p>
+        <p class="p-meta">生卒：219—256 · 提及 0 次 · 首见第 108 回</p>
+        <p class="p-desc">专权</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙桓叔武">
+        <div class="p-head"><h3>孙桓</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">叔武 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—223 · 提及 0 次 · 首见第 82 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="大乔">
+        <div class="p-head"><h3>大乔</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 女性</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 29 回</p>
+        <p class="p-desc">孙策夫人，姓名为后世演义加</p>
+        </div><div class="person-card real" data-fic="0" data-name="小乔">
+        <div class="p-head"><h3>小乔</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 女性</p>
+        <p class="p-meta">生卒：?—210 · 提及 0 次 · 首见第 44 回</p>
+        <p class="p-desc">周瑜夫人，铜雀台赋为演义虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="吴国太">
+        <div class="p-head"><h3>吴国太</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 女性</p>
+        <p class="p-meta">生卒：?—210 · 提及 0 次 · 首见第 38 回</p>
+        <p class="p-desc">虚构人物</p>
+        </div><div class="person-card real" data-fic="0" data-name="乔国老">
+        <div class="p-head"><h3>乔国老</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 其他</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 54 回</p>
+        <p class="p-desc">二乔之父，演义改编自桥公</p>
+        </div><div class="person-card real" data-fic="0" data-name="周瑜公瑾">
+        <div class="p-head"><h3>周瑜</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公瑾 · 美周郎 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 谋士</p>
+        <p class="p-meta">生卒：175—210 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc">三气周瑜为演义虚构，正史豁达</p>
+        </div><div class="person-card real" data-fic="0" data-name="鲁肃子敬">
+        <div class="p-head"><h3>鲁肃</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子敬 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 谋士</p>
+        <p class="p-meta">生卒：172—217 · 提及 0 次 · 首见第 29 回</p>
+        <p class="p-desc">单刀赴会主角本为鲁肃</p>
+        </div><div class="person-card real" data-fic="0" data-name="吕蒙子明">
+        <div class="p-head"><h3>吕蒙</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子明 · 吴下阿蒙 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：178—219 · 提及 0 次 · 首见第 38 回</p>
+        <p class="p-desc">白衣渡江擒关羽</p>
+        </div><div class="person-card real" data-fic="0" data-name="陆逊伯言">
+        <div class="p-head"><h3>陆逊</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯言 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 谋士</p>
+        <p class="p-meta">生卒：183—245 · 提及 0 次 · 首见第 83 回</p>
+        <p class="p-desc">夷陵之战大破刘备</p>
+        </div><div class="person-card real" data-fic="0" data-name="陆抗幼节">
+        <div class="p-head"><h3>陆抗</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">幼节 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：226—274 · 提及 0 次 · 首见第 109 回</p>
+        <p class="p-desc">陆逊子，抗魏名将</p>
+        </div><div class="person-card real" data-fic="0" data-name="张昭子布">
+        <div class="p-head"><h3>张昭</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子布 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：156—236 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc">舌战群儒被骂为演义虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="张纮子纲">
+        <div class="p-head"><h3>张纮</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子纲 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：151—229 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc">二张之一</p>
+        </div><div class="person-card real" data-fic="0" data-name="顾雍元叹">
+        <div class="p-head"><h3>顾雍</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元叹 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：168—243 · 提及 0 次 · 首见第 29 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="阚泽德润">
+        <div class="p-head"><h3>阚泽</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德润 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：?—243 · 提及 0 次 · 首见第 47 回</p>
+        <p class="p-desc">献诈降书为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="步骘子山">
+        <div class="p-head"><h3>步骘</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子山 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：?—247 · 提及 0 次 · 首见第 43 回</p>
+        <p class="p-desc">舌战群儒被骂</p>
+        </div><div class="person-card real" data-fic="0" data-name="虞翻仲翔">
+        <div class="p-head"><h3>虞翻</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲翔 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：164—233 · 提及 0 次 · 首见第 43 回</p>
+        <p class="p-desc">舌战群儒</p>
+        </div><div class="person-card real" data-fic="0" data-name="薛综敬文">
+        <div class="p-head"><h3>薛综</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">敬文 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：?—243 · 提及 0 次 · 首见第 43 回</p>
+        <p class="p-desc">舌战群儒</p>
+        </div><div class="person-card real" data-fic="0" data-name="严畯曼才">
+        <div class="p-head"><h3>严畯</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">曼才 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：?—242 · 提及 0 次 · 首见第 43 回</p>
+        <p class="p-desc">舌战群儒</p>
+        </div><div class="person-card real" data-fic="0" data-name="程秉德枢">
+        <div class="p-head"><h3>程秉</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德枢 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 43 回</p>
+        <p class="p-desc">舌战群儒</p>
+        </div><div class="person-card real" data-fic="0" data-name="程普德谋">
+        <div class="p-head"><h3>程普</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德谋 · 程公 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">三世老臣</p>
+        </div><div class="person-card real" data-fic="0" data-name="黄盖公覆">
+        <div class="p-head"><h3>黄盖</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公覆 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">苦肉计正史有梗概细节为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩当义公">
+        <div class="p-head"><h3>韩当</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">义公 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—226 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">三世老臣</p>
+        </div><div class="person-card real" data-fic="0" data-name="祖茂大荣">
+        <div class="p-head"><h3>祖茂</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">大荣 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 武将</p>
+        <p class="p-meta">生卒：?—190 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">正史无华雄之战，为衬托孙坚演义加戏</p>
+        </div><div class="person-card real" data-fic="0" data-name="太史慈子义">
+        <div class="p-head"><h3>太史慈</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子义 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：166—206 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc">酣斗小霸王正史有，战合肥战死为演义</p>
+        </div><div class="person-card real" data-fic="0" data-name="蒋钦公奕">
+        <div class="p-head"><h3>蒋钦</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公奕 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—219 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="周泰幼平">
+        <div class="p-head"><h3>周泰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">幼平 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—222 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc">宣城救孙权，身被数十创</p>
+        </div><div class="person-card real" data-fic="0" data-name="陈武子烈">
+        <div class="p-head"><h3>陈武</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子烈 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—215 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="潘璋文珪">
+        <div class="p-head"><h3>潘璋</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文珪 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—234 · 提及 0 次 · 首见第 38 回</p>
+        <p class="p-desc">擒关羽、获青龙刀为演义加戏</p>
+        </div><div class="person-card real" data-fic="0" data-name="董袭元代">
+        <div class="p-head"><h3>董袭</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元代 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—213 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="甘宁兴霸">
+        <div class="p-head"><h3>甘宁</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">兴霸 · 锦帆贼 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 38 回</p>
+        <p class="p-desc">百骑劫营为演义夸张</p>
+        </div><div class="person-card real" data-fic="0" data-name="凌操">
+        <div class="p-head"><h3>凌操</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—203 · 提及 0 次 · 首见第 38 回</p>
+        <p class="p-desc">被甘宁射杀（正史为流矢）</p>
+        </div><div class="person-card real" data-fic="0" data-name="凌统公绩">
+        <div class="p-head"><h3>凌统</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公绩 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—217 · 提及 0 次 · 首见第 38 回</p>
+        <p class="p-desc">甘宁杀父仇</p>
+        </div><div class="person-card real" data-fic="0" data-name="徐盛文向">
+        <div class="p-head"><h3>徐盛</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文向 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—228 · 提及 0 次 · 首见第 38 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="丁奉承渊">
+        <div class="p-head"><h3>丁奉</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">承渊 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—271 · 提及 0 次 · 首见第 38 回</p>
+        <p class="p-desc">雪中奋短兵</p>
+        </div><div class="person-card real" data-fic="0" data-name="朱然义封">
+        <div class="p-head"><h3>朱然</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">义封 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：182—249 · 提及 0 次 · 首见第 77 回</p>
+        <p class="p-desc">演义被赵云一枪刺死为虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="朱桓休穆">
+        <div class="p-head"><h3>朱桓</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">休穆 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：177—238 · 提及 0 次 · 首见第 85 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="全琮子璜">
+        <div class="p-head"><h3>全琮</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子璜 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：198—249 · 提及 0 次 · 首见第 96 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="吕范子衡">
+        <div class="p-head"><h3>吕范</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">子衡 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：?—228 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="吕岱定公">
+        <div class="p-head"><h3>吕岱</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">定公 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：161—256 · 提及 0 次 · 首见第 66 回</p>
+        <p class="p-desc">长寿将</p>
+        </div><div class="person-card real" data-fic="0" data-name="马忠">
+        <div class="p-head"><h3>马忠</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 武将</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 77 回</p>
+        <p class="p-desc">擒关羽，正史为潘璋部下；演义加射黄忠</p>
+        </div><div class="person-card real" data-fic="0" data-name="士仁君义">
+        <div class="p-head"><h3>士仁</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">君义 · 傅士仁 · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 75 回</p>
+        <p class="p-desc">公安守将，与糜芳降吴</p>
+        </div><div class="person-card real" data-fic="0" data-name="陆凯敬风">
+        <div class="p-head"><h3>陆凯</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">敬风 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：198—269 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="张悌巨先">
+        <div class="p-head"><h3>张悌</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">巨先 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 文臣</p>
+        <p class="p-meta">生卒：236—280 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc">晋灭吴战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="张角">
+        <div class="p-head"><h3>张角</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— · 天公将军 · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 诸侯</p>
+        <p class="p-meta">生卒：?—184 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">黄巾起义领袖</p>
+        </div><div class="person-card real" data-fic="0" data-name="张宝">
+        <div class="p-head"><h3>张宝</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— · 地公将军 · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 将领</p>
+        <p class="p-meta">生卒：?—184 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="张梁">
+        <div class="p-head"><h3>张梁</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— · 人公将军 · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 将领</p>
+        <p class="p-meta">生卒：?—184 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="程远志">
+        <div class="p-head"><h3>程远志</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 武将</p>
+        <p class="p-meta">生卒：?—184 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">虚构，被关羽斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="邓茂">
+        <div class="p-head"><h3>邓茂</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 武将</p>
+        <p class="p-meta">生卒：?—184 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">虚构，被张飞刺</p>
+        </div><div class="person-card real" data-fic="0" data-name="马元义">
+        <div class="p-head"><h3>马元义</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 其他</p>
+        <p class="p-meta">生卒：?—184 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">黄巾大方首领</p>
+        </div><div class="person-card real" data-fic="0" data-name="唐周">
+        <div class="p-head"><h3>唐周</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">其他 · 其他</p>
+        <p class="p-meta">生卒：?—184 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">告发黄巾</p>
+        </div><div class="person-card real" data-fic="0" data-name="裴元绍">
+        <div class="p-head"><h3>裴元绍</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 武将</p>
+        <p class="p-meta">生卒：?—200 · 提及 0 次 · 首见第 28 回</p>
+        <p class="p-desc">虚构，周仓同伴</p>
+        </div><div class="person-card real" data-fic="0" data-name="管亥">
+        <div class="p-head"><h3>管亥</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 武将</p>
+        <p class="p-meta">生卒：?—193 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc">围孔融都昌</p>
+        </div><div class="person-card real" data-fic="0" data-name="张燕">
+        <div class="p-head"><h3>张燕</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— · 飞燕 · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—205 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc">黑山贼帅</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘辟">
+        <div class="p-head"><h3>刘辟</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 将领</p>
+        <p class="p-meta">生卒：?—201 · 提及 0 次 · 首见第 26 回</p>
+        <p class="p-desc">汝南黄巾</p>
+        </div><div class="person-card real" data-fic="0" data-name="龚都">
+        <div class="p-head"><h3>龚都</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 将领</p>
+        <p class="p-meta">生卒：?—201 · 提及 0 次 · 首见第 26 回</p>
+        <p class="p-desc">汝南黄巾</p>
+        </div><div class="person-card real" data-fic="0" data-name="何仪">
+        <div class="p-head"><h3>何仪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 将领</p>
+        <p class="p-meta">生卒：?—196 · 提及 0 次 · 首见第 12 回</p>
+        <p class="p-desc">汝南黄巾</p>
+        </div><div class="person-card real" data-fic="0" data-name="张曼成">
+        <div class="p-head"><h3>张曼成</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— · 神上使 · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 将领</p>
+        <p class="p-meta">生卒：?—184 · 提及 0 次 · 首见第 2 回</p>
+        <p class="p-desc">南阳黄巾</p>
+        </div><div class="person-card real" data-fic="0" data-name="波才">
+        <div class="p-head"><h3>波才</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">黄巾 · 将领</p>
+        <p class="p-meta">生卒：?—184 · 提及 0 次 · 首见第 2 回</p>
+        <p class="p-desc">颍川黄巾</p>
+        </div><div class="person-card real" data-fic="0" data-name="公孙瓒伯珪">
+        <div class="p-head"><h3>公孙瓒</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯珪 · 白马将军 · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—199 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">白马将军，败于袁绍</p>
+        </div><div class="person-card real" data-fic="0" data-name="公孙越">
+        <div class="p-head"><h3>公孙越</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—191 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc">公孙瓒从弟</p>
+        </div><div class="person-card real" data-fic="0" data-name="严纲">
+        <div class="p-head"><h3>严纲</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—191 · 提及 0 次 · 首见第 7 回</p>
+        <p class="p-desc">界桥战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="张绣">
+        <div class="p-head"><h3>张绣</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—207 · 提及 0 次 · 首见第 16 回</p>
+        <p class="p-desc">宛城之战杀曹昂典韦</p>
+        </div><div class="person-card real" data-fic="0" data-name="胡车儿">
+        <div class="p-head"><h3>胡车儿</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—197 · 提及 0 次 · 首见第 16 回</p>
+        <p class="p-desc">盗典韦双戟为演义情节</p>
+        </div><div class="person-card real" data-fic="0" data-name="陶谦恭祖">
+        <div class="p-head"><h3>陶谦</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">恭祖 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：132—194 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">三让徐州为演义加戏</p>
+        </div><div class="person-card real" data-fic="0" data-name="陈登元龙">
+        <div class="p-head"><h3>陈登</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元龙 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—201 · 提及 0 次 · 首见第 11 回</p>
+        <p class="p-desc">助曹操破吕布</p>
+        </div><div class="person-card real" data-fic="0" data-name="陈珪汉瑜">
+        <div class="p-head"><h3>陈珪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">汉瑜 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 文臣</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 16 回</p>
+        <p class="p-desc">陈登父</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩馥文节">
+        <div class="p-head"><h3>韩馥</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">文节 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—191 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">让冀州给袁绍</p>
+        </div><div class="person-card real" data-fic="0" data-name="张邈孟卓">
+        <div class="p-head"><h3>张邈</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">孟卓 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—195 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">讨董诸侯，后叛曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="鲍信">
+        <div class="p-head"><h3>鲍信</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 文臣</p>
+        <p class="p-meta">生卒：?—192 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">迎曹操领兖州</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘岱公山">
+        <div class="p-head"><h3>刘岱</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公山 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—192 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">讨董诸侯</p>
+        </div><div class="person-card real" data-fic="0" data-name="王匡公节">
+        <div class="p-head"><h3>王匡</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公节 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—193 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">讨董诸侯</p>
+        </div><div class="person-card real" data-fic="0" data-name="公孙康">
+        <div class="p-head"><h3>公孙康</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—221 · 提及 0 次 · 首见第 33 回</p>
+        <p class="p-desc">辽东太守</p>
+        </div><div class="person-card real" data-fic="0" data-name="公孙渊">
+        <div class="p-head"><h3>公孙渊</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—238 · 提及 0 次 · 首见第 106 回</p>
+        <p class="p-desc">叛魏被司马懿平</p>
+        </div><div class="person-card real" data-fic="0" data-name="公孙度升济">
+        <div class="p-head"><h3>公孙度</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">升济 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—204 · 提及 0 次 · 首见第 33 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="士燮威彦">
+        <div class="p-head"><h3>士燮</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">威彦 · 士王 · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：137—226 · 提及 0 次 · 首见第 59 回</p>
+        <p class="p-desc">岭南军阀</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘繇正礼">
+        <div class="p-head"><h3>刘繇</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">正礼 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—197 · 提及 0 次 · 首见第 15 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="刘璋季玉">
+        <div class="p-head"><h3>刘璋</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">季玉 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—219 · 提及 0 次 · 首见第 59 回</p>
+        <p class="p-desc">益州牧，迎刘备</p>
+        </div><div class="person-card real" data-fic="0" data-name="刘焉君郎">
+        <div class="p-head"><h3>刘焉</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">君郎 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—194 · 提及 0 次 · 首见第 1 回</p>
+        <p class="p-desc">刘璋父</p>
+        </div><div class="person-card real" data-fic="0" data-name="司马徽德操">
+        <div class="p-head"><h3>司马徽</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">德操 · 水镜先生 · 籍贯不详</p>
+        <p class="p-fac">其他 · 隐士</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 35 回</p>
+        <p class="p-desc">荐卧龙凤雏，正史有</p>
+        </div><div class="person-card real" data-fic="0" data-name="庞德公">
+        <div class="p-head"><h3>庞德公</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">其他 · 隐士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 35 回</p>
+        <p class="p-desc">凤雏卧龙之号始此</p>
+        </div><div class="person-card real" data-fic="0" data-name="黄承彦">
+        <div class="p-head"><h3>黄承彦</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">其他 · 隐士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 37 回</p>
+        <p class="p-desc">诸葛亮岳父，八阵图为演义加</p>
+        </div><div class="person-card real" data-fic="0" data-name="崔州平">
+        <div class="p-head"><h3>崔州平</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">其他 · 隐士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 37 回</p>
+        <p class="p-desc">诸葛亮友</p>
+        </div><div class="person-card real" data-fic="0" data-name="石广元">
+        <div class="p-head"><h3>石广元</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">其他 · 隐士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 37 回</p>
+        <p class="p-desc">诸葛亮友</p>
+        </div><div class="person-card real" data-fic="0" data-name="孟公威建">
+        <div class="p-head"><h3>孟公威</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">建 ·  · 籍贯不详</p>
+        <p class="p-fac">其他 · 隐士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 37 回</p>
+        <p class="p-desc">诸葛亮友</p>
+        </div><div class="person-card real" data-fic="0" data-name="孔秀">
+        <div class="p-head"><h3>孔秀</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 27 回</p>
+        <p class="p-desc">虚构东岭关守将</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩福">
+        <div class="p-head"><h3>韩福</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 27 回</p>
+        <p class="p-desc">虚构洛阳关守将</p>
+        </div><div class="person-card real" data-fic="0" data-name="孟坦">
+        <div class="p-head"><h3>孟坦</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 27 回</p>
+        <p class="p-desc">虚构洛阳关守将</p>
+        </div><div class="person-card real" data-fic="0" data-name="卞喜">
+        <div class="p-head"><h3>卞喜</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 27 回</p>
+        <p class="p-desc">虚构汜水关守将</p>
+        </div><div class="person-card real" data-fic="0" data-name="王植">
+        <div class="p-head"><h3>王植</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 27 回</p>
+        <p class="p-desc">虚构荥阳关守将</p>
+        </div><div class="person-card real" data-fic="0" data-name="秦琪">
+        <div class="p-head"><h3>秦琪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 27 回</p>
+        <p class="p-desc">虚构黄河渡口守将</p>
+        </div><div class="person-card real" data-fic="0" data-name="胡班">
+        <div class="p-head"><h3>胡班</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 其他</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 27 回</p>
+        <p class="p-desc">正史有王植从事，演义加救关羽情节</p>
+        </div><div class="person-card real" data-fic="0" data-name="普净">
+        <div class="p-head"><h3>普净</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">其他 · 方士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 27 回</p>
+        <p class="p-desc">虚构，玉泉山点化关公</p>
+        </div><div class="person-card real" data-fic="0" data-name="夏侯恩">
+        <div class="p-head"><h3>夏侯恩</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 41 回</p>
+        <p class="p-desc">虚构，背青釭剑被赵云杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="淳于导">
+        <div class="p-head"><h3>淳于导</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 41 回</p>
+        <p class="p-desc">虚构被赵云杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="晏明">
+        <div class="p-head"><h3>晏明</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 41 回</p>
+        <p class="p-desc">虚构被赵云杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="夏侯杰">
+        <div class="p-head"><h3>夏侯杰</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 42 回</p>
+        <p class="p-desc">虚构，当阳桥被张飞吼死</p>
+        </div><div class="person-card real" data-fic="0" data-name="钟缙">
+        <div class="p-head"><h3>钟缙</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 41 回</p>
+        <p class="p-desc">虚构被赵云杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="钟绅">
+        <div class="p-head"><h3>钟绅</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 41 回</p>
+        <p class="p-desc">虚构被赵云杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="方悦">
+        <div class="p-head"><h3>方悦</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—190 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">虚构河内名将被吕布杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="武安国">
+        <div class="p-head"><h3>武安国</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—190 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">虚构孔融将被吕布砍手</p>
+        </div><div class="person-card real" data-fic="0" data-name="穆顺">
+        <div class="p-head"><h3>穆顺</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—190 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">虚构张杨将被吕布杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="俞涉">
+        <div class="p-head"><h3>俞涉</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—190 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">虚构袁术将被华雄斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="潘凤">
+        <div class="p-head"><h3>潘凤</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— · 无双上将 · 籍贯不详</p>
+        <p class="p-fac">群雄 · 武将</p>
+        <p class="p-meta">生卒：?—190 · 提及 0 次 · 首见第 5 回</p>
+        <p class="p-desc">虚构韩馥上将被华雄斩</p>
+        </div><div class="person-card real" data-fic="0" data-name="黄奎">
+        <div class="p-head"><h3>黄奎</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">其他 · 文臣</p>
+        <p class="p-meta">生卒：?—212 · 提及 0 次 · 首见第 57 回</p>
+        <p class="p-desc">虚构，马腾案牵连者</p>
+        </div><div class="person-card real" data-fic="0" data-name="苗泽">
+        <div class="p-head"><h3>苗泽</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">其他 · 其他</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 57 回</p>
+        <p class="p-desc">虚构告密者</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩德">
+        <div class="p-head"><h3>韩德</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 92 回</p>
+        <p class="p-desc">虚构西凉大将，四子皆被赵云杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩瑛">
+        <div class="p-head"><h3>韩瑛</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 92 回</p>
+        <p class="p-desc">虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩瑶">
+        <div class="p-head"><h3>韩瑶</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 92 回</p>
+        <p class="p-desc">虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩琼">
+        <div class="p-head"><h3>韩琼</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 92 回</p>
+        <p class="p-desc">虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩琪">
+        <div class="p-head"><h3>韩琪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 92 回</p>
+        <p class="p-desc">虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="孟获">
+        <div class="p-head"><h3>孟获</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 诸侯</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">七擒孟获为演义大幅渲染</p>
+        </div><div class="person-card real" data-fic="0" data-name="祝融夫人">
+        <div class="p-head"><h3>祝融夫人</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 女性</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 90 回</p>
+        <p class="p-desc">虚构孟获妻</p>
+        </div><div class="person-card real" data-fic="0" data-name="带来洞主">
+        <div class="p-head"><h3>带来洞主</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 其他</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 90 回</p>
+        <p class="p-desc">虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="孟优">
+        <div class="p-head"><h3>孟优</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 其他</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 88 回</p>
+        <p class="p-desc">虚构孟获弟</p>
+        </div><div class="person-card real" data-fic="0" data-name="木鹿大王">
+        <div class="p-head"><h3>木鹿大王</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 方士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 90 回</p>
+        <p class="p-desc">虚构驱兽</p>
+        </div><div class="person-card real" data-fic="0" data-name="朵思大王">
+        <div class="p-head"><h3>朵思大王</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 方士</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 89 回</p>
+        <p class="p-desc">虚构秃龙洞主</p>
+        </div><div class="person-card real" data-fic="0" data-name="兀突骨">
+        <div class="p-head"><h3>兀突骨</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 90 回</p>
+        <p class="p-desc">虚构藤甲军乌戈国主</p>
+        </div><div class="person-card real" data-fic="0" data-name="忙牙长">
+        <div class="p-head"><h3>忙牙长</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 88 回</p>
+        <p class="p-desc">虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="鄂焕">
+        <div class="p-head"><h3>鄂焕</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">虚构高定部将</p>
+        </div><div class="person-card real" data-fic="0" data-name="董荼那">
+        <div class="p-head"><h3>董荼那</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="阿会喃">
+        <div class="p-head"><h3>阿会喃</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">虚构</p>
+        </div><div class="person-card real" data-fic="0" data-name="金环三结">
+        <div class="p-head"><h3>金环三结</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">南蛮三洞元帅</p>
+        </div><div class="person-card real" data-fic="0" data-name="高定">
+        <div class="p-head"><h3>高定</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 诸侯</p>
+        <p class="p-meta">生卒：?—225 · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="雍闿">
+        <div class="p-head"><h3>雍闿</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 诸侯</p>
+        <p class="p-meta">生卒：?—225 · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">南中叛首</p>
+        </div><div class="person-card real" data-fic="0" data-name="朱褒">
+        <div class="p-head"><h3>朱褒</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">南蛮 · 文臣</p>
+        <p class="p-meta">生卒：?—225 · 提及 0 次 · 首见第 87 回</p>
+        <p class="p-desc">叛首</p>
+        </div><div class="person-card real" data-fic="0" data-name="羊祜叔子">
+        <div class="p-head"><h3>羊祜</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">叔子 ·  · 籍贯不详</p>
+        <p class="p-fac">晋 · 文臣</p>
+        <p class="p-meta">生卒：221—278 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="杜预元凯">
+        <div class="p-head"><h3>杜预</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">元凯 · 左传癖 · 籍贯不详</p>
+        <p class="p-fac">晋 · 文臣</p>
+        <p class="p-meta">生卒：222—284 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc">平吴主帅</p>
+        </div><div class="person-card real" data-fic="0" data-name="王濬士治">
+        <div class="p-head"><h3>王濬</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">士治 · 阿童 · 籍贯不详</p>
+        <p class="p-fac">晋 · 将领</p>
+        <p class="p-meta">生卒：206—286 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc">楼船下益州</p>
+        </div><div class="person-card real" data-fic="0" data-name="王浑玄冲">
+        <div class="p-head"><h3>王浑</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">玄冲 ·  · 籍贯不详</p>
+        <p class="p-fac">晋 · 将领</p>
+        <p class="p-meta">生卒：223—297 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="贾充公闾">
+        <div class="p-head"><h3>贾充</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公闾 ·  · 籍贯不详</p>
+        <p class="p-fac">晋 · 文臣</p>
+        <p class="p-meta">生卒：217—282 · 提及 0 次 · 首见第 119 回</p>
+        <p class="p-desc">弑曹髦，贾南风父</p>
+        </div><div class="person-card real" data-fic="0" data-name="卫瓘伯玉">
+        <div class="p-head"><h3>卫瓘</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯玉 ·  · 籍贯不详</p>
+        <p class="p-fac">晋 · 文臣</p>
+        <p class="p-meta">生卒：220—291 · 提及 0 次 · 首见第 116 回</p>
+        <p class="p-desc">收邓艾钟会</p>
+        </div><div class="person-card real" data-fic="0" data-name="何曾颖考">
+        <div class="p-head"><h3>何曾</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">颖考 ·  · 籍贯不详</p>
+        <p class="p-fac">晋 · 文臣</p>
+        <p class="p-meta">生卒：199—278 · 提及 0 次 · 首见第 119 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="诸葛绪">
+        <div class="p-head"><h3>诸葛绪</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—265 · 提及 0 次 · 首见第 116 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="田续">
+        <div class="p-head"><h3>田续</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 118 回</p>
+        <p class="p-desc">杀邓艾</p>
+        </div><div class="person-card real" data-fic="0" data-name="胡烈玄武">
+        <div class="p-head"><h3>胡烈</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">玄武 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 116 回</p>
+        <p class="p-desc">平钟会</p>
+        </div><div class="person-card real" data-fic="0" data-name="丘建">
+        <div class="p-head"><h3>丘建</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 其他</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 118 回</p>
+        <p class="p-desc">钟会帐下督</p>
+        </div><div class="person-card real" data-fic="0" data-name="师纂">
+        <div class="p-head"><h3>师纂</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—264 · 提及 0 次 · 首见第 117 回</p>
+        <p class="p-desc">邓艾将</p>
+        </div><div class="person-card real" data-fic="0" data-name="孙歆">
+        <div class="p-head"><h3>孙歆</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—280 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc">被王濬俘</p>
+        </div><div class="person-card real" data-fic="0" data-name="沈莹">
+        <div class="p-head"><h3>沈莹</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—280 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc">战死</p>
+        </div><div class="person-card real" data-fic="0" data-name="诸葛靓仲思">
+        <div class="p-head"><h3>诸葛靓</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">仲思 ·  · 籍贯不详</p>
+        <p class="p-fac">东吴 · 将领</p>
+        <p class="p-meta">生卒：?—225 · 提及 0 次 · 首见第 120 回</p>
+        <p class="p-desc">诸葛诞子</p>
+        </div><div class="person-card real" data-fic="0" data-name="姜维伯约">
+        <div class="p-head"><h3>姜维</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">伯约 · 幼麟 · 籍贯不详</p>
+        <p class="p-fac">蜀汉 · 将领</p>
+        <p class="p-meta">生卒：202—264 · 提及 0 次 · 首见第 93 回</p>
+        <p class="p-desc">九伐中原为演义浓缩</p>
+        </div><div class="person-card real" data-fic="0" data-name="诸葛诞公休">
+        <div class="p-head"><h3>诸葛诞</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">公休 ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 诸侯</p>
+        <p class="p-meta">生卒：?—258 · 提及 0 次 · 首见第 109 回</p>
+        <p class="p-desc">淮南三叛</p>
+        </div><div class="person-card real" data-fic="0" data-name="丁原建阳">
+        <div class="p-head"><h3>丁原</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">建阳 ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 诸侯</p>
+        <p class="p-meta">生卒：?—189 · 提及 0 次 · 首见第 3 回</p>
+        <p class="p-desc">吕布义父</p>
+        </div><div class="person-card real" data-fic="0" data-name="杨奉">
+        <div class="p-head"><h3>杨奉</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—197 · 提及 0 次 · 首见第 13 回</p>
+        <p class="p-desc">白波帅</p>
+        </div><div class="person-card real" data-fic="0" data-name="韩暹">
+        <div class="p-head"><h3>韩暹</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 将领</p>
+        <p class="p-meta">生卒：?—197 · 提及 0 次 · 首见第 13 回</p>
+        <p class="p-desc">白波帅</p>
+        </div><div class="person-card real" data-fic="0" data-name="胡才">
+        <div class="p-head"><h3>胡才</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 其他</p>
+        <p class="p-meta">生卒：?—195 · 提及 0 次 · 首见第 13 回</p>
+        <p class="p-desc">白波帅</p>
+        </div><div class="person-card real" data-fic="0" data-name="李乐">
+        <div class="p-head"><h3>李乐</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">群雄 · 其他</p>
+        <p class="p-meta">生卒：?—196 · 提及 0 次 · 首见第 13 回</p>
+        <p class="p-desc">白波帅</p>
+        </div><div class="person-card real" data-fic="0" data-name="皇甫郦">
+        <div class="p-head"><h3>皇甫郦</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">东汉 · 其他</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 10 回</p>
+        <p class="p-desc">皇甫嵩侄，说李傕郭汜</p>
+        </div><div class="person-card real" data-fic="0" data-name="徐璆">
+        <div class="p-head"><h3>徐璆</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 文臣</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 21 回</p>
+        <p class="p-desc">献玺</p>
+        </div><div class="person-card real" data-fic="0" data-name="王忠">
+        <div class="p-head"><h3>王忠</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 22 回</p>
+        <p class="p-desc">被关羽擒</p>
+        </div><div class="person-card real" data-fic="0" data-name="焦触">
+        <div class="p-head"><h3>焦触</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—220 · 提及 0 次 · 首见第 41 回</p>
+        <p class="p-desc"></p>
+        </div><div class="person-card real" data-fic="0" data-name="张南">
+        <div class="p-head"><h3>张南</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 将领</p>
+        <p class="p-meta">生卒：?—222 · 提及 0 次 · 首见第 41 回</p>
+        <p class="p-desc">焦触同党</p>
+        </div><div class="person-card real" data-fic="0" data-name="马延">
+        <div class="p-head"><h3>马延</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—208 · 提及 0 次 · 首见第 41 回</p>
+        <p class="p-desc">袁尚将降曹</p>
+        </div><div class="person-card real" data-fic="0" data-name="蔡中">
+        <div class="p-head"><h3>蔡中</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 46 回</p>
+        <p class="p-desc">蔡瑁族弟，诈降被杀</p>
+        </div><div class="person-card real" data-fic="0" data-name="蔡和">
+        <div class="p-head"><h3>蔡和</h3><span class="fic-tag">正史</span></div>
+        <p class="p-zi">— ·  · 籍贯不详</p>
+        <p class="p-fac">曹魏 · 武将</p>
+        <p class="p-meta">生卒：?—? · 提及 0 次 · 首见第 46 回</p>
+        <p class="p-desc">蔡瑁族弟，诈降被杀</p>
+        </div></div></section><script>
+document.querySelectorAll('.fbtn').forEach(b=>b.onclick=()=>{document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');const f=b.dataset.f;document.querySelectorAll('.person-card').forEach(c=>{c.style.display=(f==='all'||c.dataset.fic===f)?'':'none';});});
+document.getElementById('pSearch').oninput=e=>{const q=e.target.value.trim();document.querySelectorAll('.person-card').forEach(c=>{c.style.display=(!q||c.dataset.name.includes(q))?'':'none';});};
+</script></main><footer class="site-footer"><div class="footer-inner">
+<p>本项目以罗贯中《三国演义》毛宗岗评本为底本，参照 <em>The Story of the Stone</em> 与 <em>The Journey to the West</em> 数字人文工程构建。OWL 2 DL 本体 / 无服务器 DuckDB-WASM 查询 / 多版本异文对勘</p>
+<p class="small">© 数字人文研究 · 宣纸式阅读体验</p></div></footer>
+<script src="assets/app.js"></script></body></html>

@@ -372,3 +372,72 @@ code{font-family:"SF Mono","Menlo","Consolas",monospace;font-size:13px;
 table code{background:none;padding:0}
 /* 輿圖內 SVG 文字 */
 .sanguo-map text{font-family:var(--kai);fill:var(--ink)}
+
+/* ===== 三国新加样式 ===== */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0;padding:10px;background:#f8f1dd;border:1px solid var(--border);border-radius:4px;}
+.fbtn{background:#ede2c4;border:1px solid var(--border);padding:6px 12px;cursor:pointer;border-radius:3px;font-family:inherit;color:var(--ink);}
+.fbtn.active{background:var(--cinnabar);color:#fff;border-color:var(--cinnabar);}
+#pSearch{flex:1;min-width:180px;padding:6px 10px;border:1px solid var(--border);background:#fdf9ee;font-family:inherit;}
+.person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.person-card{background:#fdf9ee;border:1px solid var(--border);border-left:4px solid var(--gold);padding:12px;border-radius:2px;}
+.person-card.real{border-left-color:var(--jade);}
+.person-card.half{border-left-color:var(--gold);}
+.person-card.fic{border-left-color:var(--cinnabar);}
+.p-head{display:flex;justify-content:space-between;align-items:baseline;}
+.p-head h3{margin:0;font-size:1.08em;}
+.fic-tag{font-size:0.72em;padding:1px 6px;border-radius:2px;background:var(--cinnabar);color:#fff;}
+.fic-tag.real{background:var(--jade);}.fic-tag.half{background:var(--gold);}
+.p-zi,.p-fac,.p-meta{margin:4px 0;font-size:0.88em;color:#5b4f3e;}
+.p-desc{margin:6px 0 0;font-size:0.85em;color:#3b3328;line-height:1.6;}
+.faction-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+.faction-card{background:#fdf9ee;border:1px solid var(--border);border-left:5px solid var(--gold);padding:14px;}
+.faction-card h3{margin:0 0 6px;}
+.data-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:0.92em;}
+.data-table th,.data-table td{border-bottom:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top;}
+.data-table th{background:#ede2c4;color:var(--ink);font-weight:600;}
+.data-table tr:hover td{background:#f8f1dd;}
+.onto-table code{background:#f8f1dd;padding:1px 4px;border-radius:2px;color:var(--cinnabar);font-size:0.9em;}
+.timeline{position:relative;padding-left:30px;border-left:2px solid var(--gold);margin:20px 0;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-year{position:absolute;left:-70px;top:4px;width:50px;text-align:right;font-weight:bold;color:var(--cinnabar);font-size:0.95em;}
+.tl-item::before{content:"";position:absolute;left:-37px;top:10px;width:12px;height:12px;background:var(--cinnabar);border:2px solid #fdf9ee;border-radius:50%;}
+.tl-card{background:#fdf9ee;border:1px solid var(--border);padding:12px 16px;border-radius:2px;}
+.tl-card h3{margin:0 0 6px;font-size:1.05em;}
+.tl-meta{color:var(--cinnabar);font-size:0.9em;margin:4px 0;}
+.list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.list-card{background:#fdf9ee;border:1px solid var(--border);padding:14px;border-top:3px solid var(--cinnabar);}
+.list-card h3{margin:0 0 8px;font-size:1.05em;}
+.list-card h3 small{color:var(--gold);font-weight:normal;margin-left:6px;font-size:0.8em;}
+.list-card blockquote{margin:8px 0;padding:8px 12px;border-left:3px solid var(--cinnabar);background:#f8f1dd;font-style:italic;color:var(--ink);}
+.version-tree ol,.version-tree ul{padding-left:20px;}
+.version-tree li{margin:6px 0;}
+.version-tree h3{color:var(--cinnabar);margin:14px 0 6px;}
+.chapter-select{margin:12px 0;display:flex;gap:8px;align-items:center;}
+.chapter-select input{width:60px;padding:4px;border:1px solid var(--border);background:#fdf9ee;}
+.chapter-select button{background:var(--cinnabar);color:#fff;border:none;padding:6px 14px;cursor:pointer;font-family:inherit;}
+.chapter{border:1px solid var(--border);margin:6px 0;background:#fdf9ee;}
+.chapter summary{padding:10px 14px;cursor:pointer;display:flex;gap:12px;align-items:center;font-size:1em;}
+.chapter summary:hover{background:#f8f1dd;}
+.ch-no{color:var(--cinnabar);font-weight:bold;min-width:60px;}
+.ch-title{flex:1;}
+.ch-meta{color:#8a7a5d;font-size:0.85em;}
+.ch-body{padding:14px;line-height:2;border-top:1px dashed var(--border);}
+.ch-body p{text-indent:2em;margin:0;}
+.graph-wrap{background:#f8f1dd;border:1px solid var(--border);padding:8px;overflow:auto;}
+#graphCv{display:block;max-width:100%;background:linear-gradient(#f3ead7,#ebe0c5);}
+.query-box textarea{width:100%;padding:10px;border:1px solid var(--border);background:#fdf9ee;font-family:"Source Code Pro","Consolas",monospace;font-size:0.92em;line-height:1.6;margin:8px 0;}
+.query-box select,.query-box button{padding:6px 12px;margin-right:8px;font-family:inherit;}
+.query-box button{background:var(--cinnabar);color:#fff;border:none;cursor:pointer;padding:8px 20px;}
+.code,.pre{background:#f8f1dd;border:1px solid var(--border);padding:12px;font-family:"Source Code Pro",monospace;font-size:0.88em;overflow-x:auto;white-space:pre;}
+.err{color:var(--cinnabar);background:#fbe9e6;padding:10px;border-left:3px solid var(--cinnabar);}
+.freq-cloud{padding:16px;background:#f8f1dd;border:1px solid var(--border);text-align:center;line-height:2;}
+.freq-cloud span{display:inline-block;margin:0 3px;color:var(--ink);}
+.poem-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
+.poem-card{background:#fdf9ee;border:1px solid var(--border);padding:20px;text-align:center;background-image:repeating-linear-gradient(180deg,transparent 0,transparent 31px,#e9dfc3 32px);}
+.poem-meta{color:var(--gold);font-size:0.85em;margin:0;}
+.poem-card h3{margin:8px 0;color:var(--cinnabar);}
+.poem-author{color:#5b4f3e;font-size:0.9em;margin:4px 0 14px;}
+.poem-text{line-height:2.2;font-size:1.05em;color:var(--ink);font-family:"Kaiti SC","STKaiti","KaiTi",serif;}
+.tag{display:inline-block;padding:2px 8px;border-radius:2px;font-size:0.82em;margin-right:4px;color:#fff;}
+.tag.real{background:var(--jade);}.tag.half{background:var(--gold);}.tag.fic{background:var(--cinnabar);}
+.small{font-size:0.85em;color:#7a6c53;}

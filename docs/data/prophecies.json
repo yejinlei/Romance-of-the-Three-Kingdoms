@@ -1,1 +1,122 @@
-[{"text": "千里草，何青青；十日卜，不得生", "kind": "童谣", "target": "董卓", "chapter": 9, "note": "董卓字里藏『卓』，预言其暴亡"}, {"text": "代汉者当涂高", "kind": "图谶", "target": "袁术/曹魏", "chapter": 3, "note": "袁术自谓应之而僭号；后解为魏"}, {"text": "汉行气尽，黄家当立", "kind": "图谶", "target": "黄巾", "chapter": 1, "note": "黄巾起事之谶"}, {"text": "苍天已死，黄天当立；岁在甲子，天下大吉", "kind": "童谣", "target": "黄巾", "chapter": 1, "note": "张角起兵的口号"}, {"text": "三马同槽", "kind": "梦兆", "target": "司马懿父子", "chapter": 78, "note": "曹操梦三马同槽，实指司马氏三代"}, {"text": "绯衣小儿来灭魏", "kind": "谶语", "target": "司马氏", "chapter": 109, "note": "预示司马代魏"}, {"text": "秃头小儿来灭魏，杨花飘荡落谁家", "kind": "诗谶", "target": "司马氏", "chapter": 109, "note": "暗指司马"}, {"text": "左龙右凤，飞入西川", "kind": "童谣", "target": "庞统", "chapter": 57, "note": "凤雏殒于落凤坡之谶"}, {"text": "凤凰坠羽落凤坡", "kind": "诗谶", "target": "庞统", "chapter": 63, "note": "庞统殒命之地应其号『凤雏』"}, {"text": "若要捉曹操，大刀手中擎", "kind": "童谣", "target": "关羽", "chapter": 50, "note": "赤壁后关公华容道释曹"}, {"text": "非衣小儿，岂得成人", "kind": "谶语", "target": "刘禅", "chapter": 80, "note": "暗合蜀汉后主之弱"}, {"text": "姜维死，汉亡", "kind": "谶语", "target": "姜维", "chapter": 117, "note": "蜀汉覆亡之应"}]
+[
+  {
+    "text": "千里草，何青青；十日卜，不得生",
+    "target": "董卓",
+    "chapter": 9,
+    "note": "董卓字里藏『卓』，预言其暴亡",
+    "id": "prophecy_0",
+    "type": "童谣",
+    "meaning": "董卓字里藏『卓』，预言其暴亡",
+    "speaker": ""
+  },
+  {
+    "text": "代汉者当涂高",
+    "target": "袁术/曹魏",
+    "chapter": 3,
+    "note": "袁术自谓应之而僭号；后解为魏",
+    "id": "prophecy_1",
+    "type": "图谶",
+    "meaning": "袁术自谓应之而僭号；后解为魏",
+    "speaker": ""
+  },
+  {
+    "text": "汉行气尽，黄家当立",
+    "target": "黄巾",
+    "chapter": 1,
+    "note": "黄巾起事之谶",
+    "id": "prophecy_2",
+    "type": "图谶",
+    "meaning": "黄巾起事之谶",
+    "speaker": ""
+  },
+  {
+    "text": "苍天已死，黄天当立；岁在甲子，天下大吉",
+    "target": "黄巾",
+    "chapter": 1,
+    "note": "张角起兵的口号",
+    "id": "prophecy_3",
+    "type": "童谣",
+    "meaning": "张角起兵的口号",
+    "speaker": ""
+  },
+  {
+    "text": "三马同槽",
+    "target": "司马懿父子",
+    "chapter": 78,
+    "note": "曹操梦三马同槽，实指司马氏三代",
+    "id": "prophecy_4",
+    "type": "梦兆",
+    "meaning": "曹操梦三马同槽，实指司马氏三代",
+    "speaker": ""
+  },
+  {
+    "text": "绯衣小儿来灭魏",
+    "target": "司马氏",
+    "chapter": 109,
+    "note": "预示司马代魏",
+    "id": "prophecy_5",
+    "type": "谶语",
+    "meaning": "预示司马代魏",
+    "speaker": ""
+  },
+  {
+    "text": "秃头小儿来灭魏，杨花飘荡落谁家",
+    "target": "司马氏",
+    "chapter": 109,
+    "note": "暗指司马",
+    "id": "prophecy_6",
+    "type": "诗谶",
+    "meaning": "暗指司马",
+    "speaker": ""
+  },
+  {
+    "text": "左龙右凤，飞入西川",
+    "target": "庞统",
+    "chapter": 57,
+    "note": "凤雏殒于落凤坡之谶",
+    "id": "prophecy_7",
+    "type": "童谣",
+    "meaning": "凤雏殒于落凤坡之谶",
+    "speaker": ""
+  },
+  {
+    "text": "凤凰坠羽落凤坡",
+    "target": "庞统",
+    "chapter": 63,
+    "note": "庞统殒命之地应其号『凤雏』",
+    "id": "prophecy_8",
+    "type": "诗谶",
+    "meaning": "庞统殒命之地应其号『凤雏』",
+    "speaker": ""
+  },
+  {
+    "text": "若要捉曹操，大刀手中擎",
+    "target": "关羽",
+    "chapter": 50,
+    "note": "赤壁后关公华容道释曹",
+    "id": "prophecy_9",
+    "type": "童谣",
+    "meaning": "赤壁后关公华容道释曹",
+    "speaker": ""
+  },
+  {
+    "text": "非衣小儿，岂得成人",
+    "target": "刘禅",
+    "chapter": 80,
+    "note": "暗合蜀汉后主之弱",
+    "id": "prophecy_10",
+    "type": "谶语",
+    "meaning": "暗合蜀汉后主之弱",
+    "speaker": ""
+  },
+  {
+    "text": "姜维死，汉亡",
+    "target": "姜维",
+    "chapter": 117,
+    "note": "蜀汉覆亡之应",
+    "id": "prophecy_11",
+    "type": "谶语",
+    "meaning": "蜀汉覆亡之应",
+    "speaker": ""
+  }
+]

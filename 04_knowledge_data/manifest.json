@@ -1,28 +1,28 @@
 {
   "project": "Romance of the Three Kingdoms Knowledge Graph",
   "version": "1.0.0",
-  "built_at": "2026-10-25T20:36:30",
+  "built_at": "2026-10-26T01:54:07",
   "ontology": "../03_本体论规范/sanguo_kg_ontology.ttl",
   "vocabularies": "../03_本体论规范/vocabularies.yaml",
   "db_engine": "duckdb-wasm",
   "deploy_target": "github-pages",
   "counts": {
-    "persons": 132,
+    "persons": 455,
     "factions": 19,
-    "places": 104,
-    "battles": 19,
-    "events": 13,
+    "places": 191,
+    "battles": 115,
+    "events": 107,
     "artifacts": 17,
     "stratagems": 27,
     "prophecies": 12,
-    "scholars": 8,
-    "papers": 4,
-    "adaptations": 7,
+    "scholars": 15,
+    "papers": 12,
+    "adaptations": 17,
     "editions": 16,
     "chapters": 120,
     "lines": 17408,
-    "mentions": 20047,
-    "relationships": 556,
+    "mentions": 23478,
+    "relationships": 1421,
     "total_chars": 590968
   },
   "tables": [
@@ -47,38 +47,38 @@
     {
       "name": "entities",
       "path": "entities.parquet",
-      "rows": 343,
-      "size_bytes": 19306
+      "rows": 943,
+      "size_bytes": 39807
     },
     {
       "name": "persons",
       "path": "persons.parquet",
-      "rows": 132,
-      "size_bytes": 15327
+      "rows": 455,
+      "size_bytes": 32779
     },
     {
       "name": "factions",
       "path": "factions.parquet",
       "rows": 19,
-      "size_bytes": 6964
+      "size_bytes": 6556
     },
     {
       "name": "places",
       "path": "places.parquet",
-      "rows": 104,
-      "size_bytes": 8620
+      "rows": 191,
+      "size_bytes": 16962
     },
     {
       "name": "battles",
       "path": "battles.parquet",
-      "rows": 19,
-      "size_bytes": 7896
+      "rows": 115,
+      "size_bytes": 14462
     },
     {
       "name": "events",
       "path": "events.parquet",
-      "rows": 13,
-      "size_bytes": 7058
+      "rows": 107,
+      "size_bytes": 14501
     },
     {
       "name": "artifacts",
@@ -90,43 +90,43 @@
       "name": "stratagems",
       "path": "stratagems.parquet",
       "rows": 27,
-      "size_bytes": 5727
+      "size_bytes": 5675
     },
     {
       "name": "prophecies",
       "path": "prophecies.parquet",
       "rows": 12,
-      "size_bytes": 5197
+      "size_bytes": 5403
     },
     {
       "name": "scholars",
       "path": "scholars.parquet",
-      "rows": 8,
-      "size_bytes": 5430
+      "rows": 15,
+      "size_bytes": 9360
     },
     {
       "name": "papers",
       "path": "papers.parquet",
-      "rows": 4,
-      "size_bytes": 5557
+      "rows": 12,
+      "size_bytes": 7840
     },
     {
       "name": "adaptations",
       "path": "adaptations.parquet",
-      "rows": 7,
-      "size_bytes": 5178
+      "rows": 17,
+      "size_bytes": 7340
     },
     {
       "name": "mentions",
       "path": "mentions.parquet",
-      "rows": 20047,
-      "size_bytes": 272252
+      "rows": 23478,
+      "size_bytes": 324681
     },
     {
       "name": "relationships",
       "path": "relationships.parquet",
-      "rows": 556,
-      "size_bytes": 11246
+      "rows": 1421,
+      "size_bytes": 22051
     },
     {
       "name": "annotations",
@@ -138,7 +138,7 @@
       "name": "stats",
       "path": "stats.parquet",
       "rows": 17,
-      "size_bytes": 2006
+      "size_bytes": 2003
     }
   ]
 }

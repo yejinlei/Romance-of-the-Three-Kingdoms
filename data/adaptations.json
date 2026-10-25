@@ -1,0 +1,138 @@
+[
+  {
+    "id": "diao_chan_xiqu",
+    "title": "貂蝉/凤仪亭",
+    "type": "戏曲/元杂剧",
+    "year": "元明",
+    "creator": "元杂剧·无名氏",
+    "note": "元杂剧《锦云堂暗定连环计》，貂蝉故事成熟于戏曲。"
+  },
+  {
+    "id": "guanyu_xiqu",
+    "title": "单刀会",
+    "type": "戏曲/元杂剧",
+    "year": 1300,
+    "creator": "元·关汉卿",
+    "note": "关汉卿杂剧，关羽单刀赴会，与《三国演义》版本不同（主角本为鲁肃）。"
+  },
+  {
+    "id": "sanbao_taijian",
+    "title": "连环计",
+    "type": "戏曲/明传奇",
+    "year": 1500,
+    "creator": "明王济",
+    "note": "明王济《连环记》传奇，奠定貂蝉吕布故事戏曲形态。"
+  },
+  {
+    "id": "guanyu_daxi",
+    "title": "关公戏系列",
+    "type": "戏曲/京剧",
+    "year": 1800,
+    "creator": "京剧传统戏",
+    "note": "《千里走单骑》《华容道》《水淹七军》《走麦城》构成关公戏完整序列。"
+  },
+  {
+    "id": "peking_opera",
+    "title": "三国戏几十出",
+    "type": "戏曲/京剧",
+    "year": "1790-今",
+    "creator": "京剧",
+    "note": "《失空斩》《群英会》《借东风》《长坂坡》《定军山》《龙凤呈祥》《白帝城》等，京剧最重要的戏码群。"
+  },
+  {
+    "id": "dingjunshan_film",
+    "title": "定军山",
+    "type": "电影/默片",
+    "year": 1905,
+    "creator": "任庆泰执导/谭鑫培主演",
+    "note": "中国第一部电影，京剧《定军山》片段。"
+  },
+  {
+    "id": "1994sanguo_tv",
+    "title": "三国演义（1994电视剧）",
+    "type": "电视剧",
+    "year": 1994,
+    "creator": "王扶林/中央电视台",
+    "note": "84集经典，鲍国安饰曹操、唐国强饰诸葛亮、陆树铭饰关羽、孙彦军饰刘备；90年代国人集体记忆。"
+  },
+  {
+    "id": "2010sanguo_tv",
+    "title": "三国（2010电视剧）",
+    "type": "电视剧",
+    "year": 2010,
+    "creator": "高希希导演",
+    "note": "95集新三国，陈建斌饰曹操、于和伟饰刘备、陆毅饰诸葛亮、聂远饰赵云，重新解读曹操形象。"
+  },
+  {
+    "id": "romance_of_three_kingdoms_novel",
+    "title": "Romance of the Three Kingdoms（英译本）",
+    "type": "译本",
+    "year": 1925,
+    "creator": "C.H. Brewitt-Taylor 译",
+    "note": "最通行英译本；另 Moss Roberts 1991 译本 Three Kingdoms 学术价值高。"
+  },
+  {
+    "id": "koei_sangokushi",
+    "title": "三國志系列游戏",
+    "type": "游戏/策略",
+    "year": "1985-今",
+    "creator": "日本光荣（Koei/Tecmo）",
+    "note": "《三国志》1-14代策略游戏，全球累计销量超千万；《真·三国无双》动作游戏系列；是日本及全球年轻人接触三国的主要途径。"
+  },
+  {
+    "id": "sanguosha_cardgame",
+    "title": "三国杀",
+    "type": "游戏/卡牌",
+    "year": 2008,
+    "creator": "游卡桌游（Yoka）",
+    "note": "中国最流行的桌面卡牌游戏，后改编手游；人物/技能/锦囊大量取典于演义。"
+  },
+  {
+    "id": "yaoboying_sanguo",
+    "title": "三国演义连环画",
+    "type": "连环画",
+    "year": -4,
+    "creator": "上海人民美术出版社，刘锡永/赵三岛等绘",
+    "note": "60册套书，几代中国人的三国启蒙。"
+  },
+  {
+    "id": "cai_zhi_zhong_manhua",
+    "title": "《三國志》漫画",
+    "type": "漫画",
+    "year": "1971-1987",
+    "creator": "日本·横山光辉",
+    "note": "60卷长篇漫画，是日本几代人的三国启蒙。"
+  },
+  {
+    "id": "chen_mou_manhua",
+    "title": "《火鳳燎原》",
+    "type": "漫画",
+    "year": "2001-今",
+    "creator": "香港·陈某",
+    "note": "港漫经典，以司马懿为主角，水镜八奇虚构设定颠覆传统三国叙事。"
+  },
+  {
+    "id": "realloy_hanwei",
+    "title": "大军师司马懿之军师联盟/虎啸龙吟",
+    "type": "电视剧",
+    "year": 2017,
+    "creator": "张永新/吴秀波主演",
+    "note": "86集，以司马懿视角重讲三国，引发对司马氏历史评价的讨论。"
+  },
+  {
+    "id": "diaochan_film",
+    "title": "貂蝉、关公、赤壁等影视剧",
+    "type": "电影",
+    "year": "多版本",
+    "creator": "华语影视",
+    "note": "吴宇森《赤壁》(2008-2009)、李仁港《见龙卸甲》(2008)、麦庄《关云长》(2011)等。"
+  },
+  {
+    "id": "koudai_sanguozhi",
+    "title": "三国志大战",
+    "type": "游戏/街机卡",
+    "year": "2005-今",
+    "creator": "世嘉(SEGA)",
+    "note": "街机即时策略卡牌游戏，在日本与华语圈有稳定玩家群。"
+  }
+]

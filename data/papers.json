@@ -1,0 +1,110 @@
+[
+  {
+    "id": "lu_xun_xiaoshuo",
+    "title": "中国小说史略·元明传来之讲史(下)",
+    "author": "鲁迅",
+    "year": 1923,
+    "category": "专论",
+    "publisher": "新潮社/北新书局",
+    "desc": "现代学术史上首次系统论述三国源流与艺术得失，提出『状诸葛之多智而近妖』。"
+  },
+  {
+    "id": "hu_shi_sanguo",
+    "title": "《三国志演义》序",
+    "author": "胡适",
+    "year": 1922,
+    "category": "序跋",
+    "publisher": "亚东图书馆排印本",
+    "desc": "以实验主义考证版本与成书，主张罗贯中为写定者，为现代三国研究奠基。"
+  },
+  {
+    "id": "zheng_zhenduo_yanhua",
+    "title": "三国志演义的演化",
+    "author": "郑振铎",
+    "year": 1929,
+    "category": "版本考",
+    "publisher": "《小说月报》20卷10号",
+    "desc": "首次刊出多个版本比较，奠定演义系/志传系二分的版本谱系。"
+  },
+  {
+    "id": "zhangxuecheng_bingchen",
+    "title": "丙辰札记",
+    "author": "章学诚",
+    "year": 1796,
+    "category": "史学评论",
+    "publisher": "章氏遗书",
+    "desc": "提出三国『七分实事，三分虚构』论断，为史虚关系研究之祖。"
+  },
+  {
+    "id": "shenbojun_dacidian",
+    "title": "三国演义大辞典",
+    "author": "沈伯俊、谭良啸",
+    "year": 2007,
+    "category": "工具书",
+    "publisher": "中华书局",
+    "desc": "最全面的三国百科，涵盖人物、版本、故实、评点、研究史。"
+  },
+  {
+    "id": "shenbojun_xiaoli",
+    "title": "三国演义新探",
+    "author": "沈伯俊",
+    "year": 2002,
+    "category": "论文集",
+    "publisher": "四川人民出版社",
+    "desc": "集沈先生数十年校勘、版本、人物、主题研究。"
+  },
+  {
+    "id": "liushicun_banben",
+    "title": "三国演义版本考",
+    "author": "[日]中川谕/刘世德等",
+    "year": 2000,
+    "category": "版本考",
+    "publisher": "上海古籍",
+    "desc": "系统梳理二十余种存世版本，区分演义系/志传系。"
+  },
+  {
+    "id": "chenxianghua_banben",
+    "title": "《花关索传》与《三国演义》版本",
+    "author": "陈翔华",
+    "year": 1995,
+    "category": "版本考",
+    "publisher": "书目文献出版社",
+    "desc": "介绍西班牙藏叶逢春本、花关索故事的版本学意义。"
+  },
+  {
+    "id": "niegannu_lun",
+    "title": "中国古典小说论集·论三国演义",
+    "author": "聂绀弩",
+    "year": 1981,
+    "category": "论文集",
+    "publisher": "上海古籍",
+    "desc": "从人物心理与版本变迁切入，推崇嘉靖本的复杂人物。"
+  },
+  {
+    "id": "yintianzhong_pinsanguo",
+    "title": "品三国（上下）",
+    "author": "易中天",
+    "year": 2006,
+    "category": "普及著作",
+    "publisher": "上海文艺出版社",
+    "desc": "百家讲坛讲稿，以平民视角重新解读三国人物，销量破五百万。"
+  },
+  {
+    "id": "xiaoshuo_kaogu",
+    "title": "三国演义考古录",
+    "author": "盛巽昌等",
+    "year": 2000,
+    "category": "史实考辨",
+    "publisher": "上海书店",
+    "desc": "逐条考辨演义情节与正史的差异。"
+  },
+  {
+    "id": "shenrenwei_zhuge",
+    "title": "诸葛亮形象史研究",
+    "author": "沈伯俊",
+    "year": 1992,
+    "category": "专题",
+    "publisher": "陕西人民",
+    "desc": "从史传、小说、戏曲、民间信仰四层面研究诸葛亮形象演变。"
+  }
+]

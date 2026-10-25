@@ -1,24 +1,50 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>本體查詢 · 三國演義本體論</title>
-<link rel="stylesheet" href="assets/app.css"></head><body>
-<header>
-  <span class="seal">演義</span>
-  <h1>三國演義</h1>
-  <div class="sub">Romance of the Three Kingdoms · Ontology Project · DuckDB-WASM 控制台</div>
-  <nav><a href="index.html">總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
-</header>
-<main>
-<h2>本體查詢 · DuckDB-WASM</h2><p class="lead">無服務器 SQL 控制台——所有 Parquet 表本地讀取，可直接在瀏覽器中查詢人物、勢力、戰役、人物提及（章節分佈）、版本元數據等 19 張表。</p><div class="query-panel"><div id="qstatus" style="margin-bottom:8px;color:var(--bronze);font-size:13px">正在初始化 DuckDB…（首次需加載 ~3MB WASM，請稍候）</div><textarea id="sql" rows="5" placeholder="輸入 SQL，例如：&#10;SELECT name, faction, total FROM persons ORDER BY total DESC LIMIT 10;">SELECT name, faction, total FROM persons ORDER BY total DESC LIMIT 15;</textarea><div style="margin-top:8px"><button id="run">執行 ▶</button> <button id="explain">表結構</button> <select id="sample"><option value="">快速示例…</option><option>-- 諸葛亮在各章提及分佈
-SELECT l.chapter_no, COUNT(*) c FROM mentions m JOIN lines l ON m.line_id=l.line_id WHERE m.entity_id='sg_person_諸葛亮' GROUP BY l.chapter_no ORDER BY c DESC LIMIT 10;</option><option>-- 蜀漢人物按提及排序
-SELECT name, zi, total FROM persons WHERE faction='蜀漢' ORDER BY total DESC LIMIT 20;</option><option>-- 戰役時間排序
-SELECT name, year, side_a, side_b, outcome FROM battles ORDER BY CAST(year AS INT);</option><option>-- 各勢力人物數
-SELECT faction, COUNT(*) n FROM persons GROUP BY faction ORDER BY n DESC;</option></select></div><div id="results" style="margin-top:16px"></div><div id="schema" style="display:none;margin-top:16px;padding:12px;background:var(--paper);border:1px solid var(--border);font-size:12px;max-height:300px;overflow:auto"></div></div><p class="mo" style="margin-top:12px">技術：DuckDB-WASM 瀏覽器內 SQL 引擎；Parquet 文件由 build/build_parquet.py 生成，並發布至 docs/data/*.parquet。</p><script src="assets/query.js"></script>
-</main>
-<footer>
-  <span class="seal">千秋</span>
-  <div>《三國演義》本體論工程 · 以 OWL 2 DL 建構本體 · DuckDB-WASM 瀏覽器端查詢 · 無服務器靜態站<br>
-  參考 yejinlei《紅樓未完》與《西遊記》本體論範式 · 兼容《水滸傳》本體 sg/sh 前綴</div>
-</footer>
-<script src="assets/common.js"></script>
-</body></html>
+<title>查询台 · 三国演义数字人文研究</title>
+<link rel="stylesheet" href="assets/app.css">
+</head><body>
+<header class="site-header"><div class="header-inner">
+<div class="brand"><span class="seal big">三</span><div class="brand-txt"><h1>三国演义 · 数字人文研究</h1><p class="subtitle">Romance of the Three Kingdoms — An Ontology-driven Digital Edition</p></div></div>
+<p class="tagline">滚滚长江东逝水，浪花淘尽英雄。以本体论重构毛宗岗评本一百二十回，做文本、图谱、版本、地理、学术五维校勘。</p>
+<div class="nav-grid"><a class="nav-card" href="index.html"><span class="seal">卷</span><span>首页</span></a><a class="nav-card" href="ontology.html"><span class="seal">元</span><span>本体论</span></a><a class="nav-card" href="read.html"><span class="seal">读</span><span>全文阅读</span></a><a class="nav-card" href="persons.html"><span class="seal">人</span><span>人物志</span></a><a class="nav-card" href="factions.html"><span class="seal">势</span><span>势力谱</span></a><a class="nav-card" href="places.html"><span class="seal">地</span><span>地理志</span></a><a class="nav-card" href="battles.html"><span class="seal">战</span><span>战役史</span></a><a class="nav-card" href="events.html"><span class="seal">事</span><span>事件录</span></a><a class="nav-card" href="stratagems.html"><span class="seal">计</span><span>计谋鉴</span></a><a class="nav-card" href="artifacts.html"><span class="seal">物</span><span>器物簿</span></a><a class="nav-card" href="prophecies.html"><span class="seal">谶</span><span>谶纬考</span></a><a class="nav-card" href="versions.html"><span class="seal">版</span><span>版本族谱</span></a><a class="nav-card" href="variants.html"><span class="seal">勘</span><span>异文对勘</span></a><a class="nav-card" href="graph.html"><span class="seal">系</span><span>人物关系</span></a><a class="nav-card" href="map.html"><span class="seal">图</span><span>时空地图</span></a><a class="nav-card active" href="query.html"><span class="seal">问</span><span>查询台</span></a><a class="nav-card" href="stats.html"><span class="seal">数</span><span>统计析</span></a><a class="nav-card" href="scholars.html"><span class="seal">学</span><span>学术史</span></a><a class="nav-card" href="papers.html"><span class="seal">论</span><span>论著举要</span></a><a class="nav-card" href="adaptations.html"><span class="seal">艺</span><span>衍生改编</span></a><a class="nav-card" href="poetry.html"><span class="seal">诗</span><span>诗词回目</span></a><a class="nav-card" href="mirror.html"><span class="seal">虚</span><span>虚实对照</span></a><a class="nav-card" href="destiny.html"><span class="seal">命</span><span>天命叙事</span></a><a class="nav-card" href="guide.html"><span class="seal">引</span><span>阅读指南</span></a></div>
+</div></header><main><section class="paper"><h2>无服务器查询台 · DuckDB-WASM Query Console</h2><p>纯浏览器端查询，数据以 Parquet 列式表直接读取，无需后端/Neo4j。共 19 张表：persons, factions, places, battles, events, stratagems, artifacts, prophecies, editions, chapters, lines, mentions, relationships, entities, scholars, papers, adaptations, annotations, stats。</p><div class="query-box">
+<select id="sampleQ"><option value="">-- 示例SQL --</option>
+<option value="SELECT name, faction, fictional_flag, mention_count FROM persons ORDER BY mention_count DESC LIMIT 20;">TOP20 人物</option>
+<option value="SELECT name, side_a, side_b, outcome, ad_year FROM battles ORDER BY ad_year;">战役年表</option>
+<option value="SELECT name, modern_name, lon, lat, mention_count FROM places WHERE mention_count>50 ORDER BY mention_count DESC;">高频地名</option>
+<option value="SELECT fictional_flag, COUNT(*) FROM persons GROUP BY fictional_flag;">虚实分布</option>
+<option value="SELECT faction, COUNT(*) FROM persons GROUP BY faction ORDER BY COUNT(*) DESC;">阵营人数</option>
+</select>
+<textarea id="sql" rows="6">SELECT name, faction, mention_count, fictional_flag
+FROM persons
+WHERE faction = '蜀汉'
+ORDER BY mention_count DESC
+LIMIT 15;</textarea>
+<button id="runBtn">执行查询 ▶</button>
+</div>
+<div id="qStatus" class="small"></div>
+<div id="qResult"></div>
+<h3>Python / pandas 使用方式</h3>
+<pre class="code">import pandas as pd
+persons = pd.read_parquet("04_knowledge_data/persons.parquet")
+battles = pd.read_parquet("04_knowledge_data/battles.parquet")
+relations = pd.read_parquet("04_knowledge_data/relationships.parquet")
+print(persons.head())</pre><script type="module">
+import * as duckdb from 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.0/+esm';
+const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
+const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
+const logger = new duckdb.ConsoleLogger();
+const db = new duckdb.AsyncDuckDB(logger);
+await db.instantiate(bundle.mainWorker);
+const c = await db.connect();
+async function loadParquet(name){const url='data/'+name+'.parquet';await c.query(`CREATE OR REPLACE VIEW ${name} AS SELECT * FROM parquet_scan('${url}')`);}
+const tables=['persons','factions','places','battles','events','stratagems','artifacts','prophecies','editions','chapters','mentions','relationships','scholars','papers','adaptations','stats','entities'];
+document.getElementById('qStatus').textContent='加载 Parquet 表中...';
+await Promise.all(tables.map(t=>loadParquet(t)));
+document.getElementById('qStatus').textContent='已加载 '+tables.length+' 张表，可执行查询。';
+document.getElementById('sampleQ').onchange=e=>{if(e.target.value)document.getElementById('sql').value=e.target.value;};
+document.getElementById('runBtn').onclick=async()=>{const sql=document.getElementById('sql').value;try{document.getElementById('qStatus').textContent='执行中...';const r=await c.query(sql);const rows=r.toArray().map(x=>Object.fromEntries(Object.entries(x).map(([k,v])=>[k,v===null?'':(v?.toString?v.toString():v)])));const cols=rows.length?Object.keys(rows[0]):[];let html='<table class="data-table"><thead><tr>'+cols.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>';rows.forEach(r=>{html+='<tr>'+cols.map(c=>'<td>'+(r[c]??'')+'</td>').join('')+'</tr>';});html+='</tbody></table><p class="small">共 '+rows.length+' 行</p>';document.getElementById('qResult').innerHTML=html;document.getElementById('qStatus').textContent='完成 '+rows.length+' 行';}catch(err){document.getElementById('qResult').innerHTML='<pre class="err">'+err.message+'</pre>';document.getElementById('qStatus').textContent='出错';}};
+</script></main><footer class="site-footer"><div class="footer-inner">
+<p>本项目以罗贯中《三国演义》毛宗岗评本为底本，参照 <em>The Story of the Stone</em> 与 <em>The Journey to the West</em> 数字人文工程构建。OWL 2 DL 本体 / 无服务器 DuckDB-WASM 查询 / 多版本异文对勘</p>
+<p class="small">© 数字人文研究 · 宣纸式阅读体验</p></div></footer>
+<script src="assets/app.js"></script></body></html>

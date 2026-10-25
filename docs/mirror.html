@@ -1,20 +1,25 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>字鏡 · 三國演義本體論</title>
-<link rel="stylesheet" href="assets/app.css"></head><body>
-<header>
-  <span class="seal">演義</span>
-  <h1>三國演義</h1>
-  <div class="sub">Romance of the Three Kingdoms · Ontology Project · 字頻雲</div>
-  <nav><a href="index.html">總覽</a><a href="read.html">正文</a><a href="ontology.html">本體</a><a href="sanjue.html">三絕</a><a href="taoyuan.html">桃園</a><a href="persons.html">人物譜</a><a href="heroes.html">英雄譜</a><a href="genealogy.html">將相譜</a><a href="factions.html">勢力志</a><a href="battles.html">戰役錄</a><a href="timeline.html">百年興亡</a><a href="map.html">三國輿圖</a><a href="places.html">地名錄</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">兵器名馬</a><a href="prophecies.html">讖緯童謠</a><a href="foreshadow.html">草蛇灰線</a><a href="poems.html">詩詞讚語</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="scholars.html">批者群像</a><a href="academy.html">論著</a><a href="adaptations.html">影視戲曲</a><a href="graph.html">圖譜</a><a href="mirror.html">字鏡</a><a href="query.html">查詢台</a></nav>
-</header>
-<main>
-<h2>字鏡 · 全書 590,968 字</h2><p class="lead">按全書字頻降序呈現前 120 個單字，字號大小對應出現頻率——三國的字，是刀、馬、兵、將、軍、曹、玄。</p><div id="mirror"></div><p class="mo" style="margin-top:16px">說明：僅統計出現次數 ≥ 100 次的中文字（去除標點與空白）。</p><script>fetch("data/freq.json").then(r=>r.json()).then(f=>{const max=f[0].c;const d=document.getElementById("mirror");f.slice(0,180).forEach(w=>{const s=18+52*w.c/max;const op=.55+.45*w.c/max;d.insertAdjacentHTML("beforeend",`<span style="font-size:\${s}px;opacity:\${op};margin:0 6px;font-family:var(--kai);color:var(--ink)">\${w.ch}</span>`);});});</script>
-</main>
-<footer>
-  <span class="seal">千秋</span>
-  <div>《三國演義》本體論工程 · 以 OWL 2 DL 建構本體 · DuckDB-WASM 瀏覽器端查詢 · 無服務器靜態站<br>
-  參考 yejinlei《紅樓未完》與《西遊記》本體論範式 · 兼容《水滸傳》本體 sg/sh 前綴</div>
-</footer>
-<script src="assets/common.js"></script>
-</body></html>
+<title>虚实对照 · 三国演义数字人文研究</title>
+<link rel="stylesheet" href="assets/app.css">
+</head><body>
+<header class="site-header"><div class="header-inner">
+<div class="brand"><span class="seal big">三</span><div class="brand-txt"><h1>三国演义 · 数字人文研究</h1><p class="subtitle">Romance of the Three Kingdoms — An Ontology-driven Digital Edition</p></div></div>
+<p class="tagline">滚滚长江东逝水，浪花淘尽英雄。以本体论重构毛宗岗评本一百二十回，做文本、图谱、版本、地理、学术五维校勘。</p>
+<div class="nav-grid"><a class="nav-card" href="index.html"><span class="seal">卷</span><span>首页</span></a><a class="nav-card" href="ontology.html"><span class="seal">元</span><span>本体论</span></a><a class="nav-card" href="read.html"><span class="seal">读</span><span>全文阅读</span></a><a class="nav-card" href="persons.html"><span class="seal">人</span><span>人物志</span></a><a class="nav-card" href="factions.html"><span class="seal">势</span><span>势力谱</span></a><a class="nav-card" href="places.html"><span class="seal">地</span><span>地理志</span></a><a class="nav-card" href="battles.html"><span class="seal">战</span><span>战役史</span></a><a class="nav-card" href="events.html"><span class="seal">事</span><span>事件录</span></a><a class="nav-card" href="stratagems.html"><span class="seal">计</span><span>计谋鉴</span></a><a class="nav-card" href="artifacts.html"><span class="seal">物</span><span>器物簿</span></a><a class="nav-card" href="prophecies.html"><span class="seal">谶</span><span>谶纬考</span></a><a class="nav-card" href="versions.html"><span class="seal">版</span><span>版本族谱</span></a><a class="nav-card" href="variants.html"><span class="seal">勘</span><span>异文对勘</span></a><a class="nav-card" href="graph.html"><span class="seal">系</span><span>人物关系</span></a><a class="nav-card" href="map.html"><span class="seal">图</span><span>时空地图</span></a><a class="nav-card" href="query.html"><span class="seal">问</span><span>查询台</span></a><a class="nav-card" href="stats.html"><span class="seal">数</span><span>统计析</span></a><a class="nav-card" href="scholars.html"><span class="seal">学</span><span>学术史</span></a><a class="nav-card" href="papers.html"><span class="seal">论</span><span>论著举要</span></a><a class="nav-card" href="adaptations.html"><span class="seal">艺</span><span>衍生改编</span></a><a class="nav-card" href="poetry.html"><span class="seal">诗</span><span>诗词回目</span></a><a class="nav-card active" href="mirror.html"><span class="seal">虚</span><span>虚实对照</span></a><a class="nav-card" href="destiny.html"><span class="seal">命</span><span>天命叙事</span></a><a class="nav-card" href="guide.html"><span class="seal">引</span><span>阅读指南</span></a></div>
+</div></header><main><section class="paper"><h2>虚实对照</h2><p>演义七分实三分虚。以下列出 10 处经典"虚构"——演义与《三国志》正史之关键差异。</p>
+<table class="data-table"><thead><tr><th>演义情节</th><th>正史《三国志》记载</th><th>虚构类型</th></tr></thead><tbody>
+<tr><td>桃园三结义</td><td>刘关张"恩若兄弟"，但未记载结拜仪式</td><td>仪式虚构，情感史实</td></tr>
+<tr><td>温酒斩华雄</td><td>华雄为孙坚所杀（《孙破虏传》）</td><td>嫁接战功</td></tr>
+<tr><td>三英战吕布</td><td>吕布为孙坚击退，刘关张未参与</td><td>完全虚构</td></tr>
+<tr><td>貂蝉连环计</td><td>吕布与董卓侍婢私通，无"貂蝉"之名</td><td>人物虚构</td></tr>
+<tr><td>关羽约三事/千里走单骑</td><td>关羽辞曹归刘有载，但过五关斩六将无据</td><td>路线虚构</td></tr>
+<tr><td>赵云长坂七进七出</td><td>保护甘夫人与后主免难，无七进七出</td><td>夸张</td></tr>
+<tr><td>诸葛亮舌战群儒/草船借箭/借东风</td><td>诸葛亮仅外交出使；草船借箭原型孙权；借东风无</td><td>多起神化</td></tr>
+<tr><td>华容道义释曹操</td><td>刘备追之不及，无关羽释曹</td><td>虚构显"义"</td></tr>
+<tr><td>三气周瑜</td><td>周瑜豁达，"器量广大"，非气死</td><td>反衬孔明</td></tr>
+<tr><td>空城计</td><td>裴松之已驳郭冲五事之虚妄</td><td>移植/虚构</td></tr>
+</tbody></table></section></main><footer class="site-footer"><div class="footer-inner">
+<p>本项目以罗贯中《三国演义》毛宗岗评本为底本，参照 <em>The Story of the Stone</em> 与 <em>The Journey to the West</em> 数字人文工程构建。OWL 2 DL 本体 / 无服务器 DuckDB-WASM 查询 / 多版本异文对勘</p>
+<p class="small">© 数字人文研究 · 宣纸式阅读体验</p></div></footer>
+<script src="assets/app.js"></script></body></html>
