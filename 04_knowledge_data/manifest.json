@@ -1,7 +1,7 @@
 {
   "project": "Romance of the Three Kingdoms Knowledge Graph",
   "version": "1.0.0",
-  "built_at": "2026-10-26T02:48:54",
+  "built_at": "2026-10-26T12:44:40",
   "ontology": "../03_本体论规范/sanguo_kg_ontology.ttl",
   "vocabularies": "../03_本体论规范/vocabularies.yaml",
   "db_engine": "duckdb-wasm",
@@ -21,7 +21,7 @@
     "editions": 16,
     "chapters": 120,
     "lines": 17408,
-    "mentions": 23478,
+    "mentions": 23462,
     "relationships": 1421,
     "total_chars": 590968
   },
@@ -30,7 +30,7 @@
       "name": "editions",
       "path": "editions.parquet",
       "rows": 16,
-      "size_bytes": 10118
+      "size_bytes": 10183
     },
     {
       "name": "chapters",
@@ -42,7 +42,7 @@
       "name": "lines",
       "path": "lines.parquet",
       "rows": 17408,
-      "size_bytes": 1526242
+      "size_bytes": 1526151
     },
     {
       "name": "entities",
@@ -119,8 +119,8 @@
     {
       "name": "mentions",
       "path": "mentions.parquet",
-      "rows": 23478,
-      "size_bytes": 324499
+      "rows": 23462,
+      "size_bytes": 324356
     },
     {
       "name": "relationships",

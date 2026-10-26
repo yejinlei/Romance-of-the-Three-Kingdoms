@@ -21,7 +21,7 @@
 <script type="module">
 import * as duckdb from 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28/+esm';
 const samples=[
-  ['TOP20 人物',"SELECT name,faction,zi,total FROM 'data/persons.parquet' ORDER BY total DESC LIMIT 20;"],
+  ['TOP20 人物',"SELECT name,faction,zi,mention_count FROM 'data/persons.parquet' ORDER BY mention_count DESC LIMIT 20;"],
   ['TOP10 地名',"SELECT name,type,total FROM 'data/places.parquet' ORDER BY total DESC LIMIT 10;"],
   ['按势力分组统计',"SELECT faction,count(*) n FROM 'data/persons.parquet' WHERE faction<>'' GROUP BY faction ORDER BY n DESC;"],
   ['战役年份排序',"SELECT name,year,outcome FROM 'data/battles.parquet' WHERE year>180 ORDER BY year LIMIT 20;"],

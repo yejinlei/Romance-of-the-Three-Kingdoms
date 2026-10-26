@@ -70,7 +70,7 @@ edition_rows = []
 EDITION_EXTRA = [
     ("jiajing", "嘉靖壬午本《三国志通俗演义》", "古本系统", 1522, "明·嘉靖元年刻本·庸愚子序", "国图/上海图书馆", "24卷240则·七言单题·无临江仙", "演义系祖本"),
     ("yechunfeng", "叶逢春刊本《三国志传》", "古本系统", 1548, "明·嘉靖二十七年前后·书林叶逢春刊", "西班牙埃斯科里亚尔修道院/国图胶卷", "10卷240段·存8卷·花关索故事完整", "志传系最早"),
-    ("zhouyuexiao", "周曰校万卷楼本", "古本系统", 1591, "明·万历十九年万卷楼", "国图", "12卷240则", "演义系"),
+    ("zhouyuexiao", "周曰校万卷楼本", "古本系统", 1591, "明·万历十九年万卷楼", "国图", "12卷192章·識典古籍粗校全文", "演义系"),
     ("yuxiangdou", "余象斗双峰堂本《三国志传》", "古本系统", 1594, "明·万历二十二年双峰堂", "英国博物院/京都大学", "20卷·评点形式开创", "志传系·评林本"),
     ("huangzhengfu", "黄正甫天启刊本", "古本系统", 1625, "明·天启黄正甫", "日本内阁文库", "20卷240段·静轩诗多保留", "志传系"),
     ("liulongsheng", "刘龙田乔山堂本", "古本系统", 1610, "明·万历末乔山堂", "日本公文书馆", "笈邮斋本同系·关索索父故事", "志传系"),
@@ -86,7 +86,7 @@ EDITION_EXTRA = [
     ("fan_Sanguo", "反三国志演义（周大荒）", "续书衍生本", 1930, "民国·周大荒", "通行出版", "60回·翻案·蜀汉统一", "民国翻案"),
 ]
 for eid_, name, cat, year, publisher, holder, feature, lineage in EDITION_EXTRA:
-    has_full = "是" if eid_ == "maozonggang" else "否"
+    has_full = "是" if eid_ in ("maozonggang", "zhouyuexiao") else "否"
     edition_rows.append({
         "edition_id": vid(eid_),
         "id": eid_,
@@ -98,8 +98,12 @@ for eid_, name, cat, year, publisher, holder, feature, lineage in EDITION_EXTRA:
         "structural_feature": feature,
         "lineage_note": lineage,
         "has_fulltext": has_full,
-        "fulltext_note": "Project Gutenberg #23950 排印本，繁转简" if has_full == "是" else "元数据级收录",
-        "source_url": "https://www.gutenberg.org/cache/epub/23950/pg23950.txt" if has_full == "是" else "https://www.shidianguji.com/",
+        "fulltext_note": ("Project Gutenberg #23950 排印本，繁转简" if eid_ == "maozonggang"
+                          else "識典古籍周曰校刻本粗校全文（683,392 字）" if eid_ == "zhouyuexiao"
+                          else "元数据级收录"),
+        "source_url": ("https://www.gutenberg.org/cache/epub/23950/pg23950.txt" if eid_ == "maozonggang"
+                       else "https://www.shidianguji.com/" if eid_ == "zhouyuexiao"
+                       else ""),
     })
 
 # ===================== 2. chapters =====================
