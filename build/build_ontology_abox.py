@@ -194,6 +194,31 @@ for m in JT["mapping"]:
     TTL.append(f'    :belongsToEdition sg:edition_jiajing ;')
     TTL.append(f'    :correspondsToChapter sg:mao_chapter_{m["mao_chapter"]:03d} .\n')
 
+# -------- 周曰校本章节个体 + 实测异文 --------
+ZY_CH = json.load(open(ROOT / "04_knowledge_data" / "zhouyuexiao_chapters.json",
+                       encoding="utf-8"))
+TTL.append("# ---------- 周曰校本 Chapter 个体（本站已收全文，识典古籍粗校） ----------\n")
+for i, c in enumerate(ZY_CH, 1):
+    title = c.get("title") or ""
+    TTL.append(f'sg:zhou_chapter_{i:03d} a :Chapter ;')
+    TTL.append(f'    rdfs:label "第{i}章 {title}"@zh ;')
+    TTL.append(f'    :chapterNumber "{i}"^^xsd:integer ;')
+    TTL.append(f'    :belongsToEdition sg:edition_zhouyuexiao ;')
+    TTL.append(f'    :wordCount "{c["chars"]}"^^xsd:integer .\n')
+
+VR = json.load(open(DOCS / "variants_real.json", encoding="utf-8"))
+TTL.append("# ---------- 实测异文 + 邊：毛宗崗本 × 周曰校本 全文自動對勘 ----------\n")
+for it in VR["items"]:
+    TTL.append(f'sg:var_real_{it["no"]:03d} a :VariantReading, :TextualVariant ;')
+    TTL.append(f'    rdfs:label "毛第{it["mao_ch"]}回／周第{it["zhou_ch"]}章"@zh ;')
+    TTL.append(f'    :inMaoChapter "{it["mao_ch"]}"^^xsd:integer ;')
+    TTL.append(f'    :inZhouChapter "{it["zhou_ch"]}"^^xsd:integer ;')
+    TTL.append(f'    :maobenText """{it["mao"]}"""@zh ;')
+    TTL.append(f'    :zhoubenText """{it["zhou"]}"""@zh ;')
+    TTL.append(f'    :textSimilarity "{it["sim"]}"^^xsd:decimal ;')
+    TTL.append('    :comparedInEditions sg:edition_maozonggang, sg:edition_zhouyuexiao ;')
+    TTL.append('    :readingType "TextualVariant" .\n')
+
 # -------- 本体论元信息 --------
 TTL.append("""
 # ---------- 本体论元信息 ----------

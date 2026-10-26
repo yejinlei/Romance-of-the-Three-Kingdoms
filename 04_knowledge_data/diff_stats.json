@@ -1,0 +1,9 @@
+{
+ "mao_sent": 47272,
+ "zhou_sent": 32407,
+ "equal_blocks": 876,
+ "diff_blocks": 877,
+ "replace": 870,
+ "insert": 1,
+ "delete": 6
+}

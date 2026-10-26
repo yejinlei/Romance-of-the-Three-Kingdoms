@@ -557,3 +557,12 @@ mark.diff-ins{background:#c9e6d2;color:#2d5f3f;padding:0 1px;border-radius:2px;}
 .btn.small{padding:4px 10px;font-size:12px;}
 .btn.active{background:var(--cinnabar,#9e2b25);color:#fff;border-color:var(--cinnabar,#9e2b25);}
 .subtitle{max-width:900px;margin:14px auto 0;color:#666;font-size:14px;line-height:1.8;text-align:center;padding:0 20px;}
+
+/* ===== 多版本切换 & 全文实测异文 ===== */
+.ver-switch{display:flex;gap:8px;margin:6px 0 16px;flex-wrap:wrap;}
+.variant-card.real{border-left-color:#2f6b8f;}
+.variant-card.real .vr-text{background:rgba(47,107,143,.06);}
+.vr-tag.zhou{background:#2f6b8f;}
+.vr-sim{font-size:12px;color:#6b6157;margin-left:auto;white-space:nowrap;}
+#zhouBody h3{margin:6px 0 12px;color:var(--cinnabar,#9e2b25);}
+#zhouBody p{text-indent:2em;line-height:1.95;margin:.5em 0;}

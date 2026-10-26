@@ -273,6 +273,10 @@ def page_ontology():
     n_variants = len(VARIANTS)
     n_chapter_units = n_editions*0 + 360  # 毛本120+嘉靖240
     n_commentary = len(VARIANTS_DATA['commentary_lineage'])
+    _zy = load('zhouyuexiao.json') if (DOCS/'data'/'zhouyuexiao.json').exists() else {"n_chapters":0,"chars":0}
+    n_zhou_ch = _zy.get('n_chapters', 0); n_zhou_chars = _zy.get('chars', 0)
+    _vrr = load('variants_real.json') if (DOCS/'data'/'variants_real.json').exists() else {"items":[]}
+    n_real_var = len(_vrr['items'])
 
     html = header("本體論規範","ontology.html",
         f"OWL 2 DL 描述邏輯本體，含 {_n_classes} 個類、{_n_obj} 個對象屬性、{_n_data} 個數據屬性；TBox {_ttl_lines} 行 + ABox {_abox_lines} 行 Turtle，兼容 Protégé/rdflib/GraphDB/Apache Jena。") + f'''
@@ -282,7 +286,7 @@ def page_ontology():
   與《水滸傳》本體（<code>sh:</code> 前綴）統一 <code>sg:</code> 命名空間，跨本體可按人物/地名 ID JOIN。</p>
   <div class="btn-row">
     <a class="btn primary" href="ontology/sanguo_kg_ontology.ttl" download>📥 下載 TBox（本體結構 · {_ttl_lines} 行 · {_n_classes} 類 / {_n_obj} 對象屬性 / {_n_data} 數據屬性）</a>
-    <a class="btn primary" href="ontology/sanguo_kg_multiversion_abox.ttl" download>📥 下載多版本 ABox（{_abox_lines} 行 · {n_editions} 版本 / {n_variants} 異文 / {n_scholars} 學者 / {n_commentary} 評點 / {n_chapter_units} 回目個體）</a>
+    <a class="btn primary" href="ontology/sanguo_kg_multiversion_abox.ttl" download>📥 下載多版本 ABox（{_abox_lines} 行 · {n_editions} 版本 / {n_variants} 文獻異文 + {n_real_var} 全文實測異文 / {n_scholars} 學者 / {n_commentary} 評點 / {n_chapter_units} 回目 + {n_zhou_ch} 則個體）</a>
     <a class="btn" href="ontology/vocabularies.yaml" download>📥 下載受控詞表 YAML（11 大詞族）</a>
     <a class="btn" href="query.html">🔍 在瀏覽器查詢本體（DuckDB-WASM）</a>
   </div>
@@ -304,6 +308,8 @@ def page_ontology():
     <div class="kpi"><div class="kpi-num">{n_scholars}</div><div class="kpi-lab">學者/評點家</div></div>
     <div class="kpi"><div class="kpi-num">{n_commentary}</div><div class="kpi-lab">評點傳承</div></div>
     <div class="kpi"><div class="kpi-num">360</div><div class="kpi-lab">回目/則個體</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:#2f6b8f">{n_zhou_ch}</div><div class="kpi-lab">周曰校本章</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:#2f6b8f">{n_real_var}</div><div class="kpi-lab">全文實測異文</div></div>
     <div class="kpi"><div class="kpi-num">{n_papers}+{n_adapts}</div><div class="kpi-lab">論著+改編</div></div>
   </div>
 </section>
@@ -476,14 +482,27 @@ def page_read():
     html = header("全文阅读","read.html") + f'''
 <section class="paper">
   <h2>正文閱讀</h2>
+  <div class="ver-switch">
+    <button class="btn small active" id="vb-mao" onclick="switchVer('mao')">毛宗崗評本（120 回 · 全文）</button>
+    <button class="btn small" id="vb-zhou" onclick="switchVer('zhou')">周曰校刊本（192 章 · 全文）</button>
+  </div>
+  <div id="maoView">
   <div class="read-toolbar">
     <select id="chapSel" onchange="jumpSel(this.value)">
       <option value="">— 選擇章回跳轉 —</option>
       {opts_html}
     </select>
-    <span class="small">版本：毛宗崗評本百二十回</span>
+    <span class="small">版本：毛宗崗評本百二十回（通行本）</span>
   </div>
   <div id="chapterList">{''.join(chap_html)}</div>
+  </div>
+  <div id="zhouView" style="display:none">
+    <div class="read-toolbar">
+      <select id="zhouSel" onchange="showZhou(this.value)"><option value="">— 載入中 —</option></select>
+      <span class="small" id="zhouMeta">版本：周曰校刊本</span>
+    </div>
+    <div id="zhouBody" class="ch-body"></div>
+  </div>
 </section>
 <script>
 function jumpSel(n){{
@@ -492,6 +511,36 @@ function jumpSel(n){{
   all.forEach(d=>d.open=false);
   var t=document.querySelector('#chapterList details[data-ch="'+n+'"]');
   if(t){{t.open=true;t.scrollIntoView({{behavior:'smooth',block:'start'}});document.getElementById('chapSel').value='';}}
+}}
+var ZY=null;
+function esc2(s){{return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}}
+function switchVer(v){{
+  document.getElementById('maoView').style.display = v==='mao'?'':'none';
+  document.getElementById('zhouView').style.display = v==='zhou'?'':'none';
+  document.getElementById('vb-mao').classList.toggle('active', v==='mao');
+  document.getElementById('vb-zhou').classList.toggle('active', v==='zhou');
+  if(v==='zhou' && !ZY) loadZY();
+}}
+function loadZY(){{
+  var m=document.getElementById('zhouMeta'); m.textContent='正在載入周曰校本全文…';
+  fetch('data/zhouyuexiao.json').then(r=>r.json()).then(d=>{{
+    ZY=d;
+    var sel=document.getElementById('zhouSel');
+    sel.innerHTML='<option value="">— 選擇章節跳轉 —</option>'+d.chapters.map(c=>'<option value="'+c.i+'">第'+c.i+'章 '+esc2(c.title)+'</option>').join('');
+    m.textContent='版本：'+d.name+'（'+d.n_chapters+' 章 · '+d.chars.toLocaleString()+' 字 · 識典古籍粗校）';
+    showZhou(1);
+  }});
+}}
+function showZhou(n){{
+  if(!ZY)return;
+  n=parseInt(n)||1;
+  var c=ZY.chapters[n-1];
+  if(!c)return;
+  document.getElementById('zhouBody').innerHTML='<h3>第'+c.i+'章　'+esc2(c.title)+'</h3>'+
+    (c.vol?'<p class="small">'+esc2(c.vol)+'</p>':'')+
+    c.text.split('\\n\\n').filter(x=>x.trim()).map(p=>'<p>'+esc2(p)+'</p>').join('');
+  document.getElementById('zhouSel').value=n;
+  window.scrollTo({{top:0,behavior:'smooth'}});
 }}
 </script>'''
     write("read.html", html)
@@ -567,7 +616,7 @@ def render_edition(e):
     fam_map={"yanyi":"演義系","zhizhuan":"志傳系","pingdian":"評點本","modern":"現代本","sequel":"續書"}
     fam_col={"yanyi":"#9e2b25","zhizhuan":"#b08d57","pingdian":"#3f6b5e","modern":"#3b4a6b","sequel":"#6b4a8a"}
     fam = e.get("family","")
-    full = ' <span class="badge full">★全文</span>' if e.get('hasFulltext') else ' <span class="badge empty">元數據</span>'
+    full = ' <span class="badge full">★全文</span>' if (e.get('hasFulltext') or e.get('fulltext')) else ' <span class="badge empty">元數據</span>'
     return f'''<article class="edition-card" style="border-left:4px solid {fam_col.get(fam,'#999')}">
 <h3>{esc(e.get("name","") or e.get("title",""))}{full}</h3>
 <p class="edition-meta"><b>簡稱：</b>{esc(e.get("short",""))} · <b>族系：</b>{fam_map.get(fam,fam)} · <b>年代：</b>{esc(str(e.get("year","")))} · <b>存世：</b>{esc(e.get("survival",""))} · <b>卷回：</b>{esc(e.get("chapters",""))}</p>
@@ -607,6 +656,16 @@ def render_variant(v):
 
 def page_variants():
     # 專門的異文對勘頁，帶用戶自助對勘工具
+    VR = load('variants_real.json') if (DOCS/'data'/'variants_real.json').exists() else {"items": []}
+    real_cards = ''.join(
+        '<article class="variant-card real">'
+        '<header class="vr-head"><span class="vr-ch">毛第 %s 回 × 周第 %s 章</span>'
+        '<span class="vr-type">全文實測</span><span class="vr-sim">相似度 %s</span></header>'
+        '<div class="vr-body">'
+        '<div class="vr-row"><span class="vr-tag mao">毛宗崗本</span><q class="vr-text">%s</q></div>'
+        '<div class="vr-row"><span class="vr-tag zhou">周曰校刊本</span><q class="vr-text">%s</q></div>'
+        '</div></article>' % (it["mao_ch"], it["zhou_ch"], it["sim"], esc(it["mao"]), esc(it["zhou"]))
+        for it in VR["items"])
     var_types = {}
     for v in VARIANTS:
         t = v.get("type","")
@@ -614,7 +673,7 @@ def page_variants():
     type_filter = "".join(f'<button class="btn small" data-type="{t}" onclick="filterVariants(\'{t}\')">{VT_LABEL.get(t,t)}（{c}）</button>' for t,c in var_types.items())
     VT_LABEL_JSON = json.dumps(VT_LABEL, ensure_ascii=False)
     VS_JSON = json.dumps(VARIANTS, ensure_ascii=False)
-    html = header("異文對勘","variants.html",f"嘉靖壬午本 vs 毛宗崗本核心異文 {len(VARIANTS)} 則，覆蓋 7 種異文類型；提供版本演化系譜圖與用戶自助對勘入口。") + f'''
+    html = header("異文對勘","variants.html",f"毛宗崗本 × 周曰校刊本 全文實測異文 {len(VR['items'])} 則（自動對勘）+ 嘉靖壬午本等文獻校勘異文 {len(VARIANTS)} 則；含版本演化系譜圖與用戶自助對勘入口。") + f'''
 <section class="paper">
   <h2>版本演化系譜</h2>
   <p>《三國演義》現存明刊本約 30 種、清刊本約 70 餘種，按文本系統可分「演義系」（24 卷 240 則單題）、「志傳系」（20 卷，含花關索故事）兩大平行系統，再由明末評點家合併為 120 回雙題評本，至毛宗崗本定型為通行本。下圖繪出 12 個主要版本的演化關係：</p>
@@ -634,7 +693,7 @@ def page_variants():
       <!-- 演义系 -->
       <rect x="120" y="90" width="160" height="32" rx="4" fill="#fdf3e9" stroke="#9e2b25"/><text x="200" y="110" text-anchor="middle">嘉靖壬午本（1522）★</text>
       <line x1="200" y1="122" x2="200" y2="170" stroke="#9e2b25" marker-end="url(#arrow)"/>
-      <rect x="120" y="170" width="160" height="32" rx="4" fill="#fdf3e9" stroke="#9e2b25"/><text x="200" y="190" text-anchor="middle">周曰校本（1591）</text>
+      <rect x="120" y="170" width="160" height="32" rx="4" fill="#e8f0f4" stroke="#2f6b8f" stroke-width="1.5"/><text x="200" y="190" text-anchor="middle" font-weight="bold">周曰校本（1591）★</text>
       <line x1="200" y1="202" x2="200" y2="250" stroke="#9e2b25" marker-end="url(#arrow)"/>
       <rect x="120" y="250" width="160" height="32" rx="4" fill="#eaf2ee" stroke="#3f6b5e"/><text x="200" y="270" text-anchor="middle">李卓吾評本（~1607）</text>
       <text x="210" y="246" fill="#3f6b5e" font-size="10">（合 240→120 回）</text>
@@ -679,6 +738,14 @@ def page_variants():
   </div>
   <div class="variant-list" id="variant-list">
     {''.join(render_variant(v) for v in VARIANTS)}
+  </div>
+</section>
+
+<section class="paper">
+  <h2>全文實測異文 · 毛宗崗本 × 周曰校刊本（{len(VR["items"])} 則）</h2>
+  <p>以下異文由兩版本<b>全文自動對勘</b>產出（毛本 47,272 句 × 周曰校本 32,407 句，句子級對齊），差異可直接回溯原文核驗。因周曰校本採用識典古籍「粗校」文本，個別字或含 OCR 誤識，已在條目中原樣保留並可對照毛本辨讀。</p>
+  <div class="variant-list" id="variant-list-real">
+    {real_cards}
   </div>
 </section>
 

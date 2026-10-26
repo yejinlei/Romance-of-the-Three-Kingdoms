@@ -9,14 +9,14 @@
   <p class="site-sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p>
   <div class="nav-grid"><a class="nav-card" href="index.html"><span class="seal">卷</span><span>首页</span></a><a class="nav-card active" href="ontology.html"><span class="seal">元</span><span>本体论</span></a><a class="nav-card" href="read.html"><span class="seal">读</span><span>全文阅读</span></a><a class="nav-card" href="persons.html"><span class="seal">人</span><span>人物志</span></a><a class="nav-card" href="factions.html"><span class="seal">势</span><span>势力谱</span></a><a class="nav-card" href="places.html"><span class="seal">地</span><span>地理志</span></a><a class="nav-card" href="battles.html"><span class="seal">战</span><span>战役史</span></a><a class="nav-card" href="events.html"><span class="seal">事</span><span>事件录</span></a><a class="nav-card" href="stratagems.html"><span class="seal">计</span><span>计谋鉴</span></a><a class="nav-card" href="artifacts.html"><span class="seal">物</span><span>器物簿</span></a><a class="nav-card" href="prophecies.html"><span class="seal">谶</span><span>谶纬考</span></a><a class="nav-card" href="versions.html"><span class="seal">版</span><span>版本族谱</span></a><a class="nav-card" href="variants.html"><span class="seal">勘</span><span>异文对勘</span></a><a class="nav-card" href="graph.html"><span class="seal">系</span><span>人物关系</span></a><a class="nav-card" href="map.html"><span class="seal">图</span><span>时空地图</span></a><a class="nav-card" href="query.html"><span class="seal">问</span><span>查询台</span></a><a class="nav-card" href="stats.html"><span class="seal">数</span><span>统计析</span></a><a class="nav-card" href="scholars.html"><span class="seal">学</span><span>学术史</span></a><a class="nav-card" href="papers.html"><span class="seal">论</span><span>论著举要</span></a><a class="nav-card" href="adaptations.html"><span class="seal">艺</span><span>衍生改编</span></a><a class="nav-card" href="poetry.html"><span class="seal">诗</span><span>诗词回目</span></a><a class="nav-card" href="mirror.html"><span class="seal">虚</span><span>虚实对照</span></a><a class="nav-card" href="destiny.html"><span class="seal">命</span><span>天命叙事</span></a><a class="nav-card" href="guide.html"><span class="seal">引</span><span>阅读指南</span></a></div>
 </header><main>
-<p class="subtitle">OWL 2 DL 描述邏輯本體，含 78 個類、37 個對象屬性、111 個數據屬性；TBox 1249 行 + ABox 3210 行 Turtle，兼容 Protégé/rdflib/GraphDB/Apache Jena。</p>
+<p class="subtitle">OWL 2 DL 描述邏輯本體，含 78 個類、37 個對象屬性、111 個數據屬性；TBox 1249 行 + ABox 7018 行 Turtle，兼容 Protégé/rdflib/GraphDB/Apache Jena。</p>
 <section class="paper">
   <h2>本體論 OWL 2 規範 v3.2-multiversion</h2>
   <p>本體文件採用 Turtle 語法，詞表採用 YAML 受控詞表，兼容 Protégé / rdflib / GraphDB / Apache Jena 直接導入。
   與《水滸傳》本體（<code>sh:</code> 前綴）統一 <code>sg:</code> 命名空間，跨本體可按人物/地名 ID JOIN。</p>
   <div class="btn-row">
     <a class="btn primary" href="ontology/sanguo_kg_ontology.ttl" download>📥 下載 TBox（本體結構 · 1249 行 · 78 類 / 37 對象屬性 / 111 數據屬性）</a>
-    <a class="btn primary" href="ontology/sanguo_kg_multiversion_abox.ttl" download>📥 下載多版本 ABox（3210 行 · 12 版本 / 77 異文 / 24 學者 / 5 評點 / 360 回目個體）</a>
+    <a class="btn primary" href="ontology/sanguo_kg_multiversion_abox.ttl" download>📥 下載多版本 ABox（7018 行 · 12 版本 / 77 文獻異文 + 260 全文實測異文 / 24 學者 / 5 評點 / 360 回目 + 192 則個體）</a>
     <a class="btn" href="ontology/vocabularies.yaml" download>📥 下載受控詞表 YAML（11 大詞族）</a>
     <a class="btn" href="query.html">🔍 在瀏覽器查詢本體（DuckDB-WASM）</a>
   </div>
@@ -38,6 +38,8 @@
     <div class="kpi"><div class="kpi-num">24</div><div class="kpi-lab">學者/評點家</div></div>
     <div class="kpi"><div class="kpi-num">5</div><div class="kpi-lab">評點傳承</div></div>
     <div class="kpi"><div class="kpi-num">360</div><div class="kpi-lab">回目/則個體</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:#2f6b8f">192</div><div class="kpi-lab">周曰校本章</div></div>
+    <div class="kpi"><div class="kpi-num" style="color:#2f6b8f">260</div><div class="kpi-lab">全文實測異文</div></div>
     <div class="kpi"><div class="kpi-num">12+17</div><div class="kpi-lab">論著+改編</div></div>
   </div>
 </section>

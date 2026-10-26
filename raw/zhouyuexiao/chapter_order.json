@@ -1,0 +1,1154 @@
+[
+ {
+  "id": "1k3o711mconbe",
+  "vol": "全像三國志傳演義",
+  "title": "全像三國志通俗演義引",
+  "chars": 1839
+ },
+ {
+  "id": "1k3o711ya29sr",
+  "vol": "全像三國志通俗演義引",
+  "title": "全像三國志通俗演義敘",
+  "chars": 1879
+ },
+ {
+  "id": "1k3o712mu6wit",
+  "vol": "三國志宗寮",
+  "title": "蜀",
+  "chars": 386
+ },
+ {
+  "id": "1k3o717ec3xgm",
+  "vol": "新刊校正古本大字音釋三國志通俗演義卷之一",
+  "title": "祭天地桃園結義",
+  "chars": 56021
+ },
+ {
+  "id": "1k3o71cm0mcd6",
+  "vol": "新刊校正古本出像大字音釋三國志傳通俗演義卷之二",
+  "title": "劉玄德北海觧圍",
+  "chars": 3294
+ },
+ {
+  "id": "1k3o71cm0n1ne",
+  "vol": null,
+  "title": "吕温侯、濮陽大戰",
+  "chars": 3920
+ },
+ {
+  "id": "1k3o71cm0neai",
+  "vol": null,
+  "title": "陶㳟祖三讓徐州",
+  "chars": 2444
+ },
+ {
+  "id": "1k3o71cr7r412",
+  "vol": null,
+  "title": "曹操定陶破吕布",
+  "chars": 2458
+ },
+ {
+  "id": "1k3o71cr7rgo6",
+  "vol": null,
+  "title": "李傕、郭汜亂長安",
+  "chars": 3109
+ },
+ {
+  "id": "1k3o71cr7rtba",
+  "vol": null,
+  "title": "楊奉、董承雙救駕",
+  "chars": 3044
+ },
+ {
+  "id": "1k3o71cr7s5ye",
+  "vol": null,
+  "title": "遷鑾輿曹操秉政",
+  "chars": 3456
+ },
+ {
+  "id": "1k3o71cr7sili",
+  "vol": null,
+  "title": "吕布月夜奪徐州",
+  "chars": 3105
+ },
+ {
+  "id": "1k3o71cr7sv8m",
+  "vol": null,
+  "title": "孫策大戰，太史慈",
+  "chars": 3451
+ },
+ {
+  "id": "1k3o71cr7t7vq",
+  "vol": null,
+  "title": "孫策大戰嚴白虎",
+  "chars": 4086
+ },
+ {
+  "id": "1k3o71cr7tkiu",
+  "vol": null,
+  "title": "吕奉先轅門射戟",
+  "chars": 3429
+ },
+ {
+  "id": "1k3o71cr7tx5y",
+  "vol": null,
+  "title": "曹操興兵擊張繡",
+  "chars": 3978
+ },
+ {
+  "id": "1k3o71cr7u9t2",
+  "vol": null,
+  "title": "袁術七路下徐州",
+  "chars": 3566
+ },
+ {
+  "id": "1k3o71cr7umg6",
+  "vol": null,
+  "title": "曹操會兵擊袁術",
+  "chars": 2572
+ },
+ {
+  "id": "1k3o71cr7uz3a",
+  "vol": null,
+  "title": "決勝負賈詡談兵",
+  "chars": 1649
+ },
+ {
+  "id": "1k3o71cr7vbqe",
+  "vol": null,
+  "title": "夏侯惇拔矢啖睛",
+  "chars": 3247
+ },
+ {
+  "id": "1k3o71cr7vodi",
+  "vol": null,
+  "title": "吕布敗走下邳城",
+  "chars": 2772
+ },
+ {
+  "id": "1k3o71cr7w10m",
+  "vol": null,
+  "title": "白門樓曹操斬吕布",
+  "chars": 4221
+ },
+ {
+  "id": "1k3o71cr7wdnq",
+  "vol": null,
+  "title": "曹孟德許田射鹿",
+  "chars": 2368
+ },
+ {
+  "id": "1k3o71cr7wqau",
+  "vol": null,
+  "title": "董承密受衣帶詔",
+  "chars": 2624
+ },
+ {
+  "id": "1k3o71heo1kwr",
+  "vol": "新刊校正古本出像大字音釋三國志傳通俗演義卷之三",
+  "title": "青梅煮酒論英雄",
+  "chars": 3386
+ },
+ {
+  "id": "1k3o71heo2a6z",
+  "vol": null,
+  "title": "關雲長龍斬車胄",
+  "chars": 2235
+ },
+ {
+  "id": "1k3o71heo2mu3",
+  "vol": null,
+  "title": "曹公分兵拒袁紹",
+  "chars": 2062
+ },
+ {
+  "id": "1k3o71heo2zh7",
+  "vol": null,
+  "title": "關張擒劉岱、王忠",
+  "chars": 2006
+ },
+ {
+  "id": "1k3o71heo3c4b",
+  "vol": null,
+  "title": "禰衡祼體駡曹操",
+  "chars": 2690
+ },
+ {
+  "id": "1k3o71heo3orf",
+  "vol": null,
+  "title": "曹孟德三勘吉平",
+  "chars": 2148
+ },
+ {
+  "id": "1k3o71heo41ej",
+  "vol": null,
+  "title": "曹操勒死董貴妃",
+  "chars": 1686
+ },
+ {
+  "id": "1k3o71heo4e1n",
+  "vol": null,
+  "title": "玄德匹馬奔冀州",
+  "chars": 1949
+ },
+ {
+  "id": "1k3o71heo4qor",
+  "vol": null,
+  "title": "張遼義説關雲長",
+  "chars": 3054
+ },
+ {
+  "id": "1k3o71hesxv6u",
+  "vol": null,
+  "title": "雲長策馬剌顔良",
+  "chars": 5611
+ },
+ {
+  "id": "1k3o71hesy7ty",
+  "vol": null,
+  "title": "關雲長封金挂印",
+  "chars": 2722
+ },
+ {
+  "id": "1k3o71hesykh2",
+  "vol": null,
+  "title": "關雲長千里獨行",
+  "chars": 2789
+ },
+ {
+  "id": "1k3o71hesyx46",
+  "vol": null,
+  "title": "關雲長五關斬將",
+  "chars": 3260
+ },
+ {
+  "id": "1k3o71hesz9ra",
+  "vol": null,
+  "title": "雲長擂鼓斬蔡陽",
+  "chars": 3853
+ },
+ {
+  "id": "1k3o71heszmee",
+  "vol": null,
+  "title": "劉玄德古城聚義",
+  "chars": 2524
+ },
+ {
+  "id": "1lnk9orycl1ra",
+  "vol": null,
+  "title": "孫策怒斬于神仙",
+  "chars": 2958
+ },
+ {
+  "id": "1k3o71heszz1i",
+  "vol": null,
+  "title": "孫權領衆據江東",
+  "chars": 3221
+ },
+ {
+  "id": "1k3o71het0bom",
+  "vol": null,
+  "title": "曹操官渡戰袁紹",
+  "chars": 6326
+ },
+ {
+  "id": "1k3o71m8i0lra",
+  "vol": "新刊校正出像古本大字音釋三國志傳通俗演義卷之四",
+  "title": "曹操倉亭破袁紹",
+  "chars": 3092
+ },
+ {
+  "id": "1k3o71m8i1b1i",
+  "vol": null,
+  "title": "劉玄德敗走荆州",
+  "chars": 6164
+ },
+ {
+  "id": "1k3o71m8i1nom",
+  "vol": null,
+  "title": "曹操决水渰冀州",
+  "chars": 3019
+ },
+ {
+  "id": "1k3o71m8i20bq",
+  "vol": null,
+  "title": "曹操引兵取壺關",
+  "chars": 3519
+ },
+ {
+  "id": "1k3o71m8i2cyu",
+  "vol": null,
+  "title": "郭嘉遺計定遼東",
+  "chars": 2591
+ },
+ {
+  "id": "1k3o71mkaefj9",
+  "vol": null,
+  "title": "劉玄德襄陽赴會",
+  "chars": 3151
+ },
+ {
+  "id": "1k3o71mkaes6d",
+  "vol": null,
+  "title": "玄德躍馬跳檀溪",
+  "chars": 1885
+ },
+ {
+  "id": "1k3o71mkaf4th",
+  "vol": null,
+  "title": "劉玄德遇司馬徽",
+  "chars": 2107
+ },
+ {
+  "id": "1k3o71mkafhgl",
+  "vol": null,
+  "title": "玄德新野遇徐庶",
+  "chars": 1835
+ },
+ {
+  "id": "1k3o71mkafu3p",
+  "vol": null,
+  "title": "徐庶定計取樊城",
+  "chars": 2045
+ },
+ {
+  "id": "1k3o71mkag6qt",
+  "vol": null,
+  "title": "徐庶走薦諸葛亮",
+  "chars": 2417
+ },
+ {
+  "id": "1k3o71mkagjdx",
+  "vol": null,
+  "title": "劉玄德三顧茅廬",
+  "chars": 3196
+ },
+ {
+  "id": "1k3o71mkagw11",
+  "vol": null,
+  "title": "玄德風雪訪孔明",
+  "chars": 5340
+ },
+ {
+  "id": "1k3o71mkah8o5",
+  "vol": null,
+  "title": "孫權跨江破黃祖",
+  "chars": 3753
+ },
+ {
+  "id": "1k3o71mkahlb9",
+  "vol": null,
+  "title": "孔明遺計救劉琦",
+  "chars": 2881
+ },
+ {
+  "id": "1k3o71mkahxyd",
+  "vol": null,
+  "title": "諸葛亮慱望燒屯",
+  "chars": 2702
+ },
+ {
+  "id": "1k3o71mkaialh",
+  "vol": null,
+  "title": "獻荆州粲説劉琮",
+  "chars": 3984
+ },
+ {
+  "id": "1k3o71mkain8l",
+  "vol": null,
+  "title": "諸葛亮火燒新野",
+  "chars": 2322
+ },
+ {
+  "id": "1k3o71rg2df76",
+  "vol": "新刊校正出像古本大字音釋三國志傳通俗演義卷之五",
+  "title": "劉玄德敗走江陵",
+  "chars": 3385
+ },
+ {
+  "id": "1k3o71rg2e4he",
+  "vol": null,
+  "title": "長坂坡趙雲救主",
+  "chars": 3785
+ },
+ {
+  "id": "1k3o71rg2eh4i",
+  "vol": null,
+  "title": "張益德據水斷橋",
+  "chars": 2213
+ },
+ {
+  "id": "1k3o71rg2etrm",
+  "vol": null,
+  "title": "劉玄德敗走夏口",
+  "chars": 2659
+ },
+ {
+  "id": "1k3o71rg2f6eq",
+  "vol": null,
+  "title": "諸葛亮舌戰群儒",
+  "chars": 3941
+ },
+ {
+  "id": "1k3o71rg2fj1u",
+  "vol": null,
+  "title": "諸葛亮智激孫權",
+  "chars": 2312
+ },
+ {
+  "id": "1k3o71rg2fvoy",
+  "vol": null,
+  "title": "諸葛亮智説周瑜",
+  "chars": 2568
+ },
+ {
+  "id": "1k3o71rhl6z3a",
+  "vol": null,
+  "title": "周瑜定計破曹操",
+  "chars": 2522
+ },
+ {
+  "id": "1k3o71rhl7bqe",
+  "vol": null,
+  "title": "周瑜三江戰曹操",
+  "chars": 2726
+ },
+ {
+  "id": "1k3o71rhl7odi",
+  "vol": null,
+  "title": "群英會瑜智、蔣幹",
+  "chars": 3018
+ },
+ {
+  "id": "1k3o71rhl810m",
+  "vol": null,
+  "title": "諸葛亮計伏周瑜",
+  "chars": 2658
+ },
+ {
+  "id": "1k3o71rhl8dnq",
+  "vol": null,
+  "title": "黄蓋獻計破曹操",
+  "chars": 2183
+ },
+ {
+  "id": "1k3o71rhl8qau",
+  "vol": null,
+  "title": "闞澤密獻詐降書",
+  "chars": 2200
+ },
+ {
+  "id": "1k3o71rhl92xy",
+  "vol": null,
+  "title": "龐統進獻連環計",
+  "chars": 3756
+ },
+ {
+  "id": "1k3o71rhl9fl2",
+  "vol": null,
+  "title": "曹操三江調水軍",
+  "chars": 1815
+ },
+ {
+  "id": "1k3o71rhl9s86",
+  "vol": null,
+  "title": "七星壇諸葛祭風",
+  "chars": 2760
+ },
+ {
+  "id": "1k3o71rhla4va",
+  "vol": null,
+  "title": "赤壁鏖兵周公瑾",
+  "chars": 5543
+ },
+ {
+  "id": "1k3o71rhlahie",
+  "vol": null,
+  "title": "關雲長義釋曹操",
+  "chars": 2090
+ },
+ {
+  "id": "1k3o71wrg0wez",
+  "vol": "新刊校正出像古本大字音釋三國志傳通俗演義卷之六",
+  "title": "周瑜南郡戰曹仁",
+  "chars": 2627
+ },
+ {
+  "id": "1k3o71wrg1lp7",
+  "vol": null,
+  "title": "諸葛亮一氣周瑜",
+  "chars": 2177
+ },
+ {
+  "id": "1k3o71wrg1ycb",
+  "vol": null,
+  "title": "諸葛亮傍略四郡",
+  "chars": 2662
+ },
+ {
+  "id": "1k3o71wrg2azf",
+  "vol": null,
+  "title": "趙子龍智取桂陽",
+  "chars": 2159
+ },
+ {
+  "id": "1k3o71wrg2nmj",
+  "vol": null,
+  "title": "黃忠、魏延獻長沙",
+  "chars": 2549
+ },
+ {
+  "id": "1k3o71wrg309n",
+  "vol": null,
+  "title": "孫仲謀合淝大戰",
+  "chars": 2420
+ },
+ {
+  "id": "1k3o71wrg3cwr",
+  "vol": null,
+  "title": "周瑜定計取荆州",
+  "chars": 2393
+ },
+ {
+  "id": "1k3o71wrg3pjv",
+  "vol": null,
+  "title": "劉玄德娶孫夫人",
+  "chars": 5441
+ },
+ {
+  "id": "1k3o71wrg426z",
+  "vol": null,
+  "title": "諸葛亮二氣周瑜",
+  "chars": 2420
+ },
+ {
+  "id": "1k3o71wrg4eu3",
+  "vol": null,
+  "title": "曹操大宴銅雀臺",
+  "chars": 3122
+ },
+ {
+  "id": "1k3o71wrg4rh7",
+  "vol": null,
+  "title": "諸葛亮三氣周瑜",
+  "chars": 2405
+ },
+ {
+  "id": "1k3o71wrg544b",
+  "vol": null,
+  "title": "諸葛亮大哭周瑜",
+  "chars": 2262
+ },
+ {
+  "id": "1k3o71wrg5grf",
+  "vol": null,
+  "title": "耒陽張飛薦鳳雛",
+  "chars": 3523
+ },
+ {
+  "id": "1k3o71wrg5tej",
+  "vol": null,
+  "title": "馬超興兵取潼關",
+  "chars": 2820
+ },
+ {
+  "id": "1k3o71wzz4nq2",
+  "vol": null,
+  "title": "馬孟起渭橋大戰",
+  "chars": 2833
+ },
+ {
+  "id": "1k3o71wzz50d6",
+  "vol": null,
+  "title": "許褚大戰馬孟起",
+  "chars": 2451
+ },
+ {
+  "id": "1k3o71wzz5d0a",
+  "vol": null,
+  "title": "馬孟起步戰五將",
+  "chars": 3259
+ },
+ {
+  "id": "1k3o71wzz5pne",
+  "vol": null,
+  "title": "張永年，反難楊脩",
+  "chars": 4759
+ },
+ {
+  "id": "1k3o71wzz62ai",
+  "vol": null,
+  "title": "龐統獻策取西川",
+  "chars": 3006
+ },
+ {
+  "id": "1k3o721q9rwui",
+  "vol": "新刊校正古本出像大字音釋三國志傳通俗演義卷之七",
+  "title": "趙雲截江奪幼主",
+  "chars": 5639
+ },
+ {
+  "id": "1k3o721q9sm4q",
+  "vol": null,
+  "title": "玄德，斬楊懷、高沛。",
+  "chars": 2613
+ },
+ {
+  "id": "1k3o721q9syru",
+  "vol": null,
+  "title": "黃忠、魏延大争功",
+  "chars": 2840
+ },
+ {
+  "id": "1k3o721q9tbey",
+  "vol": null,
+  "title": "落鳳坡箭射龐統",
+  "chars": 2914
+ },
+ {
+  "id": "1k3o721q9to22",
+  "vol": null,
+  "title": "張翼德義釋嚴顔",
+  "chars": 2691
+ },
+ {
+  "id": "1k3o721q9u0p6",
+  "vol": null,
+  "title": "孔明定計捉張任",
+  "chars": 2981
+ },
+ {
+  "id": "1k3o721q9udca",
+  "vol": null,
+  "title": "楊阜借兵破馬超",
+  "chars": 2617
+ },
+ {
+  "id": "1k3o721q9upze",
+  "vol": null,
+  "title": "葭萌張飛戰馬超",
+  "chars": 2911
+ },
+ {
+  "id": "1k3o721q9v2mi",
+  "vol": null,
+  "title": "劉玄德平定益州",
+  "chars": 3139
+ },
+ {
+  "id": "1k3o721q9vf9m",
+  "vol": null,
+  "title": "關雲長單刀赴會",
+  "chars": 2743
+ },
+ {
+  "id": "1k3o721q9vrwq",
+  "vol": null,
+  "title": "曹操杖殺伏皇后",
+  "chars": 8162
+ },
+ {
+  "id": "1k3o721q9w4ju",
+  "vol": null,
+  "title": "甘寧百騎刼曹營",
+  "chars": 2892
+ },
+ {
+  "id": "1k3o7222jphkj",
+  "vol": null,
+  "title": "魏王宫左慈擲盃",
+  "chars": 3416
+ },
+ {
+  "id": "1k3o7222jpu7n",
+  "vol": null,
+  "title": "曹操試神卜管輅",
+  "chars": 2893
+ },
+ {
+  "id": "1k3o7222jq6ur",
+  "vol": null,
+  "title": "耿紀、韋晃討曹操",
+  "chars": 2614
+ },
+ {
+  "id": "1k3o7222jqjhv",
+  "vol": null,
+  "title": "瓦口張飛戰張郃",
+  "chars": 2697
+ },
+ {
+  "id": "1k3o7222jqw4z",
+  "vol": null,
+  "title": "黃忠、嚴顔雙立功",
+  "chars": 2571
+ },
+ {
+  "id": "1k3o72754ej2i",
+  "vol": "新刊校正古本全像大字音釋三國志傳通俗演義卷之八",
+  "title": "黃忠馘斬夏侯淵",
+  "chars": 3331
+ },
+ {
+  "id": "1k3o72754f8cq",
+  "vol": null,
+  "title": "趙子龍漢水大戰",
+  "chars": 2762
+ },
+ {
+  "id": "1k3o72754fkzu",
+  "vol": null,
+  "title": "劉玄德智取漢中",
+  "chars": 2461
+ },
+ {
+  "id": "1k3o72754fxmy",
+  "vol": null,
+  "title": "曹孟德忌殺楊修",
+  "chars": 2178
+ },
+ {
+  "id": "1k3o72754gaa2",
+  "vol": null,
+  "title": "劉備進位漢中王",
+  "chars": 3681
+ },
+ {
+  "id": "1k3o72754gmx6",
+  "vol": null,
+  "title": "關雲長威震華夏",
+  "chars": 3017
+ },
+ {
+  "id": "1k3o72754gzka",
+  "vol": null,
+  "title": "龐德擡櫬戰關公",
+  "chars": 2585
+ },
+ {
+  "id": "1k3o7276d8hma",
+  "vol": null,
+  "title": "關雲長水渰亡軍",
+  "chars": 2787
+ },
+ {
+  "id": "1k3o7276d8u9e",
+  "vol": null,
+  "title": "關雲長刮骨療毒",
+  "chars": 2742
+ },
+ {
+  "id": "1k3o7276d96wi",
+  "vol": null,
+  "title": "吕子明智取荆州",
+  "chars": 2455
+ },
+ {
+  "id": "1k3o7276d9jjm",
+  "vol": null,
+  "title": "關雲長天戰徐晃",
+  "chars": 2752
+ },
+ {
+  "id": "1k3o7276d9w6q",
+  "vol": null,
+  "title": "關雲長夜走麥城",
+  "chars": 2729
+ },
+ {
+  "id": "1k3o7276da8tu",
+  "vol": null,
+  "title": "玉泉山關公顯聖",
+  "chars": 3289
+ },
+ {
+  "id": "1k3o7276dalgy",
+  "vol": null,
+  "title": "漢中王痛哭關公",
+  "chars": 2552
+ },
+ {
+  "id": "1k3o7276day42",
+  "vol": null,
+  "title": "曹操殺神醫華陀",
+  "chars": 2789
+ },
+ {
+  "id": "1k3o7276dbar6",
+  "vol": null,
+  "title": "魏太子曹丕秉政",
+  "chars": 2328
+ },
+ {
+  "id": "1k3o7276dbnea",
+  "vol": null,
+  "title": "曹子建七步成章",
+  "chars": 2697
+ },
+ {
+  "id": "1k3o7276dc01e",
+  "vol": null,
+  "title": "漢中王怒殺劉封",
+  "chars": 2841
+ },
+ {
+  "id": "1k3o7276dccoi",
+  "vol": null,
+  "title": "廢獻帝曹丕篡漢",
+  "chars": 3311
+ },
+ {
+  "id": "1k3o7276dcpbm",
+  "vol": null,
+  "title": "漢中王成都稱帝",
+  "chars": 2272
+ },
+ {
+  "id": "1k3o72ebzwefv",
+  "vol": "新刊校正古本出像大字音釋三國志傳通俗演義卷之九",
+  "title": "范彊張逹剌張飛",
+  "chars": 3114
+ },
+ {
+  "id": "1k3o72ebzx3q3",
+  "vol": null,
+  "title": "劉先主興兵伐吳",
+  "chars": 1789
+ },
+ {
+  "id": "1k3o72ebzxgd7",
+  "vol": null,
+  "title": "吳臣趙咨説曹丕",
+  "chars": 2741
+ },
+ {
+  "id": "1k3o72ebzxt0b",
+  "vol": null,
+  "title": "關興斬將救張苞",
+  "chars": 2535
+ },
+ {
+  "id": "1k3o72ebzy5nf",
+  "vol": null,
+  "title": "劉先主猇亭大戰",
+  "chars": 3596
+ },
+ {
+  "id": "1k3o72emvtjpm",
+  "vol": null,
+  "title": "陸遜定計破蜀兵",
+  "chars": 2570
+ },
+ {
+  "id": "1k3o72emvtwcq",
+  "vol": null,
+  "title": "先主夜走白帝城",
+  "chars": 3293
+ },
+ {
+  "id": "1k3o72emvu8zu",
+  "vol": null,
+  "title": "八陣圖石伏陸遜",
+  "chars": 5849
+ },
+ {
+  "id": "1k3o72emvulmy",
+  "vol": null,
+  "title": "曹丕五路下西川",
+  "chars": 2521
+ },
+ {
+  "id": "1k3o72emvuya2",
+  "vol": null,
+  "title": "難張温秦宓論天",
+  "chars": 3000
+ },
+ {
+  "id": "1k3o72emvvax6",
+  "vol": null,
+  "title": "泛龍舟魏主伐吴",
+  "chars": 2726
+ },
+ {
+  "id": "1k3o72emvvnka",
+  "vol": null,
+  "title": "孔明興兵征孟獲",
+  "chars": 3044
+ },
+ {
+  "id": "1k3o72emvw07e",
+  "vol": null,
+  "title": "諸葛亮一擒孟獲",
+  "chars": 3092
+ },
+ {
+  "id": "1k3o72emvwcui",
+  "vol": null,
+  "title": "諸葛亮二擒孟獲",
+  "chars": 2205
+ },
+ {
+  "id": "1k3o72emvwphm",
+  "vol": null,
+  "title": "諸葛亮三擒孟獲",
+  "chars": 3063
+ },
+ {
+  "id": "1k3o72emvx24q",
+  "vol": null,
+  "title": "諸葛亮四擒孟獲",
+  "chars": 1999
+ },
+ {
+  "id": "1k3o72emvxeru",
+  "vol": null,
+  "title": "諸葛亮五擒孟獲",
+  "chars": 3610
+ },
+ {
+  "id": "1k3o72emvxrey",
+  "vol": null,
+  "title": "諸葛亮六擒孟獲",
+  "chars": 3401
+ },
+ {
+  "id": "1k3o72emvy422",
+  "vol": null,
+  "title": "諸葛亮七擒孟獲",
+  "chars": 3997
+ },
+ {
+  "id": "1k3o72knq5hyq",
+  "vol": "新刊校正古本出像大字音釋三國志傳通俗演義卷之十",
+  "title": "孔明秋夜祭瀘水",
+  "chars": 2631
+ },
+ {
+  "id": "1k3o72knq678y",
+  "vol": null,
+  "title": "孔明初上出師表",
+  "chars": 3440
+ },
+ {
+  "id": "1k3o72knq6jw2",
+  "vol": null,
+  "title": "趙子龍大破魏兵",
+  "chars": 2530
+ },
+ {
+  "id": "1k3o72knq6wj6",
+  "vol": null,
+  "title": "諸葛亮智取三郡",
+  "chars": 2885
+ },
+ {
+  "id": "1k3o72knq796a",
+  "vol": null,
+  "title": "孔明以智伏姜維",
+  "chars": 2884
+ },
+ {
+  "id": "1k3o72ku8qot6",
+  "vol": null,
+  "title": "孔明祁山破曹真",
+  "chars": 2821
+ },
+ {
+  "id": "1k3o72ku8r1ga",
+  "vol": null,
+  "title": "孔明大破鐡車兵",
+  "chars": 2814
+ },
+ {
+  "id": "1k3o72ku8re3e",
+  "vol": null,
+  "title": "司馬懿智擒孟逹",
+  "chars": 3248
+ },
+ {
+  "id": "1k3o72ku8rqqi",
+  "vol": null,
+  "title": "司馬懿計取街亭",
+  "chars": 3106
+ },
+ {
+  "id": "1k3o72ku8s3dm",
+  "vol": null,
+  "title": "孔明智退司馬懿",
+  "chars": 3356
+ },
+ {
+  "id": "1k3o72ku8sg0q",
+  "vol": null,
+  "title": "孔明揮淚斬馬謖",
+  "chars": 2411
+ },
+ {
+  "id": "1k3o72ku8ssnu",
+  "vol": null,
+  "title": "陸遜石亭破曹休",
+  "chars": 2682
+ },
+ {
+  "id": "1k3o72ku8t5ay",
+  "vol": null,
+  "title": "孔明再上出師表",
+  "chars": 2881
+ },
+ {
+  "id": "1k3o72ku8thy2",
+  "vol": null,
+  "title": "諸葛亮二出祁山",
+  "chars": 2483
+ },
+ {
+  "id": "1k3o72ku8tul6",
+  "vol": null,
+  "title": "孔明遺計斬王雙",
+  "chars": 2721
+ },
+ {
+  "id": "1k3o72ku8u78a",
+  "vol": null,
+  "title": "諸葛亮三出祁山",
+  "chars": 3065
+ },
+ {
+  "id": "1k3o72ku8ujve",
+  "vol": null,
+  "title": "孔明智敗司馬懿",
+  "chars": 3406
+ },
+ {
+  "id": "1k3o72ku8uwii",
+  "vol": null,
+  "title": "仲逹興兵寇漢中",
+  "chars": 3374
+ },
+ {
+  "id": "1k3o72ku8v95m",
+  "vol": null,
+  "title": "諸葛亮四出祁山",
+  "chars": 2796
+ },
+ {
+  "id": "1k3o72ku8vlsq",
+  "vol": null,
+  "title": "孔明祁山布八陣",
+  "chars": 3031
+ },
+ {
+  "id": "1k3o72qz3wr3n",
+  "vol": "新刊校正古本全像大字音釋三國志傳通俗演義卷之十一",
+  "title": "新刋校正古本全像大字音釋三國志傳通俗演義卷之十一（二）",
+  "chars": 30560
+ },
+ {
+  "id": "1mfuxqi2fb400",
+  "vol": null,
+  "title": "新刋校正古本出像大字音釋三國志傳通俗演義卷之十二",
+  "chars": 30635
+ },
+ {
+  "id": "1k3o72wmciexn",
+  "vol": "新刊校正古本出像大字音釋三國志傳通俗演義卷之十二",
+  "title": "鄧艾叚谷破姜維",
+  "chars": 2531
+ },
+ {
+  "id": "1k3o72wmcj47v",
+  "vol": null,
+  "title": "司馬昭破諸葛誕",
+  "chars": 2253
+ },
+ {
+  "id": "1k3o72wmcjguz",
+  "vol": null,
+  "title": "忠義士于詮守節",
+  "chars": 2382
+ },
+ {
+  "id": "1k3o72wmcjti3",
+  "vol": null,
+  "title": "姜維長城戰鄧艾",
+  "chars": 2299
+ },
+ {
+  "id": "1k3o72wmck657",
+  "vol": null,
+  "title": "孫琳廢吳主孫休",
+  "chars": 4932
+ },
+ {
+  "id": "1k3o72wmckisb",
+  "vol": null,
+  "title": "司馬昭弑殺曹髦",
+  "chars": 2416
+ },
+ {
+  "id": "1k3o72wmckvff",
+  "vol": null,
+  "title": "姜伯約棄車大戰",
+  "chars": 1989
+ },
+ {
+  "id": "1k3o72wmcl82j",
+  "vol": null,
+  "title": "姜伯約洮陽大戰",
+  "chars": 2355
+ },
+ {
+  "id": "1k3o72wmclkpn",
+  "vol": null,
+  "title": "姜維避禍屯田計",
+  "chars": 2097
+ },
+ {
+  "id": "1k3o72wmclxcr",
+  "vol": null,
+  "title": "鍾會、鄧艾取漢中",
+  "chars": 2544
+ },
+ {
+  "id": "1k3o72wmcm9zv",
+  "vol": null,
+  "title": "姜維大戰劍門關",
+  "chars": 2576
+ },
+ {
+  "id": "1k3o72wmcmmmz",
+  "vol": null,
+  "title": "鑿山嶺鄧艾襲川",
+  "chars": 2169
+ },
+ {
+  "id": "1k3o72wmcmza3",
+  "vol": null,
+  "title": "諸葛瞻大戰鄧艾",
+  "chars": 2914
+ },
+ {
+  "id": "1k3o72wmcnbx7",
+  "vol": null,
+  "title": "蜀後主輿櫬出降",
+  "chars": 5690
+ },
+ {
+  "id": "1k3o72wmcnokb",
+  "vol": null,
+  "title": "姜維一計害三賢",
+  "chars": 2671
+ },
+ {
+  "id": "1k3o72wmco17f",
+  "vol": null,
+  "title": "司馬復奪受禪臺",
+  "chars": 2976
+ },
+ {
+  "id": "1k3o72wmcoduj",
+  "vol": null,
+  "title": "羊祜病中薦杜預",
+  "chars": 7991
+ }
+]
