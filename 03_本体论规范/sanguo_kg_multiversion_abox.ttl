@@ -66,9 +66,9 @@ sg:edition_zhouyuexiao a :Edition ;
     :editionYear "1591"^^xsd:gYear ;
     :publisher "明萬曆十九年金陵周曰校萬卷樓刊"@zh ;
     :survivalState "全本（有影印，識典古籍在線）"@zh ;
-    :chapterDivision "12 卷 240 則"@zh ;
-    dc:description """演義系代表本；增補插圖、音注、釋義、考證；與嘉靖本同屬演義系統，文字高度一致。"""@zh ;
-    :hasFullText false^^xsd:boolean .
+    :chapterDivision "12 卷 192 章"@zh ;
+    dc:description """演義系代表本；增補插圖、音注、釋義、考證；與嘉靖本同屬演義系統，文字高度一致。本站已收錄全文（識典古籍粗校，683,392 字 / 192 章），可與毛本逐句對勘。"""@zh ;
+    :hasFullText true^^xsd:boolean .
 
 sg:edition_yefengchun a :Edition ;
     rdfs:label "葉逢春本《新刊通俗演義三國志傳》"@zh ;
