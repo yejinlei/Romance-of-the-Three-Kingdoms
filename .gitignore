@@ -3,3 +3,4 @@ __pycache__/
 build/sanguo_raw.txt
 build/out/
 *.zip
+ref_shuihu/

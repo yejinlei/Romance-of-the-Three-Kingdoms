@@ -1,70 +1,115 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
 <title>本體查詢 · 三國演義本體論</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="stylesheet" href="assets/app.css">
-</head><body>
-<header class="site-header">
-  <a class="seal" href="index.html" title="三國">國三</a>
-  <h1 class="site-title"><a href="index.html">三國演義本體論</a></h1>
-  <div class="sub site-sub">—— DuckDB-WASM 無服務器 SQL · 本體即席查詢</div>
-  <nav><a href="index.html">总览</a><a href="read.html">正文</a><a href="heroes.html">英雄譜</a><a href="persons.html">人物誌</a><a href="factions.html">勢力志</a><a href="places.html">地理志</a><a href="battles.html">戰役錄</a><a href="events.html">事件譜</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">器物譜</a><a href="prophecies.html">讖緯志</a><a href="poetry.html">詩詞鈔</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="graph.html">關係網</a><a href="map.html">輿地圖</a><a href="guide.html">讀法</a><a href="mirror.html">虛實辯</a><a href="destiny.html">天命讖</a><a href="scholars.html">評點家</a><a href="papers.html">學術論</a><a href="adaptations.html">演義外</a><a href="query.html" class="on">本體查詢</a><a href="ontology.html">本體論</a></nav>
-</header>
-<main>
+</head>
+<body>
 
-<section class="paper">
-  <h2>本体查询台 · DuckDB-WASM</h2>
-  <p>浏览器端无服务器查询：Parquet 文件在你的浏览器里被 DuckDB 即时加载，数据不出本机。试试以下示例：</p>
-  <div class="btn-row" id="samples"></div>
-  <textarea id="sql" rows="6" style="width:100%;font-family:var(--mono);font-size:13px;padding:10px;border:1px solid var(--border);border-radius:4px;background:var(--paper);">SELECT name, faction, zi, mention_count FROM 'data/persons.parquet' ORDER BY mention_count DESC LIMIT 20;</textarea>
-  <div class="btn-row"><button class="btn primary" onclick="run()">运行查询</button><span id="status" class="small"></span></div>
-  <div id="result" style="overflow:auto;max-height:500px;margin-top:12px;"></div>
+<header class="topbar">
+  <div class="logo">
+    <span class="seal">國三</span>
+    <span>三國演義本體論</span>
+  </div>
+  <nav class="nav-links">
+    <a href="index.html">總覽</a>
+    <a href="read.html">版本閱讀</a>
+    <a href="heroes.html">英雄譜</a>
+    <a href="persons.html">人物誌</a>
+    <a href="factions.html">勢力志</a>
+    <a href="places.html">地理志</a>
+    <a href="battles.html">戰役錄</a>
+    <a href="events.html">事件譜</a>
+    <a href="stratagems.html">計謀譜</a>
+    <a href="artifacts.html">器物譜</a>
+    <a href="prophecies.html">讖緯志</a>
+    <a href="poetry.html">詩詞鈔</a>
+    <a href="versions.html">版本譜</a>
+    <a href="variants.html">異文對勘</a>
+    <a href="graph.html">關係網</a>
+    <a href="map.html">輿地圖</a>
+    <a href="reading.html">讀法</a>
+    <a href="fictional.html">虛實辨</a>
+    <a href="destiny.html">天命讖</a>
+    <a href="critics.html">評點家</a>
+    <a href="papers.html">學術論</a>
+    <a href="adaptations.html">演義外</a>
+    <a href="query.html" class="active">本體查詢</a>
+    <a href="stat.html">統計譜</a>
+    <a href="ontology.html">本體論</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-sub">SPARQL · SQL</div>
+  <h1>本體查詢</h1>
+  <p class="hero-desc">以本體論方法系統建構三國世界——版本、人物、關係、戰役、地理、計謀、器物、讖緯、評點、衍生，一一納入結構化知識框架。</p>
+  
 </section>
-<script type="module">
-import * as duckdb from 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28/+esm';
-const samples=[
-  ['TOP20 人物',"SELECT name,faction,zi,mention_count FROM 'data/persons.parquet' ORDER BY mention_count DESC LIMIT 20;"],
-  ['TOP10 地名',"SELECT name,type,mention_count FROM 'data/places.parquet' ORDER BY mention_count DESC LIMIT 10;"],
-  ['按势力分组统计',"SELECT faction,count(*) n FROM 'data/persons.parquet' WHERE faction<>'' GROUP BY faction ORDER BY n DESC;"],
-  ['战役年份排序',"SELECT name,ad_year,outcome FROM 'data/battles.parquet' WHERE ad_year>180 ORDER BY ad_year LIMIT 20;"],
-];
-document.getElementById('samples').innerHTML=samples.map(s=>'<button class="btn" onclick="document.getElementById(\'sql\').value='+JSON.stringify(JSON.stringify(s[1]))+';run()">'+s[0]+'</button>').join('');
-let db,conn;
+
+<div class="container">
+<div class="reader-status">本體查詢基於 DuckDB-WASM 瀏覽器端執行，無服務器，數據不出本機。首次打開需下載約 10MB 的 Parquet 數據文件。</div>
+<div class="query-box">
+<textarea id="sql">-- 提及次數 TOP20 人物
+SELECT name, faction, mention_count
+FROM persons
+ORDER BY mention_count DESC
+LIMIT 20;</textarea><br>
+<button onclick="runq()">▶ 執行 SQL</button>
+<div class="query-samples">快捷示例：
+<code onclick="sets('SELECT name,faction,mention_count FROM persons ORDER BY mention_count DESC LIMIT 20;')">人物TOP20</code>
+<code onclick="sets('SELECT name,mention_count FROM places ORDER BY mention_count DESC LIMIT 10;')">地名TOP10</code>
+<code onclick="sets("SELECT faction, COUNT(*) AS n FROM persons GROUP BY faction ORDER BY n DESC;")">勢力分組</code>
+<code onclick="sets('SELECT name,ad_year FROM battles WHERE ad_year>0 ORDER BY ad_year LIMIT 20;')">戰役年表</code>
+</div>
+</div>
+<div class="query-result" id="qout"></div>
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.0/dist/duckdb-browser.js" as="script">
+<script src="https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.0/dist/duckdb-browser.js"></script>
+<script>
+let db=null;
+const tables=['persons','places','battles','events','factions','stratagems','artifacts','prophecies','editions','scholars','papers','adaptations','chapters','stats','relationships'];
 async function init(){
-  const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
-  const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
-  const worker = await duckdb.createDuckDBWorker(bundle.mainWorker);
-  const logger = new duckdb.ConsoleLogger();
-  db = new duckdb.AsyncDuckDB(logger, worker);
-  await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
-  conn = await db.connect();
-  document.getElementById('status').textContent='DuckDB 已就绪';
+  document.getElementById('qout').innerHTML='<p style="color:#6b6b6b;">正在初始化 DuckDB-WASM，首次加載約 5-10 秒……</p>';
+  const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles(), bundle=await duckdb.selectBundle(JSDELIVR_BUNDLES);
+  const w=await duckdb.createDuckDB({locateFile:(f)=>"https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.28.0/dist/"+f});
+  db=await duckdb.createDuckDB(bundle.mainWorker);
+  await db.instantiate(bundle.mainWorker,-1);
+  const c=await db.connect();
+  for(const t of tables){
+    try{await c.query(`DROP TABLE IF EXISTS ${t}`);}catch(e){}
+    const r=await fetch(`data/${t}.parquet`);
+    if(!r.ok)continue;
+    const ab=await r.arrayBuffer();
+    await db.registerFileBuffer(`${t}.parquet`,new Uint8Array(ab));
+    await c.query(`CREATE TABLE ${t} AS SELECT * FROM read_parquet('${t}.parquet')`);
+  }
+  await c.close();
+  document.getElementById('qout').innerHTML='<p style="color:#2f5d50;">✓ 已加載 '+tables.length+' 張表，可開始查詢。</p>';
 }
-window.run=async function(){
-  if(!conn){document.getElementById('status').textContent='正在加载 DuckDB…';await init();}
+async function runq(){
+  if(!db){document.getElementById('qout').innerHTML='正在初始化，請稍候……';return;}
   const sql=document.getElementById('sql').value;
-  document.getElementById('status').textContent='查询中…';
+  const c=await db.connect();
   try{
-    const r=await conn.query(sql);
+    const r=await c.query(sql);
     const cols=r.schema.fields.map(f=>f.name);
-    let h='<table class="data-table"><thead><tr>'+cols.map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>';
-    for(const row of r){h+='<tr>';for(const c of cols){h+='<td>'+(row[c]??'')+'</td>';}h+='</tr>';}
-    h+='</tbody></table>';
-    document.getElementById('result').innerHTML=h;
-    document.getElementById('status').textContent='返回 '+r.numRows+' 行';
-  }catch(e){document.getElementById('result').innerHTML='<pre style="color:#9e2b25">'+e.message+'</pre>';document.getElementById('status').textContent='错误';}
-};
-window.sql_sample=function(s){document.getElementById('sql').value=s;run();};
+    let h='<table class="data"><thead><tr>'+cols.map(x=>'<th>'+x+'</th>').join('')+'</tr></thead><tbody>';
+            for(const row of r){h+='<tr>';for(const col of cols)h+='<td>'+(row[col]??'')+'</td>';h+='</tr>';}
+            h+='</tbody></table><p style="margin-top:8px;color:#6b6b6b;font-size:13px;">共 '+r.length+' 行</p>';
+            document.getElementById('qout').innerHTML=h;
+  }catch(e){document.getElementById('qout').innerHTML='<p style="color:#8b1a1a;">'+e.message+'</p>';}
+  await c.close();
+}
+function sets(s){document.getElementById('sql').value=s;}
 init();
 </script>
-</main>
-<footer class="site-footer">
-  <div class="footer-inner">
-    <p>本站以毛宗岗评本百二十回为在线全文（590,968字）；本体论（OWL 2）兼容嘉靖本/周曰校本/叶逢春本/黄正甫本/余象斗本/李卓吾评本/李渔评本/毛宗岗本/人民文学出版社本等12个主要版本。</p>
-    <p>工程以 yejinlei 西游记本体论（jtw_kg_ontology.ttl）为范式，面向多版本对照与异文比对场景扩展；视觉系统参考《石头记》数字人文站。</p>
-  </div>
-</footer>
+
+</div>
 <footer>
-  <div>三國演義本體論 · Sanguo-Yanyi Multi-Edition Ontology</div>
-  <div style="margin-top:6px;opacity:.75;">以毛宗崗評本與周曰校刊本為線上全文；OWL 2 本體兼容十二主要版本</div>
+  三國演義本體論 · Romance of the Three Kingdoms Ontology · 以 yejinlei 西遊記/水滸傳本體論為範式 · 視覺系統參考《石頭記》數字人文站
 </footer>
-</body></html>
+</body>
+</html>

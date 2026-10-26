@@ -1,1058 +1,804 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>英雄譜 · 三國演義本體論</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>三國英雄譜 · 三国演义数字人文研究</title>
 <link rel="stylesheet" href="assets/app.css">
-</head><body>
-<header class="site-header">
-  <a class="site-seal" href="index.html">國三</a>
-  <h1 class="site-title"><a href="index.html">三國演義本體論</a></h1>
-  <p class="site-sub">—— 多版本知識圖譜 · Sanguo-Yanyi Multi-Edition Ontology</p>
-  <nav><a href="index.html">总览</a><a href="read.html">正文</a><a href="heroes.html" class="on">英雄譜</a><a href="persons.html">人物誌</a><a href="factions.html">勢力志</a><a href="places.html">地理志</a><a href="battles.html">戰役錄</a><a href="events.html">事件譜</a><a href="stratagems.html">計謀譜</a><a href="artifacts.html">器物譜</a><a href="prophecies.html">讖緯志</a><a href="poetry.html">詩詞鈔</a><a href="versions.html">版本譜</a><a href="variants.html">異文對勘</a><a href="graph.html">關係網</a><a href="map.html">輿地圖</a><a href="guide.html">讀法</a><a href="mirror.html">虛實辯</a><a href="destiny.html">天命讖</a><a href="scholars.html">評點家</a><a href="papers.html">學術論</a><a href="adaptations.html">演義外</a><a href="query.html">本體查詢</a><a href="ontology.html">本體論</a></nav>
-</header><main>
-<p class="subtitle">人物志 · 英雄譜</p>
-    <section class="hero-hero">
-      <h1><span class="big-seal">三</span>國英雄譜</h1>
-      <p class="hero-sub">—— 對照水滸一百單八將的英雄冊譜體例，以三國自有的「三絕」「桃園」「五虎上將」「五子良將」「江東十二虎臣」「四大都督」「臥龍鳳雛」等經典群像為經，以全書登場人物登場次序與提及次數為緯 ——</p>
-      <div class="hero-stats">
-        <div class="stat"><span class="num">455</span><span class="lbl">登場人物</span></div>
-        <div class="stat"><span class="num hist">337</span><span class="lbl">正史可考</span></div>
-        <div class="stat"><span class="num half">64</span><span class="lbl">半虛半實</span></div>
-        <div class="stat"><span class="num fict">54</span><span class="lbl">演義虛構</span></div>
-      </div>
-    </section>
-    <section class="legend">
-      <span class="lg shuhan">蜀漢</span>
-      <span class="lg caowei">曹魏</span>
-      <span class="lg dongwu">東吳</span>
-      <span class="lg qunxiong">群雄</span>
-      <span class="lg donghan">東漢</span>
-      <span class="lg jin">司馬晉</span>
-      <span class="lg nanman">南蠻</span>
-      <span class="lg huangjin">黃巾</span>
-    </section>
-    
-    <section class="hero-group" id="sanjue">
-      <div class="hero-group-hd">
-        <h2>三絕</h2>
-        <p>毛宗崗評本所定「三絕」——智絕、義絕、姦絕</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card qunxiong"><div class="h-name">諸葛亮</div><div class="h-tag">智絕</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card qunxiong"><div class="h-name">關羽</div><div class="h-tag">義絕</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card faction-caowei">
-            <div class="h-name">曹操<span class="h-zi">字孟德</span></div>
-            <div class="h-tag">姦絕</div>
-            <div class="h-meta">字孟德 · 沛国谯 · 155—220</div>
-            <div class="h-foot"><span class="half">半虛</span><span class="h-camp">曹魏</span></div>
-        </div></div>
-    </section>
-    <section class="hero-group" id="taoyuan">
-      <div class="hero-group-hd">
-        <h2>桃園三結義</h2>
-        <p>第一回宴桃園豪傑三結義</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card shuhan"><div class="h-name">劉備</div><div class="h-tag">大哥·昭烈帝</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card shuhan"><div class="h-name">關羽</div><div class="h-tag">二哥·漢壽亭侯</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card shuhan"><div class="h-name">張飛</div><div class="h-tag">三弟·車騎將軍</div><div class="h-meta">（人物資料待補）</div></div></div>
-    </section>
-    <section class="hero-group" id="wuhu">
-      <div class="hero-group-hd">
-        <h2>五虎上將</h2>
-        <p>第七十三回劉備進位漢中王，封關張趙馬黃為五虎大將</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card shuhan"><div class="h-name">關羽</div><div class="h-tag">前將軍·漢壽亭侯</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card shuhan"><div class="h-name">張飛</div><div class="h-tag">右將軍·西鄉侯</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card shuhan"><div class="h-name">趙雲</div><div class="h-tag">翊軍將軍·常山趙子龍</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card shuhan"><div class="h-name">馬超</div><div class="h-tag">左將軍·斄鄉侯</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card shuhan"><div class="h-name">黃忠</div><div class="h-tag">後將軍·關內侯</div><div class="h-meta">（人物資料待補）</div></div></div>
-    </section>
-    <section class="hero-group" id="wuziliang">
-      <div class="hero-group-hd">
-        <h2>五子良將</h2>
-        <p>《三國志》載「太祖建茲武功，而時之良將，五子為先」</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card caowei"><div class="h-name">張遼</div><div class="h-tag">征東將軍·晉陽侯</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card caowei"><div class="h-name">樂進</div><div class="h-tag">右將軍·廣昌亭侯</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card faction-caowei">
-            <div class="h-name">于禁<span class="h-zi">字文则</span></div>
-            <div class="h-tag">左將軍·益壽亭侯</div>
-            <div class="h-meta">字文则 · 泰山巨平 · ?—221</div>
-            <div class="h-foot"><span class="hist">正史</span><span class="h-camp">曹魏</span></div>
-        </div><div class="hero-card caowei"><div class="h-name">張郃</div><div class="h-tag">征西車騎將軍·鄚侯</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card faction-caowei">
-            <div class="h-name">徐晃<span class="h-zi">字公明</span></div>
-            <div class="h-tag">右將軍·陽平侯</div>
-            <div class="h-meta">字公明 · 河东杨 · ?—227</div>
-            <div class="h-foot"><span class="half">半虛</span><span class="h-camp">曹魏</span></div>
-        </div></div>
-    </section>
-    <section class="hero-group" id="shierhuchen">
-      <div class="hero-group-hd">
-        <h2>江東十二虎臣</h2>
-        <p>《三國志·吳書》評「凡此諸將，皆江表之虎臣」</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card faction-dongwu">
-            <div class="h-name">程普<span class="h-zi">字德谋</span></div>
-            <div class="h-tag">右北平土垠人</div>
-            <div class="h-meta">字德谋 · 右北平土垠 · ?—215</div>
-            <div class="h-foot"><span class="hist">正史</span><span class="h-camp">东吴</span></div>
-        </div><div class="hero-card dongwu"><div class="h-name">黃蓋</div><div class="h-tag">獻苦肉計</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card dongwu"><div class="h-name">韓當</div><div class="h-tag">遼西令支人</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card dongwu"><div class="h-name">蔣欽</div><div class="h-tag">九江壽春人</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card faction-dongwu">
-            <div class="h-name">周泰<span class="h-zi">字幼平</span></div>
-            <div class="h-tag">九江下蔡人</div>
-            <div class="h-meta">字幼平 · 九江下蔡 · ?—222</div>
-            <div class="h-foot"><span class="hist">正史</span><span class="h-camp">东吴</span></div>
-        </div><div class="hero-card dongwu"><div class="h-name">陳武</div><div class="h-tag">廬江松滋人</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card dongwu"><div class="h-name">董襲</div><div class="h-tag">會稽餘姚人</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card dongwu"><div class="h-name">甘寧</div><div class="h-tag">巴郡臨江人·錦帆賊</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card dongwu"><div class="h-name">凌統</div><div class="h-tag">吳郡餘杭人</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card faction-dongwu">
-            <div class="h-name">徐盛<span class="h-zi">字文向</span></div>
-            <div class="h-tag">琅邪莒人</div>
-            <div class="h-meta">字文向 · 琅邪莒 · ?—228</div>
-            <div class="h-foot"><span class="hist">正史</span><span class="h-camp">东吴</span></div>
-        </div><div class="hero-card faction-dongwu">
-            <div class="h-name">潘璋<span class="h-zi">字文珪</span></div>
-            <div class="h-tag">東郡發乾人</div>
-            <div class="h-meta">字文珪 · 东郡发干 · ?—234</div>
-            <div class="h-foot"><span class="half">半虛</span><span class="h-camp">东吴</span></div>
-        </div><div class="hero-card faction-dongwu">
-            <div class="h-name">丁奉<span class="h-zi">字承渊</span></div>
-            <div class="h-tag">廬江安豐人·雪中奮短兵</div>
-            <div class="h-meta">字承渊 · 庐江安丰 · ?—271</div>
-            <div class="h-foot"><span class="hist">正史</span><span class="h-camp">东吴</span></div>
-        </div></div>
-    </section>
-    <section class="hero-group" id="sidadu">
-      <div class="hero-group-hd">
-        <h2>江東四大都督</h2>
-        <p>東吳四代軍事統帥，皆鎮國柱石</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card faction-dongwu">
-            <div class="h-name">周瑜<span class="h-zi">字公瑾</span></div>
-            <div class="h-tag">都督·赤壁破曹</div>
-            <div class="h-meta">字公瑾 · 庐江舒 · 175—210</div>
-            <div class="h-foot"><span class="half">半虛</span><span class="h-camp">东吴</span></div>
-        </div><div class="hero-card dongwu"><div class="h-name">魯肅</div><div class="h-tag">都督·榻上策</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card dongwu"><div class="h-name">呂蒙</div><div class="h-tag">都督·白衣渡江取荊州</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card dongwu"><div class="h-name">陸遜</div><div class="h-tag">都督·火燒連營七百里</div><div class="h-meta">（人物資料待補）</div></div></div>
-    </section>
-    <section class="hero-group" id="wolongfengchu">
-      <div class="hero-group-hd">
-        <h2>臥龍鳳雛</h2>
-        <p>司馬徽薦言「伏龍鳳雛，二人得一，可安天下」</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card shuhan"><div class="h-name">諸葛亮</div><div class="h-tag">臥龍·丞相</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card shuhan"><div class="h-name">龐統</div><div class="h-tag">鳳雛·軍師中郎將</div><div class="h-meta">（人物資料待補）</div></div></div>
-    </section>
-    <section class="hero-group" id="caocaowei">
-      <div class="hero-group-hd">
-        <h2>曹魏核心謀士集團</h2>
-        <p>五大謀主</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card faction-caowei">
-            <div class="h-name">荀彧<span class="h-zi">字文若</span></div>
-            <div class="h-tag">尚書令·王佐之才</div>
-            <div class="h-meta">字文若 · 颍川颍阴 · 163—212</div>
-            <div class="h-foot"><span class="half">半虛</span><span class="h-camp">曹魏</span></div>
-        </div><div class="hero-card faction-caowei">
-            <div class="h-name">荀攸<span class="h-zi">字公达</span></div>
-            <div class="h-tag">軍師·十二奇策</div>
-            <div class="h-meta">字公达 · 颍川颍阴 · 157—214</div>
-            <div class="h-foot"><span class="hist">正史</span><span class="h-camp">曹魏</span></div>
-        </div><div class="hero-card faction-caowei">
-            <div class="h-name">郭嘉<span class="h-zi">字奉孝</span></div>
-            <div class="h-tag">軍師祭酒·鬼才</div>
-            <div class="h-meta">字奉孝 · 颍川阳翟 · 170—207</div>
-            <div class="h-foot"><span class="half">半虛</span><span class="h-camp">曹魏</span></div>
-        </div><div class="hero-card faction-caowei">
-            <div class="h-name">程昱<span class="h-zi">字仲德</span></div>
-            <div class="h-tag">衛尉·堅守三城</div>
-            <div class="h-meta">字仲德 · 东郡东阿 · 141—220</div>
-            <div class="h-foot"><span class="hist">正史</span><span class="h-camp">曹魏</span></div>
-        </div><div class="hero-card caowei"><div class="h-name">賈詡</div><div class="h-tag">太尉·亂武毒士</div><div class="h-meta">（人物資料待補）</div></div></div>
-    </section>
-    <section class="hero-group" id="shuhan_wenchen">
-      <div class="hero-group-hd">
-        <h2>蜀漢文臣樞要</h2>
-        <p>股肱之臣</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card faction-shuhan">
-            <div class="h-name">法正<span class="h-zi">字孝直</span></div>
-            <div class="h-tag">尚書令·奇謀取漢中</div>
-            <div class="h-meta">字孝直 · 扶风郿 · 176—220</div>
-            <div class="h-foot"><span class="half">半虛</span><span class="h-camp">蜀汉</span></div>
-        </div><div class="hero-card shuhan"><div class="h-name">蔣琬</div><div class="h-tag">大將軍·諸葛亮舉以自代</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card shuhan"><div class="h-name">費禕</div><div class="h-tag">大將軍·寬濟而博愛</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card faction-shuhan">
-            <div class="h-name">董允<span class="h-zi">字休昭</span></div>
-            <div class="h-tag">侍中·蜀之四相</div>
-            <div class="h-meta">字休昭 · 南郡枝江 · ?—246</div>
-            <div class="h-foot"><span class="hist">正史</span><span class="h-camp">蜀汉</span></div>
-        </div><div class="hero-card shuhan"><div class="h-name">馬良</div><div class="h-tag">侍中·白眉最良</div><div class="h-meta">（人物資料待補）</div></div></div>
-    </section>
-    <section class="hero-group" id="zhuhou">
-      <div class="hero-group-hd">
-        <h2>漢末諸侯</h2>
-        <p>逐鹿中原的割據群雄</p>
-        <span class="seal-mini">三國</span>
-      </div>
-      <div class="hero-grid"><div class="hero-card qunxiong"><div class="h-name">袁紹</div><div class="h-tag">四世三公·官渡兵敗</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card qunxiong"><div class="h-name">袁術</div><div class="h-tag">仲家皇帝·淮南僭號</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card qunxiong"><div class="h-name">劉表</div><div class="h-tag">荊州牧·據有江漢</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card qunxiong"><div class="h-name">呂布</div><div class="h-tag">溫侯·飛將·虎踞徐州</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card qunxiong"><div class="h-name">公孫瓚</div><div class="h-tag">白馬將軍·據幽州</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card qunxiong"><div class="h-name">馬騰</div><div class="h-tag">西涼太守·槐里侯</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card qunxiong"><div class="h-name">張魯</div><div class="h-tag">漢寧太守·五斗米道</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card qunxiong"><div class="h-name">劉璋</div><div class="h-tag">益州牧·據西川</div><div class="h-meta">（人物資料待補）</div></div><div class="hero-card faction-qunxiong">
-            <div class="h-name">董卓<span class="h-zi">字仲颖</span></div>
-            <div class="h-tag">太師·廢立天子</div>
-            <div class="h-meta">字仲颖 · 陇西临洮 · 139—192</div>
-            <div class="h-foot"><span class="hist">正史</span><span class="h-camp">群雄</span></div>
-        </div><div class="hero-card qunxiong"><div class="h-name">孫堅</div><div class="h-tag">江東猛虎·破虜將軍</div><div class="h-meta">（人物資料待補）</div></div></div>
-    </section>
-    <section class="hero-group" id="top120">
-      <div class="hero-group-hd">
-        <h2>群雄榜 · 登場百二十人</h2>
-        <p>按毛宗崗評本（120 回·590,968 字）人物提及次數排序，含正史人物、半虛構與演義虛構人物。</p>
-        <span class="seal-mini">演義</span>
-      </div>
-      <div class="top-grid"><div class="top-card faction-shuhan" data-rank="1">
-            <div class="t-rank">001</div>
-            <div class="t-body">
-              <div class="t-name">刘备<span class="t-zi">字玄德</span></div>
-              <div class="t-meta"><span class="t-cat">君主</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">2293次</div>
-        </div><div class="top-card faction-shuhan" data-rank="2">
-            <div class="t-rank">002</div>
-            <div class="t-body">
-              <div class="t-name">诸葛亮<span class="t-zi">字孔明</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">1990次</div>
-        </div><div class="top-card faction-caowei" data-rank="3">
-            <div class="t-rank">003</div>
-            <div class="t-body">
-              <div class="t-name">曹操<span class="t-zi">字孟德</span></div>
-              <div class="t-meta"><span class="t-cat">君主</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">1474次</div>
-        </div><div class="top-card faction-shuhan" data-rank="4">
-            <div class="t-rank">004</div>
-            <div class="t-body">
-              <div class="t-name">关羽<span class="t-zi">字云长</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">914次</div>
-        </div><div class="top-card faction-shuhan" data-rank="5">
-            <div class="t-rank">005</div>
-            <div class="t-body">
-              <div class="t-name">张飞<span class="t-zi">字翼德</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">403次</div>
-        </div><div class="top-card faction-shuhan" data-rank="6">
-            <div class="t-rank">006</div>
-            <div class="t-body">
-              <div class="t-name">赵云<span class="t-zi">字子龙</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">385次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="7">
-            <div class="t-rank">007</div>
-            <div class="t-body">
-              <div class="t-name">吕布<span class="t-zi">字奉先</span></div>
-              <div class="t-meta"><span class="t-cat">武将</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">380次</div>
-        </div><div class="top-card faction-shuhan" data-rank="8">
-            <div class="t-rank">008</div>
-            <div class="t-body">
-              <div class="t-name">魏延<span class="t-zi">字文长</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">327次</div>
-        </div><div class="top-card faction-dongwu" data-rank="9">
-            <div class="t-rank">009</div>
-            <div class="t-body">
-              <div class="t-name">孙权<span class="t-zi">字仲谋</span></div>
-              <div class="t-meta"><span class="t-cat">君主</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">320次</div>
-        </div><div class="top-card faction-dongwu" data-rank="10">
-            <div class="t-rank">010</div>
-            <div class="t-body">
-              <div class="t-name">周瑜<span class="t-zi">字公瑾</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">316次</div>
-        </div><div class="top-card faction-jin" data-rank="11">
-            <div class="t-rank">011</div>
-            <div class="t-body">
-              <div class="t-name">司马懿<span class="t-zi">字仲达</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">304次</div>
-        </div><div class="top-card faction-shuhan" data-rank="12">
-            <div class="t-rank">012</div>
-            <div class="t-body">
-              <div class="t-name">姜维<span class="t-zi">字伯约</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">290次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="13">
-            <div class="t-rank">013</div>
-            <div class="t-body">
-              <div class="t-name">袁绍<span class="t-zi">字本初</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">267次</div>
-        </div><div class="top-card faction-shuhan" data-rank="14">
-            <div class="t-rank">014</div>
-            <div class="t-body">
-              <div class="t-name">刘禅<span class="t-zi">字公嗣</span></div>
-              <div class="t-meta"><span class="t-cat">君主</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">239次</div>
-        </div><div class="top-card faction-shuhan" data-rank="15">
-            <div class="t-rank">015</div>
-            <div class="t-body">
-              <div class="t-name">马超<span class="t-zi">字孟起</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">219次</div>
-        </div><div class="top-card faction-shuhan" data-rank="16">
-            <div class="t-rank">016</div>
-            <div class="t-body">
-              <div class="t-name">黄忠<span class="t-zi">字汉升</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">193次</div>
-        </div><div class="top-card faction-dongwu" data-rank="17">
-            <div class="t-rank">017</div>
-            <div class="t-body">
-              <div class="t-name">鲁肃<span class="t-zi">字子敬</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">192次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="18">
-            <div class="t-rank">018</div>
-            <div class="t-body">
-              <div class="t-name">孟公威<span class="t-zi">字建</span></div>
-              <div class="t-meta"><span class="t-cat">隐士</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">188次</div>
-        </div><div class="top-card faction-caowei" data-rank="19">
-            <div class="t-rank">019</div>
-            <div class="t-body">
-              <div class="t-name">张郃<span class="t-zi">字儁乂</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">187次</div>
-        </div><div class="top-card faction-caowei" data-rank="20">
-            <div class="t-rank">020</div>
-            <div class="t-body">
-              <div class="t-name">邓艾<span class="t-zi">字士载</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">160次</div>
-        </div><div class="top-card faction-caowei" data-rank="21">
-            <div class="t-rank">021</div>
-            <div class="t-body">
-              <div class="t-name">张辽<span class="t-zi">字文远</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">159次</div>
-        </div><div class="top-card faction-nanman" data-rank="22">
-            <div class="t-rank">022</div>
-            <div class="t-body">
-              <div class="t-name">孟获<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">156次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="23">
-            <div class="t-rank">023</div>
-            <div class="t-body">
-              <div class="t-name">刘表<span class="t-zi">字景升</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">151次</div>
-        </div><div class="top-card faction-caowei" data-rank="24">
-            <div class="t-rank">024</div>
-            <div class="t-body">
-              <div class="t-name">曹仁<span class="t-zi">字子孝</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">143次</div>
-        </div><div class="top-card faction-caowei" data-rank="25">
-            <div class="t-rank">025</div>
-            <div class="t-body">
-              <div class="t-name">徐晃<span class="t-zi">字公明</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">138次</div>
-        </div><div class="top-card faction-shuhan" data-rank="26">
-            <div class="t-rank">026</div>
-            <div class="t-body">
-              <div class="t-name">马岱<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">127次</div>
-        </div><div class="top-card faction-caowei" data-rank="27">
-            <div class="t-rank">027</div>
-            <div class="t-body">
-              <div class="t-name">许褚<span class="t-zi">字仲康</span></div>
-              <div class="t-meta"><span class="t-cat">武将</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">126次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="28">
-            <div class="t-rank">028</div>
-            <div class="t-body">
-              <div class="t-name">董卓<span class="t-zi">字仲颖</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">125次</div>
-        </div><div class="top-card faction-caowei" data-rank="29">
-            <div class="t-rank">029</div>
-            <div class="t-body">
-              <div class="t-name">庞德<span class="t-zi">字令明</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">123次</div>
-        </div><div class="top-card faction-dongwu" data-rank="30">
-            <div class="t-rank">030</div>
-            <div class="t-body">
-              <div class="t-name">孙策<span class="t-zi">字伯符</span></div>
-              <div class="t-meta"><span class="t-cat">君主</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">123次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="31">
-            <div class="t-rank">031</div>
-            <div class="t-body">
-              <div class="t-name">袁术<span class="t-zi">字公路</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">109次</div>
-        </div><div class="top-card faction-caowei" data-rank="32">
-            <div class="t-rank">032</div>
-            <div class="t-body">
-              <div class="t-name">曹真<span class="t-zi">字子丹</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">109次</div>
-        </div><div class="top-card faction-caowei" data-rank="33">
-            <div class="t-rank">033</div>
-            <div class="t-body">
-              <div class="t-name">夏侯惇<span class="t-zi">字元让</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">109次</div>
-        </div><div class="top-card faction-shuhan" data-rank="34">
-            <div class="t-rank">034</div>
-            <div class="t-body">
-              <div class="t-name">关兴<span class="t-zi">字安国</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">108次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="35">
-            <div class="t-rank">035</div>
-            <div class="t-body">
-              <div class="t-name">刘璋<span class="t-zi">字季玉</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">106次</div>
-        </div><div class="top-card faction-shuhan" data-rank="36">
-            <div class="t-rank">036</div>
-            <div class="t-body">
-              <div class="t-name">庞统<span class="t-zi">字士元</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">105次</div>
-        </div><div class="top-card faction-dongwu" data-rank="37">
-            <div class="t-rank">037</div>
-            <div class="t-body">
-              <div class="t-name">吕蒙<span class="t-zi">字子明</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">104次</div>
-        </div><div class="top-card faction-dongwu" data-rank="38">
-            <div class="t-rank">038</div>
-            <div class="t-body">
-              <div class="t-name">陆逊<span class="t-zi">字伯言</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">102次</div>
-        </div><div class="top-card faction-shuhan" data-rank="39">
-            <div class="t-rank">039</div>
-            <div class="t-body">
-              <div class="t-name">王平<span class="t-zi">字子均</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">99次</div>
-        </div><div class="top-card faction-dongwu" data-rank="40">
-            <div class="t-rank">040</div>
-            <div class="t-body">
-              <div class="t-name">甘宁<span class="t-zi">字兴霸</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">98次</div>
-        </div><div class="top-card faction-donghan" data-rank="41">
-            <div class="t-rank">041</div>
-            <div class="t-body">
-              <div class="t-name">伏皇后<span class="t-zi">字寿</span></div>
-              <div class="t-meta"><span class="t-cat">女性</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">97次</div>
-        </div><div class="top-card faction-jin" data-rank="42">
-            <div class="t-rank">042</div>
-            <div class="t-body">
-              <div class="t-name">司马昭<span class="t-zi">字子上</span></div>
-              <div class="t-meta"><span class="t-cat">君主</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">95次</div>
-        </div><div class="top-card faction-shuhan" data-rank="43">
-            <div class="t-rank">043</div>
-            <div class="t-body">
-              <div class="t-name">张翼<span class="t-zi">字伯恭</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">95次</div>
-        </div><div class="top-card faction-caowei" data-rank="44">
-            <div class="t-rank">044</div>
-            <div class="t-body">
-              <div class="t-name">曹洪<span class="t-zi">字子廉</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">92次</div>
-        </div><div class="top-card faction-caowei" data-rank="45">
-            <div class="t-rank">045</div>
-            <div class="t-body">
-              <div class="t-name">夏侯渊<span class="t-zi">字妙才</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">91次</div>
-        </div><div class="top-card faction-caowei" data-rank="46">
-            <div class="t-rank">046</div>
-            <div class="t-body">
-              <div class="t-name">孟达<span class="t-zi">字子度</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">89次</div>
-        </div><div class="top-card faction-caowei" data-rank="47">
-            <div class="t-rank">047</div>
-            <div class="t-body">
-              <div class="t-name">于禁<span class="t-zi">字文则</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">88次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="48">
-            <div class="t-rank">048</div>
-            <div class="t-body">
-              <div class="t-name">李傕<span class="t-zi">字稚然</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">83次</div>
-        </div><div class="top-card faction-caowei" data-rank="49">
-            <div class="t-rank">049</div>
-            <div class="t-body">
-              <div class="t-name">曹丕<span class="t-zi">字子桓</span></div>
-              <div class="t-meta"><span class="t-cat">君主</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">83次</div>
-        </div><div class="top-card faction-shuhan" data-rank="50">
-            <div class="t-rank">050</div>
-            <div class="t-body">
-              <div class="t-name">张苞<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">83次</div>
-        </div><div class="top-card faction-dongwu" data-rank="51">
-            <div class="t-rank">051</div>
-            <div class="t-body">
-              <div class="t-name">黄盖<span class="t-zi">字公覆</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">81次</div>
-        </div><div class="top-card faction-caowei" data-rank="52">
-            <div class="t-rank">052</div>
-            <div class="t-body">
-              <div class="t-name">李典<span class="t-zi">字曼成</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">80次</div>
-        </div><div class="top-card faction-caowei" data-rank="53">
-            <div class="t-rank">053</div>
-            <div class="t-body">
-              <div class="t-name">郭淮<span class="t-zi">字伯济</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">79次</div>
-        </div><div class="top-card faction-shuhan" data-rank="54">
-            <div class="t-rank">054</div>
-            <div class="t-body">
-              <div class="t-name">廖化<span class="t-zi">字元俭</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">78次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="55">
-            <div class="t-rank">055</div>
-            <div class="t-body">
-              <div class="t-name">张鲁<span class="t-zi">字公祺</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">76次</div>
-        </div><div class="top-card faction-shuhan" data-rank="56">
-            <div class="t-rank">056</div>
-            <div class="t-body">
-              <div class="t-name">严颜<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">74次</div>
-        </div><div class="top-card faction-shuhan" data-rank="57">
-            <div class="t-rank">057</div>
-            <div class="t-body">
-              <div class="t-name">关平<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">73次</div>
-        </div><div class="top-card faction-dongwu" data-rank="58">
-            <div class="t-rank">058</div>
-            <div class="t-body">
-              <div class="t-name">张昭<span class="t-zi">字子布</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">72次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="59">
-            <div class="t-rank">059</div>
-            <div class="t-body">
-              <div class="t-name">韩遂<span class="t-zi">字文约</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">70次</div>
-        </div><div class="top-card faction-dongwu" data-rank="60">
-            <div class="t-rank">060</div>
-            <div class="t-body">
-              <div class="t-name">程普<span class="t-zi">字德谋</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">68次</div>
-        </div><div class="top-card faction-caowei" data-rank="61">
-            <div class="t-rank">061</div>
-            <div class="t-body">
-              <div class="t-name">徐庶<span class="t-zi">字元直</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">66次</div>
-        </div><div class="top-card faction-dongwu" data-rank="62">
-            <div class="t-rank">062</div>
-            <div class="t-body">
-              <div class="t-name">周泰<span class="t-zi">字幼平</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">65次</div>
-        </div><div class="top-card faction-dongwu" data-rank="63">
-            <div class="t-rank">063</div>
-            <div class="t-body">
-              <div class="t-name">韩当<span class="t-zi">字义公</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">64次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="64">
-            <div class="t-rank">064</div>
-            <div class="t-body">
-              <div class="t-name">张任<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">63次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="65">
-            <div class="t-rank">065</div>
-            <div class="t-body">
-              <div class="t-name">貂蝉<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">女性</span><span class="fict">演義虛構</span></div>
-            </div>
-            <div class="t-mentions">62次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="66">
-            <div class="t-rank">066</div>
-            <div class="t-body">
-              <div class="t-name">陈宫<span class="t-zi">字公台</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">62次</div>
-        </div><div class="top-card faction-shuhan" data-rank="67">
-            <div class="t-rank">067</div>
-            <div class="t-body">
-              <div class="t-name">法正<span class="t-zi">字孝直</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">62次</div>
-        </div><div class="top-card faction-dongwu" data-rank="68">
-            <div class="t-rank">068</div>
-            <div class="t-body">
-              <div class="t-name">太史慈<span class="t-zi">字子义</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">62次</div>
-        </div><div class="top-card faction-dongwu" data-rank="69">
-            <div class="t-rank">069</div>
-            <div class="t-body">
-              <div class="t-name">徐盛<span class="t-zi">字文向</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">62次</div>
-        </div><div class="top-card faction-caowei" data-rank="70">
-            <div class="t-rank">070</div>
-            <div class="t-body">
-              <div class="t-name">蔡瑁<span class="t-zi">字德珪</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">61次</div>
-        </div><div class="top-card faction-caowei" data-rank="71">
-            <div class="t-rank">071</div>
-            <div class="t-body">
-              <div class="t-name">钟会<span class="t-zi">字士季</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">61次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="72">
-            <div class="t-rank">072</div>
-            <div class="t-body">
-              <div class="t-name">郭汜<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">60次</div>
-        </div><div class="top-card faction-caowei" data-rank="73">
-            <div class="t-rank">073</div>
-            <div class="t-body">
-              <div class="t-name">荀彧<span class="t-zi">字文若</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">60次</div>
-        </div><div class="top-card faction-shuhan" data-rank="74">
-            <div class="t-rank">074</div>
-            <div class="t-body">
-              <div class="t-name">刘封<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">59次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="75">
-            <div class="t-rank">075</div>
-            <div class="t-body">
-              <div class="t-name">文丑<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">武将</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">58次</div>
-        </div><div class="top-card faction-caowei" data-rank="76">
-            <div class="t-rank">076</div>
-            <div class="t-body">
-              <div class="t-name">贾诩<span class="t-zi">字文和</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">58次</div>
-        </div><div class="top-card faction-shuhan" data-rank="77">
-            <div class="t-rank">077</div>
-            <div class="t-body">
-              <div class="t-name">糜竺<span class="t-zi">字子仲</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">57次</div>
-        </div><div class="top-card faction-jin" data-rank="78">
-            <div class="t-rank">078</div>
-            <div class="t-body">
-              <div class="t-name">司马师<span class="t-zi">字子元</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">56次</div>
-        </div><div class="top-card faction-shuhan" data-rank="79">
-            <div class="t-rank">079</div>
-            <div class="t-body">
-              <div class="t-name">杨仪<span class="t-zi">字威公</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">56次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="80">
-            <div class="t-rank">080</div>
-            <div class="t-body">
-              <div class="t-name">黄祖<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">55次</div>
-        </div><div class="top-card faction-shuhan" data-rank="81">
-            <div class="t-rank">081</div>
-            <div class="t-body">
-              <div class="t-name">夏侯霸<span class="t-zi">字仲权</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">55次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="82">
-            <div class="t-rank">082</div>
-            <div class="t-body">
-              <div class="t-name">马腾<span class="t-zi">字寿成</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">55次</div>
-        </div><div class="top-card faction-dongwu" data-rank="83">
-            <div class="t-rank">083</div>
-            <div class="t-body">
-              <div class="t-name">孙坚<span class="t-zi">字文台</span></div>
-              <div class="t-meta"><span class="t-cat">君主</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">55次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="84">
-            <div class="t-rank">084</div>
-            <div class="t-body">
-              <div class="t-name">袁尚<span class="t-zi">字显甫</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">54次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="85">
-            <div class="t-rank">085</div>
-            <div class="t-body">
-              <div class="t-name">审配<span class="t-zi">字正南</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">54次</div>
-        </div><div class="top-card faction-shuhan" data-rank="86">
-            <div class="t-rank">086</div>
-            <div class="t-body">
-              <div class="t-name">张嶷<span class="t-zi">字伯岐</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">54次</div>
-        </div><div class="top-card faction-donghan" data-rank="87">
-            <div class="t-rank">087</div>
-            <div class="t-body">
-              <div class="t-name">董承<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">52次</div>
-        </div><div class="top-card faction-dongwu" data-rank="88">
-            <div class="t-rank">088</div>
-            <div class="t-body">
-              <div class="t-name">丁奉<span class="t-zi">字承渊</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">52次</div>
-        </div><div class="top-card faction-caowei" data-rank="89">
-            <div class="t-rank">089</div>
-            <div class="t-body">
-              <div class="t-name">乐进<span class="t-zi">字文谦</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">51次</div>
-        </div><div class="top-card faction-dongwu" data-rank="90">
-            <div class="t-rank">090</div>
-            <div class="t-body">
-              <div class="t-name">诸葛瑾<span class="t-zi">字子瑜</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">48次</div>
-        </div><div class="top-card faction-shuhan" data-rank="91">
-            <div class="t-rank">091</div>
-            <div class="t-body">
-              <div class="t-name">马谡<span class="t-zi">字幼常</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">48次</div>
-        </div><div class="top-card faction-dongwu" data-rank="92">
-            <div class="t-rank">092</div>
-            <div class="t-body">
-              <div class="t-name">马忠<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">武将</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">48次</div>
-        </div><div class="top-card faction-caowei" data-rank="93">
-            <div class="t-rank">093</div>
-            <div class="t-body">
-              <div class="t-name">曹休<span class="t-zi">字文烈</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">47次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="94">
-            <div class="t-rank">094</div>
-            <div class="t-body">
-              <div class="t-name">孔融<span class="t-zi">字文举</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">46次</div>
-        </div><div class="top-card faction-shuhan" data-rank="95">
-            <div class="t-rank">095</div>
-            <div class="t-body">
-              <div class="t-name">邓芝<span class="t-zi">字伯苗</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">46次</div>
-        </div><div class="top-card faction-caowei" data-rank="96">
-            <div class="t-rank">096</div>
-            <div class="t-body">
-              <div class="t-name">程昱<span class="t-zi">字仲德</span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">45次</div>
-        </div><div class="top-card faction-caowei" data-rank="97">
-            <div class="t-rank">097</div>
-            <div class="t-body">
-              <div class="t-name">典韦<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">武将</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">45次</div>
-        </div><div class="top-card faction-dongwu" data-rank="98">
-            <div class="t-rank">098</div>
-            <div class="t-body">
-              <div class="t-name">凌统<span class="t-zi">字公绩</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">44次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="99">
-            <div class="t-rank">099</div>
-            <div class="t-body">
-              <div class="t-name">陶谦<span class="t-zi">字恭祖</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">44次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="100">
-            <div class="t-rank">100</div>
-            <div class="t-body">
-              <div class="t-name">颜良<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">武将</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">43次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="101">
-            <div class="t-rank">101</div>
-            <div class="t-body">
-              <div class="t-name">高顺<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">武将</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">42次</div>
-        </div><div class="top-card faction-shuhan" data-rank="102">
-            <div class="t-rank">102</div>
-            <div class="t-body">
-              <div class="t-name">刘琦<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">其他</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">42次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="103">
-            <div class="t-rank">103</div>
-            <div class="t-body">
-              <div class="t-name">公孙瓒<span class="t-zi">字伯珪</span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">42次</div>
-        </div><div class="top-card faction-caowei" data-rank="104">
-            <div class="t-rank">104</div>
-            <div class="t-body">
-              <div class="t-name">夏侯楙<span class="t-zi">字子林</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">41次</div>
-        </div><div class="top-card faction-donghan" data-rank="105">
-            <div class="t-rank">105</div>
-            <div class="t-body">
-              <div class="t-name">刘协<span class="t-zi">字伯和</span></div>
-              <div class="t-meta"><span class="t-cat">君主</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">40次</div>
-        </div><div class="top-card faction-caowei" data-rank="106">
-            <div class="t-rank">106</div>
-            <div class="t-body">
-              <div class="t-name">曹爽<span class="t-zi">字昭伯</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">40次</div>
-        </div><div class="top-card faction-dongwu" data-rank="107">
-            <div class="t-rank">107</div>
-            <div class="t-body">
-              <div class="t-name">糜芳<span class="t-zi">字子方</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">40次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="108">
-            <div class="t-rank">108</div>
-            <div class="t-body">
-              <div class="t-name">杨奉<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">40次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="109">
-            <div class="t-rank">109</div>
-            <div class="t-body">
-              <div class="t-name">张绣<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">诸侯</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">39次</div>
-        </div><div class="top-card faction-caowei" data-rank="110">
-            <div class="t-rank">110</div>
-            <div class="t-body">
-              <div class="t-name">陈登<span class="t-zi">字元龙</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">39次</div>
-        </div><div class="top-card faction-caowei" data-rank="111">
-            <div class="t-rank">111</div>
-            <div class="t-body">
-              <div class="t-name">华歆<span class="t-zi">字子鱼</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">38次</div>
-        </div><div class="top-card faction-shuhan" data-rank="112">
-            <div class="t-rank">112</div>
-            <div class="t-body">
-              <div class="t-name">吴懿<span class="t-zi">字子远</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">37次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="113">
-            <div class="t-rank">113</div>
-            <div class="t-body">
-              <div class="t-name">纪灵<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">武将</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">36次</div>
-        </div><div class="top-card faction-donghan" data-rank="114">
-            <div class="t-rank">114</div>
-            <div class="t-body">
-              <div class="t-name">王允<span class="t-zi">字子师</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">35次</div>
-        </div><div class="top-card faction-shuhan" data-rank="115">
-            <div class="t-rank">115</div>
-            <div class="t-body">
-              <div class="t-name">吴班<span class="t-zi">字元雄</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">35次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="116">
-            <div class="t-rank">116</div>
-            <div class="t-body">
-              <div class="t-name">李儒<span class="t-zi"></span></div>
-              <div class="t-meta"><span class="t-cat">谋士</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">34次</div>
-        </div><div class="top-card faction-caowei" data-rank="117">
-            <div class="t-rank">117</div>
-            <div class="t-body">
-              <div class="t-name">陈泰<span class="t-zi">字玄伯</span></div>
-              <div class="t-meta"><span class="t-cat">文臣</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">34次</div>
-        </div><div class="top-card faction-dongwu" data-rank="118">
-            <div class="t-rank">118</div>
-            <div class="t-body">
-              <div class="t-name">潘璋<span class="t-zi">字文珪</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="half">半虛</span></div>
-            </div>
-            <div class="t-mentions">34次</div>
-        </div><div class="top-card faction-donghan" data-rank="119">
-            <div class="t-rank">119</div>
-            <div class="t-body">
-              <div class="t-name">何进<span class="t-zi">字遂高</span></div>
-              <div class="t-meta"><span class="t-cat">外戚</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">33次</div>
-        </div><div class="top-card faction-qunxiong" data-rank="120">
-            <div class="t-rank">120</div>
-            <div class="t-body">
-              <div class="t-name">袁谭<span class="t-zi">字显思</span></div>
-              <div class="t-meta"><span class="t-cat">将领</span><span class="hist">正史</span></div>
-            </div>
-            <div class="t-mentions">33次</div>
-        </div></div>
-    </section>
-    <section class="an-note">
-      <h3>凡例</h3>
-      <ul>
-        <li>群體分類同時依《三國演義》回目與《三國志》史傳：「五虎上將」出自第七十三回劉備進位漢中王時封關張趙馬黃；「五子良將」典出《三國志·魏書》卷十七合傳；「江東十二虎臣」出自《三國志·吳書》卷十評語；「四大都督」係後世評話之通稱。</li>
-        <li>正史／半虛／演義虛構的標註，以《三國志》《後漢書》《資治通鑑》所載為憑；半虛構者為史有其人而演義增飾事蹟（如貂蟬之原型為董卓侍婢）；演義虛構者為史傳無徵之小說人物（如周倉、關索）。</li>
-        <li>「群雄榜·登場百二十人」提及次數依毛本（Gutenberg 23950 底本）機器統計，受別名指代消歧影響，偶有小幅誤差，可與「本體查詢台」互相校驗。</li>
-      </ul>
-    </section>
-    
-</main>
-<footer class="site-footer">
-  <div class="footer-inner">
-    <p>本站以毛宗岗评本百二十回为在线全文（590,968字）；本体论（OWL 2）兼容嘉靖本/周曰校本/叶逢春本/黄正甫本/余象斗本/李卓吾评本/李渔评本/毛宗岗本/人民文学出版社本等12个主要版本。</p>
-    <p>工程以 yejinlei 西游记本体论（jtw_kg_ontology.ttl）为范式，面向多版本对照与异文比对场景扩展；视觉系统参考《石头记》数字人文站。</p>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">
+    <span class="seal">國三</span>
+    <span>三國演義本體論</span>
   </div>
+  <nav class="nav-links">
+    <a href="index.html">總覽</a>
+    <a href="read.html">版本閱讀</a>
+    <a href="heroes.html" class="active">英雄譜</a>
+    <a href="persons.html">人物誌</a>
+    <a href="factions.html">勢力志</a>
+    <a href="places.html">地理志</a>
+    <a href="battles.html">戰役錄</a>
+    <a href="events.html">事件譜</a>
+    <a href="stratagems.html">計謀譜</a>
+    <a href="artifacts.html">器物譜</a>
+    <a href="prophecies.html">讖緯志</a>
+    <a href="poetry.html">詩詞鈔</a>
+    <a href="versions.html">版本譜</a>
+    <a href="variants.html">異文對勘</a>
+    <a href="graph.html">關係網</a>
+    <a href="map.html">輿地圖</a>
+    <a href="reading.html">讀法</a>
+    <a href="fictional.html">虛實辨</a>
+    <a href="destiny.html">天命讖</a>
+    <a href="critics.html">評點家</a>
+    <a href="papers.html">學術論</a>
+    <a href="adaptations.html">演義外</a>
+    <a href="query.html">本體查詢</a>
+    <a href="stat.html">統計譜</a>
+    <a href="ontology.html">本體論</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-sub">HEROES</div>
+  <h1>英雄譜</h1>
+  <p class="hero-desc">以本體論方法系統建構三國世界——版本、人物、關係、戰役、地理、計謀、器物、讖緯、評點、衍生，一一納入結構化知識框架。</p>
+  
+</section>
+
+<div class="container">
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>三絕</h2>
+    <span class="en">THREE PEERLESS</span>
+  </div>
+<div class="hero-grid"><div class="hero-card wei">
+  <div class="rank">曹</div>
+  <div class="nick">智絕·孔明</div>
+  <div class="nm">曹操</div>
+  <div class="pos">曹魏</div>
+</div></div></div>
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>桃園三結義</h2>
+    <span class="en">OATH OF THE PEACH GARDEN</span>
+  </div>
+<div class="hero-grid"></div></div>
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>蜀漢五虎上將</h2>
+    <span class="en">FIVE TIGER GENERALS</span>
+  </div>
+<div class="hero-grid"></div></div>
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>曹魏五子良將</h2>
+    <span class="en">FIVE ELITE GENERALS</span>
+  </div>
+<div class="hero-grid"><div class="hero-card wei">
+  <div class="rank">于</div>
+  <div class="nick">文则</div>
+  <div class="nm">于禁</div>
+  <div class="pos">曹魏</div>
+</div><div class="hero-card wei">
+  <div class="rank">徐</div>
+  <div class="nick">公明</div>
+  <div class="nm">徐晃</div>
+  <div class="pos">曹魏</div>
+</div></div></div>
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>江東十二虎臣</h2>
+    <span class="en">TWELVE TIGER MINISTERS</span>
+  </div>
+<div class="hero-grid"><div class="hero-card qun">
+  <div class="rank">程</div>
+  <div class="nick">德谋</div>
+  <div class="nm">程普</div>
+  <div class="pos">东吴</div>
+</div><div class="hero-card qun">
+  <div class="rank">周</div>
+  <div class="nick">幼平</div>
+  <div class="nm">周泰</div>
+  <div class="pos">东吴</div>
+</div><div class="hero-card qun">
+  <div class="rank">徐</div>
+  <div class="nick">文向</div>
+  <div class="nm">徐盛</div>
+  <div class="pos">东吴</div>
+</div><div class="hero-card qun">
+  <div class="rank">潘</div>
+  <div class="nick">文珪</div>
+  <div class="nm">潘璋</div>
+  <div class="pos">东吴</div>
+</div><div class="hero-card qun">
+  <div class="rank">丁</div>
+  <div class="nick">承渊</div>
+  <div class="nm">丁奉</div>
+  <div class="pos">东吴</div>
+</div></div></div>
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>四大都督</h2>
+    <span class="en">FOUR COMMANDERS</span>
+  </div>
+<div class="hero-grid"><div class="hero-card qun">
+  <div class="rank">周</div>
+  <div class="nick">公瑾</div>
+  <div class="nm">周瑜</div>
+  <div class="pos">东吴</div>
+</div></div></div>
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>臥龍鳳雛</h2>
+    <span class="en">CROUCHING DRAGON · YOUNG PHOENIX</span>
+  </div>
+<div class="hero-grid"></div></div>
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>曹魏五大謀主</h2>
+    <span class="en">FIVE STRATEGISTS OF WEI</span>
+  </div>
+<div class="hero-grid"><div class="hero-card wei">
+  <div class="rank">荀</div>
+  <div class="nick">文若</div>
+  <div class="nm">荀彧</div>
+  <div class="pos">曹魏</div>
+</div><div class="hero-card wei">
+  <div class="rank">荀</div>
+  <div class="nick">公达</div>
+  <div class="nm">荀攸</div>
+  <div class="pos">曹魏</div>
+</div><div class="hero-card wei">
+  <div class="rank">郭</div>
+  <div class="nick">奉孝</div>
+  <div class="nm">郭嘉</div>
+  <div class="pos">曹魏</div>
+</div><div class="hero-card wei">
+  <div class="rank">程</div>
+  <div class="nick">仲德</div>
+  <div class="nm">程昱</div>
+  <div class="pos">曹魏</div>
+</div></div></div>
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>蜀漢樞要文臣</h2>
+    <span class="en">CHANCELLORS OF SHU</span>
+  </div>
+<div class="hero-grid"><div class="hero-card qun">
+  <div class="rank">法</div>
+  <div class="nick">孝直</div>
+  <div class="nm">法正</div>
+  <div class="pos">蜀汉</div>
+</div><div class="hero-card qun">
+  <div class="rank">董</div>
+  <div class="nick">休昭</div>
+  <div class="nm">董允</div>
+  <div class="pos">蜀汉</div>
+</div></div></div>
+<div class="section">
+  <div class="section-title">
+    <span class="bar"></span>
+    <h2>群雄榜·登場百二十人</h2>
+    <span class="en">TOP 120 BY MENTIONS</span>
+  </div>
+<div class="hero-grid"><div class="hero-card qun">
+  <div class="rank">001</div>
+  <div class="nick">玄德</div>
+  <div class="nm">刘备</div>
+  <div class="pos">蜀汉 · 2293次</div>
+</div><div class="hero-card qun">
+  <div class="rank">002</div>
+  <div class="nick">孔明</div>
+  <div class="nm">诸葛亮</div>
+  <div class="pos">蜀汉 · 1990次</div>
+</div><div class="hero-card wei">
+  <div class="rank">003</div>
+  <div class="nick">孟德</div>
+  <div class="nm">曹操</div>
+  <div class="pos">曹魏 · 1474次</div>
+</div><div class="hero-card qun">
+  <div class="rank">004</div>
+  <div class="nick">云长</div>
+  <div class="nm">关羽</div>
+  <div class="pos">蜀汉 · 914次</div>
+</div><div class="hero-card qun">
+  <div class="rank">005</div>
+  <div class="nick">翼德</div>
+  <div class="nm">张飞</div>
+  <div class="pos">蜀汉 · 403次</div>
+</div><div class="hero-card qun">
+  <div class="rank">006</div>
+  <div class="nick">子龙</div>
+  <div class="nm">赵云</div>
+  <div class="pos">蜀汉 · 385次</div>
+</div><div class="hero-card qun">
+  <div class="rank">007</div>
+  <div class="nick">奉先</div>
+  <div class="nm">吕布</div>
+  <div class="pos">群雄 · 380次</div>
+</div><div class="hero-card qun">
+  <div class="rank">008</div>
+  <div class="nick">文长</div>
+  <div class="nm">魏延</div>
+  <div class="pos">蜀汉 · 327次</div>
+</div><div class="hero-card qun">
+  <div class="rank">009</div>
+  <div class="nick">仲谋</div>
+  <div class="nm">孙权</div>
+  <div class="pos">东吴 · 320次</div>
+</div><div class="hero-card qun">
+  <div class="rank">010</div>
+  <div class="nick">公瑾</div>
+  <div class="nm">周瑜</div>
+  <div class="pos">东吴 · 316次</div>
+</div><div class="hero-card qun">
+  <div class="rank">011</div>
+  <div class="nick">仲达</div>
+  <div class="nm">司马懿</div>
+  <div class="pos">晋 · 304次</div>
+</div><div class="hero-card qun">
+  <div class="rank">012</div>
+  <div class="nick">伯约</div>
+  <div class="nm">姜维</div>
+  <div class="pos">蜀汉 · 290次</div>
+</div><div class="hero-card qun">
+  <div class="rank">013</div>
+  <div class="nick">本初</div>
+  <div class="nm">袁绍</div>
+  <div class="pos">群雄 · 267次</div>
+</div><div class="hero-card qun">
+  <div class="rank">014</div>
+  <div class="nick">公嗣</div>
+  <div class="nm">刘禅</div>
+  <div class="pos">蜀汉 · 239次</div>
+</div><div class="hero-card qun">
+  <div class="rank">015</div>
+  <div class="nick">孟起</div>
+  <div class="nm">马超</div>
+  <div class="pos">蜀汉 · 219次</div>
+</div><div class="hero-card qun">
+  <div class="rank">016</div>
+  <div class="nick">汉升</div>
+  <div class="nm">黄忠</div>
+  <div class="pos">蜀汉 · 193次</div>
+</div><div class="hero-card qun">
+  <div class="rank">017</div>
+  <div class="nick">子敬</div>
+  <div class="nm">鲁肃</div>
+  <div class="pos">东吴 · 192次</div>
+</div><div class="hero-card qun">
+  <div class="rank">018</div>
+  <div class="nick">建</div>
+  <div class="nm">孟公威</div>
+  <div class="pos">其他 · 188次</div>
+</div><div class="hero-card wei">
+  <div class="rank">019</div>
+  <div class="nick">儁乂</div>
+  <div class="nm">张郃</div>
+  <div class="pos">曹魏 · 187次</div>
+</div><div class="hero-card wei">
+  <div class="rank">020</div>
+  <div class="nick">士载</div>
+  <div class="nm">邓艾</div>
+  <div class="pos">曹魏 · 160次</div>
+</div><div class="hero-card wei">
+  <div class="rank">021</div>
+  <div class="nick">文远</div>
+  <div class="nm">张辽</div>
+  <div class="pos">曹魏 · 159次</div>
+</div><div class="hero-card qun">
+  <div class="rank">022</div>
+  <div class="nick"></div>
+  <div class="nm">孟获</div>
+  <div class="pos">南蛮 · 156次</div>
+</div><div class="hero-card qun">
+  <div class="rank">023</div>
+  <div class="nick">景升</div>
+  <div class="nm">刘表</div>
+  <div class="pos">群雄 · 151次</div>
+</div><div class="hero-card wei">
+  <div class="rank">024</div>
+  <div class="nick">子孝</div>
+  <div class="nm">曹仁</div>
+  <div class="pos">曹魏 · 143次</div>
+</div><div class="hero-card wei">
+  <div class="rank">025</div>
+  <div class="nick">公明</div>
+  <div class="nm">徐晃</div>
+  <div class="pos">曹魏 · 138次</div>
+</div><div class="hero-card qun">
+  <div class="rank">026</div>
+  <div class="nick"></div>
+  <div class="nm">马岱</div>
+  <div class="pos">蜀汉 · 127次</div>
+</div><div class="hero-card wei">
+  <div class="rank">027</div>
+  <div class="nick">仲康</div>
+  <div class="nm">许褚</div>
+  <div class="pos">曹魏 · 126次</div>
+</div><div class="hero-card qun">
+  <div class="rank">028</div>
+  <div class="nick">仲颖</div>
+  <div class="nm">董卓</div>
+  <div class="pos">群雄 · 125次</div>
+</div><div class="hero-card qun">
+  <div class="rank">029</div>
+  <div class="nick">伯符</div>
+  <div class="nm">孙策</div>
+  <div class="pos">东吴 · 123次</div>
+</div><div class="hero-card wei">
+  <div class="rank">030</div>
+  <div class="nick">令明</div>
+  <div class="nm">庞德</div>
+  <div class="pos">曹魏 · 123次</div>
+</div><div class="hero-card wei">
+  <div class="rank">031</div>
+  <div class="nick">元让</div>
+  <div class="nm">夏侯惇</div>
+  <div class="pos">曹魏 · 109次</div>
+</div><div class="hero-card wei">
+  <div class="rank">032</div>
+  <div class="nick">子丹</div>
+  <div class="nm">曹真</div>
+  <div class="pos">曹魏 · 109次</div>
+</div><div class="hero-card qun">
+  <div class="rank">033</div>
+  <div class="nick">公路</div>
+  <div class="nm">袁术</div>
+  <div class="pos">群雄 · 109次</div>
+</div><div class="hero-card qun">
+  <div class="rank">034</div>
+  <div class="nick">安国</div>
+  <div class="nm">关兴</div>
+  <div class="pos">蜀汉 · 108次</div>
+</div><div class="hero-card qun">
+  <div class="rank">035</div>
+  <div class="nick">季玉</div>
+  <div class="nm">刘璋</div>
+  <div class="pos">群雄 · 106次</div>
+</div><div class="hero-card qun">
+  <div class="rank">036</div>
+  <div class="nick">士元</div>
+  <div class="nm">庞统</div>
+  <div class="pos">蜀汉 · 105次</div>
+</div><div class="hero-card qun">
+  <div class="rank">037</div>
+  <div class="nick">子明</div>
+  <div class="nm">吕蒙</div>
+  <div class="pos">东吴 · 104次</div>
+</div><div class="hero-card qun">
+  <div class="rank">038</div>
+  <div class="nick">伯言</div>
+  <div class="nm">陆逊</div>
+  <div class="pos">东吴 · 102次</div>
+</div><div class="hero-card qun">
+  <div class="rank">039</div>
+  <div class="nick">子均</div>
+  <div class="nm">王平</div>
+  <div class="pos">蜀汉 · 99次</div>
+</div><div class="hero-card qun">
+  <div class="rank">040</div>
+  <div class="nick">兴霸</div>
+  <div class="nm">甘宁</div>
+  <div class="pos">东吴 · 98次</div>
+</div><div class="hero-card qun">
+  <div class="rank">041</div>
+  <div class="nick">寿</div>
+  <div class="nm">伏皇后</div>
+  <div class="pos">东汉 · 97次</div>
+</div><div class="hero-card qun">
+  <div class="rank">042</div>
+  <div class="nick">子上</div>
+  <div class="nm">司马昭</div>
+  <div class="pos">晋 · 95次</div>
+</div><div class="hero-card qun">
+  <div class="rank">043</div>
+  <div class="nick">伯恭</div>
+  <div class="nm">张翼</div>
+  <div class="pos">蜀汉 · 95次</div>
+</div><div class="hero-card wei">
+  <div class="rank">044</div>
+  <div class="nick">子廉</div>
+  <div class="nm">曹洪</div>
+  <div class="pos">曹魏 · 92次</div>
+</div><div class="hero-card wei">
+  <div class="rank">045</div>
+  <div class="nick">妙才</div>
+  <div class="nm">夏侯渊</div>
+  <div class="pos">曹魏 · 91次</div>
+</div><div class="hero-card wei">
+  <div class="rank">046</div>
+  <div class="nick">子度</div>
+  <div class="nm">孟达</div>
+  <div class="pos">曹魏 · 89次</div>
+</div><div class="hero-card wei">
+  <div class="rank">047</div>
+  <div class="nick">文则</div>
+  <div class="nm">于禁</div>
+  <div class="pos">曹魏 · 88次</div>
+</div><div class="hero-card qun">
+  <div class="rank">048</div>
+  <div class="nick"></div>
+  <div class="nm">张苞</div>
+  <div class="pos">蜀汉 · 83次</div>
+</div><div class="hero-card wei">
+  <div class="rank">049</div>
+  <div class="nick">子桓</div>
+  <div class="nm">曹丕</div>
+  <div class="pos">曹魏 · 83次</div>
+</div><div class="hero-card qun">
+  <div class="rank">050</div>
+  <div class="nick">稚然</div>
+  <div class="nm">李傕</div>
+  <div class="pos">群雄 · 83次</div>
+</div><div class="hero-card qun">
+  <div class="rank">051</div>
+  <div class="nick">公覆</div>
+  <div class="nm">黄盖</div>
+  <div class="pos">东吴 · 81次</div>
+</div><div class="hero-card wei">
+  <div class="rank">052</div>
+  <div class="nick">曼成</div>
+  <div class="nm">李典</div>
+  <div class="pos">曹魏 · 80次</div>
+</div><div class="hero-card wei">
+  <div class="rank">053</div>
+  <div class="nick">伯济</div>
+  <div class="nm">郭淮</div>
+  <div class="pos">曹魏 · 79次</div>
+</div><div class="hero-card qun">
+  <div class="rank">054</div>
+  <div class="nick">元俭</div>
+  <div class="nm">廖化</div>
+  <div class="pos">蜀汉 · 78次</div>
+</div><div class="hero-card qun">
+  <div class="rank">055</div>
+  <div class="nick">公祺</div>
+  <div class="nm">张鲁</div>
+  <div class="pos">群雄 · 76次</div>
+</div><div class="hero-card qun">
+  <div class="rank">056</div>
+  <div class="nick"></div>
+  <div class="nm">严颜</div>
+  <div class="pos">蜀汉 · 74次</div>
+</div><div class="hero-card qun">
+  <div class="rank">057</div>
+  <div class="nick"></div>
+  <div class="nm">关平</div>
+  <div class="pos">蜀汉 · 73次</div>
+</div><div class="hero-card qun">
+  <div class="rank">058</div>
+  <div class="nick">子布</div>
+  <div class="nm">张昭</div>
+  <div class="pos">东吴 · 72次</div>
+</div><div class="hero-card qun">
+  <div class="rank">059</div>
+  <div class="nick">文约</div>
+  <div class="nm">韩遂</div>
+  <div class="pos">群雄 · 70次</div>
+</div><div class="hero-card qun">
+  <div class="rank">060</div>
+  <div class="nick">德谋</div>
+  <div class="nm">程普</div>
+  <div class="pos">东吴 · 68次</div>
+</div><div class="hero-card wei">
+  <div class="rank">061</div>
+  <div class="nick">元直</div>
+  <div class="nm">徐庶</div>
+  <div class="pos">曹魏 · 66次</div>
+</div><div class="hero-card qun">
+  <div class="rank">062</div>
+  <div class="nick">幼平</div>
+  <div class="nm">周泰</div>
+  <div class="pos">东吴 · 65次</div>
+</div><div class="hero-card qun">
+  <div class="rank">063</div>
+  <div class="nick">义公</div>
+  <div class="nm">韩当</div>
+  <div class="pos">东吴 · 64次</div>
+</div><div class="hero-card qun">
+  <div class="rank">064</div>
+  <div class="nick"></div>
+  <div class="nm">张任</div>
+  <div class="pos">群雄 · 63次</div>
+</div><div class="hero-card qun">
+  <div class="rank">065</div>
+  <div class="nick">子义</div>
+  <div class="nm">太史慈</div>
+  <div class="pos">东吴 · 62次</div>
+</div><div class="hero-card qun">
+  <div class="rank">066</div>
+  <div class="nick">文向</div>
+  <div class="nm">徐盛</div>
+  <div class="pos">东吴 · 62次</div>
+</div><div class="hero-card qun">
+  <div class="rank">067</div>
+  <div class="nick">孝直</div>
+  <div class="nm">法正</div>
+  <div class="pos">蜀汉 · 62次</div>
+</div><div class="hero-card qun">
+  <div class="rank">068</div>
+  <div class="nick"></div>
+  <div class="nm">貂蝉</div>
+  <div class="pos">群雄 · 62次</div>
+</div><div class="hero-card qun">
+  <div class="rank">069</div>
+  <div class="nick">公台</div>
+  <div class="nm">陈宫</div>
+  <div class="pos">群雄 · 62次</div>
+</div><div class="hero-card wei">
+  <div class="rank">070</div>
+  <div class="nick">德珪</div>
+  <div class="nm">蔡瑁</div>
+  <div class="pos">曹魏 · 61次</div>
+</div><div class="hero-card wei">
+  <div class="rank">071</div>
+  <div class="nick">士季</div>
+  <div class="nm">钟会</div>
+  <div class="pos">曹魏 · 61次</div>
+</div><div class="hero-card wei">
+  <div class="rank">072</div>
+  <div class="nick">文若</div>
+  <div class="nm">荀彧</div>
+  <div class="pos">曹魏 · 60次</div>
+</div><div class="hero-card qun">
+  <div class="rank">073</div>
+  <div class="nick"></div>
+  <div class="nm">郭汜</div>
+  <div class="pos">群雄 · 60次</div>
+</div><div class="hero-card qun">
+  <div class="rank">074</div>
+  <div class="nick"></div>
+  <div class="nm">刘封</div>
+  <div class="pos">蜀汉 · 59次</div>
+</div><div class="hero-card qun">
+  <div class="rank">075</div>
+  <div class="nick"></div>
+  <div class="nm">文丑</div>
+  <div class="pos">群雄 · 58次</div>
+</div><div class="hero-card wei">
+  <div class="rank">076</div>
+  <div class="nick">文和</div>
+  <div class="nm">贾诩</div>
+  <div class="pos">曹魏 · 58次</div>
+</div><div class="hero-card qun">
+  <div class="rank">077</div>
+  <div class="nick">子仲</div>
+  <div class="nm">糜竺</div>
+  <div class="pos">蜀汉 · 57次</div>
+</div><div class="hero-card qun">
+  <div class="rank">078</div>
+  <div class="nick">子元</div>
+  <div class="nm">司马师</div>
+  <div class="pos">晋 · 56次</div>
+</div><div class="hero-card qun">
+  <div class="rank">079</div>
+  <div class="nick">威公</div>
+  <div class="nm">杨仪</div>
+  <div class="pos">蜀汉 · 56次</div>
+</div><div class="hero-card qun">
+  <div class="rank">080</div>
+  <div class="nick">仲权</div>
+  <div class="nm">夏侯霸</div>
+  <div class="pos">蜀汉 · 55次</div>
+</div><div class="hero-card qun">
+  <div class="rank">081</div>
+  <div class="nick">文台</div>
+  <div class="nm">孙坚</div>
+  <div class="pos">东吴 · 55次</div>
+</div><div class="hero-card qun">
+  <div class="rank">082</div>
+  <div class="nick">寿成</div>
+  <div class="nm">马腾</div>
+  <div class="pos">群雄 · 55次</div>
+</div><div class="hero-card qun">
+  <div class="rank">083</div>
+  <div class="nick"></div>
+  <div class="nm">黄祖</div>
+  <div class="pos">群雄 · 55次</div>
+</div><div class="hero-card qun">
+  <div class="rank">084</div>
+  <div class="nick">正南</div>
+  <div class="nm">审配</div>
+  <div class="pos">群雄 · 54次</div>
+</div><div class="hero-card qun">
+  <div class="rank">085</div>
+  <div class="nick">伯岐</div>
+  <div class="nm">张嶷</div>
+  <div class="pos">蜀汉 · 54次</div>
+</div><div class="hero-card qun">
+  <div class="rank">086</div>
+  <div class="nick">显甫</div>
+  <div class="nm">袁尚</div>
+  <div class="pos">群雄 · 54次</div>
+</div><div class="hero-card qun">
+  <div class="rank">087</div>
+  <div class="nick">承渊</div>
+  <div class="nm">丁奉</div>
+  <div class="pos">东吴 · 52次</div>
+</div><div class="hero-card qun">
+  <div class="rank">088</div>
+  <div class="nick"></div>
+  <div class="nm">董承</div>
+  <div class="pos">东汉 · 52次</div>
+</div><div class="hero-card wei">
+  <div class="rank">089</div>
+  <div class="nick">文谦</div>
+  <div class="nm">乐进</div>
+  <div class="pos">曹魏 · 51次</div>
+</div><div class="hero-card qun">
+  <div class="rank">090</div>
+  <div class="nick">子瑜</div>
+  <div class="nm">诸葛瑾</div>
+  <div class="pos">东吴 · 48次</div>
+</div><div class="hero-card qun">
+  <div class="rank">091</div>
+  <div class="nick"></div>
+  <div class="nm">马忠</div>
+  <div class="pos">东吴 · 48次</div>
+</div><div class="hero-card qun">
+  <div class="rank">092</div>
+  <div class="nick">幼常</div>
+  <div class="nm">马谡</div>
+  <div class="pos">蜀汉 · 48次</div>
+</div><div class="hero-card wei">
+  <div class="rank">093</div>
+  <div class="nick">文烈</div>
+  <div class="nm">曹休</div>
+  <div class="pos">曹魏 · 47次</div>
+</div><div class="hero-card qun">
+  <div class="rank">094</div>
+  <div class="nick">文举</div>
+  <div class="nm">孔融</div>
+  <div class="pos">群雄 · 46次</div>
+</div><div class="hero-card qun">
+  <div class="rank">095</div>
+  <div class="nick">伯苗</div>
+  <div class="nm">邓芝</div>
+  <div class="pos">蜀汉 · 46次</div>
+</div><div class="hero-card wei">
+  <div class="rank">096</div>
+  <div class="nick"></div>
+  <div class="nm">典韦</div>
+  <div class="pos">曹魏 · 45次</div>
+</div><div class="hero-card wei">
+  <div class="rank">097</div>
+  <div class="nick">仲德</div>
+  <div class="nm">程昱</div>
+  <div class="pos">曹魏 · 45次</div>
+</div><div class="hero-card qun">
+  <div class="rank">098</div>
+  <div class="nick">公绩</div>
+  <div class="nm">凌统</div>
+  <div class="pos">东吴 · 44次</div>
+</div><div class="hero-card qun">
+  <div class="rank">099</div>
+  <div class="nick">恭祖</div>
+  <div class="nm">陶谦</div>
+  <div class="pos">群雄 · 44次</div>
+</div><div class="hero-card qun">
+  <div class="rank">100</div>
+  <div class="nick"></div>
+  <div class="nm">颜良</div>
+  <div class="pos">群雄 · 43次</div>
+</div><div class="hero-card qun">
+  <div class="rank">101</div>
+  <div class="nick">伯珪</div>
+  <div class="nm">公孙瓒</div>
+  <div class="pos">群雄 · 42次</div>
+</div><div class="hero-card qun">
+  <div class="rank">102</div>
+  <div class="nick"></div>
+  <div class="nm">刘琦</div>
+  <div class="pos">蜀汉 · 42次</div>
+</div><div class="hero-card qun">
+  <div class="rank">103</div>
+  <div class="nick"></div>
+  <div class="nm">高顺</div>
+  <div class="pos">群雄 · 42次</div>
+</div><div class="hero-card wei">
+  <div class="rank">104</div>
+  <div class="nick">子林</div>
+  <div class="nm">夏侯楙</div>
+  <div class="pos">曹魏 · 41次</div>
+</div><div class="hero-card qun">
+  <div class="rank">105</div>
+  <div class="nick">伯和</div>
+  <div class="nm">刘协</div>
+  <div class="pos">东汉 · 40次</div>
+</div><div class="hero-card wei">
+  <div class="rank">106</div>
+  <div class="nick">昭伯</div>
+  <div class="nm">曹爽</div>
+  <div class="pos">曹魏 · 40次</div>
+</div><div class="hero-card qun">
+  <div class="rank">107</div>
+  <div class="nick"></div>
+  <div class="nm">杨奉</div>
+  <div class="pos">群雄 · 40次</div>
+</div><div class="hero-card qun">
+  <div class="rank">108</div>
+  <div class="nick">子方</div>
+  <div class="nm">糜芳</div>
+  <div class="pos">东吴 · 40次</div>
+</div><div class="hero-card qun">
+  <div class="rank">109</div>
+  <div class="nick"></div>
+  <div class="nm">张绣</div>
+  <div class="pos">群雄 · 39次</div>
+</div><div class="hero-card wei">
+  <div class="rank">110</div>
+  <div class="nick">元龙</div>
+  <div class="nm">陈登</div>
+  <div class="pos">曹魏 · 39次</div>
+</div><div class="hero-card wei">
+  <div class="rank">111</div>
+  <div class="nick">子鱼</div>
+  <div class="nm">华歆</div>
+  <div class="pos">曹魏 · 38次</div>
+</div><div class="hero-card qun">
+  <div class="rank">112</div>
+  <div class="nick">子远</div>
+  <div class="nm">吴懿</div>
+  <div class="pos">蜀汉 · 37次</div>
+</div><div class="hero-card qun">
+  <div class="rank">113</div>
+  <div class="nick"></div>
+  <div class="nm">纪灵</div>
+  <div class="pos">群雄 · 36次</div>
+</div><div class="hero-card qun">
+  <div class="rank">114</div>
+  <div class="nick">元雄</div>
+  <div class="nm">吴班</div>
+  <div class="pos">蜀汉 · 35次</div>
+</div><div class="hero-card qun">
+  <div class="rank">115</div>
+  <div class="nick">子师</div>
+  <div class="nm">王允</div>
+  <div class="pos">东汉 · 35次</div>
+</div><div class="hero-card qun">
+  <div class="rank">116</div>
+  <div class="nick"></div>
+  <div class="nm">李儒</div>
+  <div class="pos">群雄 · 34次</div>
+</div><div class="hero-card qun">
+  <div class="rank">117</div>
+  <div class="nick">文珪</div>
+  <div class="nm">潘璋</div>
+  <div class="pos">东吴 · 34次</div>
+</div><div class="hero-card wei">
+  <div class="rank">118</div>
+  <div class="nick">玄伯</div>
+  <div class="nm">陈泰</div>
+  <div class="pos">曹魏 · 34次</div>
+</div><div class="hero-card qun">
+  <div class="rank">119</div>
+  <div class="nick">遂高</div>
+  <div class="nm">何进</div>
+  <div class="pos">东汉 · 33次</div>
+</div><div class="hero-card wei">
+  <div class="rank">120</div>
+  <div class="nick">伯宁</div>
+  <div class="nm">满宠</div>
+  <div class="pos">曹魏 · 33次</div>
+</div></div></div>
+
+</div>
+<footer>
+  三國演義本體論 · Romance of the Three Kingdoms Ontology · 以 yejinlei 西遊記/水滸傳本體論為範式 · 視覺系統參考《石頭記》數字人文站
 </footer>
-</body></html>
+</body>
+</html>
