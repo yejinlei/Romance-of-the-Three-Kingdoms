@@ -88,6 +88,12 @@
     .navgroup{display:none;}
     .navitem{white-space:nowrap;}
   }
+  .vtxt .cmt{color:#9d2933;font-family:'Kaiti SC','STKaiti','KaiTi',serif;font-size:.94em;}
+  .rd-hide-cmt .cmt{display:none;}
+  .rd-li{padding:4px 8px;border-radius:6px;color:var(--ink2);cursor:pointer;transition:.15s;}
+  .rd-li:hover{background:rgba(var(--zhu-rgb),.07);color:var(--zhu);}
+  .rd-li.on{background:rgba(var(--zhu-rgb),.13);color:var(--zhu);font-weight:600;}
+  .rd-li b{font-weight:600;}
 </style>
 </head>
 <body class="grain">
@@ -570,34 +576,20 @@ VIEW.overview = () => {
 VIEW.read = () => `
 <section class="fade">
   <h2 class="sec-title serif mb-1">版本閱讀</h2>
-  <p class="sub m-0 mb-4">毛宗崗評本（通行本） · 繁體排印 · 首回節選（正文為公版古籍，此處僅示節錄）</p>
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5 items-start">
-    <div class="card-solid p-5 md:p-7">
-      <div class="flex items-baseline gap-3 mb-4 flex-wrap">
-        <span class="serif text-[24px] font-bold" style="color:var(--zhu);">第一回</span>
-        <span class="serif text-[16px]" style="color:var(--ink2);">宴桃園豪傑三結義　斬黃巾英雄首立功</span>
-      </div>
-      <div class="vtxt">
-        <p>話說天下大勢，分久必合，合久必分。周末七國分爭，併入於秦。及秦滅之後，楚、漢分爭，又併入於漢。漢朝自高祖斬白蛇而起義，一統天下。後來光武中興，傳至獻帝，遂分為三國。</p>
-        <p>推其致亂之由，殆始於桓、靈二帝。桓帝禁錮善類，崇信宦官。及桓帝崩，靈帝即位，大將軍竇武、太傅陳蕃共相輔佐。時有宦官曹節等弄權，竇武、陳蕃謀誅之，機事不密，反為所害。中涓自此愈橫。</p>
-        <p>時鉅鹿郡有兄弟三人：一名張角，一名張寶，一名張梁。那張角本是個不第秀才，因入山採藥，遇一老人，碧眼童顏，手執藜杖，喚角至一洞中，以天書三卷授之，曰：「此名《太平要術》……代天宣化，普救世人。」</p>
-        <p>……（後略）</p>
-      </div>
-      <div class="mt-5 pt-4 border-t flex flex-wrap gap-2" style="border-color:var(--line);">
-        <span class="chip zhu">劉備</span><span class="chip zhu">關羽</span><span class="chip zhu">張飛</span><span class="chip">張角</span><span class="chip gold">桃園三結義</span>
-      </div>
-    </div>
-    <aside class="card p-4">
+  <p class="sub m-0 mb-3">毛宗崗批評本 · 匯評三國志演義 —— 兩版 120 回全文在線，繁體排印，回目導航，毛批夾註可隱顯。</p>
+  <div class="card p-3 mb-4 flex flex-wrap gap-3 items-center">
+    <span class="text-[13px]" style="color:var(--ink3);">版本</span>
+    <div class="flex gap-2 flex-wrap" id="rdEditions"></div>
+    <label class="text-[13px] flex items-center gap-1" style="color:var(--ink2);cursor:pointer;"><input type="checkbox" id="rdComment" checked> 顯示評點</label>
+    <label class="text-[13px] flex items-center gap-1" style="color:var(--ink2);cursor:pointer;"><input type="checkbox" id="rdDual"> 雙版對照</label>
+    <div class="ml-auto"><select id="rdJump" class="tag" style="max-width:320px;font-size:13px;"></select></div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-5 items-start">
+    <aside class="card p-3" style="max-height:74vh;overflow:auto;">
       <div class="detail-lbl mb-2">回目導覽</div>
-      <div class="grid grid-cols-3 gap-2 text-[13px]" style="color:var(--ink2);">
-        ${Array.from({length:12},(_,i)=>`<span class="tag text-center" style="cursor:default;">第${i+1}回</span>`).join("")}
-        <span class="sub col-span-3 mt-1">（節選示範，完整 120 回可接入全文數據）</span>
-      </div>
-      <div class="detail-lbl mt-5 mb-2">當前版本</div>
-      <div class="flex flex-wrap gap-2">
-        <span class="chip zhu">毛宗崗本</span><span class="chip">嘉靖壬午本</span><span class="chip">周曰校刊本</span>
-      </div>
+      <div id="rdList" class="flex flex-col gap-[2px] text-[13px]"></div>
     </aside>
+    <div id="rdMain"></div>
   </div>
 </section>`;
 
@@ -1054,6 +1046,78 @@ function buildNav(){
     el.addEventListener('click',()=>{ location.hash = el.dataset.k; });
   });
 }
+/* ---------- 版本閱讀器 ---------- */
+const RD = {idx:null, eid:'mz', cur:1, dual:false, cmt:true, cache:{}};
+async function rdFetch(eid,n){
+  const k=eid+'/'+n;
+  if(RD.cache[k]) return RD.cache[k];
+  const r=await fetch('data/'+eid+'/'+String(n).padStart(3,'0')+'.json');
+  const j=await r.json(); RD.cache[k]=j; return j;
+}
+function rdApplyOpts(){
+  const m=document.getElementById('rdMain');
+  if(m) m.classList.toggle('rd-hide-cmt', !RD.cmt);
+}
+async function initReader(){
+  if(!RD.idx){
+    try{ const r=await fetch('data/index.json'); RD.idx=(await r.json()).editions; }
+    catch(e){ document.getElementById('rdMain').innerHTML='<div class="card p-5">文本數據載入失敗，請確認 data/ 目錄可訪問。</div>'; return; }
+  }
+  const eds=document.getElementById('rdEditions');
+  if(eds){
+    eds.innerHTML=RD.idx.map(e=>`<span class="chip ${e.id===RD.eid?'zhu':''}" data-e="${e.id}" style="cursor:pointer;">${e.name}</span>`).join('');
+    eds.querySelectorAll('[data-e]').forEach(el=>el.onclick=()=>{ RD.eid=el.dataset.e; RD.cur=1; initReader(); });
+  }
+  const cur=RD.idx.find(e=>e.id===RD.eid)||RD.idx[0];
+  const jl=document.getElementById('rdJump');
+  if(jl){
+    jl.innerHTML=cur.titles.map((t,i)=>`<option value="${i+1}" ${i+1===RD.cur?'selected':''}>${t}</option>`).join('');
+    jl.onchange=()=>rdLoad(+jl.value); jl.value=RD.cur;
+  }
+  const lst=document.getElementById('rdList');
+  if(lst){
+    lst.innerHTML=cur.titles.map((t,i)=>{const parts=t.split('　');return `<div class="rd-li ${i+1===RD.cur?'on':''}" data-n="${i+1}"><b>${parts[0]}</b>　${parts.slice(1).join('　')}</div>`}).join('');
+    lst.querySelectorAll('.rd-li').forEach(el=>el.onclick=()=>rdLoad(+el.dataset.n));
+  }
+  const cc=document.getElementById('rdComment');
+  if(cc){ cc.checked=RD.cmt; cc.onchange=()=>{RD.cmt=cc.checked; rdApplyOpts();}; }
+  const dc=document.getElementById('rdDual');
+  if(dc){ dc.checked=RD.dual; dc.onchange=()=>{RD.dual=dc.checked; rdLoad(RD.cur);}; }
+  await rdLoad(RD.cur);
+}
+async function rdLoad(n){
+  if(n<1||n>120) return;
+  RD.cur=n;
+  const main=document.getElementById('rdMain');
+  if(!main) return;
+  main.innerHTML='<div class="card p-5 text-center" style="color:var(--ink3);">載入中…</div>';
+  const cur=RD.idx.find(e=>e.id===RD.eid)||RD.idx[0];
+  const other=RD.idx.find(e=>e.id!==RD.eid);
+  try{
+    if(RD.dual && other){
+      const [a,b]=await Promise.all([rdFetch(RD.eid,n), rdFetch(other.id,n)]);
+      main.innerHTML=`<div class="grid grid-cols-1 xl:grid-cols-2 gap-4">${rdBlock(cur.name,a)}${rdBlock(other.name,b)}</div>`;
+    }else{
+      const a=await rdFetch(RD.eid,n);
+      main.innerHTML=rdBlock(cur.name,a);
+    }
+  }catch(e){ main.innerHTML='<div class="card p-5">本回文本載入失敗。</div>'; }
+  rdApplyOpts();
+  document.querySelectorAll('.rd-li').forEach(el=>el.classList.toggle('on', +el.dataset.n===n));
+  const jl=document.getElementById('rdJump'); if(jl) jl.value=n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function rdBlock(name,ch){
+  const prev=ch.n>1?`<button class="tag" onclick="rdLoad(${ch.n-1})">← 上一回</button>`:`<span></span>`;
+  const next=ch.n<120?`<button class="tag" onclick="rdLoad(${ch.n+1})">下一回 →</button>`:`<span></span>`;
+  return `<div class="card-solid p-5 md:p-8">
+    <div class="detail-lbl mb-2">${name}</div>
+    <div class="serif text-[21px] font-bold mb-5" style="color:var(--zhu);">${ch.title}</div>
+    <div class="vtxt">${ch.html}</div>
+    <div class="mt-7 pt-4 border-t flex justify-between" style="border-color:var(--line);">${prev}${next}</div>
+  </div>`;
+}
+
 function render(){
   let k = (location.hash||'#overview').slice(1);
   if(!VIEW[k]) k='overview';
@@ -1064,6 +1128,7 @@ function render(){
   if(k==='map') drawMap();
   if(k==='stats') initStats();
   if(k==='editions') initEditionChart();
+  if(k==='read') initReader();
   if(k==='query') __qFill();
 }
 
