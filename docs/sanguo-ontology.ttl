@@ -1,0 +1,189 @@
+@prefix sg:   <https://example.org/sanguo#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+################################################################
+# 三國演義本體論 · Romance of the Three Kingdoms Ontology
+# TBox（本體規範） + 代表性 ABox（實例）
+# 全部內容可於 Protégé / Apache Jena / RDFLib 中加載與推理
+################################################################
+
+<https://example.org/sanguo>
+    a owl:Ontology ;
+    rdfs:label "三國演義本體論"@zh ;
+    rdfs:comment "以 OWL 2 DL 描述《三國演義》之人物、勢力、地理、戰役、事件、計謀、器物、讖緯、詩詞與版本異文。"@zh .
+
+################################
+# 一、類（Class）
+################################
+sg:Person        a owl:Class ; rdfs:label "人物"@zh ; rdfs:comment "書中一切出場之人物。"@zh .
+sg:Faction       a owl:Class ; rdfs:label "勢力"@zh ; rdfs:comment "魏、蜀、吳及漢末群雄等政治軍事集團。"@zh .
+sg:Place         a owl:Class ; rdfs:label "地理"@zh ; rdfs:comment "都城、州郡、關隘、戰場等空間實體。"@zh .
+sg:Battle        a owl:Class ; rdfs:label "戰役"@zh ; rdfs:comment "有明確交戰雙方之軍事衝突。"@zh .
+sg:Event         a owl:Class ; rdfs:label "事件"@zh ; rdfs:comment "非交戰性質之情節單元。"@zh .
+sg:Stratagem     a owl:Class ; rdfs:label "計謀"@zh .
+sg:Artifact      a owl:Class ; rdfs:label "器物"@zh ; rdfs:comment "兵器、坐騎、印信、器械。"@zh .
+sg:Prophecy      a owl:Class ; rdfs:label "讖緯"@zh ; rdfs:comment "童謠、讖語、圖讖、夢兆。"@zh .
+sg:Poem          a owl:Class ; rdfs:label "詩詞"@zh .
+sg:Edition       a owl:Class ; rdfs:label "版本"@zh .
+sg:Chapter       a owl:Class ; rdfs:label "回目"@zh .
+sg:VariantReading a owl:Class ; rdfs:label "異文"@zh .
+sg:Commentary    a owl:Class ; rdfs:label "評點"@zh .
+sg:Critic        a owl:Class ; rdfs:label "評點家"@zh .
+sg:OfficialTitle a owl:Class ; rdfs:label "官職"@zh .
+sg:Polity        a owl:Class ; rdfs:label "政權"@zh .
+sg:Genealogy     a owl:Class ; rdfs:label "世系"@zh .
+sg:Adaptation    a owl:Class ; rdfs:label "衍生作品"@zh .
+
+# 部分子類與互斥關係
+sg:Lord    a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "君主"@zh .
+sg:Minister a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "臣屬"@zh .
+sg:General a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "武將"@zh .
+sg:Strategist a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "謀士"@zh .
+sg:City    a owl:Class ; rdfs:subClassOf sg:Place ; rdfs:label "城邑"@zh .
+sg:Pass    a owl:Class ; rdfs:subClassOf sg:Place ; rdfs:label "關隘"@zh .
+sg:Battlefield a owl:Class ; rdfs:subClassOf sg:Place ; rdfs:label "戰場"@zh .
+
+################################
+# 二、對象屬性（Object Property）
+################################
+sg:lordOf          a owl:ObjectProperty ; rdfs:label "君臨"@zh .
+sg:vassalOf        a owl:ObjectProperty ; owl:inverseOf sg:lordOf ; rdfs:label "臣屬"@zh .
+sg:memberOf        a owl:ObjectProperty ; rdfs:label "隸屬勢力"@zh .
+sg:parentOf        a owl:ObjectProperty ; rdfs:label "父"@zh .
+sg:childOf         a owl:ObjectProperty ; owl:inverseOf sg:parentOf ; rdfs:label "子"@zh .
+sg:siblingOf       a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "兄弟 / 姊妹"@zh .
+sg:spouseOf        a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "夫妻"@zh .
+sg:swornBrotherOf  a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "結義"@zh .
+sg:mentorOf        a owl:ObjectProperty ; rdfs:label "師"@zh .
+sg:discipleOf      a owl:ObjectProperty ; owl:inverseOf sg:mentorOf ; rdfs:label "徒"@zh .
+sg:foughtIn        a owl:ObjectProperty ; rdfs:label "參戰"@zh .
+sg:partiesIn       a owl:ObjectProperty ; rdfs:label "交戰方"@zh .
+sg:occursAt        a owl:ObjectProperty ; rdfs:label "發生於"@zh .
+sg:usesStratagem   a owl:ObjectProperty ; rdfs:label "用計"@zh .
+sg:targetedBy      a owl:ObjectProperty ; rdfs:label "計謀所向"@zh .
+sg:usesArtifact    a owl:ObjectProperty ; rdfs:label "持用器物"@zh .
+sg:kills           a owl:ObjectProperty ; rdfs:label "殺 / 斬"@zh .
+sg:successorOf     a owl:ObjectProperty ; rdfs:label "繼承"@zh .
+sg:alliesWith      a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "結盟"@zh .
+sg:enemyOf         a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "為敵"@zh .
+sg:foretells       a owl:ObjectProperty ; rdfs:label "預言"@zh .
+sg:fulfilledBy     a owl:ObjectProperty ; rdfs:label "應驗"@zh .
+sg:derivedFrom     a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:label "衍生自"@zh .
+sg:hasVariant      a owl:ObjectProperty ; rdfs:label "異文對應"@zh .
+sg:commentsOn      a owl:ObjectProperty ; rdfs:label "評點"@zh .
+sg:hasCommentary   a owl:ObjectProperty ; owl:inverseOf sg:commentsOn ; rdfs:label "有評"@zh .
+sg:wrote           a owl:ObjectProperty ; rdfs:label "著述"@zh .
+
+################################
+# 三、數據屬性（Datatype Property）
+################################
+sg:surname      a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "姓"@zh .
+sg:givenName    a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "名"@zh .
+sg:styleName    a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "字"@zh .
+sg:sobriquet    a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "號"@zh .
+sg:birthYear    a owl:DatatypeProperty ; rdfs:range xsd:gYear ; rdfs:label "生年"@zh .
+sg:deathYear    a owl:DatatypeProperty ; rdfs:range xsd:gYear ; rdfs:label "卒年"@zh .
+sg:nativePlace  a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "籍貫"@zh .
+sg:title        a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "官爵"@zh .
+sg:posthumousName a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "謚號"@zh .
+sg:referenceCount a owl:DatatypeProperty ; rdfs:range xsd:integer ; rdfs:label "回目數"@zh .
+sg:compositionYear a owl:DatatypeProperty ; rdfs:range xsd:gYear ; rdfs:label "成書年"@zh .
+sg:charCount    a owl:DatatypeProperty ; rdfs:range xsd:integer ; rdfs:label "字數"@zh .
+sg:troopStrength a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "兵力"@zh .
+sg:outcome      a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "結果"@zh .
+sg:modernName   a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "今地"@zh .
+sg:coordinates  a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "經緯"@zh .
+sg:prophecyText a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "讖文"@zh .
+sg:titleText    a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "詩題"@zh .
+sg:contentText  a owl:DatatypeProperty ; rdfs:range xsd:string ; rdfs:label "正文"@zh .
+
+################################
+# 四、受控詞表（節選）
+################################
+sg:FactionScheme a skos:ConceptScheme ; rdfs:label "勢力詞表"@zh .
+sg:魏 a skos:Concept ; skos:inScheme sg:FactionScheme ; skos:prefLabel "魏"@zh .
+sg:蜀 a skos:Concept ; skos:inScheme sg:FactionScheme ; skos:prefLabel "蜀漢"@zh .
+sg:吳 a skos:Concept ; skos:inScheme sg:FactionScheme ; skos:prefLabel "東吳"@zh .
+
+sg:RelationScheme a skos:ConceptScheme ; rdfs:label "關係詞表"@zh .
+sg:rel_結義 a skos:Concept ; skos:inScheme sg:RelationScheme ; skos:prefLabel "結義"@zh .
+sg:rel_君臣 a skos:Concept ; skos:inScheme sg:RelationScheme ; skos:prefLabel "君臣"@zh .
+sg:rel_敵對 a skos:Concept ; skos:inScheme sg:RelationScheme ; skos:prefLabel "敵對"@zh .
+
+################################
+# 五、ABox（代表性實例）
+################################
+sg:蜀漢 a sg:Faction ; rdfs:label "蜀漢"@zh ; sg:leader sg:劉備 ; sg:capital sg:成都 .
+sg:曹魏 a sg:Faction ; rdfs:label "曹魏"@zh ; sg:leader sg:曹操 ; sg:capital sg:許昌 .
+sg:東吳 a sg:Faction ; rdfs:label "東吳"@zh ; sg:leader sg:孫權 ; sg:capital sg:建業 .
+
+sg:劉備 a sg:Person, sg:Lord ; rdfs:label "劉備"@zh ; sg:styleName "玄德" ; sg:birthYear "161"^^xsd:gYear ; sg:deathYear "223"^^xsd:gYear ;
+    sg:memberOf sg:蜀漢 ;
+    sg:swornBrotherOf sg:關羽 , sg:張飛 ;
+    sg:vassalOf sg:諸葛亮 ;
+    sg:spouseOf sg:孫尚香 .
+
+sg:關羽 a sg:Person, sg:General ; rdfs:label "關羽"@zh ; sg:styleName "雲長" ; sg:title "漢壽亭侯" ;
+    sg:memberOf sg:蜀漢 ; sg:swornBrotherOf sg:劉備 , sg:張飛 ; sg:usesArtifact sg:青龍偃月刀 ;
+    sg:foughtIn sg:樊城之戰 ; sg:kills sg:顏良 .
+
+sg:張飛 a sg:Person, sg:General ; rdfs:label "張飛"@zh ; sg:styleName "翼德" ;
+    sg:memberOf sg:蜀漢 ; sg:swornBrotherOf sg:劉備 , sg:關羽 ; sg:usesArtifact sg:丈八蛇矛 .
+
+sg:諸葛亮 a sg:Person, sg:Strategist ; rdfs:label "諸葛亮"@zh ; sg:styleName "孔明" ; sg:title "蜀漢丞相" ;
+    sg:memberOf sg:蜀漢 ; sg:mentorOf sg:姜維 ; sg:usesArtifact sg:羽扇綸巾 ;
+    sg:usesStratagem sg:草船借箭 , sg:空城計 .
+
+sg:曹操 a sg:Person, sg:Lord ; rdfs:label "曹操"@zh ; sg:styleName "孟德" ; sg:birthYear "155"^^xsd:gYear ; sg:deathYear "220"^^xsd:gYear ;
+    sg:memberOf sg:曹魏 ; sg:parentOf sg:曹丕 , sg:曹植 ; sg:enemyOf sg:劉備 , sg:袁紹 ;
+    sg:usesStratagem sg:反間計 .
+
+sg:孫權 a sg:Person, sg:Lord ; rdfs:label "孫權"@zh ; sg:styleName "仲謀" ;
+    sg:memberOf sg:東吳 ; sg:parentOf sg:孫尚香 ; sg:alliesWith sg:劉備 .
+
+sg:周瑜 a sg:Person, sg:General ; rdfs:label "周瑜"@zh ; sg:styleName "公瑾" ; sg:deathYear "210"^^xsd:gYear ;
+    sg:memberOf sg:東吳 ; sg:foughtIn sg:赤壁之戰 ; sg:usesStratagem sg:苦肉計 , sg:反間計 ; sg:enemyOf sg:諸葛亮 .
+
+sg:官渡之戰 a sg:Battle ; rdfs:label "官渡之戰"@zh ; sg:compositionYear "200"^^xsd:gYear ; sg:outcome "曹操勝" ; sg:occursAt sg:官渡 .
+sg:赤壁之戰 a sg:Battle ; rdfs:label "赤壁之戰"@zh ; sg:compositionYear "208"^^xsd:gYear ; sg:outcome "孫劉聯軍勝" ; sg:occursAt sg:赤壁 .
+sg:夷陵之戰 a sg:Battle ; rdfs:label "夷陵之戰"@zh ; sg:compositionYear "222"^^xsd:gYear ; sg:outcome "東吳勝" ; sg:occursAt sg:夷陵 .
+
+sg:許昌 a sg:Place, sg:City ; rdfs:label "許昌"@zh ; sg:modernName "河南許昌" ; sg:coordinates "34.02,113.85" .
+sg:成都 a sg:Place, sg:City ; rdfs:label "成都"@zh ; sg:modernName "四川成都" ; sg:coordinates "30.66,104.06" .
+sg:建業 a sg:Place, sg:City ; rdfs:label "建業"@zh ; sg:modernName "江蘇南京" ; sg:coordinates "32.06,118.80" .
+sg:赤壁 a sg:Place, sg:Battlefield ; rdfs:label "赤壁"@zh ; sg:modernName "湖北赤壁" ; sg:coordinates "29.72,113.93" .
+sg:官渡 a sg:Place, sg:Battlefield ; rdfs:label "官渡"@zh ; sg:modernName "河南中牟" ; sg:coordinates "34.72,114.02" .
+sg:夷陵 a sg:Place, sg:Battlefield ; rdfs:label "夷陵"@zh ; sg:modernName "湖北宜昌" ; sg:coordinates "30.70,111.29" .
+
+sg:桃園三結義 a sg:Event ; rdfs:label "桃園三結義"@zh ; sg:occursAt sg:涿郡 ;
+    sg:partiesIn sg:劉備 , sg:關羽 , sg:張飛 .
+sg:白帝城托孤 a sg:Event ; rdfs:label "白帝城托孤"@zh ; sg:occursAt sg:白帝城 ;
+    sg:partiesIn sg:劉備 , sg:諸葛亮 .
+
+sg:遊說連環計 a owl:NamedIndividual ; rdfs:label "連環計"@zh .
+sg:連環計 a sg:Stratagem ; rdfs:label "連環計"@zh ; sg:targetedBy sg:呂布 ; sg:usesArtifact sg:貂蟬 .
+sg:草船借箭 a sg:Stratagem ; rdfs:label "草船借箭"@zh .
+sg:空城計 a sg:Stratagem ; rdfs:label "空城計"@zh .
+sg:苦肉計 a sg:Stratagem ; rdfs:label "苦肉計"@zh .
+sg:反間計 a sg:Stratagem ; rdfs:label "反間計"@zh .
+
+sg:青龍偃月刀 a sg:Artifact ; rdfs:label "青龍偃月刀"@zh .
+sg:丈八蛇矛 a sg:Artifact ; rdfs:label "丈八蛇矛"@zh .
+sg:羽扇綸巾 a sg:Artifact ; rdfs:label "羽扇綸巾"@zh .
+
+sg:千里草讖 a sg:Prophecy ; rdfs:label "千里草讖"@zh ;
+    sg:prophecyText "千里草，何青青；十日卜，不得生。" ; sg:foretells sg:董卓 .
+sg:董卓 a sg:Person ; rdfs:label "董卓"@zh ; sg:deathYear "192"^^xsd:gYear .
+
+sg:臨江仙 a sg:Poem ; rdfs:label "臨江仙 · 滾滾長江東逝水"@zh ;
+    sg:titleText "臨江仙 · 滾滾長江東逝水" ; sg:wrote sg:楊慎 .
+
+sg:嘉靖壬午本 a sg:Edition ; rdfs:label "嘉靖壬午本"@zh ; sg:compositionYear "1522"^^xsd:gYear .
+sg:毛宗崗本 a sg:Edition ; rdfs:label "毛宗崗本"@zh ; sg:derivedFrom sg:嘉靖壬午本 .
+sg:毛宗崗 a sg:Critic ; rdfs:label "毛宗崗"@zh ; sg:commentsOn sg:毛宗崗本 .
+
+# 本文件為節選；完整版本另含 60 餘位人物、30 處地理、18 場戰役與 100 餘條關係三元組。

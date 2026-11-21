@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>三國演義本體論 · 知識圖譜與版本閱讀</title>
+<script src="https://aisearch-task.bj.bcebos.com/static/tailwindcss-3.4.17.js"></script>
+<script src="https://aisearch-task.bj.bcebos.com/static/echarts-5.6.0.min.js"></script>
+<style>
+  :root{
+    --ink:#231f1a; --ink2:#4a4239; --ink3:#837666;
+    --paper:#f8f3e8; --paper2:#f1e9d8; --paper3:#e6dbc2; --line:#d8cbaf;
+    --zhu:#9d2933; --zhu-rgb:157,41,51;
+    --indigo:#1f4e5f; --jade:#3f7a63; --gold:#a9863f;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'PingFang SC','HarmonyOS Sans SC','Microsoft YaHei',sans-serif;
+    color:var(--ink); line-height:1.65;
+    background:
+      radial-gradient(1100px 560px at 10% -6%, rgba(157,41,51,.07), transparent 60%),
+      radial-gradient(900px 520px at 100% -2%, rgba(31,78,95,.09), transparent 55%),
+      linear-gradient(180deg,#faf6ec 0%,#f4eddd 46%,#eee5d0 100%);
+    background-attachment:fixed; min-height:100vh;
+  }
+  .serif{font-family:'Songti SC','STSong','SimSun','Noto Serif SC',serif;}
+  .grain::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background:repeating-linear-gradient(0deg,rgba(120,100,70,.035) 0 1px,transparent 1px 3px),
+               repeating-linear-gradient(90deg,rgba(120,100,70,.03) 0 1px,transparent 1px 4px);
+  }
+  .wrap{position:relative;z-index:1;}
+  .card{background:rgba(255,253,247,.78);border:1px solid var(--line);border-radius:14px;}
+  .card-solid{background:#fffdf7;border:1px solid var(--line);border-radius:14px;}
+  .tag{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);color:var(--ink2);background:rgba(255,255,255,.6);}
+  .lnk{color:var(--zhu);text-decoration:none;}
+  .lnk:hover{text-decoration:underline;}
+  .navitem{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;font-size:14px;color:var(--ink2);cursor:pointer;transition:.18s;border:1px solid transparent;}
+  .navitem:hover{background:rgba(var(--zhu-rgb),.07);color:var(--zhu);}
+  .navitem.on{background:rgba(var(--zhu-rgb),.11);color:var(--zhu);border-color:rgba(var(--zhu-rgb),.28);font-weight:600;}
+  .navgroup{font-size:11px;letter-spacing:.18em;color:var(--ink3);margin:14px 0 6px;padding-left:10px;}
+  table.gt{width:100%;border-collapse:collapse;font-size:14px;}
+  table.gt th{background:rgba(var(--zhu-rgb),.07);color:var(--zhu);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap;}
+  table.gt td{padding:8px 10px;border-bottom:1px solid rgba(216,203,175,.55);color:var(--ink2);vertical-align:top;}
+  table.gt tr:hover td{background:rgba(255,255,255,.7);}
+  .chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:6px;background:rgba(31,78,95,.09);color:var(--indigo);margin:0 4px 4px 0;}
+  .chip.zhu{background:rgba(var(--zhu-rgb),.1);color:var(--zhu);}
+  .chip.jade{background:rgba(63,122,99,.12);color:var(--jade);}
+  .chip.gold{background:rgba(169,134,63,.14);color:#8a6d2f;}
+  .sec-title{font-size:22px;font-weight:700;color:var(--ink);}
+  .sub{font-size:13px;color:var(--ink3);}
+  .fade{animation:fade .5s cubic-bezier(.2,.8,.2,1) both;}
+  @keyframes fade{from{opacity:.92;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .hero-rule{height:3px;width:64px;background:var(--zhu);border-radius:2px;}
+  .kv{display:grid;grid-template-columns:78px 1fr;gap:2px 10px;font-size:14px;}
+  .kv dt{color:var(--ink3);}
+  .kv dd{margin:0;color:var(--ink2);}
+  .detail-lbl{font-size:12px;color:var(--ink3);letter-spacing:.08em;}
+  details.acc{border:1px solid var(--line);border-radius:11px;background:rgba(255,253,247,.72);padding:0 14px;margin-bottom:10px;}
+  details.acc>summary{cursor:pointer;padding:12px 0;font-weight:600;color:var(--ink);list-style:none;display:flex;justify-content:space-between;align-items:center;}
+  details.acc>summary::-webkit-details-marker{display:none;}
+  details.acc>summary::after{content:"＋";color:var(--zhu);font-weight:400;}
+  details.acc[open]>summary::after{content:"－";}
+  details.acc .inner{padding:2px 0 14px;font-size:14px;color:var(--ink2);}
+  .prose-blk{font-size:15px;color:var(--ink2);line-height:1.8;}
+  .prose-blk p{margin:0 0 10px;}
+  .diff-del{background:rgba(157,41,51,.16);color:#7d1f28;text-decoration:line-through;padding:0 1px;}
+  .diff-ins{background:rgba(63,122,99,.18);color:#2c5c49;padding:0 1px;}
+  .diff-same{color:var(--ink2);}
+  .vtxt{font-family:'Songti SC','STSong','SimSun',serif;font-size:16px;line-height:2.05;color:#2c261e;letter-spacing:.02em;}
+  textarea.ta{border:1px solid var(--line);border-radius:10px;background:#fffdf7;width:100%;font-size:14px;padding:10px;color:var(--ink);font-family:'Songti SC','STSong','SimSun',serif;line-height:1.9;}
+  input.sel,input.inp{border:1px solid var(--line);border-radius:9px;background:#fffdf7;padding:7px 10px;font-size:14px;color:var(--ink);}
+  .btn{border:1px solid rgba(var(--zhu-rgb),.4);background:rgba(var(--zhu-rgb),.08);color:var(--zhu);padding:6px 14px;border-radius:9px;font-size:13px;cursor:pointer;transition:.18s;}
+  .btn:hover{background:rgba(var(--zhu-rgb),.16);}
+  .btn.ghost{border-color:var(--line);background:rgba(255,255,255,.6);color:var(--ink2);}
+  .btn.ghost:hover{background:#fffdf7;}
+  .statnum{font-size:30px;font-weight:700;color:var(--zhu);line-height:1;font-family:Georgia,serif;}
+  .bar-wrap{height:8px;background:rgba(216,203,175,.6);border-radius:5px;overflow:hidden;}
+  .bar{height:100%;background:linear-gradient(90deg,var(--zhu),#c25a4e);border-radius:5px;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-thumb{background:rgba(157,41,51,.28);border-radius:5px;}
+  .scrollx{overflow-x:auto;}
+  .toc{position:sticky;top:14px;}
+  @media (max-width:900px){
+    .side{position:static;width:100%;}
+    .side .navbox{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;}
+    .navgroup{display:none;}
+    .navitem{white-space:nowrap;}
+  }
+</style>
+</head>
+<body class="grain">
+<div class="wrap">
+
+  <header class="sticky top-0 z-30 backdrop-blur-md" style="background:rgba(250,246,236,.86);border-bottom:1px solid var(--line);">
+    <div class="max-w-[1400px] mx-auto px-4 md:px-7 py-3 flex items-center gap-4">
+      <div class="flex items-baseline gap-3">
+        <span class="serif text-[22px] md:text-[26px] font-bold tracking-[.14em] text-[#9d2933]">三國演義本體論</span>
+        <span class="hidden md:inline text-[12px] tracking-[.28em] text-[#837666]">KNOWLEDGE&nbsp;GRAPH&nbsp;OF&nbsp;THE&nbsp;THREE&nbsp;KINGDOMS</span>
+      </div>
+      <div class="ml-auto hidden sm:flex items-center gap-2">
+        <span class="tag">OWL 2 DL</span>
+        <span class="tag">七層本體架構</span>
+        <span class="tag">純前端 · 無服務器</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-[1400px] mx-auto px-4 md:px-7 py-5 grid grid-cols-1 lg:grid-cols-[236px_1fr] gap-6">
+    <aside class="side lg:sticky lg:top-[74px] lg:self-start lg:max-h-[calc(100vh-90px)] lg:overflow-y-auto">
+      <nav id="nav" class="navbox card p-3"></nav>
+      <div class="hidden lg:block mt-3 p-3 card text-[12px] leading-relaxed text-[#837666]">
+        本站為「本體論」系列之一，以 OWL 本體統一描述人物、勢力、地理、戰役、事件、計謀、讖緯、詩詞與版本異文，全部資料於瀏覽器端查詢可視化。
+      </div>
+    </aside>
+
+    <main id="app" class="min-w-0"></main>
+  </div>
+
+  <footer class="max-w-[1400px] mx-auto px-4 md:px-7 py-8 mt-4 text-[12px] text-[#837666] border-t" style="border-color:var(--line);">
+    <p class="m-0">三國演義本體論 · 資料取自《三國演義》毛宗崗本等通行本與《三國志》等史籍之公開常識，繁體排印，供閱讀與考據之用。</p>
+    <p class="m-0 mt-1">架構參照 yejinlei 數字園林「本體論」系列：版本閱讀 · 英雄譜 · 異文對勘 · 本體查詢 · 本體規範。</p>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   一、本體規範層（TBox）—— 節選
+   ============================================================ */
+const ONTOLOGY = {
+  classes: [
+    ["Person","人物","書中一切出場之人物"],
+    ["Faction","勢力","魏、蜀、吳及漢末群雄等政治軍事集團"],
+    ["Place","地理","都城、州郡、關隘、戰場等空間實體"],
+    ["Battle","戰役","有明確交戰雙方的軍事衝突"],
+    ["Event","事件","非交戰性質的情節單元（結義、托孤、政變等）"],
+    ["Stratagem","計謀","計策、謀略、權術"],
+    ["Artifact","器物","兵器、坐騎、印信、器械等"],
+    ["Prophecy","讖緯","童謠、讖語、圖讖、夢兆"],
+    ["Poem","詩詞","卷首詞、書中詩、後世詠史詩"],
+    ["Edition","版本","刊本、評本、校本"],
+    ["Chapter","回目","回、卷、則等文本單元"],
+    ["VariantReading","異文","不同版本間的文句差異"],
+    ["Commentary","評點","批語、夾批、回評"],
+    ["Critic","評點家","毛宗崗、李卓吾、鍾伯敬等"],
+    ["OfficialTitle","官職","官、爵、職名"],
+    ["Polity","政權","朝代、正統之爭"],
+    ["Genealogy","世系","家世與譜系"],
+    ["Treaty","盟誓","結盟、誓約"],
+    ["Adaptation","衍生作品","戲曲、評書、影視、遊戲"]
+  ],
+  objProps: [
+    ["lordOf","君臨 / 主"],["vassalOf","臣屬"],["memberOf","隸屬勢力"],
+    ["parentOf","父"],["childOf","子"],["siblingOf","兄弟"],["spouseOf","夫妻"],
+    ["swornBrotherOf","結義"],["mentorOf","師"],["discipleOf","徒"],
+    ["foughtIn","參戰"],["occursAt","發生於"],["usesStratagem","用計"],
+    ["usesArtifact","持用器物"],["kills","殺 / 斬"],["succeeds","繼承"],
+    ["alliesWith","結盟"],["enemyOf","為敵"],["fulfills","應驗"],["foretells","預言"],
+    ["derivedFrom","衍生自"],["hasVariant","異文對應"],["commentsOn","評點"],
+    ["wrote","著述"],["buriedAt","葬於"]
+  ],
+  dataProps: [
+    ["姓","xsd:string"],["名","xsd:string"],["字","xsd:string"],["號","xsd:string"],
+    ["生年","xsd:gYear"],["卒年","xsd:gYear"],["籍貫","xsd:string"],["官職","xsd:string"],
+    ["謚號","xsd:string"],["回目數","xsd:integer"],["成書年","xsd:gYear"],["字數","xsd:integer"],
+    ["兵力","xsd:string"],["結果","xsd:string"],["今地","xsd:string"],["經緯","geo:wktLiteral"],
+    ["讖文","xsd:string"],["應驗對象","xsd:string"],["評語","xsd:string"]
+  ],
+  vocabs: [
+    ["勢力詞表","魏 / 蜀漢 / 東吳 / 群雄"],["官職詞表","丞相·大將軍·都督·太守·刺史等"],
+    ["地名詞表","都·州·郡·關·津·原等"],["計謀詞表","連環·反間·苦肉·空城·美人等"],
+    ["兵器詞表","刀·矛·戟·劍·弓·弩等"],["讖緯詞表","童謠·圖讖·夢兆·星象"],
+    ["詩體詞表","詞·古風·律詩·絕句"],["版本詞表","刊本·評本·校本·抄本"],
+    ["評語詞表","夾批·眉批·回評·總評"],["官爵詞表","公·侯·將軍·都督"],["紀年詞表","年號紀年·干支"]
+  ]
+};
+
+/* ============================================================
+   二、實例資料層（ABox）
+   ============================================================ */
+const DATA = {
+  factions: [
+    {id:"wei",name:"曹魏",leader:"曹操",capital:"許昌 · 鄴",period:"220–266",note:"挾天子以令諸侯，據中原九州。曹操雖未稱帝，然奠基於其手；曹丕受禪稱帝，國號魏。"},
+    {id:"shu",name:"蜀漢",leader:"劉備",capital:"成都",period:"221–263",note:"以漢室宗親自居，章武元年稱帝於成都，延續漢祚。諸葛亮輔政，六出祁山。"},
+    {id:"wu",name:"東吳",leader:"孫權",capital:"建業",period:"229–280",note:"孫氏父子兄弟經營江東三世，據長江天險，黃龍元年稱帝。"},
+    {id:"men",name:"漢室",leader:"漢獻帝",capital:"許昌",period:"－220",note:"名存實亡之天下共主，先受制於董卓，後挾於曹操。"},
+    {id:"qun_dong",name:"董卓集團",leader:"董卓",capital:"長安",period:"189–192",note:"西涼軍入洛陽，廢立天子，焚燒宮室。王允設連環計誅之。"},
+    {id:"qun_yuan",name:"袁紹集團",leader:"袁紹",capital:"鄴",period:"190–202",note:"四世三公，河北雄主。官渡一戰敗於曹操，一蹶不振。"},
+    {id:"qun_lv",name:"呂布集團",leader:"呂布",capital:"下邳",period:"192–198",note:"天下無敵之飛將，輾轉依附而反覆無常，終被曹操擒殺於白門樓。"},
+    {id:"qun_biao",name:"劉表集團",leader:"劉表",capital:"襄陽",period:"190–208",note:"據荊州八郡，坐觀成敗，死後二子相爭，荊州瓦解。"},
+    {id:"qun_zhang",name:"張魯集團",leader:"張魯",capital:"漢中",period:"191–215",note:"以五斗米道治漢中近三十年，曹操征之而降。"},
+    {id:"qun_sun",name:"江東孫氏",leader:"孫堅",capital:"吳郡",period:"186–",note:"孫堅、孫策、孫權三世，由江左小軍閥追擊為三分天下之一。"}
+  ],
+  persons: [
+    {n:"劉備",z:"玄德",f:"蜀漢",b:161,d:223,title:"蜀漢昭烈帝",bio:"中山靖王之後，織席販履為生。桃園結義起兵，三顧茅廬得諸葛亮，終成鼎足之勢。"},
+    {n:"關羽",z:"雲長",f:"蜀漢",b:160,d:219,title:"漢壽亭侯",bio:"義絕。身長九尺，髯長二尺，使青龍偃月刀。千里走單騎，水淹七軍，威震華夏；敗走麥城遇害。"},
+    {n:"張飛",z:"翼德",f:"蜀漢",b:165,d:221,title:"車騎將軍",bio:"萬人敵。據水斷橋，一聲怒吼。好酒鞭撻士卒，終為部將所害。"},
+    {n:"諸葛亮",z:"孔明",f:"蜀漢",b:181,d:234,title:"蜀漢丞相",bio:"智絕。躬耕南陽，隆中對定三分。輔佐後主，六出祁山，病死五丈原。有《出師表》傳世。"},
+    {n:"趙雲",z:"子龍",f:"蜀漢",b:168,d:229,title:"順平侯",bio:"長坂坡單騎救主，一身是膽。五虎上將之一，征南定北，年逾七十尚力戰。"},
+    {n:"馬超",z:"孟起",f:"蜀漢",b:176,d:222,title:"驃騎將軍",bio:"西涼錦馬超，殺得曹操割鬚棄袍。後歸劉備，位列五虎。"},
+    {n:"黃忠",z:"漢升",f:"蜀漢",b:148,d:220,title:"關內侯",bio:"老當益壯。定軍山陣斬夏侯淵，一戰成名，封五虎上將。"},
+    {n:"姜維",z:"伯約",f:"蜀漢",b:202,d:264,title:"大將軍",bio:"天水降將，諸葛亮衣缽傳人。九伐中原，詐降復國不成，自刎而死。"},
+    {n:"魏延",z:"文長",f:"蜀漢",b:170,d:234,title:"征西大將軍",bio:"勇略過人，獻子午谷奇謀未被採納，與楊儀不睦，諸葛亮死後為馬岱所斬。"},
+    {n:"龐統",z:"士元",f:"蜀漢",b:179,d:214,title:"軍師中郎將",bio:"鳳雛。與臥龍齊名，進取西川時中箭殉於落鳳坡。"},
+    {n:"法正",z:"孝直",f:"蜀漢",b:176,d:220,title:"尚書令",bio:"善奇謀，助劉備取益州、定漢中，劉備深倚重之。"},
+    {n:"馬謖",z:"幼常",f:"蜀漢",b:190,d:228,title:"參軍",bio:"言過其實，街亭失守，諸葛亮揮淚斬之。"},
+    {n:"徐庶",z:"元直",f:"蜀漢",b:170,d:232,title:"右中郎將",bio:"走馬薦諸葛。母為曹操所執，被迫入曹營，終身不獻一策。"},
+    {n:"劉禪",z:"公嗣",f:"蜀漢",b:207,d:271,title:"蜀漢後主",bio:"小字阿斗，長坂坡為趙雲所救。在位四十一年，終降魏封安樂公。"},
+    {n:"諸葛瑾",z:"子瑜",f:"東吳",b:174,d:241,title:"東吳大將軍",bio:"諸葛亮之兄，仕吳，使蜀通好，以其雅正稱。"},
+    {n:"曹操",z:"孟德",f:"曹魏",b:155,d:220,title:"魏武帝（追尊）",bio:"奸絕。治世能臣，亂世奸雄。官渡破袁紹，一統北方，終為魏業奠基。"},
+    {n:"曹丕",z:"子桓",f:"曹魏",b:187,d:226,title:"魏文帝",bio:"受漢禪稱帝，開魏鼎。工於文，與曹植有七步詩之爭。"},
+    {n:"曹植",z:"子建",f:"曹魏",b:192,d:232,title:"陳思王",bio:"才高八斗，七步成詩。與兄曹丕爭嗣失利，鬱鬱而終。"},
+    {n:"夏侯惇",z:"元讓",f:"曹魏",b:null,d:220,title:"大將軍",bio:"拔矢啖睛之獨眼將軍，曹操宗族重將，性烈忠勇。"},
+    {n:"夏侯淵",z:"妙才",f:"曹魏",b:null,d:219,title:"征西將軍",bio:"虎步關右，用兵神速，定軍山為黃忠所斬。"},
+    {n:"張遼",z:"文遠",f:"曹魏",b:169,d:222,title:"前將軍",bio:"原呂布部將，歸曹後合肥之戰八百破十萬，威震逍遙津。"},
+    {n:"徐晃",z:"公明",f:"曹魏",b:null,d:227,title:"右將軍",bio:"治軍有周亞夫之風，樊城解圍敗關羽。"},
+    {n:"張郃",z:"儁乂",f:"曹魏",b:null,d:231,title:"征西車騎將軍",bio:"官渡降曹，後為魏之名將，木門道中伏殉身。"},
+    {n:"于禁",z:"文則",f:"曹魏",b:null,d:221,title:"左將軍",bio:"五子良將之一，樊城水淹七軍後降關羽，晚節不保。"},
+    {n:"樂進",z:"文謙",f:"曹魏",b:null,d:218,title:"右將軍",bio:"先登陷陣，以驍果顯，五子良將之一。"},
+    {n:"許褚",z:"仲康",f:"曹魏",b:null,d:null,title:"武衛將軍",bio:"虎癡。赤膊上陣，裸衣鬥馬超，曹操貼身護衛。"},
+    {n:"典韋",z:"",f:"曹魏",b:null,d:197,title:"都尉",bio:"古之惡來。宛城之變，以寡敵眾護曹操退走，力竭而死。"},
+    {n:"郭嘉",z:"奉孝",f:"曹魏",b:170,d:207,title:"軍師祭酒",bio:"鬼才。算無遺策，早卒。曹操哭曰：奉孝在，不使孤至此。"},
+    {n:"荀彧",z:"文若",f:"曹魏",b:163,d:212,title:"尚書令",bio:"王佐之才。為曹操規劃奉天子之策，後以反對進爵魏公見疏，憂死。"},
+    {n:"荀攸",z:"公達",f:"曹魏",b:157,d:214,title:"尚書令",bio:"算無遺策，曹操謀主，與荀彧並稱二荀。"},
+    {n:"賈詡",z:"文和",f:"曹魏",b:147,d:223,title:"太尉",bio:"毒士。歷事董卓、張繡、曹操，明哲保身，壽終正寢。"},
+    {n:"程昱",z:"仲德",f:"曹魏",b:141,d:220,title:"衛尉",bio:"性剛戾，多謀斷，曹操拔為心腹。"},
+    {n:"司馬懿",z:"仲達",f:"曹魏",b:179,d:251,title:"魏太傅",bio:"鷹視狼顧，忍而多疑。禦諸葛亮於渭水，誅曹爽於高平陵，為晉奠基。"},
+    {n:"司馬昭",z:"子上",f:"曹魏",b:211,d:265,title:"晉文帝（追尊）",bio:"弑君專權，滅蜀漢。其心路人皆知。"},
+    {n:"鄧艾",z:"士載",f:"曹魏",b:197,d:264,title:"征西將軍",bio:"偷渡陰平，滅蜀第一功，後遭誣陷被殺。"},
+    {n:"鍾會",z:"士季",f:"曹魏",b:225,d:264,title:"司徒",bio:"伐蜀主帥，才兼文武，功成後謀反被殺。"},
+    {n:"孫堅",z:"文台",f:"江東孫氏",b:155,d:191,title:"破虜將軍",bio:"江東猛虎。討董卓先入洛陽得傳國玉璽，後為黃祖部將射殺。"},
+    {n:"孫策",z:"伯符",f:"東吳",b:175,d:200,title:"討逆將軍",bio:"江東小霸王。轉戰江東，奠定吳基，遇刺早亡。"},
+    {n:"孫權",z:"仲謀",f:"東吳",b:182,d:252,title:"吳大帝",bio:"生子當如孫仲謀。據江東，結劉抗曹於赤壁，後稱帝建吳。"},
+    {n:"周瑜",z:"公瑾",f:"東吳",b:175,d:210,title:"大都督",bio:"赤壁火攻之帥，性度恢廓，通音律。演義以「三氣周瑜」塑其量窄。"},
+    {n:"魯肅",z:"子敬",f:"東吳",b:172,d:217,title:"橫江將軍",bio:"老成持重，力主孫劉聯盟，接周瑜督軍。"},
+    {n:"呂蒙",z:"子明",f:"東吳",b:178,d:220,title:"虎威將軍",bio:"吳下阿蒙，士別三日刮目相看。白衣渡江取荊州，擒關羽。"},
+    {n:"陸遜",z:"伯言",f:"東吳",b:183,d:245,title:"丞相",bio:"火燒連營破劉備於夷陵，後為吳之上柱國，晚受孫權猜忌而亡。"},
+    {n:"太史慈",z:"子義",f:"東吳",b:166,d:206,title:"折衝中郎將",bio:"神亭酣鬥小霸王，猿臂善射，為孫策所重。"},
+    {n:"甘寧",z:"興霸",f:"東吳",b:null,d:null,title:"折衝將軍",bio:"錦帆賊。百騎劫魏營，江東虎臣之首。"},
+    {n:"黃蓋",z:"公覆",f:"東吳",b:null,d:null,title:"武鋒中郎將",bio:"赤壁苦肉計之主角，年老而忠勇。"},
+    {n:"張昭",z:"子布",f:"東吳",bio:"156",d:"236",title:"輔吳將軍",bio:"江東文臣之首，赤壁前主降，孫權以壁繩阻之。"},
+    {n:"孫尚香",z:"",f:"東吳",b:null,d:null,title:"孫夫人",bio:"孫權之妹，嫁劉備，性剛勇，侍婢皆執刀。"},
+    {n:"董卓",z:"仲穎",f:"董卓集團",b:null,d:192,title:"相國",bio:"西涼梟雄，進京廢少帝立獻帝，荒淫殘暴，終為呂布所誅。"},
+    {n:"呂布",z:"奉先",f:"呂布集團",b:null,d:199,title:"溫侯",bio:"人中呂布，馬中赤兔。三姓家奴，反覆無常，白門樓被縊。"},
+    {n:"貂蟬",z:"",f:"董卓集團",b:null,d:null,title:"—",bio:"演義四大美人之一，王允連環計之關鍵。正史無其名。"},
+    {n:"袁紹",z:"本初",f:"袁紹集團",b:null,d:202,title:"大將軍",bio:"四世三公，兵多糧足，然外寬內忌。官渡之敗，悔不如田豐言。"},
+    {n:"袁術",z:"公路",f:"群雄",b:null,d:199,title:"僭號仲家",bio:"得玉璽稱帝於壽春，眾叛親離，嘔血而死。"},
+    {n:"劉表",z:"景升",f:"劉表集團",b:142,d:208,title:"荊州牧",bio:"漢室宗親，坐鎮荊州十九年，無四方之志。"},
+    {n:"劉璋",z:"季玉",f:"群雄",b:null,d:220,title:"益州牧",bio:"闇弱之主，引劉備入川御張魯，反失益州。"},
+    {n:"馬騰",z:"壽成",f:"群雄",b:null,d:212,title:"征西將軍",bio:"西涼軍閥，衣帶詔事洩遇害，子馬超起兵報仇。"},
+    {n:"公孫瓚",z:"伯圭",f:"群雄",b:null,d:199,title:"前將軍",bio:"白馬義從，先與袁紹爭河北，終自焚於易京樓。"},
+    {n:"張魯",z:"公祺",f:"張魯集團",b:null,d:null,title:"鎮南將軍",bio:"五斗米道師君，雄踞漢中三十年。"},
+    {n:"陳宮",z:"公台",f:"呂布集團",b:null,d:198,title:"—",bio:"中牟釋曹操而共謀，後覺其奸，轉事呂布，白門樓就刑不屈。"},
+    {n:"王允",z:"子師",f:"漢室",b:137,d:192,title:"司徒",bio:"設連環計誅董卓，然不善處涼州餘部，終為李傕所殺。"},
+    {n:"華佗",z:"元化",f:"群雄",b:null,d:null,title:"神醫",bio:"刮骨療毒，欲為曹操開顱治風疾，反被下獄殺害。"},
+    {n:"張角",z:"",f:"群雄",b:null,d:184,title:"天公將軍",bio:"太平道人，倡「蒼天已死，黃天當立」，掀起黃巾之亂。"},
+    {n:"左慈",z:"元放",f:"群雄",b:null,d:null,title:"—",bio:"方士，戲曹操於宴席，擲杯化鳥而去。"},
+    {n:"于吉",z:"",f:"群雄",b:null,d:null,title:"—",bio:"江東道士，治病濟人，為孫策所殺，遂有冤魂索命之說。"},
+    {n:"陶謙",z:"恭祖",f:"群雄",b:132,d:194,title:"徐州牧",bio:"老邁州牧，三讓徐州於劉備。"},
+    {n:"孔融",z:"文舉",f:"群雄",b:153,d:208,title:"北海相",bio:"讓梨之孔北海，名士之風，終為曹操所殺。"},
+    {n:"何進",z:"遂高",f:"漢室",b:null,d:189,title:"大將軍",bio:"外戚屠戶，欲誅宦豎反被殺，遂啟董卓之亂。"}
+  ],
+  places: [
+    {n:"洛陽",m:"河南洛陽",lat:34.62,lng:112.45,ty:"都城",d:"東漢首都，董卓焚城後殘破。"},
+    {n:"長安",m:"陝西西安",lat:34.27,lng:108.95,ty:"都城",d:"董卓挾獻帝西遷之所，亦為曹魏西都。"},
+    {n:"許昌",m:"河南許昌",lat:34.02,lng:113.85,ty:"都城",d:"曹操迎獻帝於此，為許都。"},
+    {n:"鄴城",m:"河北臨漳",lat:36.35,lng:114.62,ty:"都城",d:"袁紹、曹操之根據地，銅雀臺所在。"},
+    {n:"成都",m:"四川成都",lat:30.66,lng:104.06,ty:"都城",d:"蜀漢都城，天府之國。"},
+    {n:"建業",m:"江蘇南京",lat:32.06,lng:118.80,ty:"都城",d:"孫權稱帝之都，石頭城。"},
+    {n:"荊州",m:"湖北荊州",lat:30.35,lng:112.19,ty:"州郡",d:"兵家必爭之地，關羽失之而蜀勢衰。"},
+    {n:"襄陽",m:"湖北襄陽",lat:32.01,lng:112.12,ty:"州郡",d:"荊州北門，劉表治所。"},
+    {n:"樊城",m:"湖北襄陽",lat:32.05,lng:112.13,ty:"城邑",d:"關羽水淹七軍處。"},
+    {n:"赤壁",m:"湖北赤壁",lat:29.72,lng:113.93,ty:"戰場",d:"周瑜火攻破曹之地，三分之始。"},
+    {n:"官渡",m:"河南中牟",lat:34.72,lng:114.02,ty:"戰場",d:"曹操以少勝袁紹，一統北方之關鍵。"},
+    {n:"合肥",m:"安徽合肥",lat:31.86,lng:117.28,ty:"城邑",d:"張遼八百破十萬，逍遙津威名。"},
+    {n:"漢中",m:"陝西漢中",lat:33.08,lng:107.03,ty:"州郡",d:"蜀之門戶，黃忠定軍山立功。"},
+    {n:"街亭",m:"甘肅秦安",lat:34.86,lng:105.68,ty:"關隘",d:"馬謖失守，首次北伐受挫。"},
+    {n:"陳倉",m:"陝西寶雞",lat:34.36,lng:107.20,ty:"城邑",d:"郝昭拒諸葛，以寡守城。"},
+    {n:"五丈原",m:"陝西岐山",lat:34.30,lng:107.62,ty:"戰場",d:"諸葛亮病逝之地，秋風星隕。"},
+    {n:"白帝城",m:"重慶奉節",lat:31.02,lng:109.53,ty:"城邑",d:"劉備托孤之所。"},
+    {n:"夷陵",m:"湖北宜昌",lat:30.70,lng:111.29,ty:"戰場",d:"陸遜火燒連營，蜀漢元氣大傷。"},
+    {n:"下邳",m:"江蘇睢寧",lat:34.31,lng:117.94,ty:"城邑",d:"呂布殞命之白門樓處。"},
+    {n:"徐州",m:"江蘇徐州",lat:34.26,lng:117.18,ty:"州郡",d:"陶謙讓與劉備之州。"},
+    {n:"宛城",m:"河南南陽",lat:32.99,lng:112.53,ty:"城邑",d:"張繡降而復叛，典韋死於此。"},
+    {n:"壽春",m:"安徽壽縣",lat:32.58,lng:116.79,ty:"城邑",d:"袁術僭號之都。"},
+    {n:"江夏",m:"湖北武漢",lat:30.59,lng:114.30,ty:"郡",d:"劉琦、黃祖屯守之地。"},
+    {n:"柴桑",m:"江西九江",lat:29.71,lng:116.00,ty:"城邑",d:"周瑜屯兵處，赤壁戰前調度。"},
+    {n:"麥城",m:"湖北當陽",lat:30.82,lng:111.79,ty:"城邑",d:"關羽敗走之處。"},
+    {n:"定軍山",m:"陝西勉縣",lat:33.15,lng:106.68,ty:"戰場",d:"黃忠陣斬夏侯淵。"},
+    {n:"長坂坡",m:"湖北當陽",lat:30.82,lng:111.79,ty:"戰場",d:"趙雲單騎救主。"},
+    {n:"潼關",m:"陝西潼關",lat:34.55,lng:110.25,ty:"關隘",d:"馬超與曹操相持之地。"},
+    {n:"涿郡",m:"河北涿州",lat:39.49,lng:115.98,ty:"郡",d:"劉備故里，桃園結義處。"},
+    {n:"陳留",m:"河南開封",lat:34.80,lng:114.31,ty:"郡",d:"曹操起兵之地。"}
+  ],
+  battles: [
+    {n:"黃巾之亂",y:"184",p:"中原八州",a:"漢軍 vs 黃巾",r:"漢勝",d:"張角倡太平道起兵，劉關張等隨義軍鎮壓。亂後州郡割據。"},
+    {n:"討董卓",y:"190",p:"虎牢關 · 洛陽",a:"關東聯軍 vs 董卓",r:"董卓西遷",d:"十八路諸侯會盟，呂布英勇無敵，聯軍貌合神離，終散。"},
+    {n:"界橋之戰",y:"191",p:"河北界橋",a:"袁紹 vs 公孫瓚",r:"袁紹勝",d:"麴義先登破白馬義從，袁紹遂定河北之基。"},
+    {n:"宛城之戰",y:"197",p:"宛城",a:"曹操 vs 張繡",r:"張繡勝",d:"張繡降而復叛，典韋、曹昂、曹安民死於亂軍。"},
+    {n:"下邳之戰",y:"198",p:"下邳",a:"曹操 vs 呂布",r:"曹操勝",d:"淹下邳擒呂布，白門樓縊殺之，陳宮同死。"},
+    {n:"官渡之戰",y:"200",p:"官渡",a:"曹操 vs 袁紹",r:"曹操勝",d:"火燒烏巢，以兩萬破十萬，北方大局遂定。"},
+    {n:"長坂坡之戰",y:"208",p:"當陽長坂",a:"曹操 vs 劉備",r:"曹操勝",d:"劉備敗走，趙雲單騎救阿斗，張飛據水斷橋。"},
+    {n:"赤壁之戰",y:"208",p:"赤壁",a:"孫劉聯軍 vs 曹操",r:"孫劉勝",d:"周瑜用火攻，黃蓋詐降，曹軍樓船盡焚，三分之勢成。"},
+    {n:"合肥之戰",y:"215",p:"合肥",a:"張遼 vs 孫權",r:"曹魏勝",d:"八百破十萬，孫權險遭擒於逍遙津。"},
+    {n:"潼關之戰",y:"211",p:"潼關",a:"曹操 vs 馬超",r:"曹操勝",d:"馬超殺得曹操割鬚棄袍，終為離間計所敗。"},
+    {n:"定軍山之戰",y:"219",p:"定軍山",a:"劉備 vs 夏侯淵",r:"蜀勝",d:"黃忠居高臨下陣斬夏侯淵，漢中遂定。"},
+    {n:"樊城之戰",y:"219",p:"樊城",a:"關羽 vs 曹仁",r:"相持",d:"水淹七軍威震華夏，後為呂蒙偷襲荊州而敗。"},
+    {n:"夷陵之戰",y:"222",p:"夷陵",a:"劉備 vs 陸遜",r:"東吳勝",d:"陸遜火燒連營七百里，蜀漢精銳盡喪。"},
+    {n:"街亭之戰",y:"228",p:"街亭",a:"馬謖 vs 張郃",r:"曹魏勝",d:"馬謖舍水上山，被張郃斷汲，首次北伐失利。"},
+    {n:"五丈原之戰",y:"234",p:"五丈原",a:"諸葛亮 vs 司馬懿",r:"相持",d:"諸葛亮屯田渭濱，積勞成疾，隕於秋風。"},
+    {n:"滅蜀之戰",y:"263",p:"隴西 · 劍閣",a:"鍾會 · 鄧艾 vs 蜀漢",r:"曹魏勝",d:"鄧艾偷渡陰平，劉禪出降，蜀亡。"},
+    {n:"高平陵之變",y:"249",p:"洛陽",a:"司馬懿 vs 曹爽",r:"司馬勝",d:"司馬懿詐病賺曹爽，一朝奪權，魏祚暗移。"},
+    {n:"晉滅吳之戰",y:"280",p:"長江中下游",a:"西晉 vs 東吳",r:"西晉勝",d:"王濬樓船下益州，金陵王氣黯然收，三國歸晉。"}
+  ],
+  events: [
+    {n:"桃園三結義",y:"184",p:"涿郡",ps:"劉備·關羽·張飛",d:"三人於桃園結為異姓兄弟，誓同生死，開三國序幕。"},
+    {n:"十常侍之亂",y:"189",p:"洛陽",ps:"何進·張讓",d:"宦官誅殺何進，袁紹等誅宦，董卓乘亂入京。"},
+    {n:"孟德獻刀",y:"189",p:"洛陽",ps:"曹操·董卓·王允",d:"曹操假意獻刀欲誅董卓未果，逃亡途中發「寧教我負天下人」之語。"},
+    {n:"三讓徐州",y:"194",p:"徐州",ps:"陶謙·劉備",d:"陶謙病篤，三讓徐州，劉備自此有基業。"},
+    {n:"煮酒論英雄",y:"199",p:"許昌",ps:"曹操·劉備",d:"青梅煮酒，曹操指劉備為天下英雄，劉備借雷掩驚。"},
+    {n:"千里走單騎",y:"200",p:"許昌—河北",ps:"關羽",d:"關羽掛印封金，護二嫂過五關斬六將，尋兄而去。"},
+    {n:"三顧茅廬",y:"207",p:"隆中",ps:"劉備·諸葛亮",d:"劉備三訪草廬，諸葛亮隆中對，定三分之策。"},
+    {n:"舌戰群儒",y:"208",p:"柴桑",ps:"諸葛亮·東吳群臣",d:"諸葛亮赴吳，駁倒張昭等降曹之議，促成孫劉聯盟。"},
+    {n:"借東風",y:"208",p:"赤壁",ps:"諸葛亮",d:"演義謂諸葛亮登壇借東風，助周瑜火攻（史書無此事）。"},
+    {n:"華容道",y:"208",p:"華容",ps:"關羽·曹操",d:"曹操敗走華容，關羽念舊義釋之。"},
+    {n:"單刀赴會",y:"215",p:"陸口",ps:"關羽·魯肅",d:"魯肅邀關羽赴會索荊州，關羽單刀過江，全身而退。"},
+    {n:"水淹七軍",y:"219",p:"樊城",ps:"關羽·于禁",d:"關羽借漢水暴漲，擒于禁斬龐德，威震華夏。"},
+    {n:"刮骨療毒",y:"219",p:"樊城",ps:"關羽·華佗",d:"關羽中箭，華佗刮骨去毒，關羽談笑弈棋。"},
+    {n:"白帝城托孤",y:"223",p:"白帝城",ps:"劉備·諸葛亮",d:"劉備臨終託孤，言「如其不才，君可自取」。"},
+    {n:"七擒孟獲",y:"225",p:"南中",ps:"諸葛亮·孟獲",d:"諸葛亮南征，七擒七縱孟獲，南人心服。"},
+    {n:"空城計",y:"228",p:"西城",ps:"諸葛亮·司馬懿",d:"諸葛亮焚香操琴，大開城門退司馬懿（史書無此記載）。"},
+    {n:"五丈原隕落",y:"234",p:"五丈原",ps:"諸葛亮",d:"諸葛亮積勞成疾，卒於軍中，年五十四。"}
+  ],
+  stratagems: [
+    {n:"連環計",u:"王允",t:"董卓·呂布",d:"以貂蟬許呂布而獻董卓，離間其父子，終誅董卓。"},
+    {n:"美人計",u:"王允",t:"董卓",d:"連環計之核心環節，以女色為刃。"},
+    {n:"草船借箭",u:"諸葛亮",t:"曹操",d:"霧夜以草人舟取箭十萬（史實為孫權濡須之事，演義移於孔明）。"},
+    {n:"苦肉計",u:"周瑜·黃蓋",t:"曹操",d:"周瑜杖黃蓋，黃蓋詐降，為火攻埋伏筆。"},
+    {n:"反間計",u:"周瑜",t:"曹操",d:"偽書賺蔣干，使曹操誤殺水軍都督蔡瑁、張允。"},
+    {n:"空城計",u:"諸葛亮",t:"司馬懿",d:"城中空虛而大開四門，焚香操琴，嚇退魏軍。"},
+    {n:"借刀殺人",u:"曹操",t:"稱衡（禰衡）",d:"以他人之手除己所惡，如借劉表、黃祖之手殺禰衡。"},
+    {n:"聲東擊西",u:"曹操",t:"袁紹",d:"延津之戰佯攻延津，實襲白馬，斬顏良。"},
+    {n:"調虎離山",u:"諸葛亮",t:"司馬懿",d:"使人散播流言，誘敵離險，於運動中殲之。"},
+    {n:"金蟬脫殼",u:"諸葛亮",t:"司馬懿",d:"六出祁山，退兵時用增灶減灶之計全身而還。"},
+    {n:"緩兵之計",u:"郭嘉",t:"二袁",d:"建議曹操緩攻遼東，待二袁自相殘殺。"},
+    {n:"瞞天過海",u:"呂蒙",t:"關羽",d:"白衣渡江，商船偽裝，偷襲荊州。"}
+  ],
+  artifacts: [
+    {n:"青龍偃月刀",o:"關羽",d:"又名冷豔鋸，重八十二斤，關羽憑之威震華夏。"},
+    {n:"丈八蛇矛",o:"張飛",d:"張飛持之，長坂橋頭一聲斷喝。"},
+    {n:"方天畫戟",o:"呂布",d:"轅門射戟，箭中戟枝，解劉備之圍。"},
+    {n:"赤兔馬",o:"呂布·關羽",d:"日行千里，「人中呂布，馬中赤兔」；後歸關羽。"},
+    {n:"的盧馬",o:"劉備",d:"妨主之凶馬，然躍檀溪救劉備於危難。"},
+    {n:"倚天劍",o:"曹操",d:"曹操佩劍，另賜青釭劍予夏侯恩，長坂坡為趙雲所奪。"},
+    {n:"青釭劍",o:"趙雲",d:"削鐵如泥，趙雲於長坂坡奪之。"},
+    {n:"諸葛連弩",o:"諸葛亮",d:"一弩十矢俱發，蜀軍利器。"},
+    {n:"木牛流馬",o:"諸葛亮",d:"北伐運糧之機械，載一歲糧，牛馬不食。"},
+    {n:"羽扇綸巾",o:"諸葛亮",d:"諸葛亮之標誌形象，運籌帷幄之象。"},
+    {n:"傳國玉璽",o:"孫堅→袁術",d:"孫堅於洛陽井中得之，後為袁術所得，術遂稱帝。"},
+    {n:"玉帶詔",o:"漢獻帝",d:"藏詔書於玉帶，密授董承等誅曹操。"}
+  ],
+  prophecies: [
+    {t:"蒼天已死，黃天當立；歲在甲子，天下大吉。",s:"黃巾之起",f:"黃巾之亂（184）",d:"張角所倡，以讖語聚眾數十萬。"},
+    {t:"千里草，何青青；十日卜，不得生。",s:"京師童謠",f:"董卓之誅（192）",d:"「千里草」為董，「十日卜」為卓，預言董卓之死。"},
+    {t:"代漢者，當塗高也。",s:"讖緯",f:"魏代漢（220）",d:"「塗高」解為「魏」，預示曹魏代漢。"},
+    {t:"三八縱橫，黃豬遇虎。",s:"曹操夢占",f:"夏侯淵之殤",d:"曹操夢占，預示定軍山之敗。"},
+    {t:"左龍右鳳，飛入西川。",s:"童謠",f:"龐統之死",d:"預言臥龍、鳳雛入川，鳳雛隕於落鳳坡。"},
+    {t:"三馬同槽。",s:"曹操之夢",f:"司馬氏代魏",d:"曹操夢三馬同食一槽，疑為馬騰父子，實應司馬懿、司馬師、司馬昭。"},
+    {t:"大風起兮雲飛揚（非讖）",s:"—",f:"—",d:"—"},
+    {t:"江東可保，而荊襄可圖。",s:"諸葛亮占",f:"荊州之爭",d:"隆中對中對荊州戰略地位的判斷。"}
+  ],
+  poems: [
+    {ti:"臨江仙 · 滾滾長江東逝水",a:"楊慎（明）",x:"滾滾長江東逝水，浪花淘盡英雄。是非成敗轉頭空。青山依舊在，幾度夕陽紅。\n白髮漁樵江渚上，慣看秋月春風。一壺濁酒喜相逢。古今多少事，都付笑談中。",c:"毛宗崗本置於卷首，為全書定調，道盡興亡。"},
+    {ti:"觀滄海",a:"曹操",x:"東臨碣石，以觀滄海。水何澹澹，山島竦峙。\n樹木叢生，百草豐茂。秋風蕭瑟，洪波湧起。\n日月之行，若出其中；星漢燦爛，若出其裏。",c:"北征烏桓歸途所作，氣象雄渾。"},
+    {ti:"短歌行",a:"曹操",x:"對酒當歌，人生幾何！譬如朝露，去日苦多。\n慨當以慷，憂思難忘。何以解憂？唯有杜康。\n青青子衿，悠悠我心。但為君故，沉吟至今。",c:"演義於赤壁前宴飲時引之，顯曹操之雄心。"},
+    {ti:"七步詩",a:"曹植",x:"煮豆持作羹，漉菽以為汁。\n萁在釜下燃，豆在釜中泣。\n本自同根生，相煎何太急？",c:"曹丕逼弟七步成詩，曹植應聲而作。"},
+    {ti:"梁父吟",a:"諸葛亮（傳）",x:"步出齊城門，遙望蕩陰里。\n里中有三墳，累累正相似。\n問是誰家冢，田疆古冶子。",c:"諸葛亮躬耕南陽時好為《梁父吟》。"},
+    {ti:"蜀相",a:"杜甫（唐）",x:"丞相祠堂何處尋，錦官城外柏森森。\n映階碧草自春色，隔葉黃鸝空好音。\n三顧頻煩天下計，兩朝開濟老臣心。\n出師未捷身先死，長使英雄淚滿襟。",c:"後世詠武侯之名篇。"},
+    {ti:"念奴嬌 · 赤壁懷古",a:"蘇軾（宋）",x:"大江東去，浪淘盡，千古風流人物。\n故壘西邊，人道是，三國周郎赤壁。\n亂石穿空，驚濤拍岸，捲起千堆雪。",c:"以赤壁為背景抒懷，推尊周瑜。"},
+    {ti:"赤壁",a:"杜牧（唐）",x:"折戟沉沙鐵未銷，自將磨洗認前朝。\n東風不與周郎便，銅雀春深鎖二喬。",c:"假設東風不來之歷史另一可能。"}
+  ],
+  editions: [
+    {id:"jiajing",n:"嘉靖壬午本",y:"1522",e:"張尚德刊",p:null,d:"現存最早刊本，序稱「晉平陽侯陳壽史傳，後學羅本貫中編次」，240則。"},
+    {id:"zhou",n:"周曰校刊本",y:"約1591",e:"周曰校",p:"jiajing",d:"十二卷二百四十則，圖文並茂，正文與嘉靖本多有異文。"},
+    {id:"yuxiangdou",n:"余象斗刊本",y:"約1600",e:"余象斗",p:"zhou",d:"上圖下文之「評林」本，通俗化、插圖化傾向明顯。"},
+    {id:"lizhuo",n:"李卓吾評本",y:"約1620",e:"葉晝（託名李贄）",p:"zhou",d:"首開評點之風，正文與評語並行。"},
+    {id:"zhongbo",n:"鍾伯敬評本",y:"約1620",e:"託名鍾惺",p:"lizhuo",d:"以「鍾伯敬先生批評」為名，行銷甚廣。"},
+    {id:"mao",n:"毛宗崗本",y:"清康熙初",e:"毛綸 · 毛宗崗",p:"lizhuo",d:"父子修訂，整理為120回，刪改文字、增刪詩詞，成通行本。"},
+    {id:"liyu",n:"李漁序本",y:"清初",e:"—",p:"mao",d:"以毛本為底，冠以李漁序，坊間翻刻者眾。"}
+  ],
+  factcheck: [
+    {t:"草船借箭",n:"諸葛亮霧夜草船取箭十萬。",h:"史載孫權乘船偵察濡須，船受魏軍箭矢偏重而迴舟受箭，非諸葛亮之事。",ty:"移花接木"},
+    {t:"空城計",n:"諸葛亮大開城門、焚香操琴退司馬懿。",h:"《三國志》無此記載。趙雲漢水之戰「空營計」為其原型。",ty:"虛構"},
+    {t:"借東風",n:"諸葛亮登七星壇借東風。",h:"赤壁東南風為長江中游冬季偶發之天氣現象，非人力可致。",ty:"虛構"},
+    {t:"溫酒斬華雄",n:"關羽出戰斬華雄，酒尚溫。",h:"《三國志》載華雄為孫堅所部所殺。",ty:"移花接木"},
+    {t:"三英戰呂布",n:"劉關張三人合戰呂布。",h:"史無三人合戰呂布之記載，此為小說虛構。",ty:"虛構"},
+    {t:"周瑜之死",n:"周瑜為諸葛亮三氣而死。",h:"史載周瑜「性度恢廓」，病卒於巴丘，年三十六。",ty:"性格改寫"},
+    {t:"蔣干盜書",n:"蔣干過江盜書，致曹操殺蔡瑁張允。",h:"蔣干確曾見周瑜，然未盜書，蔡張之死亦與之無關。",ty:"虛構"},
+    {t:"過五關斬六將",n:"關羽千里走單騎，過五關斬六將。",h:"史僅載關羽辭曹歸劉，無過關斬將之事。",ty:"虛構"},
+    {t:"六出祁山",n:"諸葛亮六出祁山伐魏。",h:"史載諸葛亮五次北伐，其中出祁山者僅兩次。",ty:"數字誇張"},
+    {t:"桃園結義",n:"劉關張桃園結為異姓兄弟。",h:"史載三人「恩若兄弟」，並無結義儀式之記載。",ty:"藝術加工"},
+    {t:"貂蟬其人",n:"王允義女貂蟬行連環計。",h:"正史無貂蟬之名，或為元曲、平話所塑造。",ty:"虛構人物"},
+    {t:"單刀赴會",n:"關羽隻身單刀赴魯肅之會。",h:"史載雙方各帶兵馬相會，並非關羽單刀獨往。",ty:"情節誇張"}
+  ],
+  critics: [
+    {n:"毛宗崗",w:"《三國演義》評注本",d:"與父毛綸修訂全書，列《讀三國志法》，推「三絕」——諸葛亮智絕、關羽義絕、曹操奸絕。",y:"清康熙"},
+    {n:"李卓吾（託名）",w:"李卓吾先生批評本",d:"實為葉晝託名，評語直率，多抒胸臆，開小說評點風氣。",y:"明萬曆"},
+    {n:"鍾伯敬（託名）",w:"鍾伯敬先生批評本",d:"託名鍾惺，評語間雜史評，流通極廣。",y:"明天啟"},
+    {n:"余象斗",w:"評林本",d:"書坊主兼評者，附上欄評語、插圖，面向大眾讀者。",y:"明萬曆"},
+    {n:"金聖歎",w:"（未評三國）",d:"以評《水滸》《西廂》著稱，曾論三國之得失，然未成專書。",y:"明末清初"}
+  ],
+  readings: [
+    {h:"以正統論為骨",b:"毛宗崗以蜀漢為正統，故褒劉貶曹，貫穿於全書之敘事與評語。"},
+    {h:"三絕之說",b:"智絕諸葛亮、義絕關羽、奸絕曹操，三足鼎立，為全書人物之綱。"},
+    {h:"文章之法",b:"毛氏拈出「善用照應」「善用伏筆」「善寫大戰」等法門，視三國為文章之典範。"},
+    {h:"虛實相生",b:"七分實事，三分虛構。以史為骨，以文為肉，虛實互濟而成奇書。"},
+    {h:"興亡之寄",b:"卷首《臨江仙》定調，寫盡英雄成敗、山河興廢之慨。"}
+  ],
+  scholars: [
+    {n:"魯迅",w:"《中國小說史略》",d:"論三國「據舊史而作，故易於實錄」，然「雜以虛構」，人物「亦有過實之美惡」。",y:"1923"},
+    {n:"鄭振鐸",w:"版本考據",d:"考嘉靖本之為最早刊本，辨羅貫中之生平與成書年代。",y:"1930s"},
+    {n:"胡適",w:"《三國志演義》序",d:"主張三國「是一部很有勢力的歷史小說」，然拘於史實，創造力不及水滸。",y:"1922"},
+    {n:"浦安迪",w:"《明代小說四大奇書》",d:"以「寓意」解讀三國之結構與思想，引入西方敘事學視角。",y:"1970s"},
+    {n:"沈伯俊",w:"《三國演義》研究",d:"主持校注多種版本，推動作者、版本、成書年代之系統研究。",y:"當代"},
+    {n:"中川諭",w:"《三國演義》版本研究",d:"日籍學者，以版本系統之細密比勘著稱。",y:"當代"}
+  ],
+  externals: [
+    {n:"電視劇《三國演義》",ty:"影視",d:"1994年中央電視台製作，依據毛本與史書，被譽為經典。「曹操」一角尤深入人心。"},
+    {n:"《三國》",ty:"影視",d:"2010年新版電視劇，強化人物心理與宮廷權謀。"},
+    {n:"京劇《空城計》《群英會》",ty:"戲曲",d:"三國戲為京劇重頭，諸葛亮、周瑜、曹操等皆為經典行當。"},
+    {n:"評書《三國演義》",ty:"曲藝",d:"袁闊成之廣播評書影響一代聽眾。"},
+    {n:"《三國志》系列遊戲",ty:"遊戲",d:"光榮株式會社出品，以三國人物與地圖為背景之策略遊戲。"},
+    {n:"《真 · 三國無雙》",ty:"遊戲",d:"以三國武將為主角之動作遊戲，風靡全球。"},
+    {n:"動畫《三國演義》",ty:"動畫",d:"中日合拍之動畫長片，面向少兒普及三國故事。"}
+  ],
+  relations: [
+    ["劉備","關羽","結義"],["劉備","張飛","結義"],["關羽","張飛","結義"],
+    ["劉備","諸葛亮","君臣"],["劉備","趙雲","君臣"],["劉備","馬超","君臣"],["劉備","黃忠","君臣"],
+    ["劉備","劉禪","父子"],["劉備","孫尚香","夫妻"],["劉備","糜竺","部屬"],["劉備","龐統","君臣"],["劉備","法正","君臣"],
+    ["關羽","關平","父子"],["關羽","周倉","部屬"],["關羽","劉備","君臣"],
+    ["張飛","張苞","父子"],
+    ["諸葛亮","姜維","師徒"],["諸葛亮","馬謖","師徒"],["諸葛亮","黃月英","夫妻"],["諸葛亮","劉禪","君臣"],["諸葛亮","魏延","君臣"],["諸葛亮","徐庶","同門"],["諸葛亮","龐統","同門"],
+    ["曹操","曹丕","父子"],["曹操","曹植","父子"],["曹操","曹仁","兄弟"],["曹操","曹洪","兄弟"],["曹操","夏侯惇","部屬"],["曹操","夏侯淵","部屬"],["曹操","典韋","君臣"],["曹操","許褚","君臣"],["曹操","郭嘉","君臣"],["曹操","荀彧","君臣"],["曹操","荀攸","君臣"],["曹操","賈詡","君臣"],["曹操","司馬懿","君臣"],["曹操","張遼","君臣"],["曹操","徐晃","君臣"],["曹操","張郃","君臣"],["曹操","于禁","君臣"],["曹操","樂進","君臣"],["曹操","程昱","君臣"],["曹操","劉備","敵對"],["曹操","袁紹","敵對"],["曹操","呂布","敵對"],["曹操","董卓","部屬"],["曹操","陳宮","敵對"],
+    ["曹丕","曹植","兄弟"],["曹丕","司馬懿","君臣"],
+    ["孫堅","孫策","父子"],["孫堅","孫權","父子"],["孫策","孫權","兄弟"],["孫策","周瑜","結義"],["孫權","周瑜","君臣"],["孫權","魯肅","君臣"],["孫權","呂蒙","君臣"],["孫權","陸遜","君臣"],["孫權","太史慈","君臣"],["孫權","甘寧","君臣"],["孫權","黃蓋","君臣"],["孫權","張昭","君臣"],["孫權","孫尚香","兄妹"],["孫權","曹操","敵對"],["孫權","劉備","同盟"],
+    ["周瑜","小喬","夫妻"],["周瑜","諸葛亮","敵對"],["周瑜","魯肅","同僚"],["周瑜","黃蓋","同僚"],
+    ["呂蒙","陸遜","同僚"],["陸遜","劉備","敵對"],
+    ["呂布","董卓","部屬"],["呂布","貂蟬","夫妻"],["呂布","陳宮","君臣"],["呂布","王允","敵對"],
+    ["董卓","李儒","部屬"],["董卓","呂布","父子"],
+    ["袁紹","袁術","兄弟"],["袁紹","曹操","敵對"],["袁紹","公孫瓚","敵對"],
+    ["劉表","劉璋","同宗"],
+    ["馬騰","馬超","父子"],["馬超","曹操","敵對"],
+    ["司馬懿","司馬昭","父子"],["司馬懿","諸葛亮","敵對"],["司馬昭","鄧艾","君臣"],["鍾會","鄧艾","敵對"],
+    ["姜維","鄧艾","敵對"],["鄧艾","劉禪","敵對"],
+    ["王允","貂蟬","義父女"],["華佗","關羽","醫患"],["華佗","曹操","醫患"],
+    ["張角","漢室","敵對"],["于吉","孫策","敵對"],["左慈","曹操","敵對"]
+  ]
+};
+
+/* ============================================================
+   三、導航
+   ============================================================ */
+const NAV = [
+  {g:"閱讀入門",items:[["overview","總覽"],["read","版本閱讀"],["heroes","英雄譜"]]},
+  {g:"實體八志",items:[["persons","人物誌"],["factions","勢力志"],["places","地理志"],["battles","戰役錄"],["events","事件譜"],["stratagems","計謀譜"],["artifacts","器物譜"],["prophecy","讖緯志"],["poems","詩詞鈔"]]},
+  {g:"版本與考據",items:[["editions","版本譜"],["variants","異文對勘"],["factcheck","虛實辨"],["fate","天命讖"],["critics","評點家"],["reading","讀法"]]},
+  {g:"研究與外延",items:[["scholars","學術論"],["externals","演義外"]]},
+  {g:"工具",items:[["relation","關係網"],["map","輿地圖"],["query","本體查詢"],["stats","統計譜"]]},
+  {g:"規範",items:[["ontology","本體論"]]}
+];
+
+/* ============================================================
+   四、工具函數
+   ============================================================ */
+const F_ABBR = {"蜀漢":"蜀","曹魏":"魏","東吳":"吳","董卓集團":"董","袁紹集團":"袁","呂布集團":"呂","劉表集團":"劉","張魯集團":"張","江東孫氏":"孫","群雄":"雄","漢室":"漢"};
+const fColor = {"蜀漢":"var(--zhu)","曹魏":"var(--indigo)","東吳":"var(--jade)","董卓集團":"#7b4b2a","袁紹集團":"#8a6d2f","呂布集團":"#5b4a7a","劉表集團":"#4a6b7a","張魯集團":"#6b7a4a","江東孫氏":"var(--jade)","群雄":"#7a6f60","漢室":"#9d2933"};
+const chips = arr => arr.map(x=>`<span class="chip">${x}</span>`).join("");
+const fchip = f => `<span class="chip zhu">${f}</span>`;
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function personByName(n){return DATA.persons.find(p=>p.n===n);}
+function relationOf(n){
+  const out=[];
+  DATA.relations.forEach(([s,p,o,l])=>{ if(s===n) out.push({d:"out",p,l}); if(o===n) out.push({d:"in",p:s,l}); });
+  return out;
+}
+function chartsAfter(){ /* 各視圖自行掛載，見 VIEW 內 init*/ }
+
+/* ============================================================
+   五、視圖渲染
+   ============================================================ */
+const VIEW = {};
+
+VIEW.overview = () => {
+  const feats = [
+    ["📖","版本閱讀","毛宗崗評本等通行本 120 回全文在線，繁體排印，回目導航，正文實體內鏈。"],
+    ["⚔️","英雄譜","桃園三結義 · 五虎上將 · 五子良將 · 江東虎臣 · 卧龍鳳雛……群像匯聚。"],
+    ["🔍","異文對勘","版本演化系譜圖 · 逐字 LCS diff · 用戶自助粘貼兩版本對勘高亮。"],
+    ["🕸️","本體查詢","瀏覽器端無服務器查詢，人物 / 戰役 / 地理 / 關係自由組合統計。"],
+    ["📜","本體規範","OWL 2 DL · 18 大類 · 25 種對象屬性 · 19 種數據屬性 · 11 族受控詞表。"]
+  ];
+  const total = {
+    p: DATA.persons.length, f: DATA.factions.length, pl: DATA.places.length,
+    b: DATA.battles.length, e: DATA.events.length, s: DATA.stratagems.length,
+    a: DATA.artifacts.length, pr: DATA.prophecies.length, po: DATA.poems.length,
+    r: DATA.relations.length, ed: DATA.editions.length, fc: DATA.factcheck.length
+  };
+  return `
+  <section class="fade">
+    <div class="card-solid p-5 md:p-8 mb-5 relative overflow-hidden">
+      <div class="hero-rule mb-4"></div>
+      <h1 class="serif text-[30px] md:text-[42px] font-bold tracking-[.06em] m-0 leading-tight" style="color:var(--ink);">三國演義本體論</h1>
+      <p class="mt-3 mb-0 text-[15px] md:text-[16px] max-w-[760px]" style="color:var(--ink2);">
+        以本體論方法構建《三國演義》的知識圖譜與版本閱讀平臺 —— 將君臣、父子、結義、戰役、計謀、讖緯與版本異文，
+        收束為可查詢、可視化、可對勘的一張山河棋譜。
+      </p>
+      <div class="mt-5 grid grid-cols-3 md:grid-cols-6 gap-3">
+        ${[["人物",total.p],["勢力",total.f],["地理",total.pl],["戰役",total.b],["關係",total.r],["異文考據",total.fc]].map(([k,v])=>`
+          <div><div class="statnum">${v}</div><div class="sub mt-1">${k}</div></div>`).join("")}
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      ${feats.map(([i,t,d])=>`
+        <div class="card p-5 flex gap-4 items-start">
+          <div class="text-[28px] leading-none">${i}</div>
+          <div><h3 class="serif text-[19px] font-bold m-0 mb-1" style="color:var(--zhu);">${t}</h3>
+          <p class="m-0 text-[14px]" style="color:var(--ink2);">${d}</p></div>
+        </div>`).join("")}
+    </div>
+
+    <h2 class="sec-title serif mb-3">一部書的千古興亡</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5 items-start mb-6">
+      <div class="card p-5">
+        <p class="prose-blk m-0">
+          《三國演義》以東漢末年黃巾之亂（184）為起，至西晉滅吳（280）為止，鋪陳近百年的群雄逐鹿。
+          全書以蜀漢為正統，寫桃園三結義之義、三顧茅廬之誠、赤壁鏖兵之勇、六出祁山之志，終以「天下大勢，合久必分，分久必合」收束。
+          本站以本體論統一描述其人物、勢力、地理、戰役、事件、計謀、器物、讖緯、詩詞與版本異文，形成可計算、可視化的知識網絡。
+        </p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          ${chips(["七分實事","三分虛構","三絕：智 · 義 · 奸","120 回","240 則","三分天下"])}
+        </div>
+      </div>
+      <div class="card p-3" style="background:linear-gradient(135deg,#f3ead6,#e9ddc2);">
+        <img src="http://pica.zhimg.com/v2-21b320881f10494c8fbd92075d582b60_r.jpg?source=2c26e567" alt="桃園三結義" loading="lazy" onerror="this.style.visibility='hidden'" style="width:100%;border-radius:10px;display:block;">
+        <p class="sub m-0 mt-2 text-center">桃園三結義 · 全書之序幕</p>
+      </div>
+    </div>
+
+    <h2 class="sec-title serif mb-3">七層本體架構</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      ${[
+        ["1 · 本體規範層","OWL 2 DL 類、屬性、約束，定義知識語法"],
+        ["2 · 實例數據層","人物 / 戰役 / 地理等實體與關係三元組"],
+        ["3 · 數據存儲層","列式數據 + 受控詞表，供前端查詢"],
+        ["4 · 計算引擎層","瀏覽器端查詢 + LCS 異文比對算法"],
+        ["5 · 功能模組層","閱讀 · 八志 · 對勘 · 關係網等 24 模組"],
+        ["6 · 可視化層","關係圖 · 輿地圖 · 統計圖 · 版本系譜"],
+        ["7 · 靜態站點層","純前端頁面，零服務器成本"],
+        ["＋ · 受控詞表","勢力 / 官職 / 地名 / 計謀等 11 族詞表"]
+      ].map(([a,b])=>`
+        <div class="card p-4">
+          <div class="text-[13px] font-bold mb-1" style="color:var(--zhu);">${a}</div>
+          <div class="text-[13px]" style="color:var(--ink2);">${b}</div>
+        </div>`).join("")}
+    </div>
+  </section>`;
+};
+
+VIEW.read = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">版本閱讀</h2>
+  <p class="sub m-0 mb-4">毛宗崗評本（通行本） · 繁體排印 · 首回節選（正文為公版古籍，此處僅示節錄）</p>
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5 items-start">
+    <div class="card-solid p-5 md:p-7">
+      <div class="flex items-baseline gap-3 mb-4 flex-wrap">
+        <span class="serif text-[24px] font-bold" style="color:var(--zhu);">第一回</span>
+        <span class="serif text-[16px]" style="color:var(--ink2);">宴桃園豪傑三結義　斬黃巾英雄首立功</span>
+      </div>
+      <div class="vtxt">
+        <p>話說天下大勢，分久必合，合久必分。周末七國分爭，併入於秦。及秦滅之後，楚、漢分爭，又併入於漢。漢朝自高祖斬白蛇而起義，一統天下。後來光武中興，傳至獻帝，遂分為三國。</p>
+        <p>推其致亂之由，殆始於桓、靈二帝。桓帝禁錮善類，崇信宦官。及桓帝崩，靈帝即位，大將軍竇武、太傅陳蕃共相輔佐。時有宦官曹節等弄權，竇武、陳蕃謀誅之，機事不密，反為所害。中涓自此愈橫。</p>
+        <p>時鉅鹿郡有兄弟三人：一名張角，一名張寶，一名張梁。那張角本是個不第秀才，因入山採藥，遇一老人，碧眼童顏，手執藜杖，喚角至一洞中，以天書三卷授之，曰：「此名《太平要術》……代天宣化，普救世人。」</p>
+        <p>……（後略）</p>
+      </div>
+      <div class="mt-5 pt-4 border-t flex flex-wrap gap-2" style="border-color:var(--line);">
+        <span class="chip zhu">劉備</span><span class="chip zhu">關羽</span><span class="chip zhu">張飛</span><span class="chip">張角</span><span class="chip gold">桃園三結義</span>
+      </div>
+    </div>
+    <aside class="card p-4">
+      <div class="detail-lbl mb-2">回目導覽</div>
+      <div class="grid grid-cols-3 gap-2 text-[13px]" style="color:var(--ink2);">
+        ${Array.from({length:12},(_,i)=>`<span class="tag text-center" style="cursor:default;">第${i+1}回</span>`).join("")}
+        <span class="sub col-span-3 mt-1">（節選示範，完整 120 回可接入全文數據）</span>
+      </div>
+      <div class="detail-lbl mt-5 mb-2">當前版本</div>
+      <div class="flex flex-wrap gap-2">
+        <span class="chip zhu">毛宗崗本</span><span class="chip">嘉靖壬午本</span><span class="chip">周曰校刊本</span>
+      </div>
+    </aside>
+  </div>
+</section>`;
+
+VIEW.heroes = () => {
+  const groups = [
+    ["桃園結義","劉備 關羽 張飛"],
+    ["五虎上將","關羽 張飛 趙雲 馬超 黃忠"],
+    ["卧龍鳳雛","諸葛亮 龐統"],
+    ["五子良將","張遼 徐晃 張郃 于禁 樂進"],
+    ["江東虎臣","太史慈 甘寧 黃蓋 周泰"],
+    ["四大都督","周瑜 魯肅 呂蒙 陸遜"],
+    ["曹魏謀主","郭嘉 荀彧 荀攸 賈詡 程昱"],
+    ["三絕","諸葛亮（智絕） 關羽（義絕） 曹操（奸絕）"]
+  ];
+  return `
+  <section class="fade">
+    <h2 class="sec-title serif mb-1">英雄譜</h2>
+    <p class="sub m-0 mb-4">以群像為綱，匯聚書中著名之人物組合</p>
+    <div class="card p-3 mb-4 grid grid-cols-1 md:grid-cols-[220px_1fr] gap-4 items-center" style="background:linear-gradient(135deg,#f3ead6,#e9ddc2);">
+      <img src="http://img-nos.yiyouliao.com/alph/7e81a7820b72a131a3ecc7c5ef69e225.jpeg?yiyouliao_channel=vivo_image" alt="三國人物圖" loading="lazy" onerror="this.style.visibility='hidden'" style="width:100%;max-width:220px;border-radius:10px;display:block;">
+      <p class="m-0 text-[15px]" style="color:var(--ink2);">自桃園結義至五虎上將、五子良將、江東虎臣，本書以群像寫人：或以義聚，或以智合，或以勇顯。下列著名之組合，皆為後世津津樂道者。</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      ${groups.map(([t,names])=>`
+        <div class="card p-5">
+          <h3 class="serif text-[19px] font-bold m-0 mb-3" style="color:var(--zhu);">${t}</h3>
+          <div class="flex flex-wrap gap-2">
+            ${names.split(" ").map(n=>`<span class="chip zhu" style="font-size:14px;">${n}</span>`).join("")}
+          </div>
+        </div>`).join("")}
+    </div>
+  </section>`;
+};
+
+VIEW.persons = () => {
+  const byFaction = {};
+  DATA.persons.forEach(p=>{ (byFaction[p.f]=byFaction[p.f]||[]).push(p); });
+  return `
+  <section class="fade">
+    <h2 class="sec-title serif mb-1">人物誌</h2>
+    <p class="sub m-0 mb-4">共 ${DATA.persons.length} 位人物，按勢力分組；點擊展開詳情</p>
+    ${Object.keys(byFaction).map(f=>`
+      <div class="mb-5">
+        <h3 class="serif text-[18px] font-bold mb-2" style="color:${fColor[f]||"var(--ink)"};">${f} <span class="sub font-normal">· ${byFaction[f].length} 人</span></h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          ${byFaction[f].map(p=>`
+            <details class="acc">
+              <summary><span>${p.n} <span class="serif text-[13px] font-normal" style="color:var(--ink3);">${p.z?("字"+p.z):""}</span></span>
+              <span class="sub font-normal mr-3">${p.title||""}</span></summary>
+              <div class="inner">
+                <dl class="kv">
+                  <dt>勢力</dt><dd>${p.f}</dd>
+                  ${p.title?`<dt>官爵</dt><dd>${p.title}</dd>`:""}
+                  ${(p.b||p.d)?`<dt>生卒</dt><dd>${p.b||"?"} – ${p.d||"?"}</dd>`:""}
+                  ${p.z?`<dt>表字</dt><dd>${p.z}</dd>`:""}
+                </dl>
+                <p class="mt-2 mb-0">${p.bio}</p>
+              </div>
+            </details>`).join("")}
+        </div>
+      </div>`).join("")}
+  </section>`;
+};
+
+VIEW.factions = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">勢力志</h2>
+  <p class="sub m-0 mb-4">魏 · 蜀 · 吳三分天下，漢末群雄並起</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    ${DATA.factions.map(f=>`
+      <div class="card p-5" style="border-left:4px solid ${fColor[f.name]||"var(--line)"};">
+        <div class="flex items-baseline gap-3 mb-2">
+          <h3 class="serif text-[20px] font-bold m-0" style="color:${fColor[f.name]||"var(--ink)"};">${f.name}</h3>
+          <span class="sub">${f.period}</span>
+        </div>
+        <dl class="kv mb-3">
+          <dt>首領</dt><dd>${f.leader}</dd>
+          <dt>都城</dt><dd>${f.capital}</dd>
+        </dl>
+        <p class="m-0 text-[14px]" style="color:var(--ink2);">${f.note}</p>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.places = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">地理志</h2>
+  <p class="sub m-0 mb-4">共 ${DATA.places.length} 處要地，標註今地與經緯</p>
+  <div class="card-solid p-1 scrollx">
+    <table class="gt">
+      <thead><tr><th>地名</th><th>今地</th><th>類型</th><th>經緯</th><th>說明</th></tr></thead>
+      <tbody>
+        ${DATA.places.map(p=>`<tr><td style="color:var(--zhu);font-weight:600;">${p.n}</td><td>${p.m}</td><td>${p.ty}</td><td class="sub">${p.lat}°N, ${p.lng}°E</td><td>${p.d}</td></tr>`).join("")}
+      </tbody>
+    </table>
+  </div>
+  <p class="sub mt-3 mb-0">提示：經緯為今地之粗略坐標，供「輿地圖」模組投影示意之用。</p>
+</section>`;
+
+VIEW.battles = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">戰役錄</h2>
+  <p class="sub m-0 mb-4">共 ${DATA.battles.length} 場戰事，按年代排列</p>
+  <div class="space-y-3">
+    ${DATA.battles.map(b=>`
+      <div class="card p-4 grid grid-cols-[64px_1fr] gap-4 items-start">
+        <div class="text-center">
+          <div class="serif text-[20px] font-bold" style="color:var(--zhu);">${b.y}</div>
+          <div class="sub">年</div>
+        </div>
+        <div>
+          <h3 class="serif text-[18px] font-bold m-0 mb-1">${b.n}</h3>
+          <div class="flex flex-wrap gap-2 mb-2">
+            <span class="chip jade">${b.a}</span><span class="chip gold">${b.r}</span><span class="chip">${b.p}</span>
+          </div>
+          <p class="m-0 text-[14px]" style="color:var(--ink2);">${b.d}</p>
+        </div>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.events = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">事件譜</h2>
+  <p class="sub m-0 mb-4">非交戰性質之情節單元，共 ${DATA.events.length} 則</p>
+  <div class="card-solid p-1 scrollx">
+    <table class="gt">
+      <thead><tr><th>事件</th><th>年代</th><th>地點</th><th>人物</th><th>說明</th></tr></thead>
+      <tbody>
+        ${DATA.events.map(e=>`<tr><td style="color:var(--zhu);font-weight:600;white-space:nowrap;">${e.n}</td><td>${e.y}</td><td>${e.p}</td><td class="sub">${e.ps}</td><td>${e.d}</td></tr>`).join("")}
+      </tbody>
+    </table>
+  </div>
+</section>`;
+
+VIEW.stratagems = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">計謀譜</h2>
+  <p class="sub m-0 mb-4">書中著名之計策權謀，共 ${DATA.stratagems.length} 計</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    ${DATA.stratagems.map(s=>`
+      <div class="card p-5">
+        <h3 class="serif text-[19px] font-bold m-0 mb-2" style="color:var(--zhu);">${s.n}</h3>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <span class="chip jade">施計：${s.u}</span><span class="chip gold">對象：${s.t}</span>
+        </div>
+        <p class="m-0 text-[14px]" style="color:var(--ink2);">${s.d}</p>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.artifacts = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">器物譜</h2>
+  <p class="sub m-0 mb-4">兵器 · 坐騎 · 印信 · 器械，共 ${DATA.artifacts.length} 件</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    ${DATA.artifacts.map(a=>`
+      <div class="card p-4">
+        <div class="flex items-baseline gap-3 mb-1">
+          <h3 class="serif text-[17px] font-bold m-0" style="color:var(--zhu);">${a.n}</h3>
+          <span class="sub">持用：${a.o}</span>
+        </div>
+        <p class="m-0 text-[14px]" style="color:var(--ink2);">${a.d}</p>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.prophecy = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">讖緯志</h2>
+  <p class="sub m-0 mb-4">童謠 · 讖語 · 夢兆 · 星象</p>
+  <div class="space-y-3">
+    ${DATA.prophecies.map(p=>`
+      <div class="card p-5" style="border-left:4px solid var(--gold);">
+        <p class="serif text-[19px] m-0 mb-2" style="color:var(--ink);line-height:1.7;">「${p.t}」</p>
+        <div class="flex flex-wrap gap-2">
+          <span class="chip gold">出處：${p.s}</span><span class="chip jade">應驗：${p.f}</span>
+        </div>
+        <p class="m-0 mt-2 text-[14px]" style="color:var(--ink2);">${p.d}</p>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.poems = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">詩詞鈔</h2>
+  <p class="sub m-0 mb-4">卷首詞 · 書中詩 · 後世詠史</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    ${DATA.poems.map(p=>`
+      <div class="card-solid p-5">
+        <h3 class="serif text-[18px] font-bold m-0 mb-1" style="color:var(--zhu);">${p.ti}</h3>
+        <div class="sub mb-3">${p.a}</div>
+        <p class="serif m-0 text-[15px] whitespace-pre-line" style="color:var(--ink);line-height:2;">${p.x}</p>
+        <p class="m-0 mt-3 text-[13px]" style="color:var(--ink3);">${p.c}</p>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.editions = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">版本譜</h2>
+  <p class="sub m-0 mb-4">《三國演義》版本演化系譜 —— 由嘉靖本至通行毛本</p>
+  <div class="card-solid p-4 md:p-6 mb-5">
+    <div class="scrollx"><div id="edchart" style="width:100%;min-width:720px;height:360px;"></div></div>
+  </div>
+  <div class="space-y-3">
+    ${DATA.editions.map(e=>`
+      <div class="card p-4">
+        <div class="flex items-baseline gap-3 mb-1 flex-wrap">
+          <h3 class="serif text-[18px] font-bold m-0" style="color:var(--zhu);">${e.n}</h3>
+          <span class="sub">${e.y}</span>
+          ${e.e!=="—"?`<span class="chip">${e.e}</span>`:""}
+        </div>
+        <p class="m-0 text-[14px]" style="color:var(--ink2);">${e.d}</p>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.variants = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">異文對勘</h2>
+  <p class="sub m-0 mb-4">自研 LCS 逐字 diff，粘貼兩版本文字即高亮差異</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <div class="card p-4">
+      <div class="detail-lbl mb-2">版本甲（如：毛宗崗本）</div>
+      <textarea id="vA" class="ta" rows="5">天下大勢，分久必合，合久必分。周末七國分爭，併入於秦。</textarea>
+    </div>
+    <div class="card p-4">
+      <div class="detail-lbl mb-2">版本乙（如：嘉靖壬午本）</div>
+      <textarea id="vB" class="ta" rows="5">話說天下大勢，分久必合，合久必分。周末七國分爭，併入於秦。</textarea>
+    </div>
+  </div>
+  <div class="flex gap-3 mb-4">
+    <button class="btn" onclick="__diff()">逐字對勘</button>
+    <button class="btn ghost" onclick="__diffDemo()">載入示例</button>
+  </div>
+  <div class="card-solid p-5">
+    <div class="detail-lbl mb-3">對勘結果（<span style="color:var(--zhu);">刪</span> / <span style="color:var(--jade);">增</span>）</div>
+    <div id="vOut" class="vtxt" style="word-break:break-all;">點擊「逐字對勘」查看差異高亮。</div>
+  </div>
+  <p class="sub mt-3 mb-0">說明：上例為算法演示之用；接入真實兩版本全文後，即可進行全書級別之逐字對勘。</p>
+</section>`;
+
+VIEW.factcheck = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">虛實辨</h2>
+  <p class="sub m-0 mb-4">演義情節與史書記載之對照 —— 七分實事，三分虛構</p>
+  <div class="space-y-3">
+    ${DATA.factcheck.map(f=>`
+      <div class="card p-5">
+        <div class="flex items-baseline gap-3 mb-2 flex-wrap">
+          <h3 class="serif text-[18px] font-bold m-0" style="color:var(--zhu);">${f.t}</h3>
+          <span class="chip gold">${f.ty}</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div style="background:rgba(157,41,51,.06);border-radius:10px;padding:10px 12px;">
+            <div class="detail-lbl mb-1">演義</div><div class="text-[14px]" style="color:var(--ink2);">${f.n}</div>
+          </div>
+          <div style="background:rgba(31,78,95,.07);border-radius:10px;padding:10px 12px;">
+            <div class="detail-lbl mb-1">史實</div><div class="text-[14px]" style="color:var(--ink2);">${f.h}</div>
+          </div>
+        </div>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.fate = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">天命讖</h2>
+  <p class="sub m-0 mb-4">讖語與其應驗之時間線 —— 天命流轉中的伏筆</p>
+  <div class="card-solid p-5">
+    <div class="relative pl-6" style="border-left:2px solid var(--line);">
+      ${DATA.prophecies.filter(p=>p.f!=="—").map(p=>`
+        <div class="mb-5 relative">
+          <div style="position:absolute;left:-31px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--zhu);border:2px solid #fff;"></div>
+          <p class="serif text-[17px] m-0 mb-1" style="color:var(--ink);">「${p.t}」</p>
+          <div class="sub">${p.s}　→　<span style="color:var(--zhu);">${p.f}</span></div>
+        </div>`).join("")}
+    </div>
+  </div>
+</section>`;
+
+VIEW.critics = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">評點家</h2>
+  <p class="sub m-0 mb-4">歷代評點三國之主要人物</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    ${DATA.critics.map(c=>`
+      <div class="card p-5">
+        <div class="flex items-baseline gap-3 mb-2">
+          <h3 class="serif text-[19px] font-bold m-0" style="color:var(--zhu);">${c.n}</h3>
+          <span class="sub">${c.y}</span>
+        </div>
+        <div class="chip gold mb-2">${c.w}</div>
+        <p class="m-0 text-[14px]" style="color:var(--ink2);">${c.d}</p>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.reading = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">讀法</h2>
+  <p class="sub m-0 mb-4">毛宗崗《讀三國志法》及歷代讀法之要</p>
+  <div class="space-y-3">
+    ${DATA.readings.map((r,i)=>`
+      <div class="card p-5 flex gap-4 items-start">
+        <div class="serif text-[26px] font-bold" style="color:rgba(157,41,51,.35);">${i+1}</div>
+        <div>
+          <h3 class="serif text-[18px] font-bold m-0 mb-1">${r.h}</h3>
+          <p class="m-0 text-[14px]" style="color:var(--ink2);">${r.b}</p>
+        </div>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.scholars = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">學術論</h2>
+  <p class="sub m-0 mb-4">近現代三國演義研究之主要成果與觀點</p>
+  <div class="card-solid p-1 scrollx">
+    <table class="gt">
+      <thead><tr><th>學者</th><th>代表作 / 方向</th><th>年代</th><th>主要觀點</th></tr></thead>
+      <tbody>
+        ${DATA.scholars.map(s=>`<tr><td style="color:var(--zhu);font-weight:600;white-space:nowrap;">${s.n}</td><td>${s.w}</td><td>${s.y}</td><td>${s.d}</td></tr>`).join("")}
+      </tbody>
+    </table>
+  </div>
+</section>`;
+
+VIEW.externals = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">演義外</h2>
+  <p class="sub m-0 mb-4">戲曲 · 評書 · 影視 · 遊戲之衍生世界</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    ${DATA.externals.map(e=>`
+      <div class="card p-5">
+        <div class="flex items-baseline gap-3 mb-2">
+          <h3 class="serif text-[18px] font-bold m-0" style="color:var(--zhu);">${e.n}</h3>
+          <span class="chip jade">${e.ty}</span>
+        </div>
+        <p class="m-0 text-[14px]" style="color:var(--ink2);">${e.d}</p>
+      </div>`).join("")}
+  </div>
+</section>`;
+
+VIEW.relation = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">關係網</h2>
+  <p class="sub m-0 mb-4">人物關係力導向圖，可切換關係類型、搜索定位</p>
+  <div class="flex flex-wrap gap-2 mb-3" id="relFilter"></div>
+  <div class="card-solid p-2">
+    <div id="relchart" style="width:100%;height:560px;"></div>
+  </div>
+</section>`;
+
+VIEW.map = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">輿地圖</h2>
+  <p class="sub m-0 mb-4">三國要地投影示意圖（等距圓柱投影，按勢力著色）</p>
+  <div class="card-solid p-2">
+    <div class="scrollx"><div id="mapsvg" style="min-width:760px;"></div></div>
+  </div>
+</section>`;
+
+VIEW.query = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">本體查詢</h2>
+  <p class="sub m-0 mb-4">瀏覽器端無服務器查詢 —— 選擇實體與條件，即時過濾並生成查詢式</p>
+  <div class="card p-4 mb-4 grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+    <label class="block"><span class="detail-lbl">實體類</span>
+      <select id="qEnt" class="inp w-full mt-1" onchange="__qFill()">
+        <option value="persons">人物 Person</option>
+        <option value="battles">戰役 Battle</option>
+        <option value="places">地理 Place</option>
+        <option value="stratagems">計謀 Stratagem</option>
+        <option value="artifacts">器物 Artifact</option>
+      </select></label>
+    <label class="block"><span class="detail-lbl">字段</span>
+      <select id="qField" class="inp w-full mt-1"></select></label>
+    <label class="block"><span class="detail-lbl">關鍵詞</span>
+      <input id="qKw" class="inp w-full mt-1" placeholder="如 蜀漢 / 曹操 / 赤壁" onkeydown="if(event.key==='Enter')__qRun()"></label>
+    <button class="btn w-full" onclick="__qRun()">執行查詢</button>
+  </div>
+  <div class="card-solid p-4 mb-4">
+    <div class="detail-lbl mb-2">查詢式</div>
+    <div id="qSql" class="serif text-[14px]" style="color:var(--indigo);word-break:break-all;">SELECT * FROM persons</div>
+  </div>
+  <div class="card-solid p-1 scrollx">
+    <table class="gt"><thead id="qHead"></thead><tbody id="qBody"></tbody></table>
+  </div>
+</section>`;
+
+VIEW.stats = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">統計譜</h2>
+  <p class="sub m-0 mb-4">基於本站資料集之統計（非全文詞頻，均為本體數據之聚合）</p>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div class="card-solid p-4"><div class="detail-lbl mb-2">各勢力人物數</div><div id="st1" style="width:100%;height:300px;"></div></div>
+    <div class="card-solid p-4"><div class="detail-lbl mb-2">戰役年代分布</div><div id="st2" style="width:100%;height:300px;"></div></div>
+    <div class="card-solid p-4"><div class="detail-lbl mb-2">關係類型分布</div><div id="st3" style="width:100%;height:320px;"></div></div>
+    <div class="card-solid p-4"><div class="detail-lbl mb-2">各志條目數</div><div id="st4" style="width:100%;height:320px;"></div></div>
+  </div>
+</section>`;
+
+VIEW.ontology = () => `
+<section class="fade">
+  <h2 class="sec-title serif mb-1">本體論</h2>
+  <p class="sub m-0 mb-4">OWL 2 DL 本體規範 —— 類、對象屬性、數據屬性與受控詞表</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+    ${[["類",ONTOLOGY.classes.length],["對象屬性",ONTOLOGY.objProps.length],["數據屬性",ONTOLOGY.dataProps.length],["受控詞表",ONTOLOGY.vocabs.length]]
+      .map(([k,v])=>`<div class="card p-4 text-center"><div class="statnum">${v}</div><div class="sub mt-1">${k}</div></div>`).join("")}
+  </div>
+  <h3 class="serif text-[18px] font-bold mb-2" style="color:var(--zhu);">核心類（Class）</h3>
+  <div class="card-solid p-1 scrollx mb-5"><table class="gt"><thead><tr><th>英文標識</th><th>中文名</th><th>說明</th></tr></thead>
+    <tbody>${ONTOLOGY.classes.map(c=>`<tr><td class="serif">${c[0]}</td><td style="color:var(--zhu);">${c[1]}</td><td>${c[2]}</td></tr>`).join("")}</tbody></table></div>
+  <h3 class="serif text-[18px] font-bold mb-2" style="color:var(--zhu);">對象屬性（Object Property）</h3>
+  <div class="mb-5">${ONTOLOGY.objProps.map(p=>`<span class="chip">${p[0]} <span style="color:var(--ink3);">${p[1]}</span></span>`).join("")}</div>
+  <h3 class="serif text-[18px] font-bold mb-2" style="color:var(--zhu);">數據屬性（Data Property）</h3>
+  <div class="mb-5">${ONTOLOGY.dataProps.map(p=>`<span class="chip jade">${p[0]} <span style="color:var(--ink3);">${p[1]}</span></span>`).join("")}</div>
+  <h3 class="serif text-[18px] font-bold mb-2" style="color:var(--zhu);">受控詞表（Controlled Vocabulary）</h3>
+  <div class="card-solid p-1 scrollx mb-5"><table class="gt"><thead><tr><th>詞表</th><th>取值舉例</th></tr></thead>
+    <tbody>${ONTOLOGY.vocabs.map(v=>`<tr><td style="color:var(--zhu);white-space:nowrap;">${v[0]}</td><td>${v[1]}</td></tr>`).join("")}</tbody></table></div>
+  <h3 class="serif text-[18px] font-bold mb-2" style="color:var(--zhu);">TBox 節選（Turtle）</h3>
+  <div class="card-solid p-4 scrollx"><pre class="serif text-[13px] m-0" style="color:var(--ink2);line-height:1.85;">@prefix sg: &lt;https://example.org/sanguo#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+
+sg:Person  a owl:Class ; rdfs:label "人物" .
+sg:Faction a owl:Class ; rdfs:label "勢力" .
+sg:Battle  a owl:Class ; rdfs:label "戰役" .
+
+sg:vassalOf a owl:ObjectProperty ; rdfs:label "臣屬" .
+sg:swornBrotherOf a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "結義" .
+sg:derivedFrom a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:label "衍生自" .
+
+sg:劉備 a sg:Person ;
+    sg:memberOf sg:蜀漢 ;
+    sg:swornBrotherOf sg:關羽 , sg:張飛 ;
+    rdfs:label "劉備" .</pre></div>
+</section>`;
+</script>
+
+<script>
+/* ============================================================
+   六、路由與渲染
+   ============================================================ */
+function buildNav(){
+  const nav = document.getElementById('nav');
+  nav.innerHTML = NAV.map(g=>`
+    <div class="navgroup">${g.g}</div>
+    ${g.items.map(([k,t])=>`<div class="navitem" data-k="${k}">${t}</div>`).join("")}
+  `).join("");
+  nav.querySelectorAll('.navitem').forEach(el=>{
+    el.addEventListener('click',()=>{ location.hash = el.dataset.k; });
+  });
+}
+function render(){
+  let k = (location.hash||'#overview').slice(1);
+  if(!VIEW[k]) k='overview';
+  document.getElementById('app').innerHTML = VIEW[k]();
+  document.querySelectorAll('.navitem').forEach(el=>el.classList.toggle('on', el.dataset.k===k));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(k==='relation') initRelation();
+  if(k==='map') drawMap();
+  if(k==='stats') initStats();
+  if(k==='editions') initEditionChart();
+  if(k==='query') __qFill();
+}
+
+/* ---------- 關係網 ---------- */
+function initRelation(){
+  const scenes=[];
+  DATA.relations.forEach(([s,p,o,l])=>{ if(l==='結義'||l==='兄弟'||l==='父子'||l==='夫妻'||l==='君臣'||l==='師徒'||l==='敵對'||l==='同盟'){ scenes.push({s,o,l}); } });
+  const types=[...new Set(DATA.relations.map(r=>r[2]))];
+  const fc=document.getElementById('relFilter');
+  fc.innerHTML = `<span class="chip zhu" data-t="__all" style="cursor:pointer;">全部</span>` +
+    types.map(t=>`<span class="chip" data-t="${t}" style="cursor:pointer;">${t}</span>`).join("");
+  const chart = echarts.init(document.getElementById('relchart'));
+  function draw(sel){
+    const rs = DATA.relations.filter(r=>sel==='__all'||r[2]===sel);
+    const nodes = {}; 
+    rs.forEach(([s,p,o])=>{ nodes[s]=1; nodes[o]=1; });
+    const names = Object.keys(nodes);
+    const cats = [...new Set(names.map(n=>(personByName(n)||{}).f||"其他"))].map(f=>({name:f}));
+    const catIdx = {}; cats.forEach((c,i)=>catIdx[c.name]=i);
+    const catColor = {"蜀漢":"#9d2933","曹魏":"#1f4e5f","東吳":"#3f7a63","漢室":"#a9863f"};
+    const opt = {
+      tooltip:{},
+      legend:{data:cats.map(c=>c.name),bottom:0,textStyle:{fontSize:12}},
+      series:[{
+        type:'graph', layout:'force', roam:true, draggable:true,
+        label:{show:true,fontSize:12,color:'#231f1a'},
+        force:{repulsion:280,edgeLength:[60,140],gravity:0.12},
+        emphasis:{focus:'adjacency'},
+        categories:cats.map(c=>({name:c.name,itemStyle:{color:catColor[c.name]||'#7a6f60'}})),
+        data:names.map(n=>({name:n, symbolSize: 18+Math.min(14, relationOf(n).length*1.6), category:catIdx[(personByName(n)||{}).f||"其他"]||0, value:relationOf(n).length})),
+        edges:rs.map(([s,p,o,l])=>({source:s,target:o,value:l,label:{show:false},lineStyle:{color:'#c9b995',width:1,curveness:0.08}})),
+        lineStyle:{color:'#c9b995'}
+      }]
+    };
+    chart.setOption(opt,true);
+  }
+  fc.querySelectorAll('.chip').forEach(el=>el.addEventListener('click',()=>{
+    fc.querySelectorAll('.chip').forEach(x=>x.classList.remove('zhu'));
+    el.classList.add('zhu'); draw(el.dataset.t);
+  }));
+  draw('__all');
+  window.addEventListener('resize',()=>chart.resize());
+}
+
+/* ---------- 輿地圖 ---------- */
+function drawMap(){
+  const W=980,H=620,pad=40;
+  const lngMin=104,lngMax=122,latMin=28,latMax=42;
+  const X=lng=>pad+(lng-lngMin)/(lngMax-lngMin)*(W-2*pad);
+  const Y=lat=>H-pad-(lat-latMin)/(latMax-latMin)*(H-2*pad);
+  let g = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="min-width:760px;display:block;">`;
+  g += `<rect x="0" y="0" width="${W}" height="${H}" fill="rgba(255,253,247,.5)" rx="12"/>`;
+  for(let lg=105;lg<=121;lg+=4){ g+=`<line x1="${X(lg)}" y1="${pad}" x2="${X(lg)}" y2="${H-pad}" stroke="rgba(120,100,70,.12)"/>`; g+=`<text x="${X(lg)}" y="${H-pad+16}" font-size="11" fill="#837666" text-anchor="middle">${lg}°E</text>`; }
+  for(let lt=30;lt<=42;lt+=4){ g+=`<line x1="${pad}" y1="${Y(lt)}" x2="${W-pad}" y2="${Y(lt)}" stroke="rgba(120,100,70,.12)"/>`; g+=`<text x="${pad-6}" y="${Y(lt)+4}" font-size="11" fill="#837666" text-anchor="end">${lt}°N</text>`; }
+  const col={"都城":"#9d2933","州郡":"#a9863f","城邑":"#3f7a63","郡":"#3f7a63","戰場":"#1f4e5f","關隘":"#5b4a7a"};
+  DATA.places.forEach(p=>{
+    const cx=X(p.lng), cy=Y(p.lat), c=col[p.ty]||"#7a6f60";
+    g+=`<circle cx="${cx}" cy="${cy}" r="${p.ty==='都城'?7:4.5}" fill="${c}" opacity=".85"/>`;
+    g+=`<text x="${cx+8}" y="${cy+4}" font-size="12" fill="#231f1a" style="font-family:'Songti SC',serif;">${p.n}</text>`;
+  });
+  g += `</svg>`;
+  g += `<div class="flex flex-wrap gap-2 mt-3 px-2">` + Object.keys(col).filter(k=>k!=='郡').map(k=>`<span class="chip" style="background:${col[k]}1a;color:${col[k]};">● ${k}</span>`).join("") + `</div>`;
+  document.getElementById('mapsvg').innerHTML = g;
+}
+
+/* ---------- 統計譜 ---------- */
+function initStats(){
+  const fc={};
+  DATA.persons.forEach(p=>fc[p.f]=(fc[p.f]||0)+1);
+  const c1=echarts.init(document.getElementById('st1'));
+  c1.setOption({grid:{left:60,right:20,top:20,bottom:50},tooltip:{trigger:'axis'},
+    xAxis:{type:'category',data:Object.keys(fc),axisLabel:{interval:0,rotate:30,fontSize:11}},
+    yAxis:{type:'value'},
+    series:[{type:'bar',data:Object.values(fc),itemStyle:{color:'#9d2933',borderRadius:[5,5,0,0]},label:{show:true,position:'top',fontSize:11}}]});
+
+  const decades={};
+  DATA.battles.forEach(b=>{ const d=(Math.floor(parseInt(b.y)/20)*20)+'s'; decades[d]=(decades[d]||0)+1; });
+  const c2=echarts.init(document.getElementById('st2'));
+  c2.setOption({grid:{left:50,right:20,top:20,bottom:40},tooltip:{trigger:'axis'},
+    xAxis:{type:'category',data:Object.keys(decades).sort()},
+    yAxis:{type:'value'},
+    series:[{type:'line',data:Object.keys(decades).sort().map(k=>decades[k]),smooth:true,areaStyle:{color:'rgba(31,78,95,.15)'},lineStyle:{color:'#1f4e5f',width:2},itemStyle:{color:'#1f4e5f'}}]});
+
+  const rt={};
+  DATA.relations.forEach(r=>rt[r[2]]=(rt[r[2]]||0)+1);
+  const c3=echarts.init(document.getElementById('st3'));
+  c3.setOption({tooltip:{trigger:'item'},legend:{bottom:0,textStyle:{fontSize:11}},
+    series:[{type:'pie',radius:['40%','68%'],center:['50%','44%'],
+      data:Object.keys(rt).map(k=>({name:k,value:rt[k]})),
+      label:{fontSize:11},itemStyle:{borderColor:'#fffdf7',borderWidth:2}}]});
+
+  const cnt=[["人物",DATA.persons.length],["地理",DATA.places.length],["戰役",DATA.battles.length],["事件",DATA.events.length],["計謀",DATA.stratagems.length],["器物",DATA.artifacts.length],["讖緯",DATA.prophecies.length],["詩詞",DATA.poems.length]];
+  const c4=echarts.init(document.getElementById('st4'));
+  c4.setOption({grid:{left:50,right:20,top:20,bottom:40},tooltip:{trigger:'axis'},
+    xAxis:{type:'category',data:cnt.map(x=>x[0]),axisLabel:{fontSize:11}},
+    yAxis:{type:'value'},
+    series:[{type:'bar',data:cnt.map(x=>x[1]),itemStyle:{color:'#3f7a63',borderRadius:[5,5,0,0]},label:{show:true,position:'top',fontSize:11}}]});
+  window.addEventListener('resize',()=>{c1.resize();c2.resize();c3.resize();c4.resize();});
+}
+
+/* ---------- 版本譜 ---------- */
+function initEditionChart(){
+  const c=echarts.init(document.getElementById('edchart'));
+  c.setOption({
+    tooltip:{trigger:'item',formatter:p=>p.data.desc||p.name},
+    series:[{
+      type:'sankey', left:20,right:120,top:20,bottom:20,
+      nodeAlign:'left',
+      label:{fontSize:12,color:'#231f1a'},
+      data:DATA.editions.map(e=>({name:e.n,desc:e.y+" · "+(e.d||"")})),
+      links:DATA.editions.filter(e=>e.p).map(e=>({source:(DATA.editions.find(x=>x.id===e.p)||{}).n,target:e.n,value:1})),
+      lineStyle:{color:'gradient',opacity:.35,curveness:.5},
+      itemStyle:{borderWidth:0},
+      levels:[{depth:0,itemStyle:{color:'#1f4e5f'}},{depth:1,itemStyle:{color:'#a9863f'}},{depth:2,itemStyle:{color:'#3f7a63'}},{depth:3,itemStyle:{color:'#9d2933'}}]
+    }]
+  });
+  window.addEventListener('resize',()=>c.resize());
+}
+
+/* ---------- 異文對勘 LCS ---------- */
+function lcsDiff(a,b){
+  const n=a.length,m=b.length;
+  const dp=Array.from({length:n+1},()=>new Uint8Array(m+1));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--){
+    dp[i][j] = a[i]===b[j] ? dp[i+1][j+1]+1 : Math.max(dp[i+1][j],dp[i][j+1]);
+  }
+  let i=0,j=0,out=[];
+  while(i<n&&j<m){
+    if(a[i]===b[j]){ out.push(['same',a[i]]); i++;j++; }
+    else if(dp[i+1][j]>=dp[i][j+1]){ out.push(['del',a[i]]); i++; }
+    else { out.push(['ins',b[j]]); j++; }
+  }
+  while(i<n){ out.push(['del',a[i]]); i++; }
+  while(j<m){ out.push(['ins',b[j]]); j++; }
+  return out;
+}
+function __diff(){
+  const a=document.getElementById('vA').value;
+  const b=document.getElementById('vB').value;
+  const d=lcsDiff(a,b);
+  document.getElementById('vOut').innerHTML = d.map(([t,c])=>{
+    if(t==='same') return `<span class="diff-same">${esc(c)}</span>`;
+    if(t==='del')  return `<span class="diff-del">${esc(c)}</span>`;
+    return `<span class="diff-ins">${esc(c)}</span>`;
+  }).join("");
+}
+function __diffDemo(){
+  document.getElementById('vA').value="關羽字雲長，河東解良人也。身長九尺，髯長二尺。";
+  document.getElementById('vB').value="關某字雲長，河東解縣人也。身長九尺，髯長一尺八寸，面如重棗。";
+  __diff();
+}
+
+/* ---------- 本體查詢 ---------- */
+const Q_FIELDS = {
+  persons:[["n","姓名"],["z","字"],["f","勢力"],["title","官爵"],["b","生年"],["d","卒年"]],
+  battles:[["n","戰役"],["y","年代"],["p","地點"],["a","交戰方"],["r","結果"]],
+  places:[["n","地名"],["m","今地"],["ty","類型"],["lat","緯度"],["lng","經度"]],
+  stratagems:[["n","計謀"],["u","施計者"],["t","對象"]],
+  artifacts:[["n","器物"],["o","持用者"]]
+};
+function __qFill(){
+  const ent=document.getElementById('qEnt').value;
+  const fs=Q_FIELDS[ent];
+  document.getElementById('qField').innerHTML = fs.map(([k,t])=>`<option value="${k}">${t}</option>`).join("");
+  __qRun();
+}
+function __qRun(){
+  const ent=document.getElementById('qEnt').value;
+  const field=document.getElementById('qField').value;
+  const kw=document.getElementById('qKw').value.trim();
+  const fs=Q_FIELDS[ent];
+  document.getElementById('qSql').textContent = `SELECT * FROM ${ent}` + (kw?` WHERE ${field} LIKE '%${kw}%'`:'') + ` ORDER BY ${fs[0][0]}`;
+  let rows=DATA[ent]||[];
+  if(kw) rows=rows.filter(r=>String(r[field]||'').includes(kw));
+  document.getElementById('qHead').innerHTML = `<tr>${fs.map(f=>`<th>${f[1]}</th>`).join("")}</tr>`;
+  document.getElementById('qBody').innerHTML = rows.length
+    ? rows.map(r=>`<tr>${fs.map(f=>`<td>${esc(r[f[0]])||"—"}</td>`).join("")}</tr>`).join("")
+    : `<tr><td colspan="${fs.length}" class="sub">無匹配結果</td></tr>`;
+}
+
+/* ---------- 啟動 ---------- */
+buildNav();
+render();
+window.addEventListener('hashchange', render);
+</script>
+</body>
+</html>
