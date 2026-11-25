@@ -1,0 +1,1186 @@
+@prefix sg:   <https://example.org/sanguo#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+################################################################
+# 三國演義本體論 · Romance of the Three Kingdoms Ontology
+# 由 data/sanguo-data.js + data/sanguo-topics.js + data/corpus-manifest.js 生成
+# 生成日期：2026-11-22
+################################################################
+
+<https://example.org/sanguo>
+    a owl:Ontology ;
+    rdfs:label "三國演義本體論"@zh ;
+    rdfs:comment "以 OWL 2 DL 描述《三國演義》的人物、勢力、地理、戰役、事件、計謀、器物、詩詞、讖緯、評點、版本與異文；每條實例盡量掛接回目出處。"@zh .
+
+################################
+# 一、類（Class）
+################################
+sg:Person a owl:Class ; rdfs:label "人物"@zh .
+sg:Faction a owl:Class ; rdfs:label "勢力"@zh .
+sg:Place a owl:Class ; rdfs:label "地理"@zh .
+sg:Battle a owl:Class ; rdfs:subClassOf sg:Event ; rdfs:label "戰役"@zh .
+sg:Event a owl:Class ; rdfs:label "事件"@zh .
+sg:Stratagem a owl:Class ; rdfs:label "計謀"@zh .
+sg:Artifact a owl:Class ; rdfs:label "器物"@zh .
+sg:Prophecy a owl:Class ; rdfs:label "讖緯"@zh .
+sg:Poem a owl:Class ; rdfs:label "詩詞"@zh .
+sg:Edition a owl:Class ; rdfs:label "版本"@zh .
+sg:Chapter a owl:Class ; rdfs:label "回目"@zh .
+sg:VariantReading a owl:Class ; rdfs:label "異文"@zh .
+sg:Commentary a owl:Class ; rdfs:label "評點"@zh .
+sg:Critic a owl:Class ; rdfs:label "評點家"@zh .
+sg:OfficialTitle a owl:Class ; rdfs:label "官職"@zh .
+sg:Polity a owl:Class ; rdfs:label "政權"@zh .
+sg:Genealogy a owl:Class ; rdfs:label "世系"@zh .
+sg:Adaptation a owl:Class ; rdfs:label "衍生作品"@zh .
+sg:EditionGap a owl:Class ; rdfs:label "版本缺口"@zh .
+sg:Lord a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "君主"@zh .
+sg:Minister a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "臣屬"@zh .
+sg:General a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "武將"@zh .
+sg:Strategist a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "謀士"@zh .
+sg:City a owl:Class ; rdfs:subClassOf sg:Place ; rdfs:label "城邑"@zh .
+sg:Pass a owl:Class ; rdfs:subClassOf sg:Place ; rdfs:label "關隘"@zh .
+sg:Battlefield a owl:Class ; rdfs:subClassOf sg:Place ; rdfs:label "戰場"@zh .
+
+################################
+# 二、對象屬性（Object Property）
+################################
+sg:lordOf a owl:ObjectProperty ; rdfs:label "君臨"@zh .
+sg:vassalOf a owl:ObjectProperty ; owl:inverseOf sg:lordOf ; rdfs:label "臣屬"@zh .
+sg:memberOf a owl:ObjectProperty ; rdfs:label "隸屬勢力"@zh .
+sg:parentOf a owl:ObjectProperty ; rdfs:label "父"@zh .
+sg:childOf a owl:ObjectProperty ; owl:inverseOf sg:parentOf ; rdfs:label "子"@zh .
+sg:siblingOf a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "兄弟 / 姊妹"@zh .
+sg:spouseOf a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "夫妻"@zh .
+sg:swornBrotherOf a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "結義"@zh .
+sg:mentorOf a owl:ObjectProperty ; rdfs:label "師"@zh .
+sg:discipleOf a owl:ObjectProperty ; owl:inverseOf sg:mentorOf ; rdfs:label "徒"@zh .
+sg:foughtIn a owl:ObjectProperty ; rdfs:label "參戰"@zh .
+sg:partiesIn a owl:ObjectProperty ; rdfs:label "參與方"@zh .
+sg:occursAt a owl:ObjectProperty ; rdfs:label "發生於"@zh .
+sg:usesStratagem a owl:ObjectProperty ; rdfs:label "用計"@zh .
+sg:usedBy a owl:ObjectProperty ; rdfs:label "使用者"@zh .
+sg:targetedBy a owl:ObjectProperty ; rdfs:label "計謀所向"@zh .
+sg:usesArtifact a owl:ObjectProperty ; rdfs:label "持用器物"@zh .
+sg:owner a owl:ObjectProperty ; rdfs:label "持有者"@zh .
+sg:kills a owl:ObjectProperty ; rdfs:label "殺 / 斬"@zh .
+sg:killedBy a owl:ObjectProperty ; owl:inverseOf sg:kills ; rdfs:label "被殺"@zh .
+sg:successorOf a owl:ObjectProperty ; rdfs:label "繼承"@zh .
+sg:descendantOf a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:label "後裔"@zh .
+sg:alliesWith a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "結盟"@zh .
+sg:enemyOf a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "為敵"@zh .
+sg:foretells a owl:ObjectProperty ; rdfs:label "預言"@zh .
+sg:fulfilledBy a owl:ObjectProperty ; rdfs:label "應驗"@zh .
+sg:derivedFrom a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:label "衍生自"@zh .
+sg:hasVariant a owl:ObjectProperty ; rdfs:label "異文對應"@zh .
+sg:commentsOn a owl:ObjectProperty ; rdfs:label "評點"@zh .
+sg:hasCommentary a owl:ObjectProperty ; owl:inverseOf sg:commentsOn ; rdfs:label "有評"@zh .
+sg:wrote a owl:ObjectProperty ; rdfs:label "著述"@zh .
+sg:inChapter a owl:ObjectProperty ; rdfs:label "見於回目"@zh .
+sg:leader a owl:ObjectProperty ; rdfs:label "君主"@zh .
+sg:capital a owl:ObjectProperty ; rdfs:label "都城"@zh .
+
+################################
+# 三、數據屬性（Datatype Property）
+################################
+sg:surname a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:givenName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:styleName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:sobriquet a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:birthYear a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:deathYear a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:nativePlace a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:title a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:posthumousName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:referenceCount a owl:DatatypeProperty ; rdfs:range xsd:integer .
+sg:compositionYear a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:storyYear a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:charCount a owl:DatatypeProperty ; rdfs:range xsd:integer .
+sg:troopStrength a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:outcome a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:modernName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:coordinates a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:prophecyText a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:titleText a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:contentText a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:chapterNumber a owl:DatatypeProperty ; rdfs:range xsd:integer .
+sg:placeName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:virtual a owl:DatatypeProperty ; rdfs:range xsd:boolean .
+sg:description a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:artifactType a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:poemType a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:authorName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:prophet a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:fulfilledByText a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:commenter a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:commentText a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:editionSystem a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:editionUnits a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:editionStatus a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:holdingForm a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:gapNote a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:acquisitionPath a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:capitalName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:period a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:placeLevel a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:userName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:targetName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:ownerName a owl:DatatypeProperty ; rdfs:range xsd:string .
+
+################################
+# 四、章回骨架
+################################
+sg:ch1 a sg:Chapter ; rdfs:label "第1回 宴桃园豪杰三结义 斩黄巾英雄首立功" ; sg:chapterNumber 1 .
+sg:ch2 a sg:Chapter ; rdfs:label "第2回 张翼德怒鞭督邮 何国舅谋诛宦竖" ; sg:chapterNumber 2 .
+sg:ch3 a sg:Chapter ; rdfs:label "第3回 议温明董卓叱丁原 馈金珠李肃说吕布" ; sg:chapterNumber 3 .
+sg:ch4 a sg:Chapter ; rdfs:label "第4回 废汉帝陈留践位 谋董贼孟德献刀" ; sg:chapterNumber 4 .
+sg:ch5 a sg:Chapter ; rdfs:label "第5回 发矫诏诸镇应曹公 破关兵三英战吕布" ; sg:chapterNumber 5 .
+sg:ch6 a sg:Chapter ; rdfs:label "第6回 焚金阙董卓行凶 匿玉玺孙坚背约" ; sg:chapterNumber 6 .
+sg:ch7 a sg:Chapter ; rdfs:label "第7回 袁绍磐河战公孙 孙坚跨江击刘表" ; sg:chapterNumber 7 .
+sg:ch8 a sg:Chapter ; rdfs:label "第8回 王司徒巧使连环计 董太师大闹凤仪亭" ; sg:chapterNumber 8 .
+sg:ch9 a sg:Chapter ; rdfs:label "第9回 除暴凶吕布助司徒 犯长安李傕听贾诩" ; sg:chapterNumber 9 .
+sg:ch10 a sg:Chapter ; rdfs:label "第10回 勤王室马腾举义 报父仇曹操兴师" ; sg:chapterNumber 10 .
+sg:ch11 a sg:Chapter ; rdfs:label "第11回 刘皇叔北海救孔融 吕温侯濮阳破曹操" ; sg:chapterNumber 11 .
+sg:ch12 a sg:Chapter ; rdfs:label "第12回 陶恭祖三让徐州 曹孟德大战吕布" ; sg:chapterNumber 12 .
+sg:ch13 a sg:Chapter ; rdfs:label "第13回 李傕郭汜大交兵 杨奉董承双救驾" ; sg:chapterNumber 13 .
+sg:ch14 a sg:Chapter ; rdfs:label "第14回 曹孟德移驾幸许都 吕奉先乘夜袭徐郡" ; sg:chapterNumber 14 .
+sg:ch15 a sg:Chapter ; rdfs:label "第15回 太史慈酣斗小霸王 孙伯符大战严白虎" ; sg:chapterNumber 15 .
+sg:ch16 a sg:Chapter ; rdfs:label "第16回 吕奉先射戟辕门 曹孟德师败淯水" ; sg:chapterNumber 16 .
+sg:ch17 a sg:Chapter ; rdfs:label "第17回 袁公路大起七军 曹孟德会合三将" ; sg:chapterNumber 17 .
+sg:ch18 a sg:Chapter ; rdfs:label "第18回 贾文和料敌决胜 夏侯惇拔矢啖睛" ; sg:chapterNumber 18 .
+sg:ch19 a sg:Chapter ; rdfs:label "第19回 下邳城曹操鏖兵 白门楼吕布殒命" ; sg:chapterNumber 19 .
+sg:ch20 a sg:Chapter ; rdfs:label "第20回 曹阿瞒许田打围 董国舅内阁受诏" ; sg:chapterNumber 20 .
+sg:ch21 a sg:Chapter ; rdfs:label "第21回 曹操煮酒论英雄 关公赚城斩车冑" ; sg:chapterNumber 21 .
+sg:ch22 a sg:Chapter ; rdfs:label "第22回 袁曹各起马步三军 关张共擒王刘二将" ; sg:chapterNumber 22 .
+sg:ch23 a sg:Chapter ; rdfs:label "第23回 祢正平裸衣骂贼 吉太医下毒遭刑" ; sg:chapterNumber 23 .
+sg:ch24 a sg:Chapter ; rdfs:label "第24回 国贼行凶杀贵妃 皇叔败走投袁绍" ; sg:chapterNumber 24 .
+sg:ch25 a sg:Chapter ; rdfs:label "第25回 屯土山关公约三事 救白马曹操解重围" ; sg:chapterNumber 25 .
+sg:ch26 a sg:Chapter ; rdfs:label "第26回 袁本初损兵折将 关云长挂印封金" ; sg:chapterNumber 26 .
+sg:ch27 a sg:Chapter ; rdfs:label "第27回 美髯公千里走单骑 汉寿侯五关斩六将" ; sg:chapterNumber 27 .
+sg:ch28 a sg:Chapter ; rdfs:label "第28回 斩蔡阳兄弟释疑 会古城主臣聚义" ; sg:chapterNumber 28 .
+sg:ch29 a sg:Chapter ; rdfs:label "第29回 小霸王怒斩于吉 碧眼儿坐领江东" ; sg:chapterNumber 29 .
+sg:ch30 a sg:Chapter ; rdfs:label "第30回 战官渡本初败绩 劫乌巢孟德烧粮" ; sg:chapterNumber 30 .
+sg:ch31 a sg:Chapter ; rdfs:label "第31回 曹操仓亭破本初 玄德荆州依刘表" ; sg:chapterNumber 31 .
+sg:ch32 a sg:Chapter ; rdfs:label "第32回 夺冀州袁尚争锋 决漳河许攸献计" ; sg:chapterNumber 32 .
+sg:ch33 a sg:Chapter ; rdfs:label "第33回 曹丕乘乱纳甄氏 郭嘉遗计定辽东" ; sg:chapterNumber 33 .
+sg:ch34 a sg:Chapter ; rdfs:label "第34回 蔡夫人隔屏听密语 刘皇叔跃马过檀溪" ; sg:chapterNumber 34 .
+sg:ch35 a sg:Chapter ; rdfs:label "第35回 玄德南漳逢隐沦 单福新野遇英主" ; sg:chapterNumber 35 .
+sg:ch36 a sg:Chapter ; rdfs:label "第36回 玄德用计袭樊城 元直走马荐诸葛" ; sg:chapterNumber 36 .
+sg:ch37 a sg:Chapter ; rdfs:label "第37回 司马徽再荐名士 刘玄德三顾草庐" ; sg:chapterNumber 37 .
+sg:ch38 a sg:Chapter ; rdfs:label "第38回 定三分隆中决策 战长江孙氏报仇" ; sg:chapterNumber 38 .
+sg:ch39 a sg:Chapter ; rdfs:label "第39回 荆州城公子三求计 博望坡军师初用兵" ; sg:chapterNumber 39 .
+sg:ch40 a sg:Chapter ; rdfs:label "第40回 蔡夫人议献荆州 诸葛亮火烧新野" ; sg:chapterNumber 40 .
+sg:ch41 a sg:Chapter ; rdfs:label "第41回 刘玄德携民渡江 赵子龙单骑救主" ; sg:chapterNumber 41 .
+sg:ch42 a sg:Chapter ; rdfs:label "第42回 张翼德大闹长坂桥 刘豫州败走汉津口" ; sg:chapterNumber 42 .
+sg:ch43 a sg:Chapter ; rdfs:label "第43回 诸葛亮舌战群儒 鲁子敬力排众议" ; sg:chapterNumber 43 .
+sg:ch44 a sg:Chapter ; rdfs:label "第44回 孔明用智激周瑜 孙权决计破曹操" ; sg:chapterNumber 44 .
+sg:ch45 a sg:Chapter ; rdfs:label "第45回 三江口曹操折兵 群英会蒋干中计" ; sg:chapterNumber 45 .
+sg:ch46 a sg:Chapter ; rdfs:label "第46回 用奇谋孔明借箭 献密计黄盖受刑" ; sg:chapterNumber 46 .
+sg:ch47 a sg:Chapter ; rdfs:label "第47回 阚泽密献诈降书 庞统巧授连环计" ; sg:chapterNumber 47 .
+sg:ch48 a sg:Chapter ; rdfs:label "第48回 宴长江曹操赋诗 锁战船北军用武" ; sg:chapterNumber 48 .
+sg:ch49 a sg:Chapter ; rdfs:label "第49回 七星坛诸葛祭风 三江口周瑜纵火" ; sg:chapterNumber 49 .
+sg:ch50 a sg:Chapter ; rdfs:label "第50回 诸葛亮智算华容 关云长义释曹操" ; sg:chapterNumber 50 .
+sg:ch51 a sg:Chapter ; rdfs:label "第51回 曹仁大战东吴兵 孔明一气周公瑾" ; sg:chapterNumber 51 .
+sg:ch52 a sg:Chapter ; rdfs:label "第52回 诸葛亮智辞鲁肃 赵子龙计取桂阳" ; sg:chapterNumber 52 .
+sg:ch53 a sg:Chapter ; rdfs:label "第53回 关云长义释黄汉升 孙仲谋大战张文远" ; sg:chapterNumber 53 .
+sg:ch54 a sg:Chapter ; rdfs:label "第54回 吴国太佛寺看新郎 刘皇叔洞房续佳偶" ; sg:chapterNumber 54 .
+sg:ch55 a sg:Chapter ; rdfs:label "第55回 玄德智激孙夫人 孔明二气周公瑾" ; sg:chapterNumber 55 .
+sg:ch56 a sg:Chapter ; rdfs:label "第56回 曹操大宴铜雀台 孔明三气周公瑾" ; sg:chapterNumber 56 .
+sg:ch57 a sg:Chapter ; rdfs:label "第57回 柴桑口卧龙吊丧 耒阳县凤雏理事" ; sg:chapterNumber 57 .
+sg:ch58 a sg:Chapter ; rdfs:label "第58回 马孟起兴兵雪恨 曹阿瞒割须弃袍" ; sg:chapterNumber 58 .
+sg:ch59 a sg:Chapter ; rdfs:label "第59回 许褚裸衣斗马超 曹操抹书间韩遂" ; sg:chapterNumber 59 .
+sg:ch60 a sg:Chapter ; rdfs:label "第60回 张永年反难杨修 庞士元议取西蜀" ; sg:chapterNumber 60 .
+sg:ch61 a sg:Chapter ; rdfs:label "第61回 赵云截江夺阿斗 孙权遣书退老瞒" ; sg:chapterNumber 61 .
+sg:ch62 a sg:Chapter ; rdfs:label "第62回 取涪关杨高授首 攻雒城黄魏争功" ; sg:chapterNumber 62 .
+sg:ch63 a sg:Chapter ; rdfs:label "第63回 诸葛亮痛哭庞统 张翼德义释严颜" ; sg:chapterNumber 63 .
+sg:ch64 a sg:Chapter ; rdfs:label "第64回 孔明定计捉张任 杨阜借兵破马超" ; sg:chapterNumber 64 .
+sg:ch65 a sg:Chapter ; rdfs:label "第65回 马超大战葭萌关 刘备自领益州牧" ; sg:chapterNumber 65 .
+sg:ch66 a sg:Chapter ; rdfs:label "第66回 关云长单刀赴会 伏皇后为国捐生" ; sg:chapterNumber 66 .
+sg:ch67 a sg:Chapter ; rdfs:label "第67回 曹操平定汉中地 张辽威震逍遥津" ; sg:chapterNumber 67 .
+sg:ch68 a sg:Chapter ; rdfs:label "第68回 甘宁百骑劫魏营 左慈掷杯戏曹操" ; sg:chapterNumber 68 .
+sg:ch69 a sg:Chapter ; rdfs:label "第69回 卜周易管辂知机 讨汉贼五臣死节" ; sg:chapterNumber 69 .
+sg:ch70 a sg:Chapter ; rdfs:label "第70回 猛张飞智取瓦口隘 老黄忠计夺天荡山" ; sg:chapterNumber 70 .
+sg:ch71 a sg:Chapter ; rdfs:label "第71回 占对山黄忠逸待劳 据汉水赵云寡胜众" ; sg:chapterNumber 71 .
+sg:ch72 a sg:Chapter ; rdfs:label "第72回 诸葛亮智取汉中 曹阿瞒兵退斜谷" ; sg:chapterNumber 72 .
+sg:ch73 a sg:Chapter ; rdfs:label "第73回 玄德进位汉中王 云长攻拔襄阳郡" ; sg:chapterNumber 73 .
+sg:ch74 a sg:Chapter ; rdfs:label "第74回 庞令明抬榇决死战 关云长放水淹七军" ; sg:chapterNumber 74 .
+sg:ch75 a sg:Chapter ; rdfs:label "第75回 关云长刮骨疗毒 吕子明白衣渡江" ; sg:chapterNumber 75 .
+sg:ch76 a sg:Chapter ; rdfs:label "第76回 徐公明大战沔水 关云长败走麦城" ; sg:chapterNumber 76 .
+sg:ch77 a sg:Chapter ; rdfs:label "第77回 玉泉山关公显圣 洛阳城曹操感神" ; sg:chapterNumber 77 .
+sg:ch78 a sg:Chapter ; rdfs:label "第78回 治风疾神医身死 传遗命奸雄数终" ; sg:chapterNumber 78 .
+sg:ch79 a sg:Chapter ; rdfs:label "第79回 兄逼弟曹植赋诗 侄陷叔刘封伏法" ; sg:chapterNumber 79 .
+sg:ch80 a sg:Chapter ; rdfs:label "第80回 曹丕废帝篡炎刘 汉王正位续大统" ; sg:chapterNumber 80 .
+sg:ch81 a sg:Chapter ; rdfs:label "第81回 急兄仇张飞遇害 雪弟恨先主兴兵" ; sg:chapterNumber 81 .
+sg:ch82 a sg:Chapter ; rdfs:label "第82回 孙权降魏受九锡 先主征吴赏六军" ; sg:chapterNumber 82 .
+sg:ch83 a sg:Chapter ; rdfs:label "第83回 战猇亭先主得仇人 守江口书生拜大将" ; sg:chapterNumber 83 .
+sg:ch84 a sg:Chapter ; rdfs:label "第84回 陆逊营烧七百里 孔明巧布八阵图" ; sg:chapterNumber 84 .
+sg:ch85 a sg:Chapter ; rdfs:label "第85回 刘先主遗诏托孤儿 诸葛亮安居平五路" ; sg:chapterNumber 85 .
+sg:ch86 a sg:Chapter ; rdfs:label "第86回 难张温秦宓逞天辩 破曹丕徐盛用火攻" ; sg:chapterNumber 86 .
+sg:ch87 a sg:Chapter ; rdfs:label "第87回 征南寇丞相大兴师 抗天兵蛮王初受执" ; sg:chapterNumber 87 .
+sg:ch88 a sg:Chapter ; rdfs:label "第88回 渡泸水再缚番王 识诈降三擒孟获" ; sg:chapterNumber 88 .
+sg:ch89 a sg:Chapter ; rdfs:label "第89回 武乡侯四番用计 南蛮王五次遭擒" ; sg:chapterNumber 89 .
+sg:ch90 a sg:Chapter ; rdfs:label "第90回 驱巨兽六破蛮兵 烧藤甲七擒孟获" ; sg:chapterNumber 90 .
+sg:ch91 a sg:Chapter ; rdfs:label "第91回 祭泸水汉相班师 伐中原武侯上表" ; sg:chapterNumber 91 .
+sg:ch92 a sg:Chapter ; rdfs:label "第92回 赵子龙力斩五将 诸葛亮智取三城" ; sg:chapterNumber 92 .
+sg:ch93 a sg:Chapter ; rdfs:label "第93回 姜伯约归降孔明 武乡侯骂死王朗" ; sg:chapterNumber 93 .
+sg:ch94 a sg:Chapter ; rdfs:label "第94回 诸葛亮乘雪破羌兵 司马懿克日擒孟达" ; sg:chapterNumber 94 .
+sg:ch95 a sg:Chapter ; rdfs:label "第95回 马谡拒谏失街亭 武侯弹琴退仲达" ; sg:chapterNumber 95 .
+sg:ch96 a sg:Chapter ; rdfs:label "第96回 孔明挥泪斩马谡 周鲂断发赚曹休" ; sg:chapterNumber 96 .
+sg:ch97 a sg:Chapter ; rdfs:label "第97回 讨魏国武侯再上表 破曹兵姜维诈献书" ; sg:chapterNumber 97 .
+sg:ch98 a sg:Chapter ; rdfs:label "第98回 追汉军王双受诛 袭陈仓武侯取胜" ; sg:chapterNumber 98 .
+sg:ch99 a sg:Chapter ; rdfs:label "第99回 诸葛亮大破魏兵 司马懿入寇西蜀" ; sg:chapterNumber 99 .
+sg:ch100 a sg:Chapter ; rdfs:label "第100回 汉兵劫寨破曹真 武侯斗阵辱仲达" ; sg:chapterNumber 100 .
+sg:ch101 a sg:Chapter ; rdfs:label "第101回 出陇上诸葛妆神 奔剑阁张郃中计" ; sg:chapterNumber 101 .
+sg:ch102 a sg:Chapter ; rdfs:label "第102回 司马懿占北原渭桥 诸葛亮造木牛流马" ; sg:chapterNumber 102 .
+sg:ch103 a sg:Chapter ; rdfs:label "第103回 上方谷司马受困 五丈原诸葛禳星" ; sg:chapterNumber 103 .
+sg:ch104 a sg:Chapter ; rdfs:label "第104回 陨大星汉丞相归天 见木像魏都督丧胆" ; sg:chapterNumber 104 .
+sg:ch105 a sg:Chapter ; rdfs:label "第105回 武侯预伏锦囊计 魏主拆取承露盘" ; sg:chapterNumber 105 .
+sg:ch106 a sg:Chapter ; rdfs:label "第106回 公孙渊兵败死襄平 司马懿诈病赚曹爽" ; sg:chapterNumber 106 .
+sg:ch107 a sg:Chapter ; rdfs:label "第107回 魏主政归司马氏 姜维兵败牛头山" ; sg:chapterNumber 107 .
+sg:ch108 a sg:Chapter ; rdfs:label "第108回 丁奉雪中奋短兵 孙峻席间施密计" ; sg:chapterNumber 108 .
+sg:ch109 a sg:Chapter ; rdfs:label "第109回 困司马汉将奇谋 废曹芳魏家果报" ; sg:chapterNumber 109 .
+sg:ch110 a sg:Chapter ; rdfs:label "第110回 文鸯单骑退雄兵 姜维背水破大敌" ; sg:chapterNumber 110 .
+sg:ch111 a sg:Chapter ; rdfs:label "第111回 邓士载智败姜伯约 诸葛诞义讨司马昭" ; sg:chapterNumber 111 .
+sg:ch112 a sg:Chapter ; rdfs:label "第112回 救寿春于诠死节 取长城伯约鏖兵" ; sg:chapterNumber 112 .
+sg:ch113 a sg:Chapter ; rdfs:label "第113回 丁奉定计斩孙綝 姜维斗阵破邓艾" ; sg:chapterNumber 113 .
+sg:ch114 a sg:Chapter ; rdfs:label "第114回 曹髦驱车死南阙 姜维弃粮胜魏兵" ; sg:chapterNumber 114 .
+sg:ch115 a sg:Chapter ; rdfs:label "第115回 诏班师后主信谗 托屯田姜维避祸" ; sg:chapterNumber 115 .
+sg:ch116 a sg:Chapter ; rdfs:label "第116回 钟会分兵汉中道 武侯显圣定军山" ; sg:chapterNumber 116 .
+sg:ch117 a sg:Chapter ; rdfs:label "第117回 邓士载偷度阴平 诸葛瞻战死绵竹" ; sg:chapterNumber 117 .
+sg:ch118 a sg:Chapter ; rdfs:label "第118回 哭祖庙一王死孝 入西川二士争功" ; sg:chapterNumber 118 .
+sg:ch119 a sg:Chapter ; rdfs:label "第119回 假投降巧计成虚话 再受禅依样画葫芦" ; sg:chapterNumber 119 .
+sg:ch120 a sg:Chapter ; rdfs:label "第120回 荐杜预老将献新谋 降孙皓三分归一统" ; sg:chapterNumber 120 .
+
+################################
+# 五、人物、勢力、地理、戰役
+################################
+sg:p1 a sg:Person ; rdfs:label "刘备" ; sg:styleName "玄德" ; sg:title "汉昭烈帝" ; sg:birthYear "161" ; sg:deathYear "223" ; sg:nativePlace "涿郡楼桑村" ; sg:referenceCount 1800 .
+sg:p1 owl:sameAs sg:刘备 .
+sg:p2 a sg:Person ; rdfs:label "关羽" ; sg:styleName "云长" ; sg:title "汉寿亭侯、壮缪侯" ; sg:birthYear "160" ; sg:deathYear "220" ; sg:nativePlace "河东解良" ; sg:referenceCount 1500 .
+sg:p2 owl:sameAs sg:关羽 .
+sg:p3 a sg:Person ; rdfs:label "张飞" ; sg:styleName "翼德" ; sg:title "车骑将军、西乡侯" ; sg:birthYear "165" ; sg:deathYear "221" ; sg:nativePlace "涿郡" ; sg:referenceCount 1200 .
+sg:p3 owl:sameAs sg:张飞 .
+sg:p4 a sg:Person ; rdfs:label "诸葛亮" ; sg:styleName "孔明" ; sg:title "丞相、武乡侯、忠武侯" ; sg:birthYear "181" ; sg:deathYear "234" ; sg:nativePlace "琅琊阳都" ; sg:referenceCount 2000 .
+sg:p4 owl:sameAs sg:诸葛亮 .
+sg:p5 a sg:Person ; rdfs:label "赵云" ; sg:styleName "子龙" ; sg:title "镇军将军、顺平侯" ; sg:birthYear "168" ; sg:deathYear "229" ; sg:nativePlace "常山真定" ; sg:referenceCount 900 .
+sg:p5 owl:sameAs sg:赵云 .
+sg:p6 a sg:Person ; rdfs:label "马超" ; sg:styleName "孟起" ; sg:title "骠骑将军、斄乡侯" ; sg:birthYear "176" ; sg:deathYear "222" ; sg:nativePlace "扶风茂陵" ; sg:referenceCount 500 .
+sg:p6 owl:sameAs sg:马超 .
+sg:p7 a sg:Person ; rdfs:label "黄忠" ; sg:styleName "汉升" ; sg:title "后将军、刚侯" ; sg:birthYear "147" ; sg:deathYear "220" ; sg:nativePlace "南阳" ; sg:referenceCount 300 .
+sg:p7 owl:sameAs sg:黄忠 .
+sg:p8 a sg:Person ; rdfs:label "庞统" ; sg:styleName "士元" ; sg:title "军师中郎将、关内侯" ; sg:birthYear "179" ; sg:deathYear "214" ; sg:nativePlace "襄阳" ; sg:referenceCount 200 .
+sg:p8 owl:sameAs sg:庞统 .
+sg:p9 a sg:Person ; rdfs:label "魏延" ; sg:styleName "文长" ; sg:title "征西大将军、南郑侯" ; sg:birthYear "?" ; sg:deathYear "234" ; sg:nativePlace "义阳" ; sg:referenceCount 400 .
+sg:p9 owl:sameAs sg:魏延 .
+sg:p10 a sg:Person ; rdfs:label "姜维" ; sg:styleName "伯约" ; sg:title "大将军、平襄侯" ; sg:birthYear "202" ; sg:deathYear "264" ; sg:nativePlace "天水冀县" ; sg:referenceCount 700 .
+sg:p10 owl:sameAs sg:姜维 .
+sg:p11 a sg:Person ; rdfs:label "刘禅" ; sg:styleName "公嗣" ; sg:title "后主、安乐公" ; sg:birthYear "207" ; sg:deathYear "271" ; sg:nativePlace "新野" ; sg:referenceCount 600 .
+sg:p11 owl:sameAs sg:刘禅 .
+sg:p12 a sg:Person ; rdfs:label "法正" ; sg:styleName "孝直" ; sg:title "尚书令、翼侯" ; sg:birthYear "176" ; sg:deathYear "220" ; sg:nativePlace "扶风郿县" ; sg:referenceCount 200 .
+sg:p12 owl:sameAs sg:法正 .
+sg:p13 a sg:Person ; rdfs:label "徐庶" ; sg:styleName "元直" ; sg:title "右中郎将、御史中丞" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "颍川" ; sg:referenceCount 150 .
+sg:p13 owl:sameAs sg:徐庶 .
+sg:p14 a sg:Person ; rdfs:label "马良" ; sg:styleName "季常" ; sg:title "侍中" ; sg:birthYear "187" ; sg:deathYear "222" ; sg:nativePlace "襄阳宜城" ; sg:referenceCount 80 .
+sg:p14 owl:sameAs sg:马良 .
+sg:p15 a sg:Person ; rdfs:label "马谡" ; sg:styleName "幼常" ; sg:title "参军" ; sg:birthYear "190" ; sg:deathYear "228" ; sg:nativePlace "襄阳宜城" ; sg:referenceCount 100 .
+sg:p15 owl:sameAs sg:马谡 .
+sg:p16 a sg:Person ; rdfs:label "蒋琬" ; sg:styleName "公琰" ; sg:title "大司马、安阳亭侯" ; sg:birthYear "?" ; sg:deathYear "246" ; sg:nativePlace "湘乡" ; sg:referenceCount 80 .
+sg:p16 owl:sameAs sg:蒋琬 .
+sg:p17 a sg:Person ; rdfs:label "费祎" ; sg:styleName "文伟" ; sg:title "大将军、成乡侯" ; sg:birthYear "?" ; sg:deathYear "253" ; sg:nativePlace "江夏鄳县" ; sg:referenceCount 70 .
+sg:p17 owl:sameAs sg:费祎 .
+sg:p18 a sg:Person ; rdfs:label "王平" ; sg:styleName "子均" ; sg:title "镇北大将军、安汉侯" ; sg:birthYear "?" ; sg:deathYear "248" ; sg:nativePlace "宕渠" ; sg:referenceCount 80 .
+sg:p18 owl:sameAs sg:王平 .
+sg:p19 a sg:Person ; rdfs:label "廖化" ; sg:styleName "元俭" ; sg:title "右车骑将军" ; sg:birthYear "?" ; sg:deathYear "264" ; sg:nativePlace "襄阳" ; sg:referenceCount 60 .
+sg:p19 owl:sameAs sg:廖化 .
+sg:p20 a sg:Person ; rdfs:label "关平" ; sg:styleName "坦之" ; sg:title "副将" ; sg:birthYear "?" ; sg:deathYear "220" ; sg:nativePlace "河东解良" ; sg:referenceCount 120 .
+sg:p20 owl:sameAs sg:关平 .
+sg:p21 a sg:Person ; rdfs:label "关兴" ; sg:styleName "安国" ; sg:title "龙骧将军" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "河东解良" ; sg:referenceCount 100 .
+sg:p21 owl:sameAs sg:关兴 .
+sg:p22 a sg:Person ; rdfs:label "张苞" ; sg:styleName "兴国" ; sg:title "虎翼将军" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "涿郡" ; sg:referenceCount 90 .
+sg:p22 owl:sameAs sg:张苞 .
+sg:p23 a sg:Person ; rdfs:label "刘封" ; sg:styleName "?" ; sg:title "副军中郎将" ; sg:birthYear "?" ; sg:deathYear "220" ; sg:nativePlace "长沙" ; sg:referenceCount 80 .
+sg:p23 owl:sameAs sg:刘封 .
+sg:p24 a sg:Person ; rdfs:label "孟达" ; sg:styleName "子度" ; sg:title "建武将军、平阳亭侯" ; sg:birthYear "?" ; sg:deathYear "228" ; sg:nativePlace "扶风" ; sg:referenceCount 120 .
+sg:p24 owl:sameAs sg:孟达 .
+sg:p25 a sg:Person ; rdfs:label "严颜" ; sg:styleName "?" ; sg:title "前将军" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "临江" ; sg:referenceCount 50 .
+sg:p25 owl:sameAs sg:严颜 .
+sg:p26 a sg:Person ; rdfs:label "周仓" ; sg:styleName "?" ; sg:title "关羽副将" ; sg:birthYear "?" ; sg:deathYear "220" ; sg:nativePlace "关西" ; sg:referenceCount 80 .
+sg:p26 owl:sameAs sg:周仓 .
+sg:p27 a sg:Person ; rdfs:label "糜竺" ; sg:styleName "子仲" ; sg:title "安汉将军" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "东海朐县" ; sg:referenceCount 40 .
+sg:p27 owl:sameAs sg:糜竺 .
+sg:p28 a sg:Person ; rdfs:label "糜芳" ; sg:styleName "子方" ; sg:title "南郡太守" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "东海朐县" ; sg:referenceCount 50 .
+sg:p28 owl:sameAs sg:糜芳 .
+sg:p29 a sg:Person ; rdfs:label "孙乾" ; sg:styleName "公祐" ; sg:title "秉忠将军" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "北海" ; sg:referenceCount 50 .
+sg:p29 owl:sameAs sg:孙乾 .
+sg:p30 a sg:Person ; rdfs:label "简雍" ; sg:styleName "宪和" ; sg:title "昭德将军" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "涿郡" ; sg:referenceCount 40 .
+sg:p30 owl:sameAs sg:简雍 .
+sg:p31 a sg:Person ; rdfs:label "曹操" ; sg:styleName "孟德" ; sg:title "魏武帝" ; sg:birthYear "155" ; sg:deathYear "220" ; sg:nativePlace "沛国谯县" ; sg:referenceCount 2200 .
+sg:p31 owl:sameAs sg:曹操 .
+sg:p32 a sg:Person ; rdfs:label "曹丕" ; sg:styleName "子桓" ; sg:title "魏文帝" ; sg:birthYear "187" ; sg:deathYear "226" ; sg:nativePlace "沛国谯县" ; sg:referenceCount 300 .
+sg:p32 owl:sameAs sg:曹丕 .
+sg:p33 a sg:Person ; rdfs:label "曹植" ; sg:styleName "子建" ; sg:title "陈思王" ; sg:birthYear "192" ; sg:deathYear "232" ; sg:nativePlace "沛国谯县" ; sg:referenceCount 150 .
+sg:p33 owl:sameAs sg:曹植 .
+sg:p34 a sg:Person ; rdfs:label "曹睿" ; sg:styleName "元仲" ; sg:title "魏明帝" ; sg:birthYear "204" ; sg:deathYear "239" ; sg:nativePlace "沛国谯县" ; sg:referenceCount 200 .
+sg:p34 owl:sameAs sg:曹睿 .
+sg:p35 a sg:Person ; rdfs:label "司马懿" ; sg:styleName "仲达" ; sg:title "宣帝、太傅" ; sg:birthYear "179" ; sg:deathYear "251" ; sg:nativePlace "河内温县" ; sg:referenceCount 1000 .
+sg:p35 owl:sameAs sg:司马懿 .
+sg:p36 a sg:Person ; rdfs:label "夏侯惇" ; sg:styleName "元让" ; sg:title "大将军、高安乡侯" ; sg:birthYear "?" ; sg:deathYear "220" ; sg:nativePlace "沛国谯县" ; sg:referenceCount 300 .
+sg:p36 owl:sameAs sg:夏侯惇 .
+sg:p37 a sg:Person ; rdfs:label "夏侯渊" ; sg:styleName "妙才" ; sg:title "征西将军、博昌亭侯" ; sg:birthYear "?" ; sg:deathYear "219" ; sg:nativePlace "沛国谯县" ; sg:referenceCount 250 .
+sg:p37 owl:sameAs sg:夏侯渊 .
+sg:p38 a sg:Person ; rdfs:label "曹仁" ; sg:styleName "子孝" ; sg:title "大司马、陈侯" ; sg:birthYear "168" ; sg:deathYear "223" ; sg:nativePlace "沛国谯县" ; sg:referenceCount 300 .
+sg:p38 owl:sameAs sg:曹仁 .
+sg:p39 a sg:Person ; rdfs:label "曹洪" ; sg:styleName "子廉" ; sg:title "骠骑将军、乐城侯" ; sg:birthYear "?" ; sg:deathYear "232" ; sg:nativePlace "沛国谯县" ; sg:referenceCount 150 .
+sg:p39 owl:sameAs sg:曹洪 .
+sg:p40 a sg:Person ; rdfs:label "张辽" ; sg:styleName "文远" ; sg:title "前将军、晋阳侯" ; sg:birthYear "169" ; sg:deathYear "222" ; sg:nativePlace "雁门马邑" ; sg:referenceCount 400 .
+sg:p40 owl:sameAs sg:张辽 .
+sg:p41 a sg:Person ; rdfs:label "张郃" ; sg:styleName "俊乂" ; sg:title "征西车骑将军、鄚侯" ; sg:birthYear "?" ; sg:deathYear "231" ; sg:nativePlace "河间鄚县" ; sg:referenceCount 300 .
+sg:p41 owl:sameAs sg:张郃 .
+sg:p42 a sg:Person ; rdfs:label "徐晃" ; sg:styleName "公明" ; sg:title "右将军、阳平侯" ; sg:birthYear "?" ; sg:deathYear "227" ; sg:nativePlace "河东杨县" ; sg:referenceCount 250 .
+sg:p42 owl:sameAs sg:徐晃 .
+sg:p43 a sg:Person ; rdfs:label "于禁" ; sg:styleName "文则" ; sg:title "左将军、益寿亭侯" ; sg:birthYear "?" ; sg:deathYear "221" ; sg:nativePlace "泰山钜平" ; sg:referenceCount 180 .
+sg:p43 owl:sameAs sg:于禁 .
+sg:p44 a sg:Person ; rdfs:label "乐进" ; sg:styleName "文谦" ; sg:title "右将军、广昌亭侯" ; sg:birthYear "?" ; sg:deathYear "218" ; sg:nativePlace "阳平卫国" ; sg:referenceCount 150 .
+sg:p44 owl:sameAs sg:乐进 .
+sg:p45 a sg:Person ; rdfs:label "典韦" ; sg:styleName "?" ; sg:title "校尉" ; sg:birthYear "?" ; sg:deathYear "197" ; sg:nativePlace "陈留己吾" ; sg:referenceCount 120 .
+sg:p45 owl:sameAs sg:典韦 .
+sg:p46 a sg:Person ; rdfs:label "许褚" ; sg:styleName "仲康" ; sg:title "武卫将军、牟乡侯" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "谯国谯县" ; sg:referenceCount 200 .
+sg:p46 owl:sameAs sg:许褚 .
+sg:p47 a sg:Person ; rdfs:label "郭嘉" ; sg:styleName "奉孝" ; sg:title "军师祭酒、洧阳亭侯" ; sg:birthYear "170" ; sg:deathYear "207" ; sg:nativePlace "颍川阳翟" ; sg:referenceCount 200 .
+sg:p47 owl:sameAs sg:郭嘉 .
+sg:p48 a sg:Person ; rdfs:label "荀彧" ; sg:styleName "文若" ; sg:title "尚书令、万岁亭侯" ; sg:birthYear "163" ; sg:deathYear "212" ; sg:nativePlace "颍川颍阴" ; sg:referenceCount 250 .
+sg:p48 owl:sameAs sg:荀彧 .
+sg:p49 a sg:Person ; rdfs:label "荀攸" ; sg:styleName "公达" ; sg:title "尚书令、陵树亭侯" ; sg:birthYear "157" ; sg:deathYear "214" ; sg:nativePlace "颍川颍阴" ; sg:referenceCount 150 .
+sg:p49 owl:sameAs sg:荀攸 .
+sg:p50 a sg:Person ; rdfs:label "贾诩" ; sg:styleName "文和" ; sg:title "太尉、寿乡侯" ; sg:birthYear "147" ; sg:deathYear "223" ; sg:nativePlace "武威姑臧" ; sg:referenceCount 200 .
+sg:p50 owl:sameAs sg:贾诩 .
+sg:p51 a sg:Person ; rdfs:label "程昱" ; sg:styleName "仲德" ; sg:title "卫尉、安乡侯" ; sg:birthYear "141" ; sg:deathYear "220" ; sg:nativePlace "东郡东阿" ; sg:referenceCount 150 .
+sg:p51 owl:sameAs sg:程昱 .
+sg:p52 a sg:Person ; rdfs:label "刘晔" ; sg:styleName "子扬" ; sg:title "太中大夫" ; sg:birthYear "?" ; sg:deathYear "234" ; sg:nativePlace "淮南成德" ; sg:referenceCount 80 .
+sg:p52 owl:sameAs sg:刘晔 .
+sg:p53 a sg:Person ; rdfs:label "满宠" ; sg:styleName "伯宁" ; sg:title "太尉、昌邑侯" ; sg:birthYear "?" ; sg:deathYear "242" ; sg:nativePlace "山阳昌邑" ; sg:referenceCount 70 .
+sg:p53 owl:sameAs sg:满宠 .
+sg:p54 a sg:Person ; rdfs:label "吕虔" ; sg:styleName "子恪" ; sg:title "徐州刺史、万年亭侯" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "任城" ; sg:referenceCount 40 .
+sg:p54 owl:sameAs sg:吕虔 .
+sg:p55 a sg:Person ; rdfs:label "文聘" ; sg:styleName "仲业" ; sg:title "后将军、新野侯" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "南阳宛县" ; sg:referenceCount 60 .
+sg:p55 owl:sameAs sg:文聘 .
+sg:p56 a sg:Person ; rdfs:label "庞德" ; sg:styleName "令明" ; sg:title "立义将军、关门亭侯" ; sg:birthYear "?" ; sg:deathYear "219" ; sg:nativePlace "南安狟道" ; sg:referenceCount 150 .
+sg:p56 owl:sameAs sg:庞德 .
+sg:p57 a sg:Person ; rdfs:label "钟会" ; sg:styleName "士季" ; sg:title "司徒、县侯" ; sg:birthYear "225" ; sg:deathYear "264" ; sg:nativePlace "颍川长社" ; sg:referenceCount 200 .
+sg:p57 owl:sameAs sg:钟会 .
+sg:p58 a sg:Person ; rdfs:label "邓艾" ; sg:styleName "士载" ; sg:title "太尉、邓侯" ; sg:birthYear "197" ; sg:deathYear "264" ; sg:nativePlace "义阳棘阳" ; sg:referenceCount 250 .
+sg:p58 owl:sameAs sg:邓艾 .
+sg:p59 a sg:Person ; rdfs:label "司马师" ; sg:styleName "子元" ; sg:title "景帝、大将军" ; sg:birthYear "208" ; sg:deathYear "255" ; sg:nativePlace "河内温县" ; sg:referenceCount 150 .
+sg:p59 owl:sameAs sg:司马师 .
+sg:p60 a sg:Person ; rdfs:label "司马昭" ; sg:styleName "子上" ; sg:title "文帝、晋公" ; sg:birthYear "211" ; sg:deathYear "265" ; sg:nativePlace "河内温县" ; sg:referenceCount 250 .
+sg:p60 owl:sameAs sg:司马昭 .
+sg:p61 a sg:Person ; rdfs:label "杨修" ; sg:styleName "德祖" ; sg:title "丞相主簿" ; sg:birthYear "175" ; sg:deathYear "219" ; sg:nativePlace "弘农华阴" ; sg:referenceCount 100 .
+sg:p61 owl:sameAs sg:杨修 .
+sg:p62 a sg:Person ; rdfs:label "王朗" ; sg:styleName "景兴" ; sg:title "司徒、兰陵侯" ; sg:birthYear "?" ; sg:deathYear "228" ; sg:nativePlace "东海郯县" ; sg:referenceCount 80 .
+sg:p62 owl:sameAs sg:王朗 .
+sg:p63 a sg:Person ; rdfs:label "华歆" ; sg:styleName "子鱼" ; sg:title "太尉、博平侯" ; sg:birthYear "157" ; sg:deathYear "232" ; sg:nativePlace "平原高唐" ; sg:referenceCount 50 .
+sg:p63 owl:sameAs sg:华歆 .
+sg:p64 a sg:Person ; rdfs:label "陈群" ; sg:styleName "长文" ; sg:title "司空、颍阴侯" ; sg:birthYear "?" ; sg:deathYear "237" ; sg:nativePlace "颍川许昌" ; sg:referenceCount 50 .
+sg:p64 owl:sameAs sg:陈群 .
+sg:p65 a sg:Person ; rdfs:label "郭淮" ; sg:styleName "伯济" ; sg:title "车骑将军、阳曲侯" ; sg:birthYear "?" ; sg:deathYear "255" ; sg:nativePlace "太原阳曲" ; sg:referenceCount 80 .
+sg:p65 owl:sameAs sg:郭淮 .
+sg:p66 a sg:Person ; rdfs:label "郝昭" ; sg:styleName "伯道" ; sg:title "杂号将军" ; sg:birthYear "?" ; sg:deathYear "229" ; sg:nativePlace "太原" ; sg:referenceCount 60 .
+sg:p66 owl:sameAs sg:郝昭 .
+sg:p67 a sg:Person ; rdfs:label "王双" ; sg:styleName "子全" ; sg:title "虎威将军" ; sg:birthYear "?" ; sg:deathYear "228" ; sg:nativePlace "陇西狄道" ; sg:referenceCount 50 .
+sg:p67 owl:sameAs sg:王双 .
+sg:p68 a sg:Person ; rdfs:label "诸葛诞" ; sg:styleName "公休" ; sg:title "征东大将军、高平侯" ; sg:birthYear "?" ; sg:deathYear "258" ; sg:nativePlace "琅琊阳都" ; sg:referenceCount 80 .
+sg:p68 owl:sameAs sg:诸葛诞 .
+sg:p69 a sg:Person ; rdfs:label "文鸯" ; sg:styleName "次骞" ; sg:title "东夷校尉" ; sg:birthYear "238" ; sg:deathYear "291" ; sg:nativePlace "谯郡" ; sg:referenceCount 70 .
+sg:p69 owl:sameAs sg:文鸯 .
+sg:p70 a sg:Person ; rdfs:label "邓忠" ; sg:styleName "?" ; sg:title "惠唐亭侯" ; sg:birthYear "?" ; sg:deathYear "264" ; sg:nativePlace "义阳棘阳" ; sg:referenceCount 40 .
+sg:p70 owl:sameAs sg:邓忠 .
+sg:p71 a sg:Person ; rdfs:label "孙权" ; sg:styleName "仲谋" ; sg:title "吴大帝" ; sg:birthYear "182" ; sg:deathYear "252" ; sg:nativePlace "吴郡富春" ; sg:referenceCount 1200 .
+sg:p71 owl:sameAs sg:孙权 .
+sg:p72 a sg:Person ; rdfs:label "孙坚" ; sg:styleName "文台" ; sg:title "武烈皇帝" ; sg:birthYear "155" ; sg:deathYear "191" ; sg:nativePlace "吴郡富春" ; sg:referenceCount 250 .
+sg:p72 owl:sameAs sg:孙坚 .
+sg:p73 a sg:Person ; rdfs:label "孙策" ; sg:styleName "伯符" ; sg:title "长沙桓王" ; sg:birthYear "175" ; sg:deathYear "200" ; sg:nativePlace "吴郡富春" ; sg:referenceCount 300 .
+sg:p73 owl:sameAs sg:孙策 .
+sg:p74 a sg:Person ; rdfs:label "周瑜" ; sg:styleName "公瑾" ; sg:title "偏将军、南郡太守" ; sg:birthYear "175" ; sg:deathYear "210" ; sg:nativePlace "庐江舒县" ; sg:referenceCount 700 .
+sg:p74 owl:sameAs sg:周瑜 .
+sg:p75 a sg:Person ; rdfs:label "鲁肃" ; sg:styleName "子敬" ; sg:title "横江将军" ; sg:birthYear "172" ; sg:deathYear "217" ; sg:nativePlace "临淮东城" ; sg:referenceCount 400 .
+sg:p75 owl:sameAs sg:鲁肃 .
+sg:p76 a sg:Person ; rdfs:label "吕蒙" ; sg:styleName "子明" ; sg:title "南郡太守、孱陵侯" ; sg:birthYear "178" ; sg:deathYear "220" ; sg:nativePlace "汝南富陂" ; sg:referenceCount 300 .
+sg:p76 owl:sameAs sg:吕蒙 .
+sg:p77 a sg:Person ; rdfs:label "陆逊" ; sg:styleName "伯言" ; sg:title "丞相、江陵侯" ; sg:birthYear "183" ; sg:deathYear "245" ; sg:nativePlace "吴郡吴县" ; sg:referenceCount 350 .
+sg:p77 owl:sameAs sg:陆逊 .
+sg:p78 a sg:Person ; rdfs:label "张昭" ; sg:styleName "子布" ; sg:title "辅吴将军、娄侯" ; sg:birthYear "156" ; sg:deathYear "236" ; sg:nativePlace "彭城" ; sg:referenceCount 200 .
+sg:p78 owl:sameAs sg:张昭 .
+sg:p79 a sg:Person ; rdfs:label "顾雍" ; sg:styleName "元叹" ; sg:title "丞相、醴陵侯" ; sg:birthYear "168" ; sg:deathYear "243" ; sg:nativePlace "吴郡吴县" ; sg:referenceCount 60 .
+sg:p79 owl:sameAs sg:顾雍 .
+sg:p80 a sg:Person ; rdfs:label "诸葛瑾" ; sg:styleName "子瑜" ; sg:title "大将军、宛陵侯" ; sg:birthYear "174" ; sg:deathYear "241" ; sg:nativePlace "琅琊阳都" ; sg:referenceCount 100 .
+sg:p80 owl:sameAs sg:诸葛瑾 .
+sg:p81 a sg:Person ; rdfs:label "太史慈" ; sg:styleName "子义" ; sg:title "建昌都尉" ; sg:birthYear "166" ; sg:deathYear "206" ; sg:nativePlace "东莱黄县" ; sg:referenceCount 150 .
+sg:p81 owl:sameAs sg:太史慈 .
+sg:p82 a sg:Person ; rdfs:label "甘宁" ; sg:styleName "兴霸" ; sg:title "折冲将军、西陵太守" ; sg:birthYear "?" ; sg:deathYear "220" ; sg:nativePlace "巴郡临江" ; sg:referenceCount 200 .
+sg:p82 owl:sameAs sg:甘宁 .
+sg:p83 a sg:Person ; rdfs:label "凌统" ; sg:styleName "公绩" ; sg:title "偏将军" ; sg:birthYear "189" ; sg:deathYear "217" ; sg:nativePlace "吴郡馀杭" ; sg:referenceCount 80 .
+sg:p83 owl:sameAs sg:凌统 .
+sg:p84 a sg:Person ; rdfs:label "周泰" ; sg:styleName "幼平" ; sg:title "奋威将军、陵阳侯" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "九江下蔡" ; sg:referenceCount 100 .
+sg:p84 owl:sameAs sg:周泰 .
+sg:p85 a sg:Person ; rdfs:label "程普" ; sg:styleName "德谋" ; sg:title "偏将军、江夏太守" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "右北平土垠" ; sg:referenceCount 120 .
+sg:p85 owl:sameAs sg:程普 .
+sg:p86 a sg:Person ; rdfs:label "黄盖" ; sg:styleName "公覆" ; sg:title "偏将军、武陵太守" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "零陵泉陵" ; sg:referenceCount 150 .
+sg:p86 owl:sameAs sg:黄盖 .
+sg:p87 a sg:Person ; rdfs:label "韩当" ; sg:styleName "义公" ; sg:title "昭武将军、石城侯" ; sg:birthYear "?" ; sg:deathYear "227" ; sg:nativePlace "辽西令支" ; sg:referenceCount 80 .
+sg:p87 owl:sameAs sg:韩当 .
+sg:p88 a sg:Person ; rdfs:label "蒋钦" ; sg:styleName "公奕" ; sg:title "右护军" ; sg:birthYear "?" ; sg:deathYear "220" ; sg:nativePlace "九江寿春" ; sg:referenceCount 60 .
+sg:p88 owl:sameAs sg:蒋钦 .
+sg:p89 a sg:Person ; rdfs:label "丁奉" ; sg:styleName "承渊" ; sg:title "大司马、安丰侯" ; sg:birthYear "?" ; sg:deathYear "271" ; sg:nativePlace "庐江安丰" ; sg:referenceCount 120 .
+sg:p89 owl:sameAs sg:丁奉 .
+sg:p90 a sg:Person ; rdfs:label "徐盛" ; sg:styleName "文向" ; sg:title "安东将军、芜湖侯" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "琅邪莒县" ; sg:referenceCount 80 .
+sg:p90 owl:sameAs sg:徐盛 .
+sg:p91 a sg:Person ; rdfs:label "潘璋" ; sg:styleName "文珪" ; sg:title "右将军、溧阳侯" ; sg:birthYear "?" ; sg:deathYear "234" ; sg:nativePlace "东郡发干" ; sg:referenceCount 80 .
+sg:p91 owl:sameAs sg:潘璋 .
+sg:p92 a sg:Person ; rdfs:label "朱然" ; sg:styleName "义封" ; sg:title "大司马、当阳侯" ; sg:birthYear "182" ; sg:deathYear "249" ; sg:nativePlace "丹阳故鄣" ; sg:referenceCount 60 .
+sg:p92 owl:sameAs sg:朱然 .
+sg:p93 a sg:Person ; rdfs:label "陆抗" ; sg:styleName "幼节" ; sg:title "大司马、荆州牧" ; sg:birthYear "226" ; sg:deathYear "274" ; sg:nativePlace "吴郡吴县" ; sg:referenceCount 80 .
+sg:p93 owl:sameAs sg:陆抗 .
+sg:p94 a sg:Person ; rdfs:label "孙皓" ; sg:styleName "元宗" ; sg:title "吴末帝、归命侯" ; sg:birthYear "242" ; sg:deathYear "284" ; sg:nativePlace "建业" ; sg:referenceCount 100 .
+sg:p94 owl:sameAs sg:孙皓 .
+sg:p95 a sg:Person ; rdfs:label "诸葛恪" ; sg:styleName "元逊" ; sg:title "大将军、阳都侯" ; sg:birthYear "203" ; sg:deathYear "253" ; sg:nativePlace "琅琊阳都" ; sg:referenceCount 80 .
+sg:p95 owl:sameAs sg:诸葛恪 .
+sg:p96 a sg:Person ; rdfs:label "孙峻" ; sg:styleName "子远" ; sg:title "丞相、大将军" ; sg:birthYear "219" ; sg:deathYear "256" ; sg:nativePlace "吴郡富春" ; sg:referenceCount 50 .
+sg:p96 owl:sameAs sg:孙峻 .
+sg:p97 a sg:Person ; rdfs:label "孙綝" ; sg:styleName "子通" ; sg:title "丞相、大将军" ; sg:birthYear "231" ; sg:deathYear "258" ; sg:nativePlace "吴郡富春" ; sg:referenceCount 50 .
+sg:p97 owl:sameAs sg:孙綝 .
+sg:p98 a sg:Person ; rdfs:label "大乔" ; sg:styleName "?" ; sg:title "孙策夫人" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "皖县" ; sg:referenceCount 80 .
+sg:p98 owl:sameAs sg:大乔 .
+sg:p99 a sg:Person ; rdfs:label "小乔" ; sg:styleName "?" ; sg:title "周瑜夫人" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "皖县" ; sg:referenceCount 100 .
+sg:p99 owl:sameAs sg:小乔 .
+sg:p100 a sg:Person ; rdfs:label "孙尚香" ; sg:styleName "?" ; sg:title "刘备夫人" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "吴郡富春" ; sg:referenceCount 150 .
+sg:p100 owl:sameAs sg:孙尚香 .
+sg:p101 a sg:Person ; rdfs:label "董卓" ; sg:styleName "仲颖" ; sg:title "相国、太师" ; sg:birthYear "?" ; sg:deathYear "192" ; sg:nativePlace "陇西临洮" ; sg:referenceCount 500 .
+sg:p101 owl:sameAs sg:董卓 .
+sg:p102 a sg:Person ; rdfs:label "吕布" ; sg:styleName "奉先" ; sg:title "温侯" ; sg:birthYear "?" ; sg:deathYear "199" ; sg:nativePlace "五原九原" ; sg:referenceCount 700 .
+sg:p102 owl:sameAs sg:吕布 .
+sg:p103 a sg:Person ; rdfs:label "袁绍" ; sg:styleName "本初" ; sg:title "大将军、邺侯" ; sg:birthYear "?" ; sg:deathYear "202" ; sg:nativePlace "汝南汝阳" ; sg:referenceCount 600 .
+sg:p103 owl:sameAs sg:袁绍 .
+sg:p104 a sg:Person ; rdfs:label "袁术" ; sg:styleName "公路" ; sg:title "仲家皇帝" ; sg:birthYear "?" ; sg:deathYear "199" ; sg:nativePlace "汝南汝阳" ; sg:referenceCount 300 .
+sg:p104 owl:sameAs sg:袁术 .
+sg:p105 a sg:Person ; rdfs:label "刘表" ; sg:styleName "景升" ; sg:title "镇南将军、荆州牧" ; sg:birthYear "142" ; sg:deathYear "208" ; sg:nativePlace "山阳高平" ; sg:referenceCount 300 .
+sg:p105 owl:sameAs sg:刘表 .
+sg:p106 a sg:Person ; rdfs:label "刘璋" ; sg:styleName "季玉" ; sg:title "益州牧" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "江夏竟陵" ; sg:referenceCount 150 .
+sg:p106 owl:sameAs sg:刘璋 .
+sg:p107 a sg:Person ; rdfs:label "张鲁" ; sg:styleName "公祺" ; sg:title "镇南将军、阆中侯" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "沛国丰县" ; sg:referenceCount 80 .
+sg:p107 owl:sameAs sg:张鲁 .
+sg:p108 a sg:Person ; rdfs:label "马腾" ; sg:styleName "寿成" ; sg:title "卫尉、槐里侯" ; sg:birthYear "?" ; sg:deathYear "212" ; sg:nativePlace "扶风茂陵" ; sg:referenceCount 100 .
+sg:p108 owl:sameAs sg:马腾 .
+sg:p109 a sg:Person ; rdfs:label "韩遂" ; sg:styleName "文约" ; sg:title "征西将军" ; sg:birthYear "?" ; sg:deathYear "215" ; sg:nativePlace "凉州金城" ; sg:referenceCount 80 .
+sg:p109 owl:sameAs sg:韩遂 .
+sg:p110 a sg:Person ; rdfs:label "陶谦" ; sg:styleName "恭祖" ; sg:title "徐州牧、溧阳侯" ; sg:birthYear "132" ; sg:deathYear "194" ; sg:nativePlace "丹阳" ; sg:referenceCount 100 .
+sg:p110 owl:sameAs sg:陶谦 .
+sg:p111 a sg:Person ; rdfs:label "公孙瓒" ; sg:styleName "伯圭" ; sg:title "前将军、易侯" ; sg:birthYear "?" ; sg:deathYear "199" ; sg:nativePlace "辽西令支" ; sg:referenceCount 150 .
+sg:p111 owl:sameAs sg:公孙瓒 .
+sg:p112 a sg:Person ; rdfs:label "公孙渊" ; sg:styleName "文懿" ; sg:title "燕王" ; sg:birthYear "?" ; sg:deathYear "238" ; sg:nativePlace "辽东襄平" ; sg:referenceCount 50 .
+sg:p112 owl:sameAs sg:公孙渊 .
+sg:p113 a sg:Person ; rdfs:label "张角" ; sg:styleName "?" ; sg:title "天公将军" ; sg:birthYear "?" ; sg:deathYear "184" ; sg:nativePlace "巨鹿" ; sg:referenceCount 120 .
+sg:p113 owl:sameAs sg:张角 .
+sg:p114 a sg:Person ; rdfs:label "张宝" ; sg:styleName "?" ; sg:title "地公将军" ; sg:birthYear "?" ; sg:deathYear "184" ; sg:nativePlace "巨鹿" ; sg:referenceCount 50 .
+sg:p114 owl:sameAs sg:张宝 .
+sg:p115 a sg:Person ; rdfs:label "张梁" ; sg:styleName "?" ; sg:title "人公将军" ; sg:birthYear "?" ; sg:deathYear "184" ; sg:nativePlace "巨鹿" ; sg:referenceCount 50 .
+sg:p115 owl:sameAs sg:张梁 .
+sg:p116 a sg:Person ; rdfs:label "汉献帝" ; sg:styleName "伯和" ; sg:title "山阳公" ; sg:birthYear "181" ; sg:deathYear "234" ; sg:nativePlace "洛阳" ; sg:referenceCount 500 .
+sg:p116 owl:sameAs sg:汉献帝 .
+sg:p117 a sg:Person ; rdfs:label "何进" ; sg:styleName "遂高" ; sg:title "大将军" ; sg:birthYear "?" ; sg:deathYear "189" ; sg:nativePlace "南阳宛县" ; sg:referenceCount 120 .
+sg:p117 owl:sameAs sg:何进 .
+sg:p118 a sg:Person ; rdfs:label "十常侍" ; sg:styleName "?" ; sg:title "中常侍" ; sg:birthYear "?" ; sg:deathYear "189" ; sg:nativePlace "" ; sg:referenceCount 100 .
+sg:p118 owl:sameAs sg:十常侍 .
+sg:p119 a sg:Person ; rdfs:label "王允" ; sg:styleName "子师" ; sg:title "司徒" ; sg:birthYear "137" ; sg:deathYear "192" ; sg:nativePlace "太原祁县" ; sg:referenceCount 120 .
+sg:p119 owl:sameAs sg:王允 .
+sg:p120 a sg:Person ; rdfs:label "貂蝉" ; sg:styleName "?" ; sg:title "四大美人" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "忻州木耳村" ; sg:referenceCount 200 .
+sg:p120 owl:sameAs sg:貂蝉 .
+sg:p121 a sg:Person ; rdfs:label "华佗" ; sg:styleName "元化" ; sg:title "神医" ; sg:birthYear "?" ; sg:deathYear "208" ; sg:nativePlace "沛国谯县" ; sg:referenceCount 120 .
+sg:p121 owl:sameAs sg:华佗 .
+sg:p122 a sg:Person ; rdfs:label "张仲景" ; sg:styleName "?" ; sg:title "医圣" ; sg:birthYear "150" ; sg:deathYear "219" ; sg:nativePlace "南阳涅阳" ; sg:referenceCount 20 .
+sg:p122 owl:sameAs sg:张仲景 .
+sg:p123 a sg:Person ; rdfs:label "左慈" ; sg:styleName "元放" ; sg:title "方士" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "庐江" ; sg:referenceCount 50 .
+sg:p123 owl:sameAs sg:左慈 .
+sg:p124 a sg:Person ; rdfs:label "于吉" ; sg:styleName "?" ; sg:title "道士" ; sg:birthYear "?" ; sg:deathYear "200" ; sg:nativePlace "琅琊" ; sg:referenceCount 60 .
+sg:p124 owl:sameAs sg:于吉 .
+sg:p125 a sg:Person ; rdfs:label "司马徽" ; sg:styleName "德操" ; sg:title "水镜先生" ; sg:birthYear "?" ; sg:deathYear "208" ; sg:nativePlace "颍川阳翟" ; sg:referenceCount 80 .
+sg:p125 owl:sameAs sg:司马徽 .
+sg:p126 a sg:Person ; rdfs:label "黄承彦" ; sg:styleName "?" ; sg:title "诸葛亮岳父" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "沔南" ; sg:referenceCount 40 .
+sg:p126 owl:sameAs sg:黄承彦 .
+sg:p127 a sg:Person ; rdfs:label "管辂" ; sg:styleName "公明" ; sg:title "神卜" ; sg:birthYear "209" ; sg:deathYear "256" ; sg:nativePlace "平原" ; sg:referenceCount 50 .
+sg:p127 owl:sameAs sg:管辂 .
+sg:p128 a sg:Person ; rdfs:label "祢衡" ; sg:styleName "正平" ; sg:title "名士" ; sg:birthYear "173" ; sg:deathYear "198" ; sg:nativePlace "平原般县" ; sg:referenceCount 60 .
+sg:p128 owl:sameAs sg:祢衡 .
+sg:p129 a sg:Person ; rdfs:label "孔融" ; sg:styleName "文举" ; sg:title "北海相" ; sg:birthYear "153" ; sg:deathYear "208" ; sg:nativePlace "鲁国" ; sg:referenceCount 80 .
+sg:p129 owl:sameAs sg:孔融 .
+sg:p130 a sg:Person ; rdfs:label "陈琳" ; sg:styleName "孔璋" ; sg:title "军谋祭酒" ; sg:birthYear "?" ; sg:deathYear "217" ; sg:nativePlace "广陵射阳" ; sg:referenceCount 70 .
+sg:p130 owl:sameAs sg:陈琳 .
+sg:p131 a sg:Person ; rdfs:label "蔡邕" ; sg:styleName "伯喈" ; sg:title "左中郎将" ; sg:birthYear "133" ; sg:deathYear "192" ; sg:nativePlace "陈留圉县" ; sg:referenceCount 60 .
+sg:p131 owl:sameAs sg:蔡邕 .
+sg:p132 a sg:Person ; rdfs:label "蔡文姬" ; sg:styleName "文姬" ; sg:title "才女" ; sg:birthYear "177" ; sg:deathYear "?" ; sg:nativePlace "陈留圉县" ; sg:referenceCount 40 .
+sg:p132 owl:sameAs sg:蔡文姬 .
+sg:p133 a sg:Person ; rdfs:label "甄宓" ; sg:styleName "?" ; sg:title "文昭皇后" ; sg:birthYear "183" ; sg:deathYear "221" ; sg:nativePlace "中山无极" ; sg:referenceCount 80 .
+sg:p133 owl:sameAs sg:甄宓 .
+sg:p134 a sg:Person ; rdfs:label "黄月英" ; sg:styleName "?" ; sg:title "诸葛亮夫人" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "沔南" ; sg:referenceCount 50 .
+sg:p134 owl:sameAs sg:黄月英 .
+sg:p135 a sg:Person ; rdfs:label "甘夫人" ; sg:styleName "?" ; sg:title "刘备夫人、昭烈皇后" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "沛县" ; sg:referenceCount 80 .
+sg:p135 owl:sameAs sg:甘夫人 .
+sg:p136 a sg:Person ; rdfs:label "糜夫人" ; sg:styleName "?" ; sg:title "刘备夫人" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "东海朐县" ; sg:referenceCount 60 .
+sg:p136 owl:sameAs sg:糜夫人 .
+sg:p137 a sg:Person ; rdfs:label "吴国太" ; sg:styleName "?" ; sg:title "孙坚夫人" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "吴郡" ; sg:referenceCount 80 .
+sg:p137 owl:sameAs sg:吴国太 .
+sg:p138 a sg:Person ; rdfs:label "乔国老" ; sg:styleName "?" ; sg:title "二乔之父" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "皖县" ; sg:referenceCount 50 .
+sg:p138 owl:sameAs sg:乔国老 .
+sg:p139 a sg:Person ; rdfs:label "李儒" ; sg:styleName "文优" ; sg:title "博士、军师" ; sg:birthYear "?" ; sg:deathYear "192" ; sg:nativePlace "陇西" ; sg:referenceCount 80 .
+sg:p139 owl:sameAs sg:李儒 .
+sg:p140 a sg:Person ; rdfs:label "李傕" ; sg:styleName "稚然" ; sg:title "大司马、车骑将军" ; sg:birthYear "?" ; sg:deathYear "198" ; sg:nativePlace "北地" ; sg:referenceCount 100 .
+sg:p140 owl:sameAs sg:李傕 .
+sg:p141 a sg:Person ; rdfs:label "郭汜" ; sg:styleName "?" ; sg:title "车骑将军" ; sg:birthYear "?" ; sg:deathYear "197" ; sg:nativePlace "张掖" ; sg:referenceCount 100 .
+sg:p141 owl:sameAs sg:郭汜 .
+sg:p142 a sg:Person ; rdfs:label "华雄" ; sg:styleName "?" ; sg:title "都督" ; sg:birthYear "?" ; sg:deathYear "191" ; sg:nativePlace "关西" ; sg:referenceCount 80 .
+sg:p142 owl:sameAs sg:华雄 .
+sg:p143 a sg:Person ; rdfs:label "陈宫" ; sg:styleName "公台" ; sg:title "谋士" ; sg:birthYear "?" ; sg:deathYear "199" ; sg:nativePlace "东郡武阳" ; sg:referenceCount 150 .
+sg:p143 owl:sameAs sg:陈宫 .
+sg:p144 a sg:Person ; rdfs:label "高顺" ; sg:styleName "?" ; sg:title "中郎将" ; sg:birthYear "?" ; sg:deathYear "199" ; sg:nativePlace "?" ; sg:referenceCount 80 .
+sg:p144 owl:sameAs sg:高顺 .
+sg:p145 a sg:Person ; rdfs:label "张任" ; sg:styleName "?" ; sg:title "益州从事" ; sg:birthYear "?" ; sg:deathYear "214" ; sg:nativePlace "蜀郡" ; sg:referenceCount 80 .
+sg:p145 owl:sameAs sg:张任 .
+sg:p146 a sg:Person ; rdfs:label "严颜" ; sg:styleName "?" ; sg:title "前将军" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "临江" ; sg:referenceCount 60 .
+sg:p146 owl:sameAs sg:严颜 .
+sg:p147 a sg:Person ; rdfs:label "张松" ; sg:styleName "永年" ; sg:title "益州别驾" ; sg:birthYear "?" ; sg:deathYear "213" ; sg:nativePlace "蜀郡" ; sg:referenceCount 80 .
+sg:p147 owl:sameAs sg:张松 .
+sg:p148 a sg:Person ; rdfs:label "法正" ; sg:styleName "孝直" ; sg:title "尚书令" ; sg:birthYear "176" ; sg:deathYear "220" ; sg:nativePlace "扶风郿县" ; sg:referenceCount 200 .
+sg:p148 owl:sameAs sg:法正 .
+sg:p149 a sg:Person ; rdfs:label "刘谌" ; sg:styleName "?" ; sg:title "北地王" ; sg:birthYear "?" ; sg:deathYear "263" ; sg:nativePlace "成都" ; sg:referenceCount 60 .
+sg:p149 owl:sameAs sg:刘谌 .
+sg:p150 a sg:Person ; rdfs:label "黄皓" ; sg:styleName "?" ; sg:title "中常侍、奉车都尉" ; sg:birthYear "?" ; sg:deathYear "?" ; sg:nativePlace "?" ; sg:referenceCount 80 .
+sg:p150 owl:sameAs sg:黄皓 .
+sg:fac0 a sg:Faction ; rdfs:label "蜀漢（季漢）" ; sg:capitalName "成都" ; sg:period "221–263" ; sg:troopStrength "約十萬" ; sg:description "以「興復漢室」為旗號，據益州天府之國，諸葛亮治戎為長，然夷陵之後國力大損，終為魏所滅。" .
+sg:fac0 owl:sameAs sg:蜀漢 .
+sg:fac1 a sg:Faction ; rdfs:label "曹魏" ; sg:capitalName "許都、洛陽" ; sg:period "220–266" ; sg:troopStrength "約四十萬" ; sg:description "曹操挾天子以令諸侯，屯田養兵，唯才是舉，統一北方；曹丕受禪稱帝，後權歸司馬氏。" .
+sg:fac1 owl:sameAs sg:曹魏 .
+sg:fac2 a sg:Faction ; rdfs:label "東吳" ; sg:capitalName "建業" ; sg:period "229–280" ; sg:troopStrength "約二十三萬" ; sg:description "孫氏三世經營江東，憑長江天險與水軍立國，赤壁一戰定三分，存續最久。" .
+sg:fac2 owl:sameAs sg:東吳 .
+sg:fac3 a sg:Faction ; rdfs:label "董卓集團" ; sg:capitalName "長安" ; sg:period "189–198" ; sg:troopStrength "約十五萬" ; sg:description "西涼軍閥入京，廢立天子，殘暴失人心；王允連環計誅董卓，李郭之亂使關中殘破。" .
+sg:fac3 owl:sameAs sg:董卓集團 .
+sg:fac4 a sg:Faction ; rdfs:label "袁紹集團" ; sg:capitalName "鄴城" ; sg:period "190–207" ; sg:troopStrength "約三十萬" ; sg:description "四世三公，門生故吏遍天下，雄踞河北；官渡之敗後內部分裂，為曹操所併。" .
+sg:fac4 owl:sameAs sg:袁紹集團 .
+sg:fac5 a sg:Faction ; rdfs:label "袁術集團" ; sg:capitalName "壽春" ; sg:period "190–199" ; sg:troopStrength "約八萬" ; sg:description "據淮南稱帝，僭號「仲家」，失道寡助，糧盡眾叛，嘔血而死。" .
+sg:fac5 owl:sameAs sg:袁術集團 .
+sg:fac6 a sg:Faction ; rdfs:label "呂布集團" ; sg:capitalName "徐州" ; sg:period "194–198" ; sg:troopStrength "約五萬" ; sg:description "呂布勇冠三軍而無謀，反覆無常，奪徐州後為曹操水淹下邳所擒。" .
+sg:fac6 owl:sameAs sg:呂布集團 .
+sg:fac7 a sg:Faction ; rdfs:label "荊州劉表" ; sg:capitalName "襄陽" ; sg:period "190–208" ; sg:troopStrength "約十萬" ; sg:description "單騎入荊州，坐保江漢，然晚年寵蔡氏、疏長子，死後劉琮降曹。" .
+sg:fac7 owl:sameAs sg:荊州劉表 .
+sg:fac8 a sg:Faction ; rdfs:label "益州劉璋" ; sg:capitalName "成都" ; sg:period "194–214" ; sg:troopStrength "約八萬" ; sg:description "闇弱多疑，引劉備入蜀以拒張魯，反失益州。" .
+sg:fac8 owl:sameAs sg:益州劉璋 .
+sg:fac9 a sg:Faction ; rdfs:label "西涼馬騰韓遂" ; sg:capitalName "西涼" ; sg:period "190–214" ; sg:troopStrength "約六萬" ; sg:description "西涼騎兵驍勇，馬超起兵為父報仇，潼關一戰震動關中。" .
+sg:fac9 owl:sameAs sg:西涼馬騰韓遂 .
+sg:fac10 a sg:Faction ; rdfs:label "黃巾軍" ; sg:capitalName "無" ; sg:period "184–188" ; sg:troopStrength "數十萬" ; sg:description "「蒼天已死，黃天當立」，頭裹黃巾，雖被鎮壓，卻成三國群雄崛起的序幕。" .
+sg:fac10 owl:sameAs sg:黃巾軍 .
+sg:fac11 a sg:Faction ; rdfs:label "司馬晉" ; sg:capitalName "洛陽" ; sg:period "265–280" ; sg:troopStrength "約五十萬" ; sg:description "司馬氏三代專魏政，高平陵之變後獨攬大權，滅蜀、代魏、平吳，三分歸一。" .
+sg:fac11 owl:sameAs sg:司馬晉 .
+sg:pl1 a sg:Place ; rdfs:label "洛阳" ; sg:placeLevel "都城" ; sg:modernName "河南洛阳" ; sg:coordinates "112.45,34.62" .
+sg:pl1 owl:sameAs sg:洛阳 .
+sg:pl2 a sg:Place ; rdfs:label "长安" ; sg:placeLevel "都城" ; sg:modernName "陕西西安" ; sg:coordinates "108.94,34.34" .
+sg:pl2 owl:sameAs sg:长安 .
+sg:pl3 a sg:Place ; rdfs:label "许都" ; sg:placeLevel "都城" ; sg:modernName "河南许昌" ; sg:coordinates "113.85,34.03" .
+sg:pl3 owl:sameAs sg:许都 .
+sg:pl4 a sg:Place ; rdfs:label "成都" ; sg:placeLevel "都城" ; sg:modernName "四川成都" ; sg:coordinates "104.07,30.67" .
+sg:pl4 owl:sameAs sg:成都 .
+sg:pl5 a sg:Place ; rdfs:label "建业" ; sg:placeLevel "都城" ; sg:modernName "江苏南京" ; sg:coordinates "118.8,32.06" .
+sg:pl5 owl:sameAs sg:建业 .
+sg:pl6 a sg:Place ; rdfs:label "邺城" ; sg:placeLevel "州治" ; sg:modernName "河北临漳" ; sg:coordinates "114.62,36.32" .
+sg:pl6 owl:sameAs sg:邺城 .
+sg:pl7 a sg:Place ; rdfs:label "襄阳" ; sg:placeLevel "郡治" ; sg:modernName "湖北襄阳" ; sg:coordinates "112.14,32.04" .
+sg:pl7 owl:sameAs sg:襄阳 .
+sg:pl8 a sg:Place ; rdfs:label "荆州" ; sg:placeLevel "州治" ; sg:modernName "湖北荆州" ; sg:coordinates "112.24,30.33" .
+sg:pl8 owl:sameAs sg:荆州 .
+sg:pl9 a sg:Place ; rdfs:label "徐州" ; sg:placeLevel "州治" ; sg:modernName "江苏徐州" ; sg:coordinates "117.18,34.26" .
+sg:pl9 owl:sameAs sg:徐州 .
+sg:pl10 a sg:Place ; rdfs:label "幽州" ; sg:placeLevel "州治" ; sg:modernName "北京" ; sg:coordinates "116.4,39.9" .
+sg:pl10 owl:sameAs sg:幽州 .
+sg:pl11 a sg:Place ; rdfs:label "冀州" ; sg:placeLevel "州治" ; sg:modernName "河北临漳" ; sg:coordinates "114.62,36.32" .
+sg:pl11 owl:sameAs sg:冀州 .
+sg:pl12 a sg:Place ; rdfs:label "青州" ; sg:placeLevel "州治" ; sg:modernName "山东淄博" ; sg:coordinates "118.05,36.81" .
+sg:pl12 owl:sameAs sg:青州 .
+sg:pl13 a sg:Place ; rdfs:label "兖州" ; sg:placeLevel "州治" ; sg:modernName "山东金乡" ; sg:coordinates "116.31,35.07" .
+sg:pl13 owl:sameAs sg:兖州 .
+sg:pl14 a sg:Place ; rdfs:label "豫州" ; sg:placeLevel "州治" ; sg:modernName "河南汝南" ; sg:coordinates "114.36,33" .
+sg:pl14 owl:sameAs sg:豫州 .
+sg:pl15 a sg:Place ; rdfs:label "扬州" ; sg:placeLevel "州治" ; sg:modernName "安徽寿县" ; sg:coordinates "116.78,32.58" .
+sg:pl15 owl:sameAs sg:扬州 .
+sg:pl16 a sg:Place ; rdfs:label "益州" ; sg:placeLevel "州治" ; sg:modernName "四川成都" ; sg:coordinates "104.07,30.67" .
+sg:pl16 owl:sameAs sg:益州 .
+sg:pl17 a sg:Place ; rdfs:label "汉中" ; sg:placeLevel "郡治" ; sg:modernName "陕西汉中" ; sg:coordinates "107.03,33.07" .
+sg:pl17 owl:sameAs sg:汉中 .
+sg:pl18 a sg:Place ; rdfs:label "天水" ; sg:placeLevel "郡治" ; sg:modernName "甘肃天水" ; sg:coordinates "105.72,34.58" .
+sg:pl18 owl:sameAs sg:天水 .
+sg:pl19 a sg:Place ; rdfs:label "宛城" ; sg:placeLevel "郡治" ; sg:modernName "河南南阳" ; sg:coordinates "112.53,33" .
+sg:pl19 owl:sameAs sg:宛城 .
+sg:pl20 a sg:Place ; rdfs:label "下邳" ; sg:placeLevel "县治" ; sg:modernName "江苏睢宁" ; sg:coordinates "117.95,33.91" .
+sg:pl20 owl:sameAs sg:下邳 .
+sg:pl21 a sg:Place ; rdfs:label "小沛" ; sg:placeLevel "县治" ; sg:modernName "江苏沛县" ; sg:coordinates "116.93,34.73" .
+sg:pl21 owl:sameAs sg:小沛 .
+sg:pl22 a sg:Place ; rdfs:label "濮阳" ; sg:placeLevel "郡治" ; sg:modernName "河南濮阳" ; sg:coordinates "115.03,35.76" .
+sg:pl22 owl:sameAs sg:濮阳 .
+sg:pl23 a sg:Place ; rdfs:label "白马" ; sg:placeLevel "津渡" ; sg:modernName "河南滑县" ; sg:coordinates "114.79,35.57" .
+sg:pl23 owl:sameAs sg:白马 .
+sg:pl24 a sg:Place ; rdfs:label "延津" ; sg:placeLevel "津渡" ; sg:modernName "河南延津" ; sg:coordinates "114.19,35.14" .
+sg:pl24 owl:sameAs sg:延津 .
+sg:pl25 a sg:Place ; rdfs:label "官渡" ; sg:placeLevel "战场" ; sg:modernName "河南中牟" ; sg:coordinates "113.97,34.71" .
+sg:pl25 owl:sameAs sg:官渡 .
+sg:pl26 a sg:Place ; rdfs:label "乌巢" ; sg:placeLevel "战场" ; sg:modernName "河南延津" ; sg:coordinates "114.25,35.18" .
+sg:pl26 owl:sameAs sg:乌巢 .
+sg:pl27 a sg:Place ; rdfs:label "仓亭" ; sg:placeLevel "渡口" ; sg:modernName "山东阳谷" ; sg:coordinates "115.79,36.12" .
+sg:pl27 owl:sameAs sg:仓亭 .
+sg:pl28 a sg:Place ; rdfs:label "新野" ; sg:placeLevel "县治" ; sg:modernName "河南新野" ; sg:coordinates "112.36,32.52" .
+sg:pl28 owl:sameAs sg:新野 .
+sg:pl29 a sg:Place ; rdfs:label "樊城" ; sg:placeLevel "城邑" ; sg:modernName "湖北襄阳" ; sg:coordinates "112.15,32.05" .
+sg:pl29 owl:sameAs sg:樊城 .
+sg:pl30 a sg:Place ; rdfs:label "隆中" ; sg:placeLevel "隐士居" ; sg:modernName "湖北襄阳" ; sg:coordinates "112.03,31.99" .
+sg:pl30 owl:sameAs sg:隆中 .
+sg:pl31 a sg:Place ; rdfs:label "当阳长坂坡" ; sg:placeLevel "战场" ; sg:modernName "湖北当阳" ; sg:coordinates "111.79,30.82" .
+sg:pl31 owl:sameAs sg:当阳长坂坡 .
+sg:pl32 a sg:Place ; rdfs:label "汉津口" ; sg:placeLevel "渡口" ; sg:modernName "湖北沙洋" ; sg:coordinates "112.56,30.7" .
+sg:pl32 owl:sameAs sg:汉津口 .
+sg:pl33 a sg:Place ; rdfs:label "夏口" ; sg:placeLevel "城邑" ; sg:modernName "湖北武汉汉口" ; sg:coordinates "114.29,30.58" .
+sg:pl33 owl:sameAs sg:夏口 .
+sg:pl34 a sg:Place ; rdfs:label "柴桑" ; sg:placeLevel "郡治" ; sg:modernName "江西九江" ; sg:coordinates "115.97,29.71" .
+sg:pl34 owl:sameAs sg:柴桑 .
+sg:pl35 a sg:Place ; rdfs:label "三江口" ; sg:placeLevel "战场" ; sg:modernName "湖北黄冈" ; sg:coordinates "114.87,30.45" .
+sg:pl35 owl:sameAs sg:三江口 .
+sg:pl36 a sg:Place ; rdfs:label "赤壁" ; sg:placeLevel "战场" ; sg:modernName "湖北赤壁市" ; sg:coordinates "113.89,29.72" .
+sg:pl36 owl:sameAs sg:赤壁 .
+sg:pl37 a sg:Place ; rdfs:label "华容道" ; sg:placeLevel "古道" ; sg:modernName "湖北监利" ; sg:coordinates "112.93,29.83" .
+sg:pl37 owl:sameAs sg:华容道 .
+sg:pl38 a sg:Place ; rdfs:label "南郡" ; sg:placeLevel "郡治" ; sg:modernName "湖北荆州" ; sg:coordinates "112.24,30.33" .
+sg:pl38 owl:sameAs sg:南郡 .
+sg:pl39 a sg:Place ; rdfs:label "长沙" ; sg:placeLevel "郡治" ; sg:modernName "湖南长沙" ; sg:coordinates "112.94,28.23" .
+sg:pl39 owl:sameAs sg:长沙 .
+sg:pl40 a sg:Place ; rdfs:label "桂阳" ; sg:placeLevel "郡治" ; sg:modernName "湖南桂阳" ; sg:coordinates "112.74,25.74" .
+sg:pl40 owl:sameAs sg:桂阳 .
+sg:pl41 a sg:Place ; rdfs:label "零陵" ; sg:placeLevel "郡治" ; sg:modernName "湖南零陵" ; sg:coordinates "111.61,26.22" .
+sg:pl41 owl:sameAs sg:零陵 .
+sg:pl42 a sg:Place ; rdfs:label "武陵" ; sg:placeLevel "郡治" ; sg:modernName "湖南常德" ; sg:coordinates "111.69,29.04" .
+sg:pl42 owl:sameAs sg:武陵 .
+sg:pl43 a sg:Place ; rdfs:label "南徐" ; sg:placeLevel "城邑" ; sg:modernName "江苏镇江" ; sg:coordinates "119.45,32.2" .
+sg:pl43 owl:sameAs sg:南徐 .
+sg:pl44 a sg:Place ; rdfs:label "甘露寺" ; sg:placeLevel "寺庙" ; sg:modernName "江苏镇江北固山" ; sg:coordinates "119.46,32.23" .
+sg:pl44 owl:sameAs sg:甘露寺 .
+sg:pl45 a sg:Place ; rdfs:label "合肥" ; sg:placeLevel "城邑" ; sg:modernName "安徽合肥" ; sg:coordinates "117.28,31.86" .
+sg:pl45 owl:sameAs sg:合肥 .
+sg:pl46 a sg:Place ; rdfs:label "逍遥津" ; sg:placeLevel "战场" ; sg:modernName "安徽合肥" ; sg:coordinates "117.29,31.87" .
+sg:pl46 owl:sameAs sg:逍遥津 .
+sg:pl47 a sg:Place ; rdfs:label "濡须口" ; sg:placeLevel "渡口" ; sg:modernName "安徽无为" ; sg:coordinates "117.89,31.38" .
+sg:pl47 owl:sameAs sg:濡须口 .
+sg:pl48 a sg:Place ; rdfs:label "潼关" ; sg:placeLevel "关隘" ; sg:modernName "陕西潼关" ; sg:coordinates "110.24,34.56" .
+sg:pl48 owl:sameAs sg:潼关 .
+sg:pl49 a sg:Place ; rdfs:label "定军山" ; sg:placeLevel "战场" ; sg:modernName "陕西勉县" ; sg:coordinates "106.67,33.12" .
+sg:pl49 owl:sameAs sg:定军山 .
+sg:pl50 a sg:Place ; rdfs:label "祁山" ; sg:placeLevel "战场" ; sg:modernName "甘肃礼县" ; sg:coordinates "104.98,34.26" .
+sg:pl50 owl:sameAs sg:祁山 .
+sg:pl51 a sg:Place ; rdfs:label "街亭" ; sg:placeLevel "战场" ; sg:modernName "甘肃秦安" ; sg:coordinates "105.72,34.87" .
+sg:pl51 owl:sameAs sg:街亭 .
+sg:pl52 a sg:Place ; rdfs:label "五丈原" ; sg:placeLevel "战场" ; sg:modernName "陕西岐山" ; sg:coordinates "107.62,34.32" .
+sg:pl52 owl:sameAs sg:五丈原 .
+sg:pl53 a sg:Place ; rdfs:label "阴平" ; sg:placeLevel "古道" ; sg:modernName "甘肃文县" ; sg:coordinates "104.69,32.94" .
+sg:pl53 owl:sameAs sg:阴平 .
+sg:pl54 a sg:Place ; rdfs:label "绵竹" ; sg:placeLevel "城邑" ; sg:modernName "四川绵竹" ; sg:coordinates "104.2,31.34" .
+sg:pl54 owl:sameAs sg:绵竹 .
+sg:pl55 a sg:Place ; rdfs:label "白帝城" ; sg:placeLevel "城邑" ; sg:modernName "重庆奉节" ; sg:coordinates "109.53,31.04" .
+sg:pl55 owl:sameAs sg:白帝城 .
+sg:pl56 a sg:Place ; rdfs:label "夷陵猇亭" ; sg:placeLevel "战场" ; sg:modernName "湖北宜昌" ; sg:coordinates "111.29,30.69" .
+sg:pl56 owl:sameAs sg:夷陵猇亭 .
+sg:pl57 a sg:Place ; rdfs:label "麦城" ; sg:placeLevel "城邑" ; sg:modernName "湖北当阳" ; sg:coordinates "111.82,30.86" .
+sg:pl57 owl:sameAs sg:麦城 .
+sg:pl58 a sg:Place ; rdfs:label "虎牢关" ; sg:placeLevel "关隘" ; sg:modernName "河南荥阳" ; sg:coordinates "113.31,34.83" .
+sg:pl58 owl:sameAs sg:虎牢关 .
+sg:pl59 a sg:Place ; rdfs:label "汜水关" ; sg:placeLevel "关隘" ; sg:modernName "河南荥阳" ; sg:coordinates "113.26,34.81" .
+sg:pl59 owl:sameAs sg:汜水关 .
+sg:pl60 a sg:Place ; rdfs:label "五关" ; sg:placeLevel "关隘组" ; sg:modernName "河南一线" ; sg:coordinates "" .
+sg:pl60 owl:sameAs sg:五关 .
+sg:b1 a sg:Battle ; rdfs:label "黄巾起义" ; sg:storyYear "184" ; sg:outcome "东汉镇压，起义失败" ; sg:occursAt sg:pl10 , sg:pl9 , sg:pl13 .
+sg:b1 owl:sameAs sg:黄巾起义 .
+sg:b2 a sg:Battle ; rdfs:label "汜水关之战" ; sg:storyYear "190" ; sg:outcome "联军破华雄" ; sg:occursAt sg:pl59 .
+sg:b2 owl:sameAs sg:汜水关之战 .
+sg:b3 a sg:Battle ; rdfs:label "虎牢关之战" ; sg:storyYear "190" ; sg:outcome "三英战吕布，联军胜" ; sg:occursAt sg:pl58 .
+sg:b3 owl:sameAs sg:虎牢关之战 .
+sg:b4 a sg:Battle ; rdfs:label "磐河之战" ; sg:storyYear "191" ; sg:outcome "袁绍胜公孙瓒，赵云归刘备" ; sg:occursAt sg:pl11 .
+sg:b4 owl:sameAs sg:磐河之战 .
+sg:b5 a sg:Battle ; rdfs:label "襄阳之战" ; sg:storyYear "191" ; sg:outcome "孙坚战死" ; sg:occursAt sg:pl7 .
+sg:b5 owl:sameAs sg:襄阳之战 .
+sg:b6 a sg:Battle ; rdfs:label "长安之战" ; sg:storyYear "192" ; sg:outcome "吕布杀董卓，李郭乱长安" ; sg:occursAt sg:pl2 .
+sg:b6 owl:sameAs sg:长安之战 .
+sg:b7 a sg:Battle ; rdfs:label "濮阳之战" ; sg:storyYear "194" ; sg:outcome "曹操败吕布，收复兖州" ; sg:occursAt sg:pl22 .
+sg:b7 owl:sameAs sg:濮阳之战 .
+sg:b8 a sg:Battle ; rdfs:label "定陶之战" ; sg:storyYear "195" ; sg:outcome "曹操大破吕布，吕布投刘备" ; sg:occursAt sg:pl13 .
+sg:b8 owl:sameAs sg:定陶之战 .
+sg:b9 a sg:Battle ; rdfs:label "宛城之战" ; sg:storyYear "197" ; sg:outcome "张绣降而复叛，典韦战死" ; sg:occursAt sg:pl19 .
+sg:b9 owl:sameAs sg:宛城之战 .
+sg:b10 a sg:Battle ; rdfs:label "下邳之战" ; sg:storyYear "199" ; sg:outcome "曹操擒杀吕布，收张辽" ; sg:occursAt sg:pl20 .
+sg:b10 owl:sameAs sg:下邳之战 .
+sg:b11 a sg:Battle ; rdfs:label "白马之战" ; sg:storyYear "200" ; sg:outcome "关羽斩颜良，解白马围" ; sg:occursAt sg:pl23 .
+sg:b11 owl:sameAs sg:白马之战 .
+sg:b12 a sg:Battle ; rdfs:label "延津之战" ; sg:storyYear "200" ; sg:outcome "关羽诛文丑" ; sg:occursAt sg:pl24 .
+sg:b12 owl:sameAs sg:延津之战 .
+sg:b13 a sg:Battle ; rdfs:label "官渡之战" ; sg:storyYear "200" ; sg:outcome "曹操以少胜多，大破袁绍" ; sg:occursAt sg:pl25 .
+sg:b13 owl:sameAs sg:官渡之战 .
+sg:b14 a sg:Battle ; rdfs:label "乌巢之战" ; sg:storyYear "200" ; sg:outcome "曹操烧乌巢粮，袁军溃败" ; sg:occursAt sg:pl26 .
+sg:b14 owl:sameAs sg:乌巢之战 .
+sg:b15 a sg:Battle ; rdfs:label "仓亭之战" ; sg:storyYear "201" ; sg:outcome "曹操再破袁绍主力" ; sg:occursAt sg:pl27 .
+sg:b15 owl:sameAs sg:仓亭之战 .
+sg:b16 a sg:Battle ; rdfs:label "博望坡之战" ; sg:storyYear "208" ; sg:outcome "诸葛亮火攻破夏侯惇" ; sg:occursAt sg:pl28 .
+sg:b16 owl:sameAs sg:博望坡之战 .
+sg:b17 a sg:Battle ; rdfs:label "长坂坡之战" ; sg:storyYear "208" ; sg:outcome "赵云单骑救主，张飞断桥" ; sg:occursAt sg:pl31 .
+sg:b17 owl:sameAs sg:长坂坡之战 .
+sg:b18 a sg:Battle ; rdfs:label "赤壁之战" ; sg:storyYear "208" ; sg:outcome "孙刘联军火攻大破曹操" ; sg:occursAt sg:pl36 .
+sg:b18 owl:sameAs sg:赤壁之战 .
+sg:b19 a sg:Battle ; rdfs:label "华容道" ; sg:storyYear "208" ; sg:outcome "关羽义释曹操" ; sg:occursAt sg:pl37 .
+sg:b19 owl:sameAs sg:华容道 .
+sg:b20 a sg:Battle ; rdfs:label "南郡之战" ; sg:storyYear "209" ; sg:outcome "诸葛亮一气周瑜，取荆州" ; sg:occursAt sg:pl38 .
+sg:b20 owl:sameAs sg:南郡之战 .
+sg:b21 a sg:Battle ; rdfs:label "合肥之战（逍遥津）" ; sg:storyYear "215" ; sg:outcome "张辽威震逍遥津，孙权败" ; sg:occursAt sg:pl45 , sg:pl46 .
+sg:b21 owl:sameAs sg:合肥之战逍遥津 .
+sg:b22 a sg:Battle ; rdfs:label "潼关之战" ; sg:storyYear "211" ; sg:outcome "曹操反间计破马超韩遂" ; sg:occursAt sg:pl48 .
+sg:b22 owl:sameAs sg:潼关之战 .
+sg:b23 a sg:Battle ; rdfs:label "雒城之战" ; sg:storyYear "214" ; sg:outcome "刘备破雒城，庞统中箭亡" ; sg:occursAt sg:pl62 .
+sg:b23 owl:sameAs sg:雒城之战 .
+sg:b24 a sg:Battle ; rdfs:label "益州之战" ; sg:storyYear "214" ; sg:outcome "刘备取成都，领益州牧" ; sg:occursAt sg:pl16 .
+sg:b24 owl:sameAs sg:益州之战 .
+sg:b25 a sg:Battle ; rdfs:label "汉中之战" ; sg:storyYear "219" ; sg:outcome "刘备取汉中，斩夏侯渊" ; sg:occursAt sg:pl17 , sg:pl49 .
+sg:b25 owl:sameAs sg:汉中之战 .
+sg:b26 a sg:Battle ; rdfs:label "水淹七军" ; sg:storyYear "219" ; sg:outcome "关羽擒于禁斩庞德，威震华夏" ; sg:occursAt sg:pl29 .
+sg:b26 owl:sameAs sg:水淹七军 .
+sg:b27 a sg:Battle ; rdfs:label "襄樊之战（白衣渡江）" ; sg:storyYear "219" ; sg:outcome "吕蒙白衣渡江袭荆州，关羽败走麦城" ; sg:occursAt sg:pl29 , sg:pl8 .
+sg:b27 owl:sameAs sg:襄樊之战白衣渡江 .
+sg:b28 a sg:Battle ; rdfs:label "夷陵之战（猇亭）" ; sg:storyYear "222" ; sg:outcome "陆逊火烧连营七百里，刘备大败" ; sg:occursAt sg:pl56 .
+sg:b28 owl:sameAs sg:夷陵之战猇亭 .
+sg:b29 a sg:Battle ; rdfs:label "南中平定战（七擒孟获）" ; sg:storyYear "225" ; sg:outcome "诸葛亮七擒七纵孟获，平定南中" ; sg:occursAt sg:nanz .
+sg:b29 owl:sameAs sg:南中平定战七擒孟获 .
+sg:b30 a sg:Battle ; rdfs:label "街亭之战" ; sg:storyYear "228" ; sg:outcome "马谡失街亭，诸葛亮第一次北伐失败" ; sg:occursAt sg:pl51 .
+sg:b30 owl:sameAs sg:街亭之战 .
+sg:b31 a sg:Battle ; rdfs:label "空城计" ; sg:storyYear "228" ; sg:outcome "诸葛亮弹琴退司马懿" ; sg:occursAt sg:xic .
+sg:b31 owl:sameAs sg:空城计 .
+sg:b32 a sg:Battle ; rdfs:label "五丈原之战" ; sg:storyYear "234" ; sg:outcome "诸葛亮病逝，蜀军撤退" ; sg:occursAt sg:pl52 .
+sg:b32 owl:sameAs sg:五丈原之战 .
+sg:b33 a sg:Battle ; rdfs:label "高平陵之变" ; sg:storyYear "249" ; sg:outcome "司马懿诛曹爽，司马氏专权" ; sg:occursAt sg:pl2 .
+sg:b33 owl:sameAs sg:高平陵之变 .
+sg:b34 a sg:Battle ; rdfs:label "偷渡阴平" ; sg:storyYear "263" ; sg:outcome "邓艾偷渡阴平，直取成都" ; sg:occursAt sg:pl53 .
+sg:b34 owl:sameAs sg:偷渡阴平 .
+sg:b35 a sg:Battle ; rdfs:label "绵竹之战" ; sg:storyYear "263" ; sg:outcome "诸葛瞻战死，刘禅投降蜀汉亡" ; sg:occursAt sg:pl54 .
+sg:b35 owl:sameAs sg:绵竹之战 .
+sg:b36 a sg:Battle ; rdfs:label "晋灭吴之战" ; sg:storyYear "280" ; sg:outcome "杜预灭吴，三分归一统" ; sg:occursAt sg:pl5 .
+sg:b36 owl:sameAs sg:晋灭吴之战 .
+
+################################
+# 六、事件 · 計謀 · 器物
+################################
+sg:e1 a sg:Event ; rdfs:label "黃巾起義" ; sg:storyYear "184" ; sg:inChapter sg:ch1 ; sg:placeName "八州" ; sg:description "張角以太平道聚眾數十萬，頭裹黃巾，八州並起。朝廷解除黨禁，遣皇甫嵩、盧植等討伐，劉關張於涿郡投軍。" ; sg:virtual false .
+sg:e2 a sg:Event ; rdfs:label "桃園結義" ; sg:storyYear "184" ; sg:inChapter sg:ch1 ; sg:placeName "涿郡" ; sg:description "劉關張於桃園祭告天地，結為異姓兄弟，誓「上報國家，下安黎庶」，是小說全書的情感起點。" ; sg:virtual true .
+sg:e3 a sg:Event ; rdfs:label "董卓入京" ; sg:storyYear "189" ; sg:inChapter sg:ch3 ; sg:placeName "洛陽" ; sg:description "何進誅宦失敗被殺，袁紹等盡誅宦官，董卓率西涼兵入洛陽，收編何進部曲，自此專擅朝政。" ; sg:virtual false .
+sg:e4 a sg:Event ; rdfs:label "廢少帝立獻帝" ; sg:storyYear "189" ; sg:inChapter sg:ch4 ; sg:placeName "洛陽" ; sg:description "董卓廢少帝劉辯為弘農王，立陳留王劉協為帝，即漢獻帝，關東諸侯由此起兵。" ; sg:virtual false .
+sg:e5 a sg:Event ; rdfs:label "曹操獻刀" ; sg:storyYear "189" ; sg:inChapter sg:ch4 ; sg:placeName "洛陽" ; sg:description "曹操借王允七星寶刀入相府行刺董卓，事敗詐稱獻刀，騎馬逃出洛陽。" ; sg:virtual true .
+sg:e6 a sg:Event ; rdfs:label "捉放曹" ; sg:storyYear "189" ; sg:inChapter sg:ch4 ; sg:placeName "中牟" ; sg:description "曹操逃亡途中為陳宮所擒，陳宮棄官同逃；曹操誤殺呂伯奢全家，留下「寧教我負天下人」之語。" ; sg:virtual true .
+sg:e7 a sg:Event ; rdfs:label "十八路諸侯討董" ; sg:storyYear "190" ; sg:inChapter sg:ch5 ; sg:placeName "酸棗" ; sg:description "關東諸侯推袁紹為盟主，起兵討董，然各懷異心，糧草不繼，最終散去。" ; sg:virtual false .
+sg:e8 a sg:Event ; rdfs:label "溫酒斬華雄" ; sg:storyYear "190" ; sg:inChapter sg:ch5 ; sg:placeName "汜水關" ; sg:description "華雄連斬聯軍數將，關羽請纓出戰，曹操溫酒相送；關羽斬華雄而歸，其酒尚溫。" ; sg:virtual true .
+sg:e9 a sg:Event ; rdfs:label "三英戰呂布" ; sg:storyYear "190" ; sg:inChapter sg:ch5 ; sg:placeName "虎牢關" ; sg:description "呂布縱馬耀武，張飛、關羽、劉備先後夾攻，呂布遮攔不住，倒拖畫戟敗走。" ; sg:virtual true .
+sg:e10 a sg:Event ; rdfs:label "王允連環計" ; sg:storyYear "192" ; sg:inChapter sg:ch8 ; sg:placeName "長安" ; sg:description "王允先許貂蟬於呂布，後獻於董卓，使二人反目；呂布遂與王允合謀誅董。" ; sg:virtual true .
+sg:e11 a sg:Event ; rdfs:label "董卓之死" ; sg:storyYear "192" ; sg:inChapter sg:ch9 ; sg:placeName "長安" ; sg:description "董卓入朝，呂布以詔書為名將其刺死，暴屍於市；蔡邕因嘆董卓被殺。" ; sg:virtual false .
+sg:e12 a sg:Event ; rdfs:label "李傕郭汜之亂" ; sg:storyYear "192" ; sg:inChapter sg:ch10 ; sg:placeName "長安" ; sg:description "李傕、郭汜聽賈詡之計反攻長安，呂布敗走，王允殉難，關中自此大亂。" ; sg:virtual false .
+sg:e13 a sg:Event ; rdfs:label "曹操迎駕許都" ; sg:storyYear "196" ; sg:inChapter sg:ch14 ; sg:placeName "洛陽、許都" ; sg:description "曹操納荀彧「奉主上以從人望」之策，迎獻帝遷都許縣，自此挾天子以令諸侯。" ; sg:virtual false .
+sg:e14 a sg:Event ; rdfs:label "轅門射戟" ; sg:storyYear "196" ; sg:inChapter sg:ch16 ; sg:placeName "小沛" ; sg:description "袁術遣紀靈攻劉備，呂布於轅門外百五十步射中畫戟小枝，為兩家解鬥。" ; sg:virtual true .
+sg:e15 a sg:Event ; rdfs:label "呂布之死" ; sg:storyYear "198" ; sg:inChapter sg:ch19 ; sg:placeName "下邳" ; sg:description "曹操水淹下邳，呂布為部下所縛；劉備提醒曹操勿養虎遺患，呂布、陳宮、高順皆被殺。" ; sg:virtual false .
+sg:e16 a sg:Event ; rdfs:label "煮酒論英雄" ; sg:storyYear "199" ; sg:inChapter sg:ch21 ; sg:placeName "許都" ; sg:description "曹操與劉備對坐煮酒，指天下英雄唯操與備；劉備借雷聲掩飾失箸，韜晦自保。" ; sg:virtual true .
+sg:e17 a sg:Event ; rdfs:label "衣帶詔" ; sg:storyYear "200" ; sg:inChapter sg:ch20 ; sg:placeName "許都" ; sg:description "獻帝以血書藏衣帶中，密詔董承誅曹；事洩，董承等被誅，劉備由此反曹。" ; sg:virtual false .
+sg:e18 a sg:Event ; rdfs:label "千里走單騎" ; sg:storyYear "200" ; sg:inChapter sg:ch27 ; sg:placeName "許都至古城" ; sg:description "關羽得知劉備下落，封金掛印，護送二嫂過五關斬六將，於古城與劉張重會。" ; sg:virtual true .
+sg:e19 a sg:Event ; rdfs:label "官渡之戰" ; sg:storyYear "200" ; sg:inChapter sg:ch30 ; sg:placeName "官渡" ; sg:description "曹操以少勝多，火燒烏巢糧草，袁紹軍潰；此戰奠定曹操統一北方之基。" ; sg:virtual false .
+sg:e20 a sg:Event ; rdfs:label "倉亭之戰" ; sg:storyYear "201" ; sg:inChapter sg:ch31 ; sg:placeName "倉亭" ; sg:description "曹操用十面埋伏之計再破袁紹，袁紹嘔血，河北震動。" ; sg:virtual false .
+sg:e21 a sg:Event ; rdfs:label "三顧茅廬" ; sg:storyYear "207" ; sg:inChapter sg:ch37 ; sg:placeName "隆中" ; sg:description "劉備三赴隆中，終見諸葛亮；諸葛亮提出跨有荊益、聯吳抗曹的隆中對。" ; sg:virtual false .
+sg:e22 a sg:Event ; rdfs:label "隆中對" ; sg:storyYear "207" ; sg:inChapter sg:ch38 ; sg:placeName "隆中" ; sg:description "諸葛亮縱論天下三分，先取荊州為家，再取益州為基，結好孫權，待時北伐。" ; sg:virtual true .
+sg:e23 a sg:Event ; rdfs:label "火燒博望坡" ; sg:storyYear "208" ; sg:inChapter sg:ch39 ; sg:placeName "博望坡" ; sg:description "諸葛亮初用兵，以火攻伏擊夏侯惇，關張由此信服。" ; sg:virtual true .
+sg:e24 a sg:Event ; rdfs:label "長坂坡之戰" ; sg:storyYear "208" ; sg:inChapter sg:ch41 ; sg:placeName "長坂坡" ; sg:description "趙雲單騎救阿斗，七進七出；張飛據水斷橋，一聲大喝退曹兵。" ; sg:virtual true .
+sg:e25 a sg:Event ; rdfs:label "舌戰群儒" ; sg:storyYear "208" ; sg:inChapter sg:ch43 ; sg:placeName "柴桑" ; sg:description "諸葛亮赴江東，逐一駁倒張昭等主降派，促成孫劉聯盟。" ; sg:virtual true .
+sg:e26 a sg:Event ; rdfs:label "草船借箭" ; sg:storyYear "208" ; sg:inChapter sg:ch46 ; sg:placeName "長江" ; sg:description "諸葛亮以草船趁大霧佯攻曹營，得箭十萬餘枝，周瑜自嘆不如。" ; sg:virtual true .
+sg:e27 a sg:Event ; rdfs:label "苦肉計" ; sg:storyYear "208" ; sg:inChapter sg:ch46 ; sg:placeName "江東" ; sg:description "黃蓋與周瑜定苦肉計，當眾受杖，闞澤獻詐降書，為火攻鋪路。" ; sg:virtual true .
+sg:e28 a sg:Event ; rdfs:label "借東風" ; sg:storyYear "208" ; sg:inChapter sg:ch49 ; sg:placeName "南屏山" ; sg:description "周瑜憂無東風，諸葛亮設壇祭風，東風大起，火攻得以實施。" ; sg:virtual true .
+sg:e29 a sg:Event ; rdfs:label "赤壁之戰" ; sg:storyYear "208" ; sg:inChapter sg:ch49 ; sg:placeName "赤壁" ; sg:description "孫劉聯軍以火攻大破曹軍連環船，曹操敗走華容道，三分天下之勢初成。" ; sg:virtual false .
+sg:e30 a sg:Event ; rdfs:label "華容道" ; sg:storyYear "208" ; sg:inChapter sg:ch50 ; sg:placeName "華容道" ; sg:description "曹操敗走華容道，關羽念舊日恩義，義釋曹操，回營請罪。" ; sg:virtual true .
+sg:e31 a sg:Event ; rdfs:label "劉備取荊南" ; sg:storyYear "209" ; sg:inChapter sg:ch52 ; sg:placeName "荊南四郡" ; sg:description "劉備趁赤壁之勝，取長沙、零陵、桂陽、武陵四郡，黃忠、魏延來歸。" ; sg:virtual false .
+sg:e32 a sg:Event ; rdfs:label "劉備入蜀" ; sg:storyYear "211" ; sg:inChapter sg:ch60 ; sg:placeName "益州" ; sg:description "劉璋迎劉備入蜀拒張魯，劉備反客為主，逐步奪取益州。" ; sg:virtual false .
+sg:e33 a sg:Event ; rdfs:label "潼關之戰" ; sg:storyYear "211" ; sg:inChapter sg:ch58 ; sg:placeName "潼關" ; sg:description "馬超為父報仇，起西涼兵攻曹，曹操割鬚棄袍；後用賈詡離間計破馬韓。" ; sg:virtual false .
+sg:e34 a sg:Event ; rdfs:label "落鳳坡" ; sg:storyYear "214" ; sg:inChapter sg:ch63 ; sg:placeName "落鳳坡" ; sg:description "龐統進兵雒城，中張任埋伏，歿於落鳳坡，年三十六。" ; sg:virtual true .
+sg:e35 a sg:Event ; rdfs:label "濡須之戰" ; sg:storyYear "215" ; sg:inChapter sg:ch61 ; sg:placeName "濡須口" ; sg:description "孫曹相持於濡須，甘寧百騎劫曹營；曹操見吳軍整肅，嘆「生子當如孫仲謀」。" ; sg:virtual false .
+sg:e36 a sg:Event ; rdfs:label "合肥之戰" ; sg:storyYear "215" ; sg:inChapter sg:ch67 ; sg:placeName "合肥" ; sg:description "張遼以八百破十萬，威震逍遙津，江東小兒聞名止啼。" ; sg:virtual false .
+sg:e37 a sg:Event ; rdfs:label "定軍山之戰" ; sg:storyYear "219" ; sg:inChapter sg:ch70 ; sg:placeName "定軍山" ; sg:description "法正謀劃，黃忠居高臨下斬夏侯淵，劉備遂取漢中。" ; sg:virtual false .
+sg:e38 a sg:Event ; rdfs:label "水淹七軍" ; sg:storyYear "219" ; sg:inChapter sg:ch74 ; sg:placeName "樊城" ; sg:description "漢水暴漲，關羽乘勢水淹七軍，擒于禁、斬龐德，威震華夏。" ; sg:virtual false .
+sg:e39 a sg:Event ; rdfs:label "白衣渡江" ; sg:storyYear "219" ; sg:inChapter sg:ch75 ; sg:placeName "荊州" ; sg:description "呂蒙裝作商船白衣渡江，襲取荊州；糜芳、傅士仁不戰而降。" ; sg:virtual false .
+sg:e40 a sg:Event ; rdfs:label "關羽之死" ; sg:storyYear "220" ; sg:inChapter sg:ch77 ; sg:placeName "麥城" ; sg:description "關羽敗走麥城，為吳軍所擒，不屈而死；孫權送首級於曹操，曹操以王禮葬之。" ; sg:virtual false .
+sg:e41 a sg:Event ; rdfs:label "曹操之死" ; sg:storyYear "220" ; sg:inChapter sg:ch78 ; sg:placeName "洛陽" ; sg:description "曹操頭風病重，疑華佗欲害己而殺之，終病逝洛陽，遺令薄葬。" ; sg:virtual false .
+sg:e42 a sg:Event ; rdfs:label "曹丕篡漢" ; sg:storyYear "220" ; sg:inChapter sg:ch80 ; sg:placeName "許都" ; sg:description "曹丕逼獻帝禪讓，改國號魏，東漢滅亡；獻帝被封山陽公。" ; sg:virtual false .
+sg:e43 a sg:Event ; rdfs:label "夷陵之戰" ; sg:storyYear "222" ; sg:inChapter sg:ch84 ; sg:placeName "夷陵" ; sg:description "劉備為關羽報仇東征，陸遜堅守不出，火燒連營七百里，蜀軍大敗。" ; sg:virtual false .
+sg:e44 a sg:Event ; rdfs:label "白帝城託孤" ; sg:storyYear "223" ; sg:inChapter sg:ch85 ; sg:placeName "白帝城" ; sg:description "劉備病篤，託孤於諸葛亮，言「若嗣子可輔則輔之，如其不才，君可自取」，諸葛亮泣誓竭股肱之力。" ; sg:virtual false .
+sg:e45 a sg:Event ; rdfs:label "七擒孟獲" ; sg:storyYear "225" ; sg:inChapter sg:ch87 ; sg:placeName "南中" ; sg:description "諸葛亮南征，七擒七縱孟獲，攻心為上，南中平定。" ; sg:virtual true .
+sg:e46 a sg:Event ; rdfs:label "失街亭" ; sg:storyYear "228" ; sg:inChapter sg:ch95 ; sg:placeName "街亭" ; sg:description "馬謖違亮節度，舍水上山，為張郃所破；諸葛亮揮淚斬馬謖，自貶三等。" ; sg:virtual false .
+sg:e47 a sg:Event ; rdfs:label "空城計" ; sg:storyYear "228" ; sg:inChapter sg:ch95 ; sg:placeName "西城" ; sg:description "司馬懿大軍壓境，諸葛亮大開城門，焚香撫琴，司馬懿疑有伏兵而退。" ; sg:virtual true .
+sg:e48 a sg:Event ; rdfs:label "五丈原" ; sg:storyYear "234" ; sg:inChapter sg:ch104 ; sg:placeName "五丈原" ; sg:description "諸葛亮第六次北伐，與司馬懿相持於五丈原，積勞成疾，星落秋風。" ; sg:virtual false .
+sg:e49 a sg:Event ; rdfs:label "高平陵之變" ; sg:storyYear "249" ; sg:inChapter sg:ch107 ; sg:placeName "洛陽" ; sg:description "司馬懿趁曹爽陪帝謁陵，發動政變，誅曹爽集團，魏政盡歸司馬氏。" ; sg:virtual false .
+sg:e50 a sg:Event ; rdfs:label "鄧艾滅蜀" ; sg:storyYear "263" ; sg:inChapter sg:ch117 ; sg:placeName "成都" ; sg:description "鄧艾偷渡陰平，直取成都，劉禪出降；姜維詐降鍾會，事敗而死。" ; sg:virtual false .
+sg:e51 a sg:Event ; rdfs:label "三國歸晉" ; sg:storyYear "280" ; sg:inChapter sg:ch120 ; sg:placeName "建業" ; sg:description "晉六路伐吳，王濬樓船下益州，孫皓面縛出降，三國歸於一統。" ; sg:virtual false .
+sg:s1 a sg:Stratagem ; rdfs:label "連環計" ; sg:inChapter sg:ch8 ; sg:userName "王允、龐統" ; sg:targetName "董卓、曹操" ; sg:description "王允以貂蟬離間董卓與呂布；龐統獻連環計使曹操鎖戰船，為火攻創造條件。" ; sg:outcome "董卓被誅；赤壁曹軍船陣無法散開。" .
+sg:s1 owl:sameAs sg:連環計 .
+sg:s2 a sg:Stratagem ; rdfs:label "美人計" ; sg:inChapter sg:ch8 ; sg:userName "王允、周瑜" ; sg:targetName "董卓、劉備" ; sg:description "以貂蟬許呂布而獻董卓；周瑜欲以孫尚香羈縻劉備。" ; sg:outcome "董呂反目；劉備借孫夫人得以脫身。" .
+sg:s2 owl:sameAs sg:美人計 .
+sg:s3 a sg:Stratagem ; rdfs:label "苦肉計" ; sg:inChapter sg:ch46 ; sg:userName "黃蓋、周瑜" ; sg:targetName "曹操" ; sg:description "黃蓋當眾受杖，詐稱降曹，闞澤送降書，取得曹操信任。" ; sg:outcome "黃蓋得以火船近曹營。" .
+sg:s3 owl:sameAs sg:苦肉計 .
+sg:s4 a sg:Stratagem ; rdfs:label "反間計" ; sg:inChapter sg:ch45 ; sg:userName "周瑜、曹操、賈詡" ; sg:targetName "蔡瑁張允、韓遂" ; sg:description "周瑜偽造書信使蔣幹盜回，曹操誤殺蔡瑁、張允；賈詡抹書離間馬超韓遂。" ; sg:outcome "曹軍失水軍統帥；馬韓內訌。" .
+sg:s4 owl:sameAs sg:反間計 .
+sg:s5 a sg:Stratagem ; rdfs:label "空城計" ; sg:inChapter sg:ch95 ; sg:userName "諸葛亮" ; sg:targetName "司馬懿" ; sg:description "西城兵少，諸葛亮大開城門，焚香操琴，以靜制動。" ; sg:outcome "司馬懿疑有伏兵，退軍。" .
+sg:s5 owl:sameAs sg:空城計 .
+sg:s6 a sg:Stratagem ; rdfs:label "火攻計" ; sg:inChapter sg:ch49 ; sg:userName "周瑜、陸遜、諸葛亮" ; sg:targetName "曹操、劉備" ; sg:description "赤壁火燒連環船；夷陵火燒連營七百里；博望坡、上方谷皆用火。" ; sg:outcome "赤壁破曹；夷陵破蜀。" .
+sg:s6 owl:sameAs sg:火攻計 .
+sg:s7 a sg:Stratagem ; rdfs:label "水攻計" ; sg:inChapter sg:ch74 ; sg:userName "關羽、曹操" ; sg:targetName "于禁、呂布" ; sg:description "關羽乘漢水暴漲水淹七軍；曹操決泗水灌下邳擒呂布。" ; sg:outcome "于禁降、龐德死；呂布被擒。" .
+sg:s7 owl:sameAs sg:水攻計 .
+sg:s8 a sg:Stratagem ; rdfs:label "聲東擊西" ; sg:inChapter sg:ch98 ; sg:userName "諸葛亮、賈詡" ; sg:targetName "曹魏" ; sg:description "諸葛亮揚言出斜谷，實出祁山；賈詡屢以疑兵破曹。" ; sg:outcome "調動敵軍，出其不意。" .
+sg:s8 owl:sameAs sg:聲東擊西 .
+sg:s9 a sg:Stratagem ; rdfs:label "借刀殺人" ; sg:inChapter sg:ch23 ; sg:userName "曹操" ; sg:targetName "禰衡" ; sg:description "曹操遣禰衡使荊州，借劉表、黃祖之手除之。" ; sg:outcome "禰衡為黃祖所殺。" .
+sg:s9 owl:sameAs sg:借刀殺人 .
+sg:s10 a sg:Stratagem ; rdfs:label "以逸待勞" ; sg:inChapter sg:ch84 ; sg:userName "陸遜、司馬懿" ; sg:targetName "劉備、諸葛亮" ; sg:description "陸遜堅守不戰，待蜀軍疲敝；司馬懿拒守不出，待諸葛亮糧盡。" ; sg:outcome "夷陵蜀敗；五丈原蜀退。" .
+sg:s10 owl:sameAs sg:以逸待勞 .
+sg:s11 a sg:Stratagem ; rdfs:label "瞞天過海" ; sg:inChapter sg:ch75 ; sg:userName "呂蒙" ; sg:targetName "關羽" ; sg:description "呂蒙稱病，以陸遜代任，使關羽鬆懈；白衣渡江襲荊州。" ; sg:outcome "荊州失守，關羽敗亡。" .
+sg:s11 owl:sameAs sg:瞞天過海 .
+sg:s12 a sg:Stratagem ; rdfs:label "圍魏救趙" ; sg:inChapter sg:ch30 ; sg:userName "曹操、孫臏式戰法" ; sg:targetName "袁紹" ; sg:description "曹操不救白馬而直取延津、烏巢，攻其必救。" ; sg:outcome "袁紹軍心大亂。" .
+sg:s12 owl:sameAs sg:圍魏救趙 .
+sg:s13 a sg:Stratagem ; rdfs:label "無中生有" ; sg:inChapter sg:ch46 ; sg:userName "諸葛亮、周瑜" ; sg:targetName "曹操" ; sg:description "草船借箭、借東風，皆以虛為實，製造有利態勢。" ; sg:outcome "得箭十萬；火攻成。" .
+sg:s13 owl:sameAs sg:無中生有 .
+sg:s14 a sg:Stratagem ; rdfs:label "暗度陳倉" ; sg:inChapter sg:ch97 ; sg:userName "韓信式、諸葛亮" ; sg:targetName "曹魏" ; sg:description "明修棧道，暗度陳倉；諸葛亮二次北伐出散關。" ; sg:outcome "出其不意攻陳倉。" .
+sg:s14 owl:sameAs sg:暗度陳倉 .
+sg:s15 a sg:Stratagem ; rdfs:label "隔岸觀火" ; sg:inChapter sg:ch32 ; sg:userName "曹操、孫權" ; sg:targetName "袁氏兄弟" ; sg:description "曹操暫緩攻河北，待袁譚袁尚自相殘殺；孫權坐觀曹劉相爭。" ; sg:outcome "袁氏內耗，曹操得利。" .
+sg:s15 owl:sameAs sg:隔岸觀火 .
+sg:s16 a sg:Stratagem ; rdfs:label "笑裡藏刀" ; sg:inChapter sg:ch78 ; sg:userName "曹操、司馬懿" ; sg:targetName "政敵" ; sg:description "表面優禮，暗藏殺機；曹操殺華佗、荀彧皆外寬內忌。" ; sg:outcome "異己清除。" .
+sg:s16 owl:sameAs sg:笑裡藏刀 .
+sg:s17 a sg:Stratagem ; rdfs:label "李代桃僵" ; sg:inChapter sg:ch17 ; sg:userName "曹操、司馬懿" ; sg:targetName "軍紀" ; sg:description "曹操借倉官王垕之首以安軍心；司馬氏以成濟弑君而誅成濟。" ; sg:outcome "眾怨得解，主謀脫身。" .
+sg:s17 owl:sameAs sg:李代桃僵 .
+sg:s18 a sg:Stratagem ; rdfs:label "順手牽羊" ; sg:inChapter sg:ch52 ; sg:userName "劉備、孫權" ; sg:targetName "荊南" ; sg:description "赤壁之後，劉備順勢取荊南四郡；孫權取交州。" ; sg:outcome "地盤擴張。" .
+sg:s18 owl:sameAs sg:順手牽羊 .
+sg:s19 a sg:Stratagem ; rdfs:label "調虎離山" ; sg:inChapter sg:ch56 ; sg:userName "周瑜、諸葛亮" ; sg:targetName "劉備" ; sg:description "周瑜以取西川為名誘劉備過江，欲困之；諸葛亮將計就計。" ; sg:outcome "劉備安然返回。" .
+sg:s19 owl:sameAs sg:調虎離山 .
+sg:s20 a sg:Stratagem ; rdfs:label "欲擒故縱" ; sg:inChapter sg:ch87 ; sg:userName "諸葛亮" ; sg:targetName "孟獲" ; sg:description "七擒七縱，使孟獲心服，南人不復反。" ; sg:outcome "南中平定。" .
+sg:s20 owl:sameAs sg:欲擒故縱 .
+sg:s21 a sg:Stratagem ; rdfs:label "拋磚引玉" ; sg:inChapter sg:ch45 ; sg:userName "周瑜、諸葛亮" ; sg:targetName "蔣幹" ; sg:description "周瑜故意讓蔣幹盜走偽書，引出曹操誤殺。" ; sg:outcome "反間成功。" .
+sg:s21 owl:sameAs sg:拋磚引玉 .
+sg:s22 a sg:Stratagem ; rdfs:label "擒賊擒王" ; sg:inChapter sg:ch21 ; sg:userName "關羽、張遼" ; sg:targetName "顏良" ; sg:description "關羽於萬軍中斬顏良，袁軍奪氣。" ; sg:outcome "白馬之圍解。" .
+sg:s22 owl:sameAs sg:擒賊擒王 .
+sg:s23 a sg:Stratagem ; rdfs:label "釜底抽薪" ; sg:inChapter sg:ch30 ; sg:userName "曹操、陸遜" ; sg:targetName "袁紹" ; sg:description "曹操火燒烏巢糧草；陸遜火燒蜀軍連營。" ; sg:outcome "敵軍糧盡自潰。" .
+sg:s23 owl:sameAs sg:釜底抽薪 .
+sg:s24 a sg:Stratagem ; rdfs:label "混水摸魚" ; sg:inChapter sg:ch14 ; sg:userName "曹操、司馬懿" ; sg:targetName "亂局" ; sg:description "趁董卓死後關中大亂，曹操迎駕；趁曹爽謁陵發動政變。" ; sg:outcome "亂中取利。" .
+sg:s24 owl:sameAs sg:混水摸魚 .
+sg:s25 a sg:Stratagem ; rdfs:label "金蟬脫殼" ; sg:inChapter sg:ch104 ; sg:userName "諸葛亮、姜維" ; sg:targetName "司馬懿" ; sg:description "諸葛亮死後，姜維秘不發喪，以木像退司馬懿。" ; sg:outcome "蜀軍全師而退。" .
+sg:s25 owl:sameAs sg:金蟬脫殼 .
+sg:s26 a sg:Stratagem ; rdfs:label "關門捉賊" ; sg:inChapter sg:ch19 ; sg:userName "曹操、陸遜" ; sg:targetName "呂布、劉備" ; sg:description "曹操圍下邳，水淹城池；陸遜圍劉備於馬鞍山。" ; sg:outcome "呂布被擒；蜀軍潰敗。" .
+sg:s26 owl:sameAs sg:關門捉賊 .
+sg:s27 a sg:Stratagem ; rdfs:label "遠交近攻" ; sg:inChapter sg:ch38 ; sg:userName "諸葛亮、孫權" ; sg:targetName "曹魏" ; sg:description "諸葛亮隆中對主張聯吳抗曹，先取近處荊益。" ; sg:outcome "三分格局。" .
+sg:s27 owl:sameAs sg:遠交近攻 .
+sg:s28 a sg:Stratagem ; rdfs:label "假道伐虢" ; sg:inChapter sg:ch60 ; sg:userName "劉備、曹操" ; sg:targetName "劉璋" ; sg:description "劉備借拒張魯之名入蜀，反取益州；曹操借道伐張魯而窺漢中。" ; sg:outcome "劉璋失國。" .
+sg:s28 owl:sameAs sg:假道伐虢 .
+sg:s29 a sg:Stratagem ; rdfs:label "偷梁換柱" ; sg:inChapter sg:ch14 ; sg:userName "曹操、司馬懿" ; sg:targetName "漢室" ; sg:description "曹操迎獻帝而換天子之權；司馬氏架空曹魏。" ; sg:outcome "政權實質轉移。" .
+sg:s29 owl:sameAs sg:偷梁換柱 .
+sg:s30 a sg:Stratagem ; rdfs:label "指桑罵槐" ; sg:inChapter sg:ch30 ; sg:userName "曹操、諸葛亮" ; sg:targetName "將領" ; sg:description "曹操借殺王垕整肅軍紀；諸葛亮斬馬謖以明法。" ; sg:outcome "軍紀整肅。" .
+sg:s30 owl:sameAs sg:指桑罵槐 .
+sg:s31 a sg:Stratagem ; rdfs:label "假癡不癲" ; sg:inChapter sg:ch21 ; sg:userName "劉備、司馬懿" ; sg:targetName "曹操" ; sg:description "劉備種菜掩飾雄心，借雷失箸；司馬懿稱病賺曹爽。" ; sg:outcome "保全自身，待時而動。" .
+sg:s31 owl:sameAs sg:假癡不癲 .
+sg:s32 a sg:Stratagem ; rdfs:label "上屋抽梯" ; sg:inChapter sg:ch39 ; sg:userName "諸葛亮、周瑜" ; sg:targetName "夏侯惇" ; sg:description "誘敵深入，斷其退路，博望坡火攻。" ; sg:outcome "曹軍大敗。" .
+sg:s32 owl:sameAs sg:上屋抽梯 .
+sg:s33 a sg:Stratagem ; rdfs:label "樹上開花" ; sg:inChapter sg:ch42 ; sg:userName "張飛、諸葛亮" ; sg:targetName "曹操" ; sg:description "張飛於長坂橋後揚塵吶喊，虛張聲勢；諸葛亮草船借箭。" ; sg:outcome "曹軍疑懼退兵。" .
+sg:s33 owl:sameAs sg:樹上開花 .
+sg:s34 a sg:Stratagem ; rdfs:label "反客為主" ; sg:inChapter sg:ch60 ; sg:userName "劉備" ; sg:targetName "劉璋" ; sg:description "劉備入蜀本為客軍，漸收人心、奪城池，終反客為主。" ; sg:outcome "得益州。" .
+sg:s34 owl:sameAs sg:反客為主 .
+sg:s35 a sg:Stratagem ; rdfs:label "連環船" ; sg:inChapter sg:ch47 ; sg:userName "龐統、曹操" ; sg:targetName "曹軍" ; sg:description "龐統獻連環計，曹操以鐵索連船，求平穩卻失機動。" ; sg:outcome "火攻時全軍覆沒。" .
+sg:s35 owl:sameAs sg:連環船 .
+sg:s36 a sg:Stratagem ; rdfs:label "七擒七縱" ; sg:inChapter sg:ch87 ; sg:userName "諸葛亮" ; sg:targetName "孟獲" ; sg:description "屢擒屢縱，以德服人，使南人心悅誠服。" ; sg:outcome "南中長期安定。" .
+sg:s36 owl:sameAs sg:七擒七縱 .
+sg:a1 a sg:Artifact ; rdfs:label "青龍偃月刀" ; sg:artifactType "兵器" ; sg:ownerName "關羽" ; sg:inChapter sg:ch1 ; sg:description "又名冷艷鋸，重八十二斤，刀身如偃月，關羽憑此斬顏良、誅文醜，為忠義象徵。" ; sg:virtual true .
+sg:a1 owl:sameAs sg:青龍偃月刀 .
+sg:a2 a sg:Artifact ; rdfs:label "丈八蛇矛" ; sg:artifactType "兵器" ; sg:ownerName "張飛" ; sg:inChapter sg:ch1 ; sg:description "矛長一丈八尺，矛頭如蛇，張飛據長坂橋一聲大喝，曹軍望風而退。" ; sg:virtual true .
+sg:a2 owl:sameAs sg:丈八蛇矛 .
+sg:a3 a sg:Artifact ; rdfs:label "雌雄雙股劍" ; sg:artifactType "兵器" ; sg:ownerName "劉備" ; sg:inChapter sg:ch1 ; sg:description "又名鴛鴦劍，一雌一雄，劉備起兵時所鑄，象徵仁厚而剛毅。" ; sg:virtual true .
+sg:a3 owl:sameAs sg:雌雄雙股劍 .
+sg:a4 a sg:Artifact ; rdfs:label "方天畫戟" ; sg:artifactType "兵器" ; sg:ownerName "呂布" ; sg:inChapter sg:ch3 ; sg:description "戟桿頂端作井字形，可刺可砍，呂布持之縱橫虎牢關，號稱三國第一兵器。" ; sg:virtual true .
+sg:a4 owl:sameAs sg:方天畫戟 .
+sg:a5 a sg:Artifact ; rdfs:label "青釭劍" ; sg:artifactType "兵器" ; sg:ownerName "曹操 → 趙雲" ; sg:inChapter sg:ch41 ; sg:description "曹操二寶劍之一，削鐵如泥；長坂坡為趙雲所得，助其單騎救主。" ; sg:virtual true .
+sg:a5 owl:sameAs sg:青釭劍 .
+sg:a6 a sg:Artifact ; rdfs:label "倚天劍" ; sg:artifactType "兵器" ; sg:ownerName "曹操" ; sg:inChapter sg:ch41 ; sg:description "曹操自佩寶劍，與青釭並稱，象徵其權勢。" ; sg:virtual true .
+sg:a6 owl:sameAs sg:倚天劍 .
+sg:a7 a sg:Artifact ; rdfs:label "七星寶刀" ; sg:artifactType "兵器" ; sg:ownerName "王允 → 曹操" ; sg:inChapter sg:ch4 ; sg:description "王允家傳寶刀，曹操借以刺董卓，事敗後詐稱獻刀。" ; sg:virtual true .
+sg:a7 owl:sameAs sg:七星寶刀 .
+sg:a8 a sg:Artifact ; rdfs:label "赤兔馬" ; sg:artifactType "坐騎" ; sg:ownerName "呂布 → 曹操 → 關羽" ; sg:inChapter sg:ch3 ; sg:description "「人中呂布，馬中赤兔」，日行千里；關羽騎之斬將，後絕食殉主。" ; sg:virtual true .
+sg:a8 owl:sameAs sg:赤兔馬 .
+sg:a9 a sg:Artifact ; rdfs:label "的盧馬" ; sg:artifactType "坐騎" ; sg:ownerName "劉表 → 劉備" ; sg:inChapter sg:ch34 ; sg:description "額有白毛，妨主之馬；劉備騎之躍過檀溪，脫離蔡瑁追殺。" ; sg:virtual true .
+sg:a9 owl:sameAs sg:的盧馬 .
+sg:a10 a sg:Artifact ; rdfs:label "絕影" ; sg:artifactType "坐騎" ; sg:ownerName "曹操" ; sg:inChapter sg:ch16 ; sg:description "曹操名馬，宛城之戰中身中三箭而死，助曹操脫險。" ; sg:virtual true .
+sg:a10 owl:sameAs sg:絕影 .
+sg:a11 a sg:Artifact ; rdfs:label "爪黃飛電" ; sg:artifactType "坐騎" ; sg:ownerName "曹操" ; sg:inChapter sg:ch20 ; sg:description "曹操騎乘的黃色名馬，與絕影並稱。" ; sg:virtual true .
+sg:a11 owl:sameAs sg:爪黃飛電 .
+sg:a12 a sg:Artifact ; rdfs:label "傳國玉璽" ; sg:artifactType "印璽" ; sg:ownerName "孫堅 → 袁術 → 曹操" ; sg:inChapter sg:ch6 ; sg:description "秦始皇所製，刻「受命於天，既壽永昌」，為正統象徵；孫堅入洛陽得之，後歸袁術。" ; sg:virtual false .
+sg:a12 owl:sameAs sg:傳國玉璽 .
+sg:a13 a sg:Artifact ; rdfs:label "羽扇綸巾" ; sg:artifactType "服飾" ; sg:ownerName "諸葛亮" ; sg:inChapter sg:ch38 ; sg:description "諸葛亮標誌性裝束，羽扇輕搖，指揮若定，成為智慧與從容的符號。" ; sg:virtual true .
+sg:a13 owl:sameAs sg:羽扇綸巾 .
+sg:a14 a sg:Artifact ; rdfs:label "木牛流馬" ; sg:artifactType "器械" ; sg:ownerName "諸葛亮" ; sg:inChapter sg:ch102 ; sg:description "北伐運糧器械，木牛負重而行，流馬轉運，緩解蜀道糧運之難。" ; sg:virtual true .
+sg:a14 owl:sameAs sg:木牛流馬 .
+sg:a15 a sg:Artifact ; rdfs:label "諸葛連弩" ; sg:artifactType "器械" ; sg:ownerName "諸葛亮" ; sg:inChapter sg:ch104 ; sg:description "一弩十矢俱發，威力驚人，後世稱「諸葛弩」。" ; sg:virtual true .
+sg:a15 owl:sameAs sg:諸葛連弩 .
+sg:a16 a sg:Artifact ; rdfs:label "八陣圖" ; sg:artifactType "陣法" ; sg:ownerName "諸葛亮" ; sg:inChapter sg:ch84 ; sg:description "以亂石堆成八陣，變化莫測；陸遜誤入，幾不得脫。" ; sg:virtual true .
+sg:a16 owl:sameAs sg:八陣圖 .
+sg:a17 a sg:Artifact ; rdfs:label "七星燈" ; sg:artifactType "法器" ; sg:ownerName "諸葛亮" ; sg:inChapter sg:ch103 ; sg:description "五丈原禳星續命，主燈七盞，魏延闖帳滅燈，諸葛亮知天命難違。" ; sg:virtual true .
+sg:a17 owl:sameAs sg:七星燈 .
+sg:a18 a sg:Artifact ; rdfs:label "銅雀台" ; sg:artifactType "建築" ; sg:ownerName "曹操" ; sg:inChapter sg:ch34 ; sg:description "曹操於鄴城築銅雀台，鎖二喬之語成為赤壁之戰的導火索之一。" ; sg:virtual true .
+sg:a18 owl:sameAs sg:銅雀台 .
+sg:a19 a sg:Artifact ; rdfs:label "衣帶詔" ; sg:artifactType "文書" ; sg:ownerName "漢獻帝 → 董承" ; sg:inChapter sg:ch20 ; sg:description "獻帝以血書藏於衣帶，密詔董承誅曹，事洩引發大獄。" ; sg:virtual false .
+sg:a19 owl:sameAs sg:衣帶詔 .
+sg:a20 a sg:Artifact ; rdfs:label "出師表" ; sg:artifactType "文書" ; sg:ownerName "諸葛亮" ; sg:inChapter sg:ch91 ; sg:description "北伐前上表後主，鞠躬盡瘁，死而後已，為千古忠臣文字。" ; sg:virtual false .
+sg:a20 owl:sameAs sg:出師表 .
+sg:a21 a sg:Artifact ; rdfs:label "誡子書" ; sg:artifactType "文書" ; sg:ownerName "諸葛亮" ; sg:description "「靜以修身，儉以養德」，諸葛亮家訓，影響深遠。" ; sg:virtual false .
+sg:a21 owl:sameAs sg:誡子書 .
+sg:a22 a sg:Artifact ; rdfs:label "短歌行" ; sg:artifactType "詩文" ; sg:ownerName "曹操" ; sg:inChapter sg:ch48 ; sg:description "「對酒當歌，人生幾何」，曹操橫槊賦詩，抒發求賢統一之志。" ; sg:virtual false .
+sg:a22 owl:sameAs sg:短歌行 .
+sg:a23 a sg:Artifact ; rdfs:label "洛神賦" ; sg:artifactType "詩文" ; sg:ownerName "曹植" ; sg:description "曹植感甄氏而作，辭采華美，與銅雀台故事相映。" ; sg:virtual false .
+sg:a23 owl:sameAs sg:洛神賦 .
+sg:a24 a sg:Artifact ; rdfs:label "七步詩" ; sg:artifactType "詩文" ; sg:ownerName "曹植" ; sg:inChapter sg:ch79 ; sg:description "煮豆燃萁，曹丕逼曹植七步成詩，成為兄弟相殘的象徵。" ; sg:virtual true .
+sg:a24 owl:sameAs sg:七步詩 .
+sg:a25 a sg:Artifact ; rdfs:label "太平要術" ; sg:artifactType "典籍" ; sg:ownerName "張角" ; sg:inChapter sg:ch1 ; sg:description "南華老仙所授天書，張角得之能呼風喚雨，發動黃巾起義。" ; sg:virtual true .
+sg:a25 owl:sameAs sg:太平要術 .
+sg:a26 a sg:Artifact ; rdfs:label "孟德新書" ; sg:artifactType "典籍" ; sg:ownerName "曹操" ; sg:inChapter sg:ch60 ; sg:description "曹操所著兵書，張松過目不忘，笑其抄襲，曹操怒而焚之。" ; sg:virtual true .
+sg:a26 owl:sameAs sg:孟德新書 .
+sg:a27 a sg:Artifact ; rdfs:label "青囊書" ; sg:artifactType "典籍" ; sg:ownerName "華佗" ; sg:inChapter sg:ch78 ; sg:description "華佗醫書，臨刑前欲傳獄吏，吏懼不敢受，華佗焚之。" ; sg:virtual true .
+sg:a27 owl:sameAs sg:青囊書 .
+sg:a28 a sg:Artifact ; rdfs:label "錦囊妙計" ; sg:artifactType "信物" ; sg:ownerName "諸葛亮" ; sg:inChapter sg:ch55 ; sg:description "諸葛亮預留錦囊，令趙雲依計行事，助劉備脫離東吳。" ; sg:virtual true .
+sg:a28 owl:sameAs sg:錦囊妙計 .
+
+################################
+# 七、詩詞 · 讖緯 · 評點
+################################
+sg:poem1 a sg:Poem ; rdfs:label "臨江仙·滾滾長江東逝水" ; sg:titleText "臨江仙·滾滾長江東逝水" ; sg:authorName "楊慎" ; sg:poemType "卷首詞" ; sg:contentText "滾滾長江東逝水，浪花淘盡英雄。是非成敗轉頭空。青山依舊在，幾度夕陽紅。\n白髮漁樵江渚上，慣看秋月春風。一壺濁酒喜相逢。古今多少事，都付笑談中。" .
+sg:poem2 a sg:Poem ; rdfs:label "短歌行" ; sg:titleText "短歌行" ; sg:authorName "曹操" ; sg:poemType "樂府" ; sg:inChapter sg:ch48 ; sg:contentText "對酒當歌，人生幾何！譬如朝露，去日苦多。\n慨當以慷，憂思難忘。何以解憂？唯有杜康。\n青青子衿，悠悠我心。但為君故，沉吟至今。\n呦呦鹿鳴，食野之苹。我有嘉賓，鼓瑟吹笙。\n明明如月，何時可掇？憂從中來，不可斷絕。\n越陌度阡，枉用相存。契闊談讌，心念舊恩。\n月明星稀，烏鵲南飛。繞樹三匝，何枝可依？\n山不厭高，海不厭深。周公吐哺，天下歸心。" .
+sg:poem3 a sg:Poem ; rdfs:label "觀滄海" ; sg:titleText "觀滄海" ; sg:authorName "曹操" ; sg:poemType "樂府" ; sg:contentText "東臨碣石，以觀滄海。\n水何澹澹，山島竦峙。\n樹木叢生，百草豐茂。\n秋風蕭瑟，洪波湧起。\n日月之行，若出其中；\n星漢燦爛，若出其裡。\n幸甚至哉，歌以詠志。" .
+sg:poem4 a sg:Poem ; rdfs:label "龜雖壽" ; sg:titleText "龜雖壽" ; sg:authorName "曹操" ; sg:poemType "樂府" ; sg:contentText "神龜雖壽，猶有竟時。\n騰蛇乘霧，終為土灰。\n老驥伏櫪，志在千里。\n烈士暮年，壯心不已。\n盈縮之期，不但在天；\n養怡之福，可得永年。\n幸甚至哉，歌以詠志。" .
+sg:poem5 a sg:Poem ; rdfs:label "七步詩" ; sg:titleText "七步詩" ; sg:authorName "曹植" ; sg:poemType "五言" ; sg:inChapter sg:ch79 ; sg:contentText "煮豆燃豆萁，豆在釜中泣。\n本是同根生，相煎何太急。" .
+sg:poem6 a sg:Poem ; rdfs:label "梁甫吟" ; sg:titleText "梁甫吟" ; sg:authorName "諸葛亮" ; sg:poemType "古詩" ; sg:inChapter sg:ch37 ; sg:contentText "步出齊城門，遙望蕩陰里。\n里中有三墳，累累正相似。\n問是誰家墓，田疆古冶氏。\n力能排南山，文能絕地紀。\n一朝被讒言，二桃殺三士。\n誰能為此謀，國相齊晏子。" .
+sg:poem7 a sg:Poem ; rdfs:label "出師表（節選）" ; sg:titleText "出師表（節選）" ; sg:authorName "諸葛亮" ; sg:poemType "表文" ; sg:inChapter sg:ch91 ; sg:contentText "臣本布衣，躬耕於南陽，苟全性命於亂世，不求聞達於諸侯。\n先帝不以臣卑鄙，猥自枉屈，三顧臣於草廬之中，咨臣以當世之事，由是感激，遂許先帝以驅馳。\n後值傾覆，受任於敗軍之際，奉命於危難之間，爾來二十有一年矣。" .
+sg:poem8 a sg:Poem ; rdfs:label "誡子書" ; sg:titleText "誡子書" ; sg:authorName "諸葛亮" ; sg:poemType "家訓" ; sg:contentText "夫君子之行，靜以修身，儉以養德。\n非淡泊無以明志，非寧靜無以致遠。\n夫學須靜也，才須學也，非學無以廣才，非志無以成學。" .
+sg:poem9 a sg:Poem ; rdfs:label "銅雀台賦（節選）" ; sg:titleText "銅雀台賦（節選）" ; sg:authorName "曹植" ; sg:poemType "賦" ; sg:inChapter sg:ch34 ; sg:contentText "從明後而嬉遊兮，登層臺以娛情。\n見太府之廣開兮，觀聖德之所營。\n建高門之嵯峨兮，浮雙闕乎太清。\n立中天之華觀兮，連飛閣乎西城。" .
+sg:poem10 a sg:Poem ; rdfs:label "赤壁懷古" ; sg:titleText "赤壁懷古" ; sg:authorName "杜牧" ; sg:poemType "唐詩" ; sg:inChapter sg:ch49 ; sg:contentText "折戟沉沙鐵未銷，自將磨洗認前朝。\n東風不與周郎便，銅雀春深鎖二喬。" .
+sg:poem11 a sg:Poem ; rdfs:label "蜀相" ; sg:titleText "蜀相" ; sg:authorName "杜甫" ; sg:poemType "唐詩" ; sg:inChapter sg:ch104 ; sg:contentText "丞相祠堂何處尋，錦官城外柏森森。\n映階碧草自春色，隔葉黃鸝空好音。\n三顧頻煩天下計，兩朝開濟老臣心。\n出師未捷身先死，長使英雄淚滿襟。" .
+sg:poem12 a sg:Poem ; rdfs:label "八陣圖" ; sg:titleText "八陣圖" ; sg:authorName "杜甫" ; sg:poemType "唐詩" ; sg:inChapter sg:ch84 ; sg:contentText "功蓋三分國，名成八陣圖。\n江流石不轉，遺恨失吞吳。" .
+sg:poem13 a sg:Poem ; rdfs:label "詠懷古跡·其五" ; sg:titleText "詠懷古跡·其五" ; sg:authorName "杜甫" ; sg:poemType "唐詩" ; sg:contentText "諸葛大名垂宇宙，宗臣遺像肅清高。\n三分割據紆籌策，萬古雲霄一羽毛。\n伯仲之間見伊呂，指揮若定失蕭曹。\n運移漢祚終難復，志決身殲軍務勞。" .
+sg:poem14 a sg:Poem ; rdfs:label "討曹檄文" ; sg:titleText "討曹檄文" ; sg:authorName "陳琳" ; sg:poemType "檄文" ; sg:inChapter sg:ch22 ; sg:contentText "司空曹操，祖父中常侍騰，與左悺、徐璜並作妖孽……\n操又特置發丘中郎將、摸金校尉，所過隳突，無骸不露。" .
+sg:poem15 a sg:Poem ; rdfs:label "讓縣自明本志令（節選）" ; sg:titleText "讓縣自明本志令（節選）" ; sg:authorName "曹操" ; sg:poemType "令文" ; sg:inChapter sg:ch56 ; sg:contentText "孤始舉孝廉，年少，自以本非巖穴知名之士，恐為海內人之所見凡愚，欲為一郡守，好作政教，以建立名譽，使世士明知之。" .
+sg:poem16 a sg:Poem ; rdfs:label "胡笳十八拍（節選）" ; sg:titleText "胡笳十八拍（節選）" ; sg:authorName "蔡文姬" ; sg:poemType "樂府" ; sg:contentText "我生之初尚無為，我生之後漢祚衰。\n天不仁兮降亂離，地不仁兮使我逢此時。\n干戈日尋兮道路危，民卒流亡兮共哀悲。" .
+sg:poem17 a sg:Poem ; rdfs:label "悲憤詩（節選）" ; sg:titleText "悲憤詩（節選）" ; sg:authorName "蔡文姬" ; sg:poemType "五言" ; sg:contentText "漢季失權柄，董卓亂天常。\n志欲圖篡弑，先害諸賢良。\n逼迫遷舊邦，擁主以自強。\n海內興義師，欲共討不祥。" .
+sg:poem18 a sg:Poem ; rdfs:label "飲馬長城窟行" ; sg:titleText "飲馬長城窟行" ; sg:authorName "陳琳" ; sg:poemType "樂府" ; sg:contentText "飲馬長城窟，水寒傷馬骨。\n往謂長城吏，慎莫稽留太原卒。\n官作自有程，舉築諧汝聲。\n男兒寧當格鬥死，何能怫鬱築長城。" .
+sg:poem19 a sg:Poem ; rdfs:label "七哀詩（節選）" ; sg:titleText "七哀詩（節選）" ; sg:authorName "王粲" ; sg:poemType "五言" ; sg:contentText "西京亂無象，豺虎方遘患。\n復棄中國去，委身適荊蠻。\n親戚對我悲，朋友相追攀。\n出門無所見，白骨蔽平原。" .
+sg:poem20 a sg:Poem ; rdfs:label "登樓賦（節選）" ; sg:titleText "登樓賦（節選）" ; sg:authorName "王粲" ; sg:poemType "賦" ; sg:contentText "登茲樓以四望兮，聊暇日以銷憂。\n覽斯宇之所處兮，實顯敞而寡仇。\n挾清漳之通浦兮，倚曲沮之長洲。" .
+sg:prophecy1 a sg:Prophecy ; rdfs:label "蒼天已死，黃天當立；歲在甲子，天下大吉" ; sg:prophecyText "蒼天已死，黃天當立；歲在甲子，天下大吉" ; sg:prophet "張角" ; sg:inChapter sg:ch1 ; sg:fulfilledByText "黃巾起義爆發，漢室由此衰微" .
+sg:prophecy2 a sg:Prophecy ; rdfs:label "帝非帝，王非王，千乘萬騎走北邙" ; sg:prophecyText "帝非帝，王非王，千乘萬騎走北邙" ; sg:prophet "洛陽童謠" ; sg:inChapter sg:ch3 ; sg:fulfilledByText "少帝與陳留王被宦官劫出洛陽，北邙避難" .
+sg:prophecy3 a sg:Prophecy ; rdfs:label "千里草，何青青；十日卜，不得生" ; sg:prophecyText "千里草，何青青；十日卜，不得生" ; sg:prophet "長安童謠" ; sg:inChapter sg:ch9 ; sg:fulfilledByText "董卓被呂布所殺" .
+sg:prophecy4 a sg:Prophecy ; rdfs:label "侯非侯，王非王，千乘萬騎走北邙" ; sg:prophecyText "侯非侯，王非王，千乘萬騎走北邙" ; sg:prophet "童謠" ; sg:inChapter sg:ch4 ; sg:fulfilledByText "少帝被廢，獻帝播遷" .
+sg:prophecy5 a sg:Prophecy ; rdfs:label "代漢者，當塗高也" ; sg:prophecyText "代漢者，當塗高也" ; sg:prophet "讖語" ; sg:fulfilledByText "曹丕代漢稱帝" .
+sg:prophecy6 a sg:Prophecy ; rdfs:label "三馬同槽" ; sg:prophecyText "三馬同槽" ; sg:prophet "曹操夢" ; sg:inChapter sg:ch78 ; sg:fulfilledByText "司馬懿、司馬師、司馬昭父子專魏政" .
+sg:prophecy7 a sg:Prophecy ; rdfs:label "伏龍、鳳雛，二人得一，可安天下" ; sg:prophecyText "伏龍、鳳雛，二人得一，可安天下" ; sg:prophet "司馬徽" ; sg:inChapter sg:ch35 ; sg:fulfilledByText "劉備得諸葛亮、龐統" .
+sg:prophecy8 a sg:Prophecy ; rdfs:label "一鳳並一龍，相將到蜀中。才到半路里，鳳死落坡東" ; sg:prophecyText "一鳳並一龍，相將到蜀中。才到半路里，鳳死落坡東" ; sg:prophet "紫虛上人" ; sg:inChapter sg:ch62 ; sg:fulfilledByText "龐統死於落鳳坡" .
+sg:prophecy9 a sg:Prophecy ; rdfs:label "左龍右鳳，飛入西川。雛鳳墜地，臥龍升天" ; sg:prophecyText "左龍右鳳，飛入西川。雛鳳墜地，臥龍升天" ; sg:prophet "讖語" ; sg:inChapter sg:ch62 ; sg:fulfilledByText "龐統死，諸葛亮獨撐蜀漢" .
+sg:prophecy10 a sg:Prophecy ; rdfs:label "東風不與周郎便，銅雀春深鎖二喬" ; sg:prophecyText "東風不與周郎便，銅雀春深鎖二喬" ; sg:prophet "杜牧詩" ; sg:inChapter sg:ch49 ; sg:fulfilledByText "赤壁東風起，曹軍敗退" .
+sg:prophecy11 a sg:Prophecy ; rdfs:label "既生瑜，何生亮" ; sg:prophecyText "既生瑜，何生亮" ; sg:prophet "周瑜" ; sg:inChapter sg:ch57 ; sg:fulfilledByText "周瑜氣量狹窄，嘔血而亡" .
+sg:prophecy12 a sg:Prophecy ; rdfs:label "臥龍雖得其主，不得其時" ; sg:prophecyText "臥龍雖得其主，不得其時" ; sg:prophet "司馬徽" ; sg:inChapter sg:ch37 ; sg:fulfilledByText "諸葛亮鞠躬盡瘁，未能興復漢室" .
+sg:prophecy13 a sg:Prophecy ; rdfs:label "漢室不可復興，曹魏不可卒除" ; sg:prophecyText "漢室不可復興，曹魏不可卒除" ; sg:prophet "諸葛亮" ; sg:fulfilledByText "北伐未能成功，三國終歸晉" .
+sg:prophecy14 a sg:Prophecy ; rdfs:label "星落秋風五丈原" ; sg:prophecyText "星落秋風五丈原" ; sg:prophet "杜甫詩" ; sg:inChapter sg:ch104 ; sg:fulfilledByText "諸葛亮病逝五丈原" .
+sg:prophecy15 a sg:Prophecy ; rdfs:label "寧可我負天下人，休教天下人負我" ; sg:prophecyText "寧可我負天下人，休教天下人負我" ; sg:prophet "曹操" ; sg:inChapter sg:ch4 ; sg:fulfilledByText "曹操一生權謀，終成魏武帝" .
+sg:prophecy16 a sg:Prophecy ; rdfs:label "天下大勢，分久必合，合久必分" ; sg:prophecyText "天下大勢，分久必合，合久必分" ; sg:prophet "卷首語" ; sg:inChapter sg:ch1 ; sg:fulfilledByText "三國歸晉，天下一統" .
+sg:commentary1 a sg:Commentary ; rdfs:label "毛宗岗批第1回" ; sg:commenter "毛宗岗" ; sg:inChapter sg:ch1 ; sg:commentText "以三寇引出三國，是全部中賓主；以張角兄弟三人引出桃園兄弟三人，此又一回中賓主。" .
+sg:commentary2 a sg:Commentary ; rdfs:label "李卓吾批第1回" ; sg:commenter "李卓吾" ; sg:inChapter sg:ch1 ; sg:commentText "天下大勢，分久必合，合久必分，此十二字是一部《三國》總綱。" .
+sg:commentary3 a sg:Commentary ; rdfs:label "毛宗岗批第5回" ; sg:commenter "毛宗岗" ; sg:inChapter sg:ch5 ; sg:commentText "寫關公之勇，先寫華雄之勇；寫華雄之勇，先寫潘鳳之勇。層層襯托，然後關公一出，如泰山壓卵。" .
+sg:commentary4 a sg:Commentary ; rdfs:label "李卓吾批第9回" ; sg:commenter "李卓吾" ; sg:inChapter sg:ch9 ; sg:commentText "董卓之惡，通於天；呂布之惡，亦通於天。以惡攻惡，而王允收漁人之利。" .
+sg:commentary5 a sg:Commentary ; rdfs:label "毛宗岗批第21回" ; sg:commenter "毛宗岗" ; sg:inChapter sg:ch21 ; sg:commentText "劉備種菜，是英雄韜晦；曹操煮酒，是奸雄試探。一藏一露，而天下英雄之目已定。" .
+sg:commentary6 a sg:Commentary ; rdfs:label "李卓吾批第30回" ; sg:commenter "李卓吾" ; sg:inChapter sg:ch30 ; sg:commentText "官渡之勝，勝在許攸之一奔；赤壁之敗，敗在蔣幹之一過。成敗之機，常在俄頃。" .
+sg:commentary7 a sg:Commentary ; rdfs:label "毛宗岗批第37回" ; sg:commenter "毛宗岗" ; sg:inChapter sg:ch37 ; sg:commentText "三顧茅廬，非獨見玄德之誠，亦見孔明之慎。出處之際，君臣之分，於此定矣。" .
+sg:commentary8 a sg:Commentary ; rdfs:label "李卓吾批第41回" ; sg:commenter "李卓吾" ; sg:inChapter sg:ch41 ; sg:commentText "趙子龍一身都是膽，長坂坡前，七進七出，真千古虎將。" .
+sg:commentary9 a sg:Commentary ; rdfs:label "鍾惺批第46回" ; sg:commenter "鍾惺" ; sg:inChapter sg:ch46 ; sg:commentText "草船借箭，妙在算準大霧；借東風，妙在算準天時。孔明之智，皆從實學中來。" .
+sg:commentary10 a sg:Commentary ; rdfs:label "毛宗岗批第49回" ; sg:commenter "毛宗岗" ; sg:inChapter sg:ch49 ; sg:commentText "赤壁一戰，周郎為主，孔明為賓，而孔明處處占先，此賓主相形之法。" .
+sg:commentary11 a sg:Commentary ; rdfs:label "李漁批第50回" ; sg:commenter "李漁" ; sg:inChapter sg:ch50 ; sg:commentText "關公義釋曹操，非獨報舊恩，亦見其胸襟磊落，不似世人趨炎附勢。" .
+sg:commentary12 a sg:Commentary ; rdfs:label "毛宗岗批第57回" ; sg:commenter "毛宗岗" ; sg:inChapter sg:ch57 ; sg:commentText "既生瑜，何生亮，非周郎之量小，實孔明之才大。天生兩人，以成赤壁之奇。" .
+sg:commentary13 a sg:Commentary ; rdfs:label "鍾惺批第74回" ; sg:commenter "鍾惺" ; sg:inChapter sg:ch74 ; sg:commentText "水淹七軍，關公之威震華夏；然驕矜之氣，亦自此始。盛極而衰，可為大戒。" .
+sg:commentary14 a sg:Commentary ; rdfs:label "毛宗岗批第85回" ; sg:commenter "毛宗岗" ; sg:inChapter sg:ch85 ; sg:commentText "白帝城託孤，君臣至公，古今盛軌。玄德之知人，孔明之盡忠，千載之下猶令人淚下。" .
+sg:commentary15 a sg:Commentary ; rdfs:label "鍾惺批第95回" ; sg:commenter "鍾惺" ; sg:inChapter sg:ch95 ; sg:commentText "空城計只可偶一用之，若再用必敗。孔明唯其不得已而用，故成奇謀。" .
+sg:commentary16 a sg:Commentary ; rdfs:label "毛宗岗批第104回" ; sg:commenter "毛宗岗" ; sg:inChapter sg:ch104 ; sg:commentText "「出師未捷身先死，長使英雄淚滿襟」，千載下讀武侯遺表，猶有餘痛。" .
+sg:commentary17 a sg:Commentary ; rdfs:label "李卓吾批第120回" ; sg:commenter "李卓吾" ; sg:inChapter sg:ch120 ; sg:commentText "三分歸晉，天下復合。讀至此，令人有滄海桑田之感。" .
+
+################################
+# 八、版本 · 缺口 · 異文
+################################
+sg:edition1 a sg:Edition ; rdfs:label "三國志平話" ; sg:editionSystem "平話" ; sg:editionUnits "3卷" ; sg:editionStatus "已入庫" ; sg:description "建安虞氏刊《全相平話五種》之一，文字粗樸，含大量民間傳說，是演義的重要源頭。" .
+sg:edition2 a sg:Edition ; rdfs:label "嘉靖壬午本" ; sg:editionSystem "演義" ; sg:editionUnits "24卷240則" ; sg:editionStatus "已入庫" ; sg:description "現存最早完整刊本，分則不分回，文字古樸，含夾注。" .
+sg:edition3 a sg:Edition ; rdfs:label "周曰校刊本" ; sg:editionSystem "演義" ; sg:editionUnits "12卷240則" ; sg:editionStatus "缺口·僅影印" ; sg:description "金陵周曰校刻本，插圖精美；目前僅見影印本，未獲純文本。" .
+sg:edition4 a sg:Edition ; rdfs:label "余象斗刊本" ; sg:editionSystem "志傳" ; sg:editionUnits "20卷" ; sg:editionStatus "缺口·僅影印" ; sg:description "建陽余象斗雙峰堂刊《批評三國志傳》，現存殘卷；識典古籍有 OCR 全文可在線瀏覽。" .
+sg:edition5 a sg:Edition ; rdfs:label "黃正甫本" ; sg:editionSystem "志傳" ; sg:editionUnits "180則" ; sg:editionStatus "已入庫" ; sg:description "志傳系統代表，保留關索等早期故事。" .
+sg:edition6 a sg:Edition ; rdfs:label "李卓吾評本" ; sg:editionSystem "評本" ; sg:editionUnits "120回" ; sg:editionStatus "部分" ; sg:description "李贄（託名）評點，批語潑辣；全本正文未獲純文本，已輯錄批語。" .
+sg:edition7 a sg:Edition ; rdfs:label "鍾伯敬評本" ; sg:editionSystem "評本" ; sg:editionUnits "120回" ; sg:editionStatus "部分" ; sg:description "鍾惺評點，多從文章法度著眼；已輯錄批語。" .
+sg:edition8 a sg:Edition ; rdfs:label "七家匯評本" ; sg:editionSystem "匯評" ; sg:editionUnits "120回" ; sg:editionStatus "已入庫" ; sg:description "匯輯毛宗崗、李贄、鍾惺、李漁等批語，正文夾批完整。" .
+sg:edition9 a sg:Edition ; rdfs:label "笠翁評閱本" ; sg:editionSystem "評本" ; sg:editionUnits "120回" ; sg:editionStatus "缺口·僅影印" ; sg:description "李漁評閱本，承毛評而多有新見；僅見影印與書目。" .
+sg:edition10 a sg:Edition ; rdfs:label "毛宗崗評本" ; sg:editionSystem "評本" ; sg:editionUnits "120回" ; sg:editionStatus "已入庫" ; sg:description "通行定本，整頓回目、修正文辭，附完整評點。" .
+sg:gap1 a sg:EditionGap ; rdfs:label "周曰校刊本" ; sg:editionSystem "演義系統" ; sg:editionStatus "未獲文本" ; sg:holdingForm "僅影印 PDF" ; sg:gapNote "明萬曆十九年金陵周曰校刻本，12卷240則，插圖精美；目前僅見影印本，未見可批量抓取的純文本。" ; sg:acquisitionPath "《中華再造善本》影印本、學兔兔古籍網、中國國家圖書館藏本。" .
+sg:gap2 a sg:EditionGap ; rdfs:label "余象斗刊本" ; sg:editionSystem "志傳系統" ; sg:editionStatus "部分可得" ; sg:holdingForm "影印 PDF + 在線 OCR" ; sg:gapNote "明萬曆二十年建陽余象斗雙峰堂刊《批評三國志傳》二十卷，現存殘卷；識典古籍有 OCR 全文可逐卷在線瀏覽，但未提供批量導出。" ; sg:acquisitionPath "識典古籍（CADAL02015947）、日本建仁寺兩足院殘卷、國家圖書館出版社影印本。" .
+sg:gap3 a sg:EditionGap ; rdfs:label "熊清波／藜光堂本" ; sg:editionSystem "志傳系統" ; sg:editionStatus "未獲文本" ; sg:holdingForm "僅影印／書目" ; sg:gapNote "明末建陽熊清波、藜光堂等坊刻本，多為二十卷志傳系統；僅見書目與零散影印，未見完整純文本。" ; sg:acquisitionPath "中國國家圖書館、日本內閣文庫、天理圖書館藏本；可俟後續影印出版。" .
+sg:gap4 a sg:EditionGap ; rdfs:label "葉逢春刊本" ; sg:editionSystem "志傳系統" ; sg:editionStatus "未獲文本" ; sg:holdingForm "僅影印殘卷" ; sg:gapNote "明嘉靖二十七年葉逢春刊《三國志史傳》，現存殘卷，是志傳系統較早刻本，含關索故事。" ; sg:acquisitionPath "西班牙埃斯科里亞爾修道院藏殘本；影印收入《古本小說集成》。" .
+sg:gap5 a sg:EditionGap ; rdfs:label "夏振宇刊本" ; sg:editionSystem "演義系統" ; sg:editionStatus "未獲文本" ; sg:holdingForm "僅影印" ; sg:gapNote "明萬曆間夏振宇刊《三國志通俗演義》，十二卷，插圖與周曰校本相關。" ; sg:acquisitionPath "日本蓬左文庫、中國國家圖書館藏本；《古本小說集成》影印。" .
+sg:gap6 a sg:EditionGap ; rdfs:label "朱鼎臣刊本" ; sg:editionSystem "志傳系統" ; sg:editionStatus "未獲文本" ; sg:holdingForm "僅影印" ; sg:gapNote "明萬曆間建陽朱鼎臣刊《三國志史傳》，二十卷，文字簡率，保留較多民間故事。" ; sg:acquisitionPath "日本內閣文庫、中國國家圖書館藏本。" .
+sg:gap7 a sg:EditionGap ; rdfs:label "楊美生／劉龍田本" ; sg:editionSystem "志傳系統" ; sg:editionStatus "未獲文本" ; sg:holdingForm "僅影印" ; sg:gapNote "明萬曆間建陽楊美生、劉龍田等坊刻本，均屬二十卷志傳系統，版本關係尚待細考。" ; sg:acquisitionPath "日本內閣文庫、東京大學東洋文化研究所藏本。" .
+sg:gap8 a sg:EditionGap ; rdfs:label "鄭少垣刊本" ; sg:editionSystem "志傳系統" ; sg:editionStatus "未獲文本" ; sg:holdingForm "僅影印" ; sg:gapNote "明萬曆間鄭少垣聯輝堂刊《三國志傳》，二十卷，評林本系統。" ; sg:acquisitionPath "日本內閣文庫、中國國家圖書館藏本。" .
+sg:gap9 a sg:EditionGap ; rdfs:label "李卓吾評本（全本）" ; sg:editionSystem "評本" ; sg:editionStatus "部分可得" ; sg:holdingForm "批語已輯／正文在線 OCR" ; sg:gapNote "明末《李卓吾先生批評三國志》一百二十回；本庫已輯出李卓吾批語 1952 條，但全本正文未獲公開純文本。" ; sg:acquisitionPath "識典古籍 AI 整理本、美國國會圖書館 PDF、國學大師網影印本。" .
+sg:gap10 a sg:EditionGap ; rdfs:label "鍾伯敬評本（全本）" ; sg:editionSystem "評本" ; sg:editionStatus "部分可得" ; sg:holdingForm "批語已輯／無正文" ; sg:gapNote "明末鍾惺評本一百二十回；本庫已輯出鍾伯敬批語 2281 條，全本正文未見公開純文本。" ; sg:acquisitionPath "日本內閣文庫、中國國家圖書館藏本；俟影印或數字化。" .
+sg:gap11 a sg:EditionGap ; rdfs:label "笠翁評閱本" ; sg:editionSystem "評本" ; sg:editionStatus "未獲文本" ; sg:holdingForm "僅影印" ; sg:gapNote "清康熙間李漁評閱本一百二十回，承毛評而多有新見；僅見影印與書目。" ; sg:acquisitionPath "中國國家圖書館、上海圖書館藏本。" .
+sg:gap12 a sg:EditionGap ; rdfs:label "七家匯評本（現代整理本）" ; sg:editionSystem "匯評本" ; sg:editionStatus "不收錄" ; sg:holdingForm "版權期內" ; sg:gapNote "2025 年與觚齋輯校《七家匯評本》仍在版權保護期，按公版原則不收錄；本庫以公版舊輯《七家匯評本》替代。" ; sg:acquisitionPath "不納入；如需引用請循正規授權。" .
+sg:variant1 a sg:VariantReading ; rdfs:label "第1回 回目與開篇" ; sg:inChapter sg:ch1 ; sg:description "毛本回目更工整，突出「英雄」；嘉靖本保留早期說話人口吻。" .
+sg:variant2 a sg:VariantReading ; rdfs:label "第1回 張角出身" ; sg:inChapter sg:ch1 ; sg:description "兩版基本一致，可見早期文本已給張角秀才身份。" .
+sg:variant3 a sg:VariantReading ; rdfs:label "第5回 關公出戰" ; sg:inChapter sg:ch5 ; sg:description "文字差異極小，毛本僅修飾語氣。" .
+sg:variant4 a sg:VariantReading ; rdfs:label "第21回 劉備失箸" ; sg:inChapter sg:ch21 ; sg:description "毛本修改為更從容掩飾，符合劉備韜光養晦性格。" .
+sg:variant5 a sg:VariantReading ; rdfs:label "第25回 漢壽亭侯" ; sg:inChapter sg:ch25 ; sg:description "毛本糾正嘉靖本常識錯誤：漢壽為地名，亭侯為爵名。" .
+sg:variant6 a sg:VariantReading ; rdfs:label "第37回 三顧茅廬" ; sg:inChapter sg:ch37 ; sg:description "兩版情節一致，毛本增飾詩詞與細節。" .
+sg:variant7 a sg:VariantReading ; rdfs:label "第49回 借東風" ; sg:inChapter sg:ch49 ; sg:description "毛本強化了神異色彩。" .
+sg:variant8 a sg:VariantReading ; rdfs:label "第50回 華容道" ; sg:inChapter sg:ch50 ; sg:description "毛本強化關公「義絕」形象，增加心理描寫與詩詞贊頌。" .
+sg:variant9 a sg:VariantReading ; rdfs:label "第74回 水淹七軍" ; sg:inChapter sg:ch74 ; sg:description "嘉靖本更近史實，毛本強調關公智勇。" .
+sg:variant10 a sg:VariantReading ; rdfs:label "第77回 關羽之死" ; sg:inChapter sg:ch77 ; sg:description "毛本增加大量忠義描寫。" .
+sg:variant11 a sg:VariantReading ; rdfs:label "第84回 夷陵之戰" ; sg:inChapter sg:ch84 ; sg:description "「七百里」為小說誇張，嘉靖本較簡。" .
+sg:variant12 a sg:VariantReading ; rdfs:label "第95回 空城計" ; sg:inChapter sg:ch95 ; sg:description "毛本增設琴聲、掃地等細節，戲劇性更強。" .
+sg:variant13 a sg:VariantReading ; rdfs:label "第104回 五丈原" ; sg:inChapter sg:ch104 ; sg:description "禳星情節為毛本增飾。" .
+sg:variant14 a sg:VariantReading ; rdfs:label "第120回 結尾" ; sg:inChapter sg:ch120 ; sg:description "兩版結局一致，毛本附加總結詩。" .
+
+################################
+# 九、關係三元組
+################################
+sg:p20 sg:childOf sg:p2 .
+sg:p31 sg:parentOf sg:p32 .
+sg:p31 sg:parentOf sg:p33 .
+sg:p32 sg:siblingOf sg:p33 .
+sg:p35 sg:parentOf sg:p59 .
+sg:p35 sg:parentOf sg:p60 .
+sg:p48 sg:vassalOf sg:p31 .
+sg:p47 sg:vassalOf sg:p31 .
+sg:p40 sg:vassalOf sg:p31 .
+sg:p42 sg:vassalOf sg:p31 .
+sg:p36 sg:vassalOf sg:p31 .
+sg:p58 sg:vassalOf sg:p60 .
+sg:p57 sg:vassalOf sg:p60 .
+sg:p72 sg:parentOf sg:p73 .
+sg:p72 sg:parentOf sg:p71 .
+sg:p73 sg:siblingOf sg:p71 .
+sg:p74 sg:vassalOf sg:p71 .
+sg:p76 sg:vassalOf sg:p71 .
+sg:p77 sg:vassalOf sg:p71 .
+sg:p82 sg:vassalOf sg:p71 .
+sg:p81 sg:vassalOf sg:p73 .
+sg:p86 sg:vassalOf sg:p72 .
+sg:p71 sg:siblingOf sg:p100 .
+sg:p101 sg:lordOf sg:p102 .
+sg:p102 sg:childOf sg:p101 .
+sg:p102 sg:spouseOf sg:p120 .
+sg:p101 sg:spouseOf sg:p120 .
+sg:p103 sg:lordOf sg:p41 .
+sg:p108 sg:parentOf sg:p6 .
+sg:p109 sg:swornBrotherOf sg:p108 .
+sg:p31 sg:enemyOf sg:p103 .
+sg:p31 sg:enemyOf sg:p71 .
+sg:p74 sg:enemyOf sg:p4 .
+sg:p4 sg:enemyOf sg:p35 .
+sg:p2 sg:enemyOf sg:p76 .
+sg:p76 sg:killedBy sg:p2 .
+sg:p10 sg:enemyOf sg:p58 .
+
+################################
+# 十、受控詞表與既有代表性 ABox（保留並修正）
+################################
+# 四、受控詞表（節選）
+################################
+sg:FactionScheme a skos:ConceptScheme ; rdfs:label "勢力詞表"@zh .
+sg:魏 a skos:Concept ; skos:inScheme sg:FactionScheme ; skos:prefLabel "魏"@zh .
+sg:蜀 a skos:Concept ; skos:inScheme sg:FactionScheme ; skos:prefLabel "蜀漢"@zh .
+sg:吳 a skos:Concept ; skos:inScheme sg:FactionScheme ; skos:prefLabel "東吳"@zh .
+
+sg:RelationScheme a skos:ConceptScheme ; rdfs:label "關係詞表"@zh .
+sg:rel_結義 a skos:Concept ; skos:inScheme sg:RelationScheme ; skos:prefLabel "結義"@zh .
+sg:rel_君臣 a skos:Concept ; skos:inScheme sg:RelationScheme ; skos:prefLabel "君臣"@zh .
+sg:rel_敵對 a skos:Concept ; skos:inScheme sg:RelationScheme ; skos:prefLabel "敵對"@zh .
+
+################################
+# 五、ABox（代表性實例）
+################################
+sg:蜀漢 a sg:Faction ; rdfs:label "蜀漢"@zh ; sg:leader sg:劉備 ; sg:capital sg:成都 .
+sg:曹魏 a sg:Faction ; rdfs:label "曹魏"@zh ; sg:leader sg:曹操 ; sg:capital sg:許昌 .
+sg:東吳 a sg:Faction ; rdfs:label "東吳"@zh ; sg:leader sg:孫權 ; sg:capital sg:建業 .
+
+sg:劉備 a sg:Person, sg:Lord ; rdfs:label "劉備"@zh ; sg:styleName "玄德" ; sg:birthYear "161"^^xsd:gYear ; sg:deathYear "223"^^xsd:gYear ;
+    sg:memberOf sg:蜀漢 ;
+    sg:swornBrotherOf sg:關羽 , sg:張飛 ;
+    sg:vassalOf sg:諸葛亮 ;
+    sg:spouseOf sg:孫尚香 .
+
+sg:關羽 a sg:Person, sg:General ; rdfs:label "關羽"@zh ; sg:styleName "雲長" ; sg:title "漢壽亭侯" ;
+    sg:memberOf sg:蜀漢 ; sg:swornBrotherOf sg:劉備 , sg:張飛 ; sg:usesArtifact sg:青龍偃月刀 ;
+    sg:foughtIn sg:樊城之戰 ; sg:kills sg:顏良 .
+
+sg:張飛 a sg:Person, sg:General ; rdfs:label "張飛"@zh ; sg:styleName "翼德" ;
+    sg:memberOf sg:蜀漢 ; sg:swornBrotherOf sg:劉備 , sg:關羽 ; sg:usesArtifact sg:丈八蛇矛 .
+
+sg:諸葛亮 a sg:Person, sg:Strategist ; rdfs:label "諸葛亮"@zh ; sg:styleName "孔明" ; sg:title "蜀漢丞相" ;
+    sg:memberOf sg:蜀漢 ; sg:mentorOf sg:姜維 ; sg:usesArtifact sg:羽扇綸巾 ;
+    sg:usesStratagem sg:草船借箭 , sg:空城計 .
+
+sg:曹操 a sg:Person, sg:Lord ; rdfs:label "曹操"@zh ; sg:styleName "孟德" ; sg:birthYear "155"^^xsd:gYear ; sg:deathYear "220"^^xsd:gYear ;
+    sg:memberOf sg:曹魏 ; sg:parentOf sg:曹丕 , sg:曹植 ; sg:enemyOf sg:劉備 , sg:袁紹 ;
+    sg:usesStratagem sg:反間計 .
+
+sg:孫權 a sg:Person, sg:Lord ; rdfs:label "孫權"@zh ; sg:styleName "仲謀" ;
+    sg:memberOf sg:東吳 ; sg:parentOf sg:孫尚香 ; sg:alliesWith sg:劉備 .
+
+sg:周瑜 a sg:Person, sg:General ; rdfs:label "周瑜"@zh ; sg:styleName "公瑾" ; sg:deathYear "210"^^xsd:gYear ;
+    sg:memberOf sg:東吳 ; sg:foughtIn sg:赤壁之戰 ; sg:usesStratagem sg:苦肉計 , sg:反間計 ; sg:enemyOf sg:諸葛亮 .
+
+sg:官渡之戰 a sg:Battle ; rdfs:label "官渡之戰"@zh ; sg:compositionYear "200"^^xsd:gYear ; sg:outcome "曹操勝" ; sg:occursAt sg:官渡 .
+sg:赤壁之戰 a sg:Battle ; rdfs:label "赤壁之戰"@zh ; sg:compositionYear "208"^^xsd:gYear ; sg:outcome "孫劉聯軍勝" ; sg:occursAt sg:赤壁 .
+sg:夷陵之戰 a sg:Battle ; rdfs:label "夷陵之戰"@zh ; sg:compositionYear "222"^^xsd:gYear ; sg:outcome "東吳勝" ; sg:occursAt sg:夷陵 .
+
+sg:許昌 a sg:Place, sg:City ; rdfs:label "許昌"@zh ; sg:modernName "河南許昌" ; sg:coordinates "34.02,113.85" .
+sg:成都 a sg:Place, sg:City ; rdfs:label "成都"@zh ; sg:modernName "四川成都" ; sg:coordinates "30.66,104.06" .
+sg:建業 a sg:Place, sg:City ; rdfs:label "建業"@zh ; sg:modernName "江蘇南京" ; sg:coordinates "32.06,118.80" .
+sg:赤壁 a sg:Place, sg:Battlefield ; rdfs:label "赤壁"@zh ; sg:modernName "湖北赤壁" ; sg:coordinates "29.72,113.93" .
+sg:官渡 a sg:Place, sg:Battlefield ; rdfs:label "官渡"@zh ; sg:modernName "河南中牟" ; sg:coordinates "34.72,114.02" .
+sg:夷陵 a sg:Place, sg:Battlefield ; rdfs:label "夷陵"@zh ; sg:modernName "湖北宜昌" ; sg:coordinates "30.70,111.29" .
+
+sg:桃園三結義 a sg:Event ; rdfs:label "桃園三結義"@zh ; sg:occursAt sg:涿郡 ;
+    sg:partiesIn sg:劉備 , sg:關羽 , sg:張飛 .
+sg:白帝城托孤 a sg:Event ; rdfs:label "白帝城托孤"@zh ; sg:occursAt sg:白帝城 ;
+    sg:partiesIn sg:劉備 , sg:諸葛亮 .
+
+sg:遊說連環計 a owl:NamedIndividual ; rdfs:label "連環計"@zh .
+sg:連環計 a sg:Stratagem ; rdfs:label "連環計"@zh ; sg:targetedBy sg:呂布 ; sg:usesArtifact sg:貂蟬 .
+sg:草船借箭 a sg:Stratagem ; rdfs:label "草船借箭"@zh .
+sg:空城計 a sg:Stratagem ; rdfs:label "空城計"@zh .
+sg:苦肉計 a sg:Stratagem ; rdfs:label "苦肉計"@zh .
+sg:反間計 a sg:Stratagem ; rdfs:label "反間計"@zh .
+
+sg:青龍偃月刀 a sg:Artifact ; rdfs:label "青龍偃月刀"@zh .
+sg:丈八蛇矛 a sg:Artifact ; rdfs:label "丈八蛇矛"@zh .
+sg:羽扇綸巾 a sg:Artifact ; rdfs:label "羽扇綸巾"@zh .
+
+sg:千里草讖 a sg:Prophecy ; rdfs:label "千里草讖"@zh ;
+    sg:prophecyText "千里草，何青青；十日卜，不得生。" ; sg:foretells sg:董卓 .
+sg:董卓 a sg:Person ; rdfs:label "董卓"@zh ; sg:deathYear "192"^^xsd:gYear .
+
+sg:臨江仙 a sg:Poem ; rdfs:label "臨江仙 · 滾滾長江東逝水"@zh ;
+    sg:titleText "臨江仙 · 滾滾長江東逝水" ; sg:wrote sg:楊慎 .
+
+sg:嘉靖壬午本 a sg:Edition ; rdfs:label "嘉靖壬午本"@zh ; sg:compositionYear "1522"^^xsd:gYear .
+sg:毛宗崗本 a sg:Edition ; rdfs:label "毛宗崗本"@zh ; sg:derivedFrom sg:嘉靖壬午本 .
+sg:毛宗崗 a sg:Critic ; rdfs:label "毛宗崗"@zh ; sg:commentsOn sg:毛宗崗本 .
+
+# 本文件為節選；完整版本另含 60 餘位人物、30 處地理、18 場戰役與 100 餘條關係三元組。

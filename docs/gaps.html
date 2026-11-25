@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>版本缺口清單 · 三國演義本體論</title>
+<style>
+  :root{--ink:#2f2a25;--ink2:#5d5449;--ink3:#8a7f6d;--paper:#f2ebdb;--cinnabar:#9e2b25;--line:#e3d9c4;--shadow:0 1px 2px rgba(70,52,28,.05),0 10px 26px rgba(70,52,28,.07);--serif:"Songti SC","STSong","Noto Serif CJK SC","SimSun",serif}
+  *{box-sizing:border-box}
+  body{margin:0;color:var(--ink);background-color:#ecdfc6;background-image:radial-gradient(1100px 560px at 10% -10%,rgba(255,255,255,.5),transparent 62%),radial-gradient(900px 520px at 92% 4%,rgba(226,205,172,.34),transparent 66%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");background-attachment:fixed;font-family:var(--serif);font-size:15.5px;line-height:1.9}
+  a{color:#3b4a6b;text-decoration:none}a:hover{color:var(--cinnabar)}
+  header{text-align:center;padding:26px 20px 12px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(247,240,225,.9),rgba(240,231,211,.82))}
+  header h1{margin:0;font-size:27px;letter-spacing:.3em;text-indent:.3em}
+  header .sub{color:var(--ink3);font-size:13px;letter-spacing:.14em;margin-top:6px}
+  header nav{margin-top:10px;font-size:14px}header nav a{margin:0 10px;letter-spacing:.08em}
+  main{max-width:1180px;margin:0 auto;padding:20px 16px 60px}
+  .card{background:linear-gradient(180deg,rgba(255,253,248,.94),rgba(253,248,238,.9));border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow)}
+  .intro{padding:16px 20px;margin-bottom:14px}
+  .intro h2{margin:0 0 6px;font-size:20px;color:var(--cinnabar);letter-spacing:.08em}
+  .intro p{margin:4px 0;font-size:14px;color:var(--ink2)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+  @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{padding:10px;text-align:center;border:1px solid var(--line);background:rgba(255,253,248,.8);border-radius:2px}
+  .stat b{display:block;font-size:24px;color:var(--cinnabar);line-height:1.3}
+  .stat span{font-size:12px;color:var(--ink3)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;margin-bottom:14px}
+  .toolbar button{font-family:inherit;cursor:pointer;background:linear-gradient(180deg,rgba(255,253,248,.93),rgba(247,240,226,.9));border:1px solid var(--line);border-radius:2px;padding:4px 10px;font-size:13px;color:var(--ink2)}
+  .toolbar button:hover,.toolbar button.on{border-color:var(--cinnabar);color:var(--cinnabar)}
+  .toolbar button.on{background:linear-gradient(180deg,#c2504a,var(--cinnabar));color:#fdf6ec;border-color:#7d1f1b}
+  .gap{padding:16px 18px;margin-bottom:12px;border-left:5px solid #b0a08a}
+  .gap.part{border-left-color:#b08d57}
+  .gap.none{border-left-color:#8a8a8a}
+  .gap.ocr{border-left-color:#2f6b4f}
+  .gap.tier-a{border-left-color:#2f6b4f}
+  .gap.tier-b{border-left-color:#b08d57}
+  .gap.tier-c{border-left-color:#8a8a8a}
+  .gap h3{margin:0;font-size:18px;color:var(--cinnabar);letter-spacing:.04em}
+  .gap .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+  .tag{font-size:12px;padding:1px 9px;border-radius:10px;border:1px solid var(--line);color:var(--ink3);white-space:nowrap}
+  .tag.part{background:#fff3e0;color:#a05a00;border-color:#f0d3a0}
+  .tag.ocr{background:#e6f7e6;color:#1f5a3f;border-color:#a9d3b8}
+  .tag.none{background:#eee7d8;color:#6b5a3f}
+  .tag.tier-a{background:#e6f7e6;color:#1f5a3f;border-color:#a9d3b8}
+  .tag.tier-b{background:#fff3e0;color:#a05a00;border-color:#f0d3a0}
+  .tag.tier-c{background:#eee7d8;color:#6b5a3f}
+  .meta.wide{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:700px){.meta.wide{grid-template-columns:1fr}}
+  .url{font-size:13.5px;margin:6px 0;word-break:break-all}
+  .url a{color:#2f5d8a}
+  .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 14px;font-size:13.5px;margin:8px 0;color:var(--ink2)}
+  @media(max-width:700px){.meta{grid-template-columns:1fr}}
+  .meta b{color:var(--ink)}
+  .detail{font-size:14.5px;margin:6px 0}
+  .path{font-size:13.5px;color:#3f5a3f;background:rgba(63,107,94,.06);border-left:2px solid rgba(63,107,94,.35);padding:6px 10px;margin-top:8px}
+  .note{font-size:12.5px;color:var(--ink3);margin-top:10px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>版本缺口清單</h1>
+  <div class="sub">古本 · 志傳 · 評本 · 匯評本 · 存藏與獲取途徑</div>
+  <nav>
+    <a href="./index.html">← 返回本體論總覽</a>
+    <a href="./corpus.html">多版本語料庫</a>
+    <a href="./index.html#versions">版本譜</a>
+  </nav>
+</header>
+<main>
+  <div class="card intro">
+    <h2>缺口登記說明</h2>
+    <p>本頁逐條登記尚未取得純文本的版本，寫明版本系統、藏本與卷次、在線地址、下載權限、影像分辨率、缺卷情況與後續獲取途徑。</p>
+    <p>2026 年 11 月完成一輪影印可得性排查，按三檔標記：<b>可獲影印</b>（已有可下載掃描件或可購／館藏影印本）、<b>僅在線瀏覽</b>（只能看、不能下載）、<b>確實拿不到</b>（無公開影像，亦無影印本）。</p>
+    <p>判準：只收公版古籍；現代整理本若仍在版權保護期，僅登記、不收錄。已入庫文本請前往<a href="./corpus.html">多版本語料庫</a>。</p>
+    <div class="stats" id="stats"></div>
+  </div>
+  <div class="toolbar" id="toolbar"></div>
+  <div id="list"></div>
+  <p class="note">資料來源：texts/manifest.json · data/corpus-manifest.js</p>
+</main>
+<script src="./data/corpus-manifest.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+let filter={system:'',tier:''};
+const tierCls=t=>t==='可獲影印'?'tier-a':t==='僅在線瀏覽'?'tier-b':'tier-c';
+function render(){
+  const gaps=SANGUO_CORPUS.gaps||[];
+  const systems=[...new Set(gaps.map(g=>g.system))];
+  const tiers=['可獲影印','僅在線瀏覽','確實拿不到'];
+  $('stats').innerHTML=`
+    <div class="stat"><b>${gaps.length}</b><span>登記缺口</span></div>
+    <div class="stat"><b>${gaps.filter(g=>g.tier==='可獲影印').length}</b><span>可獲影印</span></div>
+    <div class="stat"><b>${gaps.filter(g=>g.tier==='僅在線瀏覽').length}</b><span>僅在線瀏覽</span></div>
+    <div class="stat"><b>${gaps.filter(g=>g.tier==='確實拿不到').length}</b><span>確實拿不到</span></div>`;
+  $('toolbar').innerHTML=`
+    <span style="font-size:13px;color:#8a7f6d">系統：</span>
+    <button class="${!filter.system?'on':''}" data-k="system" data-v="">全部</button>
+    ${systems.map(s=>`<button class="${filter.system===s?'on':''}" data-k="system" data-v="${esc(s)}">${esc(s)}</button>`).join('')}
+    <span style="font-size:13px;color:#8a7f6d;margin-left:8px">可得性：</span>
+    <button class="${!filter.tier?'on':''}" data-k="tier" data-v="">全部</button>
+    ${tiers.map(s=>`<button class="${filter.tier===s?'on':''}" data-k="tier" data-v="${esc(s)}">${esc(s)}</button>`).join('')}`;
+  document.querySelectorAll('#toolbar button').forEach(b=>b.onclick=()=>{filter[b.dataset.k]=b.dataset.v;render()});
+  const list=gaps.filter(g=>(!filter.system||g.system===filter.system)&&(!filter.tier||g.tier===filter.tier));
+  $('list').innerHTML=list.length?list.map(g=>{
+    const cls=tierCls(g.tier);
+    const stTag=(g.status&&g.status!=='未獲文本')?`<span class="tag ${g.status.includes('OCR')?'ocr':g.status.includes('部分')?'part':'none'}">${esc(g.status)}</span>`:'';
+    const url=g.url?`<div class="url"><b>在線地址：</b><a href="${esc(g.url)}" target="_blank" rel="noopener">${esc(g.url)}</a></div>`:'';
+    return `<div class="card gap ${cls}">
+      <div class="top"><h3>${esc(g.edition)}</h3><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag ${cls}">${esc(g.tier)}</span>${stTag}</span></div>
+      <div class="meta wide">
+        <div><b>版本系統：</b>${esc(g.system)}</div>
+        <div><b>藏本：</b>${esc(g.holder)}</div>
+        <div><b>卷次／存缺：</b>${esc(g.volumes)}</div>
+      </div>
+      <div class="meta wide">
+        <div><b>下載權限：</b>${esc(g.download)}</div>
+        <div><b>影像分辨率：</b>${esc(g.resolution)}</div>
+        <div><b>缺卷情況：</b>${esc(g.missing)}</div>
+      </div>
+      ${url}
+      <div class="detail">${esc(g.detail)}</div>
+      <div class="path"><b>獲取途徑：</b>${esc(g.path)}</div>
+    </div>`;
+  }).join(''):'<div class="card gap" style="text-align:center;color:#8a7f6d">此篩選條件下暫無條目。</div>';
+}
+render();
+</script>
+</body>
+</html>

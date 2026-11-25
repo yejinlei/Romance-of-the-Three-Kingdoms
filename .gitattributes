@@ -1,0 +1,15 @@
+# 统一 LF，避免 Windows 把前端文件转成 CRLF 破坏解析
+* text=auto
+*.html text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.ttl text eol=lf
+*.py text eol=lf
+
+# 二进制大文件：普通 git 托管（按用户要求不用 LFS），不参与文本归一化
+*.pdf binary
+*.jpg binary
+*.png binary

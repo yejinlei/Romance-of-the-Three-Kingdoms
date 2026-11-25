@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>語料與本體自檢 · 三國演義</title>
+<style>
+body{margin:0;padding:32px;background:#f2ebdb;color:#2f2a25;font-family:"Songti SC","SimSun",serif;line-height:1.9}
+main{max-width:900px;margin:0 auto;background:#fffdf8;border:1px solid #e3d9c4;padding:24px 28px;box-shadow:0 10px 26px rgba(70,52,28,.07)}
+h1{color:#9e2b25;font-size:24px;margin:0 0 6px}
+p{font-size:14px;color:#5d5449}
+a{color:#3b4a6b}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th,td{border-bottom:1px solid #e3d9c4;padding:6px 8px;text-align:left}
+th{color:#8a7f6d;font-weight:normal}
+.ok{color:#006400}.warn{color:#a05a00}
+</style>
+</head>
+<body>
+<main>
+  <h1>語料與本體自檢</h1>
+  <p>此頁用於檢查站點數據是否完整載入。正式閱讀請前往 <a href="./corpus.html">多版本語料庫</a> 或 <a href="./index.html">本體論總覽</a>。</p>
+  <div id="summary">正在讀取 data/corpus-manifest.js …</div>
+  <table>
+    <thead><tr><th>文本</th><th>規模</th><th>字數</th><th>狀態</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <p id="onto"></p>
+</main>
+<script src="./data/corpus-manifest.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+if(typeof SANGUO_CORPUS==='undefined'){
+  $('summary').innerHTML='<span class="warn">未載入 data/corpus-manifest.js，請透過 HTTP 服務開啟。</span>';
+}else{
+  const c=SANGUO_CORPUS;
+  $('summary').innerHTML=`共 <b>${c.items.length}</b> 份文本、約 <b>${c.totalChars.toLocaleString()}</b> 字；缺口登記 <b>${c.gaps.length}</b> 條。`;
+  $('rows').innerHTML=c.items.map(it=>`<tr><td>${it.title}</td><td>${it.units}</td><td>${it.chars.toLocaleString()}</td><td class="ok">已入庫</td></tr>`).join('');
+  $('onto').innerHTML='OWL 本體：<a href="./sanguo-ontology.ttl">sanguo-ontology.ttl</a>（4,216 條三元組，含人物、事件、計謀、器物、詩詞、讖緯、版本與缺口）。';
+}
+</script>
+</body>
+</html>

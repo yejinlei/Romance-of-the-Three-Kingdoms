@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>影印本閱讀 · 三國演義本體論</title>
+<style>
+  :root{
+    --ink:#2f2a25; --ink2:#5d5449; --ink3:#8a7f6d;
+    --paper:#f2ebdb; --paper2:#fffdf8;
+    --cinnabar:#9e2b25; --cinnabar-d:#7d1f1b;
+    --jade:#3f6b5e; --indigo:#3b4a6b; --gold:#b08d57;
+    --line:#e3d9c4; --shadow:0 1px 2px rgba(70,52,28,.05),0 10px 26px rgba(70,52,28,.07);
+    --serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+    --kai:"Kaiti SC","STKaiti","KaiTi","Noto Serif CJK SC",serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;color:var(--ink);background-color:#ecdfc6;background-image:
+    radial-gradient(1100px 560px at 10% -10%,rgba(255,255,255,.5),transparent 62%),
+    radial-gradient(900px 520px at 92% 4%,rgba(226,205,172,.34),transparent 66%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+    background-attachment:fixed;font-family:var(--serif);font-size:15.5px;line-height:1.95}
+  a{color:var(--indigo);text-decoration:none}a:hover{color:var(--cinnabar)}
+  header{text-align:center;padding:22px 20px 10px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(247,240,225,.9),rgba(240,231,211,.82))}
+  header h1{margin:0;font-size:24px;letter-spacing:.28em;text-indent:.28em}
+  header .sub{color:var(--ink3);font-size:13px;letter-spacing:.14em;margin-top:5px}
+  header nav{margin-top:9px;font-size:14px}
+  header nav a{margin:0 10px;letter-spacing:.08em}
+  main{max-width:1400px;margin:0 auto;padding:16px 14px 50px}
+  .layout{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start}
+  @media(max-width:920px){.layout{grid-template-columns:1fr}}
+  .card{background:linear-gradient(180deg,rgba(255,253,248,.94),rgba(253,248,238,.9));
+    border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow)}
+  .side{padding:12px;position:sticky;top:12px;max-height:88vh;overflow:auto}
+  .side h3{font-size:14px;color:var(--cinnabar);margin:12px 4px 6px;letter-spacing:.12em;border-bottom:1px solid var(--line);padding-bottom:4px}
+  .side h3:first-child{margin-top:2px}
+  .ed{display:block;width:100%;text-align:left;border:1px solid transparent;background:none;font:inherit;
+    color:var(--ink2);padding:6px 8px;border-radius:2px;cursor:pointer;font-size:14px;line-height:1.5}
+  .ed:hover{background:rgba(158,43,37,.06);color:var(--cinnabar)}
+  .ed.on{background:linear-gradient(180deg,#fffdf8,#f6ecd9);border-color:rgba(158,43,37,.35);color:var(--cinnabar);font-weight:600}
+  .ed small{display:block;color:var(--ink3);font-size:11.5px;font-weight:400}
+  .vols{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:5px;margin:4px 0 10px 8px}
+  .vols button{padding:5px 2px;font-size:12.5px}
+  .main{padding:16px 22px;min-height:62vh}
+  .titlebar{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;border-bottom:2px double var(--cinnabar);padding-bottom:8px;margin-bottom:12px}
+  .titlebar h2{margin:0;font-size:21px;letter-spacing:.06em}
+  .meta{font-size:12.5px;color:var(--ink3)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;font-size:13.5px}
+  button{font-family:inherit;cursor:pointer;background:linear-gradient(180deg,rgba(255,253,248,.93),rgba(247,240,226,.9));
+    border:1px solid var(--line);border-radius:2px;padding:3px 10px;font-size:13px;color:var(--ink2)}
+  button:hover{border-color:var(--cinnabar);color:var(--cinnabar)}
+  button.on{background:linear-gradient(180deg,#c2504a,var(--cinnabar));border-color:var(--cinnabar-d);color:#fdf6ec}
+  .pdfwrap{width:100%;height:72vh;border:1px solid var(--line);border-radius:2px;background:#4a4438;overflow:hidden}
+  .pdfwrap iframe{width:100%;height:100%;border:0;display:block}
+  .empty{padding:40px;text-align:center;color:var(--ink3)}
+  .note{font-size:12.5px;color:#a05a00;background:#fff7ea;border:1px solid #f0d3a0;border-radius:2px;padding:5px 10px;margin-bottom:10px}
+  .badge{display:inline-block;font-size:11px;border:1px solid var(--line);border-radius:9px;padding:0 7px;color:var(--ink3);margin-left:5px}
+</style>
+</head>
+<body>
+<header>
+  <h1>三國演義 · 影印本閱讀</h1>
+  <div class="sub">公版古本 · 八種版刻 · 一百二十二冊</div>
+  <nav>
+    <a href="./index.html">← 返回本體論總覽</a>
+    <a href="./corpus.html">多版本語料庫</a>
+    <a href="./gaps.html">版本缺口</a>
+  </nav>
+</header>
+<main>
+  <div class="layout">
+    <aside class="card side" id="side"></aside>
+    <section class="card main" id="main">
+      <div class="empty">正在載入影印清單…</div>
+    </section>
+  </div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ---- 8 个版本元数据（与 D:\src\books 落盘一一对应）---- */
+const VERSIONS = [
+  { id:"周曰校刊本",    note:"周曰校刊本，明萬曆間金陵周曰校刊《新刊校正古本大字音釋三國志通俗演義》，十二卷十二冊，正文系統。", count:12, textId:"jiajing" },
+  { id:"熊清波藜光堂本", note:"熊清波藜光堂本，明萬曆間閩建熊清波刊《三國全傳》，十六冊，志傳系統。", count:16, textId:"" },
+  { id:"朱鼎臣刊本",    note:"朱鼎臣刊本，明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，八冊，志傳系統，全像插圖。", count:8, textId:"" },
+  { id:"鄭少垣刊本",    note:"鄭少垣刊本，明萬曆間閩建鄭少垣聯輝堂刊《三國志傳》，八冊，志傳系統。", count:8, textId:"" },
+  { id:"李卓吾評本",    note:"李卓吾評本，明萬曆間建陽刊《李卓吾先生批評三國志》，二十三冊，合併為一二〇回。", count:23, textId:"cmt-li" },
+  { id:"鍾伯敬評本",    note:"鍾伯敬評本，明末鍾惺（伯敬）批評本，十七冊（卷首+卷一至卷十六；卷十七至二十缺）。", count:17, textId:"cmt-zhong" },
+  { id:"笠翁評閱本",    note:"笠翁評閱本，清初李漁（笠翁）評閱本，二十六冊，承毛評而有新見。", count:26, textId:"cmt-liyu" },
+  { id:"夏振宇刊本",    note:"夏振宇刊本，明萬曆間夏振宇刊《三國志傳》，十二冊，志傳系統。", count:12, textId:"" },
+];
+const state = { ed:null, vol:null };
+
+/* 册号格式化为 01/02/… */
+function fnum(n){ return String(n).padStart(2,'0'); }
+
+/* 生成侧栏：每版本一个展开分组，册号按钮 */
+function renderSide(){
+  $('side').innerHTML = VERSIONS.map(v=>`
+    <h3>${esc(v.id)}<span class="badge">${v.count} 冊</span></h3>
+    <div class="vols">
+      ${Array.from({length:v.count},(_,i)=>`
+        <button class="${state.ed===v.id&&state.vol===i+1?'on':''}"
+          data-ed="${esc(v.id)}" data-vol="${i+1}">${fnum(i+1)}</button>`).join('')}
+    </div>`).join('');
+  document.querySelectorAll('.vols button').forEach(b=>{
+    b.onclick=()=>load(b.dataset.ed, +b.dataset.vol);
+  });
+}
+
+/* 加载某版本某册的 PDF 到主区 iframe */
+function load(ed, vol){
+  state.ed=ed; state.vol=vol;
+  const v=VERSIONS.find(x=>x.id===ed);
+  const src='pdf/'+encodeURIComponent(ed)+'/'+encodeURIComponent(fnum(vol))+'.pdf';
+  $('main').innerHTML=`
+    <div class="titlebar">
+      <div><h2>${esc(ed)}<span class="badge">第 ${fnum(vol)} 冊 / 共 ${v.count} 冊</span></h2>
+        <div class="meta">${esc(v.note)}</div></div>
+      <div class="meta">
+        ${v.textId?`<a href="corpus.html#ed=${encodeURIComponent(v.textId)}&c=1" style="color:var(--cinnabar);font-weight:600">📖 看文本 →</a> · `:''}
+        <a href="${src}" target="_blank">在新視窗開啟 ↗</a> · <a href="${src}" download>下載本冊</a>
+      </div>
+    </div>
+    <div class="note">影印古本 · 瀏覽器內嵌原生 PDF 檢視器，可縮放／翻頁／全螢幕閱讀。OCR 文本正於「多版本語料庫」處理中。</div>
+    <div class="pdfwrap"><iframe src="${src}" title="${esc(ed)} 第${fnum(vol)}冊"></iframe></div>`;
+  renderSide();
+  location.hash='ed='+encodeURIComponent(ed)+'&f='+vol;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* 从 URL 哈希恢复，默认打开第一版本第一册 */
+function bootFromHash(){
+  const h=location.hash.replace(/^#/,'');
+  const p=new URLSearchParams(h.replace(/&/g,'&'));
+  const ed=p.get('ed'); const f=+(p.get('f')||1);
+  const v=VERSIONS.find(x=>x.id===ed);
+  if(v){ load(v.id, Math.min(Math.max(1,f), v.count)); }
+  else{ load(VERSIONS[0].id, 1); }
+}
+
+bootFromHash();
+window.addEventListener('hashchange', bootFromHash);
+</script>
+</body>
+</html>

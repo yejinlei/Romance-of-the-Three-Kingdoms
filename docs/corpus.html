@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多版本語料庫 · 三國演義本體論</title>
+<style>
+  :root{
+    --ink:#2f2a25; --ink2:#5d5449; --ink3:#8a7f6d;
+    --paper:#f2ebdb; --paper2:#fffdf8;
+    --cinnabar:#9e2b25; --cinnabar-d:#7d1f1b;
+    --jade:#3f6b5e; --indigo:#3b4a6b; --gold:#b08d57;
+    --line:#e3d9c4; --shadow:0 1px 2px rgba(70,52,28,.05),0 10px 26px rgba(70,52,28,.07);
+    --serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+    --kai:"Kaiti SC","STKaiti","KaiTi","Noto Serif CJK SC",serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;color:var(--ink);background-color:#ecdfc6;background-image:
+    radial-gradient(1100px 560px at 10% -10%,rgba(255,255,255,.5),transparent 62%),
+    radial-gradient(900px 520px at 92% 4%,rgba(226,205,172,.34),transparent 66%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+    background-attachment:fixed;font-family:var(--serif);font-size:15.5px;line-height:1.95}
+  a{color:var(--indigo);text-decoration:none}a:hover{color:var(--cinnabar)}
+  header{text-align:center;padding:26px 20px 12px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(247,240,225,.9),rgba(240,231,211,.82))}
+  header h1{margin:0;font-size:28px;letter-spacing:.32em;text-indent:.32em}
+  header .sub{color:var(--ink3);font-size:13px;letter-spacing:.16em;margin-top:6px}
+  header nav{margin-top:10px;font-size:14px}
+  header nav a{margin:0 10px;letter-spacing:.1em}
+  main{max-width:1320px;margin:0 auto;padding:18px 16px 60px}
+  .layout{display:grid;grid-template-columns:280px 1fr;gap:16px;align-items:start}
+  @media(max-width:900px){.layout{grid-template-columns:1fr}}
+  .card{background:linear-gradient(180deg,rgba(255,253,248,.94),rgba(253,248,238,.9));
+    border:1px solid var(--line);border-radius:3px;box-shadow:var(--shadow)}
+  .side{padding:12px;position:sticky;top:12px;max-height:88vh;overflow:auto}
+  .side h3{font-size:14px;color:var(--cinnabar);margin:12px 4px 6px;letter-spacing:.12em;border-bottom:1px solid var(--line);padding-bottom:4px}
+  .ed{display:block;width:100%;text-align:left;border:1px solid transparent;background:none;font:inherit;
+    color:var(--ink2);padding:6px 8px;border-radius:2px;cursor:pointer;font-size:14px;line-height:1.5}
+  .ed:hover{background:rgba(158,43,37,.06);color:var(--cinnabar)}
+  .ed.on{background:linear-gradient(180deg,#fffdf8,#f6ecd9);border-color:rgba(158,43,37,.35);color:var(--cinnabar);font-weight:600}
+  .ed small{display:block;color:var(--ink3);font-size:11.5px;font-weight:400}
+  .main{padding:16px 22px;min-height:60vh}
+  .titlebar{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;border-bottom:2px double var(--cinnabar);padding-bottom:8px;margin-bottom:14px}
+  .titlebar h2{margin:0;font-size:22px;letter-spacing:.08em}
+  .meta{font-size:12.5px;color:var(--ink3)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;font-size:13.5px}
+  select,input[type=search]{font-family:inherit;font-size:13.5px;padding:3px 8px;border:1px solid var(--line);border-radius:2px;background:rgba(255,253,248,.95)}
+  button{font-family:inherit;cursor:pointer;background:linear-gradient(180deg,rgba(255,253,248,.93),rgba(247,240,226,.9));
+    border:1px solid var(--line);border-radius:2px;padding:3px 10px;font-size:13px;color:var(--ink2)}
+  button:hover{border-color:var(--cinnabar);color:var(--cinnabar)}
+  button.on{background:linear-gradient(180deg,#c2504a,var(--cinnabar));border-color:var(--cinnabar-d);color:#fdf6ec}
+  .chapgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:5px;margin:10px 0 14px}
+  .chapgrid button{padding:4px 2px;font-size:12.5px}
+  .chapgrid button.on{background:var(--cinnabar);color:#fff;border-color:var(--cinnabar-d)}
+  .body-text{font-size:17px;line-height:2.05}
+  .body-text p{margin:0 0 10px;text-indent:2em}
+  .body-text p.noindent{text-indent:0}
+  .anno{font-family:var(--kai);font-size:14.5px;color:var(--cinnabar);background:linear-gradient(90deg,rgba(158,43,37,.06),transparent 70%);border-left:2px solid rgba(158,43,37,.4);padding-left:8px}
+  .anno.li{color:var(--indigo);border-left-color:rgba(59,74,107,.4);background:linear-gradient(90deg,rgba(59,74,107,.06),transparent 70%)}
+  .anno.zhong{color:var(--jade);border-left-color:rgba(63,107,94,.4);background:linear-gradient(90deg,rgba(63,107,94,.06),transparent 70%)}
+  .anno.yu{color:#7a4a8a;border-left-color:rgba(122,74,138,.4);background:linear-gradient(90deg,rgba(122,74,138,.06),transparent 70%)}
+  .hide-anno .anno{display:none}
+  .pager{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--ink3)}
+  .critic{border-top:1px solid var(--line);margin-top:20px;padding-top:12px}
+  .critic h3{font-size:15px;color:var(--cinnabar);margin:0 0 8px}
+  .critic .cmt{font-family:var(--kai);font-size:14.5px;border-bottom:1px dotted #e9ddc7;padding:5px 0;color:#4a4438}
+  .empty{padding:40px;text-align:center;color:var(--ink3)}
+  .badge{display:inline-block;font-size:11.5px;border:1px solid var(--line);border-radius:10px;padding:0 8px;color:var(--ink3);margin-left:6px}
+  .toast{position:fixed;right:18px;bottom:18px;background:#2f2a25;color:#fffdf5;padding:8px 14px;border-radius:3px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
+  .toast.show{opacity:.92}
+</style>
+</head>
+<body>
+<header>
+  <h1>三國演義 · 多版本語料庫</h1>
+  <div class="sub">公版古本 · 評本 · 史傳 · 說唱 · 批語輯錄</div>
+  <nav>
+    <a href="./index.html">← 返回本體論總覽</a>
+    <a href="./index.html#versions" onclick="return true">版本譜</a>
+    <a href="./gaps.html">版本缺口</a>
+    <a href="./pdf-viewer.html">影印本閱讀</a>
+    <a href="./sanguo-ontology.ttl">OWL 本體</a>
+  </nav>
+</header>
+<main>
+  <div class="layout">
+    <aside class="card side" id="side">
+      <h3>正文古本</h3><div id="ed-body"></div>
+      <h3>史傳 · 說唱</h3><div id="ed-extra"></div>
+      <h3>批語輯錄</h3><div id="ed-cmt"></div>
+      <h3>序跋 · 讀法</h3><div id="ed-front"></div>
+    </aside>
+    <section class="card main" id="main">
+      <div class="empty">正在載入語料清單…</div>
+    </section>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+<script src="./data/corpus-manifest.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const state = { ed: 'mao', idx: 1, units: [], onlyText: false, critic: '' };
+let criticCache = {};
+
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); }
+
+function cn2num(s){
+  const d={'零':0,'〇':0,'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9};
+  if(/^\d+$/.test(s)) return +s;
+  if(s==='十') return 10;
+  if(s.includes('百')){
+    const [a,b='']=s.split('百'); let n=(d[a]||1)*100;
+    if(b.startsWith('十')) n+=10+(d[b[1]]||0);
+    else if(b) n+=(d[b[0]]||0)*10+(d[b[1]]||0);
+    return n;
+  }
+  if(s.includes('十')){ const [a,b='']=s.split('十'); return (d[a]||1)*10+(d[b]||0); }
+  return d[s]||0;
+}
+function numLabel(n){ return n; }
+
+function cleanLines(lines){
+  const out=[];
+  for(let raw of lines){
+    let t=raw.replace(/\r/g,'').trim();
+    if(!t || t.startsWith('#')) continue;
+    if(/^\d{1,4}$/.test(t)) continue; // 页码残迹
+    out.push(t);
+  }
+  return out;
+}
+
+function splitMarker(text){
+  const lines=text.split('\n'); const units=[]; let cur=null;
+  for(const line of lines){
+    const m=line.match(/^===\s*(.+?)\s*===$/);
+    if(m){ cur={title:m[1],lines:[]}; units.push(cur); }
+    else if(cur) cur.lines.push(line);
+  }
+  if(!units.length) units.push({title:'全文',lines});
+  return units.map(u=>({title:u.title,paras:cleanLines(u.lines)}));
+}
+function mergeSubheads(units, isTop){
+  const out=[];
+  for(const u of units){
+    if(isTop(u.title) || !out.length) out.push({title:u.title,paras:u.paras.slice()});
+    else{
+      const prev=out[out.length-1];
+      prev.paras.push('〔'+u.title+'〕');
+      prev.paras=prev.paras.concat(u.paras);
+    }
+  }
+  return out;
+}
+function splitChapter(text){
+  const lines=text.split('\n'); const units=[]; let cur=null;
+  for(const line of lines){
+    const m=line.match(/^第([一二三四五六七八九十百零〇0-9]{1,6})回[\s　]*(.*)$/);
+    if(m){ cur={n:cn2num(m[1]),title:line.trim(),lines:[]}; units.push(cur); }
+    else if(cur) cur.lines.push(line);
+  }
+  return units.map(u=>({n:u.n,title:u.title,paras:cleanLines(u.lines)}));
+}
+function splitBullet(text){
+  const lines=text.split('\n'); const units=[]; let cur=null;
+  for(const line of lines){
+    const m=line.match(/^\s*●\s*(.+)$/);
+    if(m){ cur={title:m[1].trim(),lines:[]}; units.push(cur); }
+    else if(cur) cur.lines.push(line);
+  }
+  return units.map(u=>({title:u.title,paras:cleanLines(u.lines)}));
+}
+function splitVolume(text){
+  const lines=text.split('\n'); const units=[]; let cur=null;
+  for(const line of lines){
+    const m=line.match(/^卷之([一二三四五六七八九十百零〇0-9]+)\s*$/);
+    if(m){ cur={title:'卷之'+m[1],n:cn2num(m[1]),lines:[]}; units.push(cur); }
+    else if(cur) cur.lines.push(line);
+  }
+  return units.map(u=>({title:u.title,n:u.n,paras:cleanLines(u.lines)}));
+}
+
+function fmtPara(p){
+  let s=esc(p);
+  s=s.replace(/【([^】]{1,4000})】/g,(all,inner)=>{
+    let cls='anno';
+    if(/^(贽|李贽|李卓吾)/.test(inner)) cls+=' li';
+    else if(/^(钟|鍾|钟敬伯)/.test(inner)) cls+=' zhong';
+    else if(/^(渔|李渔)/.test(inner)) cls+=' yu';
+    return `<span class="${cls}">【${esc(inner)}】</span>`;
+  });
+  return `<p class="${/^[「『【]/.test(p)?'noindent':''}">${s}</p>`;
+}
+
+function renderSide(){
+  const groups={body:[],extra:[],cmt:[],front:[]};
+  for(const it of SANGUO_CORPUS.items){
+    if(it.id==='mao'||it.id==='jiajing'||it.id==='huiping'||it.id==='huang') groups.body.push(it);
+    else if(it.id==='pinghua'||it.id==='huaguan'||it.id==='sanguozhi') groups.extra.push(it);
+    else if(it.id.startsWith('cmt-')) groups.cmt.push(it);
+    else groups.front.push(it);
+  }
+  const btn=it=>`<button class="ed ${state.ed===it.id?'on':''}" data-ed="${it.id}">${esc(it.title)}<small>${it.units}${it.id==='sanguozhi'?' 卷':it.id==='huang'?' 則':it.id==='pinghua'||it.id==='huaguan'?' 種':it.id.startsWith('cmt-')?' 回批語':' 回'} · ${(it.chars/10000).toFixed(1)}萬字</small></button>`;
+  $('ed-body').innerHTML=groups.body.map(btn).join('');
+  $('ed-extra').innerHTML=groups.extra.map(btn).join('');
+  $('ed-cmt').innerHTML=groups.cmt.map(btn).join('');
+  $('ed-front').innerHTML=groups.front.map(btn).join('');
+  document.querySelectorAll('.ed').forEach(b=>b.onclick=()=>selectEdition(b.dataset.ed));
+}
+
+async function loadEdition(id){
+  const it=SANGUO_CORPUS.items.find(x=>x.id===id)||SANGUO_CORPUS.items[0];
+  state.ed=it.id;
+  $('main').innerHTML=`<div class="empty">正在載入《${esc(it.title)}》…</div>`;
+  try{
+    const res=await fetch('texts/'+encodeURIComponent(it.file));
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const text=await res.text();
+    let units;
+    if(it.kind==='chapter') units=splitChapter(text);
+    else if(it.kind==='bullet') units=splitBullet(text);
+    else if(it.kind==='volume') units=splitVolume(text);
+    else units=splitMarker(text);
+    if(it.id==='sanguozhi') units=mergeSubheads(units,t=>/^(魏書|蜀書|吳書)/.test(t));
+    if(it.id==='jiajing-front') units=mergeSubheads(units,t=>/^(序|引|三國志宗僚|三国志宗僚)$/.test(t));
+    state.units=units;
+    state.idx=0;
+    renderSide();
+    renderEdition(it);
+  }catch(e){
+    $('main').innerHTML=`<div class="empty">載入失敗：${esc(e.message)}<br><span class="meta">請確認透過 HTTP 服務開啟（GitHub Pages 或本地靜態伺服器），而非 file:// 直接打開。</span><br><br><a href="texts/${encodeURIComponent(it.file)}">直接下載文本 →</a></div>`;
+  }
+}
+
+function renderEdition(it){
+  const n=state.units.length;
+  const cur=state.units[state.idx]||{title:'',paras:[]};
+  const criticOpts=SANGUO_CORPUS.commentaries.map(c=>`<option value="${c.id}" ${state.critic===c.id?'selected':''}>${esc(c.name)}批語</option>`).join('');
+  const showCritic = it.id==='mao' || it.id==='jiajing';
+  // 文本版本 -> 影印本（PDF）版本映射；無對應影印者為空
+  const pdfOf = {'jiajing':'周曰校刊本','cmt-li':'李卓吾評本','cmt-zhong':'鍾伯敬評本','cmt-liyu':'笠翁評閱本','zhouyue':'周曰校刊本'};
+  const pdfEd = pdfOf[it.id] || '';
+  $('main').innerHTML=`
+    <div class="titlebar">
+      <div><h2>${esc(it.title)}</h2><div class="meta">${esc(it.note)}</div></div>
+      <div class="meta">${pdfEd?`<a href="pdf-viewer.html#ed=${encodeURIComponent(pdfEd)}&f=1" style="color:var(--cinnabar);font-weight:600">影印本 →</a> · `:''}${esc(it.source)}</div>
+    </div>
+    <div class="toolbar">
+      <label>篇章：</label>
+      <select id="unit-select">${state.units.map((u,i)=>`<option value="${i}" ${i===state.idx?'selected':''}>${esc(u.title).slice(0,60)}</option>`).join('')}</select>
+      <button id="prev">← 上一</button><button id="next">下一 →</button>
+      ${it.id==='huiping'?`<label><input type="checkbox" id="onlyText" ${state.onlyText?'checked':''}> 只看正文</label>`:''}
+      ${showCritic?`<label>批語對照：</label><select id="critic"><option value="">不顯示</option>${criticOpts}</select>`:''}
+      <span class="meta">${state.idx+1} / ${n}</span>
+    </div>
+    <div class="body-text ${state.onlyText?'hide-anno':''}" id="content">
+      ${cur.paras.length?cur.paras.map(fmtPara).join(''):'<div class="empty">本篇暫無正文段落。</div>'}
+    </div>
+    <div class="critic" id="critic-panel"></div>
+    <div class="pager">
+      <button id="prev2" ${state.idx===0?'disabled':''}>← ${state.idx>0?esc(state.units[state.idx-1].title).slice(0,30):'已是首篇'}</button>
+      <span>${it.units} ${it.id==='sanguozhi'?'卷':it.id==='huang'?'則':'回'} · 約 ${(it.chars).toLocaleString()} 字</span>
+      <button id="next2" ${state.idx===n-1?'disabled':''}>${state.idx<n-1?esc(state.units[state.idx+1].title).slice(0,30):'已是末篇'} →</button>
+    </div>`;
+  $('unit-select').onchange=e=>{ state.idx=+e.target.value; renderEdition(it); };
+  const go=d=>{ const i=state.idx+d; if(i>=0&&i<state.units.length){ state.idx=i; renderEdition(it); } };
+  $('prev').onclick=()=>go(-1); $('next').onclick=()=>go(1);
+  $('prev2').onclick=()=>go(-1); $('next2').onclick=()=>go(1);
+  const ot=$('onlyText'); if(ot) ot.onchange=e=>{ state.onlyText=e.target.checked; $('content').classList.toggle('hide-anno',state.onlyText); };
+  const cs=$('critic'); if(cs) cs.onchange=e=>{ state.critic=e.target.value; renderCritic(it); };
+  renderCritic(it);
+  location.hash=`ed=${it.id}&c=${state.idx+1}`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function chapterNoOf(unit){
+  if(unit.n) return unit.n;
+  const m=(unit.title||'').match(/第([一二三四五六七八九十百零〇0-9]{1,6})回/);
+  return m?cn2num(m[1]):null;
+}
+
+async function renderCritic(it){
+  const panel=$('critic-panel'); if(!panel) return;
+  if(!state.critic || (it.id!=='mao'&&it.id!=='jiajing')){ panel.innerHTML=''; return; }
+  const meta=SANGUO_CORPUS.commentaries.find(c=>c.id===state.critic);
+  if(!meta){ panel.innerHTML=''; return; }
+  panel.innerHTML='<div class="meta">正在載入批語…</div>';
+  try{
+    if(!criticCache[meta.id]){
+      const r=await fetch('texts/'+encodeURIComponent(meta.file));
+      criticCache[meta.id]=splitMarker(await r.text());
+    }
+    const units=criticCache[meta.id];
+    const target=chapterNoOf(state.units[state.idx]);
+    let u=units.find(x=>chapterNoOf(x)===target);
+    if(!u && it.id==='jiajing'){
+      // 嘉靖 240 则：按比例映射到毛本 120 回
+      const jn=state.idx+1; const approx=Math.max(1,Math.min(120,Math.round(jn/2)));
+      u=units.find(x=>chapterNoOf(x)===approx);
+    }
+    if(!u){ panel.innerHTML=`<h3>${esc(meta.name)}批語</h3><div class="meta">本回未輯得批語。</div>`; return; }
+    panel.innerHTML=`<h3>${esc(meta.name)}批語 · ${esc(u.title)}</h3>`+
+      (u.paras.length?u.paras.map(p=>`<div class="cmt">${esc(p)}</div>`).join(''):'<div class="meta">本回未輯得批語。</div>');
+  }catch(e){ panel.innerHTML=`<div class="meta">批語載入失敗：${esc(e.message)}</div>`; }
+}
+
+function selectEdition(id){
+  state.critic=''; state.onlyText=false;
+  loadEdition(id);
+}
+
+function bootFromHash(){
+  const h=location.hash.replace(/^#/,'');
+  const p=new URLSearchParams(h.replace(/&/g,'&'));
+  const ed=p.get('ed'); const c=+(p.get('c')||1);
+  if(ed && SANGUO_CORPUS.items.some(x=>x.id===ed)){
+    loadEdition(ed).then(()=>{ if(c>1 && c<=state.units.length){ state.idx=c-1; renderEdition(SANGUO_CORPUS.items.find(x=>x.id===ed)); } });
+  } else loadEdition('mao').then(()=>{ state.idx=0; renderEdition(SANGUO_CORPUS.items.find(x=>x.id==='mao')); });
+}
+
+if(typeof SANGUO_CORPUS==='undefined'){
+  $('main').innerHTML='<div class="empty">語料清單載入失敗：data/corpus-manifest.js 未找到。</div>';
+}else{
+  renderSide();
+  bootFromHash();
+  window.addEventListener('hashchange', bootFromHash);
+}
+</script>
+</body>
+</html>

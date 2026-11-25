@@ -1,0 +1,26 @@
+# Trae 内部工具产物
+.trae-html-share-packages/
+.trae/
+
+# 中间态 OCR 原始识别结果（合并版已入库 docs/texts/ 与 texts/*_OCR.txt）
+texts/ocr/
+
+# 日志与临时
+texts/_fetch.log
+books_manifest.json
+
+# 系统
+Thumbs.db
+.DS_Store
+# 旧 git 备份（勿入库）
+.git.bak/
+
+
+# 构建/调试临时产物
+.build/
+.trae-html-share-packages/
+
+
+# 拆提交前备份（勿入库）
+.git.pre_split/
+

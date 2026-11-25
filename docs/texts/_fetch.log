@@ -1,0 +1,34 @@
+[2026-11-22T09:38:20.794Z] FATAL Error: missing
+    at fetchExtract (C:\Users\T480\AppData\Local\Temp\fetch_sanguo.js:42:34)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async buildBook (C:\Users\T480\AppData\Local\Temp\fetch_sanguo.js:63:54)
+    at async C:\Users\T480\AppData\Local\Temp\fetch_sanguo.js:83:5
+[2026-11-22T09:40:10.369Z] EMPTY 三國演義/第002回
+[2026-11-22T09:41:02.698Z] PROGRESS 毛宗岗评本.txt 10/119 chars=43280
+[2026-11-22T09:42:12.627Z] PROGRESS 毛宗岗评本.txt 20/119 chars=98462
+[2026-11-22T09:43:06.895Z] PROGRESS 毛宗岗评本.txt 30/119 chars=148668
+[2026-11-22T09:44:07.226Z] EMPTY 三國演義/讀《三國志》法
+[2026-11-22T09:44:08.459Z] DONE 毛宗岗本序跋读法.txt items=2/3 chars=2145
+[2026-11-22T09:44:12.456Z] DONE 嘉靖壬午本序引宗僚.txt items=3/3 chars=8362
+[2026-11-22T09:44:12.457Z] ALL DONE
+[2026-11-22T09:44:13.935Z] PROGRESS 毛宗岗评本.txt 40/119 chars=197485
+[2026-11-22T09:45:26.373Z] PROGRESS 毛宗岗评本.txt 50/119 chars=243388
+[2026-11-22T09:46:33.212Z] PROGRESS 毛宗岗评本.txt 60/119 chars=295785
+[2026-11-22T09:47:22.172Z] PROGRESS 毛宗岗评本.txt 70/119 chars=349680
+[2026-11-22T09:48:25.945Z] PROGRESS 毛宗岗评本.txt 80/119 chars=393114
+[2026-11-22T09:49:17.282Z] PROGRESS 毛宗岗评本.txt 90/119 chars=447471
+[2026-11-22T09:50:15.060Z] PROGRESS 毛宗岗评本.txt 100/119 chars=500562
+[2026-11-22T09:51:19.689Z] PROGRESS 毛宗岗评本.txt 110/119 chars=549603
+[2026-11-22T09:52:30.022Z] DONE 毛宗岗评本.txt items=118/119 chars=590278
+[2026-11-22T09:52:30.023Z] ALL DONE
+[2026-11-22T09:58:52.013Z] DONE 三国志平话.txt items=3/3 chars=68904
+[2026-11-22T09:59:10.488Z] PROGRESS 三国志裴注.txt 10/65 chars=205986
+[2026-11-22T09:59:14.885Z] DONE 花关索传.txt items=4/4 chars=40807
+[2026-11-22T09:59:14.886Z] ALL DONE
+[2026-11-22T10:00:16.795Z] PROGRESS 三国志裴注.txt 20/65 chars=362655
+[2026-11-22T10:01:28.864Z] PROGRESS 三国志裴注.txt 30/65 chars=521585
+[2026-11-22T10:02:22.282Z] PROGRESS 三国志裴注.txt 40/65 chars=598835
+[2026-11-22T10:03:14.461Z] PROGRESS 三国志裴注.txt 50/65 chars=711576
+[2026-11-22T10:04:17.171Z] PROGRESS 三国志裴注.txt 60/65 chars=816533
+[2026-11-22T10:05:13.936Z] DONE 三国志裴注.txt items=65/65 chars=855251
+[2026-11-22T10:05:13.937Z] ALL DONE

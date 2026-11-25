@@ -1,0 +1,32 @@
+[
+  {
+    "file": "黄正甫本.txt",
+    "title": "《三国志传》黄正甫本",
+    "source": "GitHub hexj/sanguo（huang.txt），原题《三国志传》黄正甫本；参校明崇祯间黄正甫刊本系统",
+    "chars": 379278,
+    "chapters120": 0,
+    "volumes": 0,
+    "items180": 180,
+    "note": "志传系统代表版本，存180则，含早期民间传说内容。"
+  },
+  {
+    "file": "嘉靖壬午本.txt",
+    "title": "嘉靖壬午本《三国志通俗演义》",
+    "source": "钱建文《钱氏藏书》电子本（据明嘉靖壬午刊本整理，含夹注及《三国志宗僚》）；GitHub hexj/sanguo（jiajing.txt）",
+    "chars": 750299,
+    "chapters120": 0,
+    "volumes": 24,
+    "items180": 0,
+    "note": "明嘉靖壬午（1522）刊本，24卷240则，现存最早完整刊本。"
+  },
+  {
+    "file": "七家汇评本.txt",
+    "title": "七家汇评本《三国演义》",
+    "source": "GitHub hexj/sanguo（hui.txt）；汇辑毛宗岗、李贽、钟惺、李渔等诸家批语",
+    "chars": 1057657,
+    "chapters120": 120,
+    "volumes": 0,
+    "items180": 0,
+    "note": "120回，正文中夹【毛夹批】【贽眉批】【钟眉批】【渔眉批】及各家总评。"
+  }
+]
