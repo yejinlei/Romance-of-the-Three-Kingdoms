@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三国演义 · 专题深研</title>
+<link rel="stylesheet" href="./assets/style.css">
+<script src="./assets/tailwind.js"></script>
+<script src="./data/sanguo-data.js"></script>
+<script src="./data/sanguo-topics.js"></script>
+<script src="./assets/app.js"></script>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="topnav-brand" href="index.html">三国演义深度本体论</a>
+    <span class="topnav-sub">OWL · 公版结论 · 虚实有据</span>
+    <div class="topnav-links">
+      <a href="index.html">导论·总览</a>
+      <a href="read.html">版本阅读</a>
+      <a href="graph.html">本体图谱</a>
+      <a href="research.html">学术研究</a>
+      <a href="topics.html" class="active">专题深研</a>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <div class="subtabs" id="subtabs">
+    <div class="subtab active" onclick="SANGUO_APP.showView('heros'); switchSub('heros')">英雄谱</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('adaptations'); switchSub('adaptations')">演义外</div>
+  </div>
+
+  <div id="main-content"></div>
+</div>
+
+<footer class="footer">
+  纯静态站 · GitHub Pages 托管 · 以本库 19 种古本为文献基础 · 虚实皆有依据
+</footer>
+
+<script>
+  const _subMap = { heros:0, adaptations:1 };
+  function switchSub(name){
+    document.querySelectorAll('#subtabs .subtab').forEach((el,i)=>{ el.classList.toggle('active', _subMap[name]===i); });
+  }
+  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('heros'); });
+</script>
+</body>
+</html>

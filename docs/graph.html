@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三国演义 · 本体图谱</title>
+<link rel="stylesheet" href="./assets/style.css">
+<script src="./assets/tailwind.js"></script>
+<script src="./assets/echarts.min.js"></script>
+<script src="./data/sanguo-data.js"></script>
+<script src="./data/sanguo-topics.js"></script>
+<script src="./data/ontology-schema.js"></script>
+<script src="./data/annotations.js"></script>
+<script src="./assets/app.js"></script>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="topnav-brand" href="index.html">三国演义深度本体论</a>
+    <span class="topnav-sub">OWL · 公版结论 · 虚实有据</span>
+    <div class="topnav-links">
+      <a href="index.html">导论·总览</a>
+      <a href="read.html">版本阅读</a>
+      <a href="graph.html" class="active">本体图谱</a>
+      <a href="research.html">学术研究</a>
+      <a href="topics.html">专题深研</a>
+    </div>
+  </div>
+</nav>
+
+<div class="main-container">
+  <!-- 第一组：实体八志 -->
+  <h3 class="text-[#8b0000] font-bold mb-2 mt-2">实体八志</h3>
+  <div class="subtabs" id="subtabs-entities">
+    <div class="subtab active" onclick="SANGUO_APP.showView('persons')">人物志</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('factions')">势力志</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('places')">地理志</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('battles')">战役录</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('events')">事件谱</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('stratagems')">计谋谱</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('artifacts')">器物谱</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('poems')">诗词钞</div>
+  </div>
+
+  <!-- 第二组：可视化工具 -->
+  <h3 class="text-[#8b0000] font-bold mb-2 mt-4">可视化工具</h3>
+  <div class="subtabs" id="subtabs-viz">
+    <div class="subtab" onclick="SANGUO_APP.showView('relation-graph')">人物关系网</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('map')">三国舆地图</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('query')">本体查询</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('statistics')">统计谱</div>
+  </div>
+
+  <!-- 第三组：本体规范 -->
+  <h3 class="text-[#8b0000] font-bold mb-2 mt-4">本体规范</h3>
+  <div class="subtabs" id="subtabs-ontology">
+    <div class="subtab" onclick="SANGUO_APP.showView('ontology')">OWL 本体规范</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('about')">关于项目</div>
+  </div>
+
+  <div id="main-content" class="mt-4"></div>
+</div>
+
+<footer class="footer">
+  纯静态站 · GitHub Pages 托管 · 以本库 19 种古本为文献基础 · 虚实皆有依据
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('persons'); });
+</script>
+</body>
+</html>
