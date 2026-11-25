@@ -2,7 +2,7 @@
 const SANGUO_CORPUS = {
   "updated": "2026-11-25",
   "note": "《三国演义》公版语料库。正文均来自中文维基文库或公开电子本，许可为 PD-old。",
-  "totalChars": 10935386,
+  "totalChars": 11673971,
   "items": [
     {
       "id": "mao",
@@ -140,12 +140,12 @@ const SANGUO_CORPUS = {
       "id": "zhudingchen",
       "file": "朱鼎臣刊本_OCR.txt",
       "title": "朱鼎臣刊本（OCR）",
-      "note": "明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，二十卷存十一冊；識典古籍 OCR，僅檢索用",
+      "note": "明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，二十卷二百四十則全；識典古籍 OCR，卷十六至二十（第181-240則）已以多模态大模型 VLM 逐页补全，僅檢索用",
       "source": "識典古籍（https://www.shidianguji.com/）",
-      "units": 11,
+      "units": 240,
       "kind": "marker",
       "ocr": true,
-      "chars": 387237
+      "chars": 425888
     },
     {
       "id": "pinghua",
