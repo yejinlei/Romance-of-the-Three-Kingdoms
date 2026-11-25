@@ -75,8 +75,12 @@
   <h1>三國演義 · 多版本語料庫</h1>
   <div class="sub">公版古本 · 評本 · 史傳 · 說唱 · 批語輯錄</div>
   <nav>
-    <a href="./index.html">← 返回本體論總覽</a>
-    <a href="./index.html#versions" onclick="return true">版本譜</a>
+    <a href="./index.html">← 返回导论·总览</a>
+    <a href="./read.html">版本谱</a>
+    <a href="./read.html#reader">版本阅读器</a>
+    <a href="./research.html">学术研究</a>
+    <a href="./graph.html">本体图谱</a>
+    <a href="./topics.html">专题深研</a>
     <a href="./gaps.html">版本缺口</a>
     <a href="./pdf-viewer.html">影印本閱讀</a>
     <a href="./sanguo-ontology.ttl">OWL 本體</a>
@@ -196,7 +200,9 @@ function fmtPara(p){
 function renderSide(){
   const groups={body:[],extra:[],cmt:[],front:[]};
   for(const it of SANGUO_CORPUS.items){
-    if(it.id==='mao'||it.id==='jiajing'||it.id==='huiping'||it.id==='huang') groups.body.push(it);
+    if(it.id==='mao'||it.id==='jiajing'||it.id==='huiping'||it.id==='huang'||
+       it.id==='lizhuowu'||it.id==='liyu'||it.id==='xiazhenyu'||it.id==='xiongqingbo'||
+       it.id==='zhengshaoyuan'||it.id==='zhongbojing'||it.id==='zhudingchen') groups.body.push(it);
     else if(it.id==='pinghua'||it.id==='huaguan'||it.id==='sanguozhi') groups.extra.push(it);
     else if(it.id.startsWith('cmt-')) groups.cmt.push(it);
     else groups.front.push(it);
@@ -239,11 +245,14 @@ function renderEdition(it){
   const criticOpts=SANGUO_CORPUS.commentaries.map(c=>`<option value="${c.id}" ${state.critic===c.id?'selected':''}>${esc(c.name)}批語</option>`).join('');
   const showCritic = it.id==='mao' || it.id==='jiajing';
   // 文本版本 -> 影印本（PDF）版本映射；無對應影印者為空
-  const pdfOf = {'jiajing':'周曰校刊本','cmt-li':'李卓吾評本','cmt-zhong':'鍾伯敬評本','cmt-liyu':'笠翁評閱本','zhouyue':'周曰校刊本'};
+  const pdfOf = {'jiajing':'周曰校刊本','cmt-li':'李卓吾評本','cmt-zhong':'鍾伯敬評本','cmt-liyu':'笠翁評閱本','zhouyue':'周曰校刊本',
+    'lizhuowu':'李卓吾評本','liyu':'笠翁評閱本','xiazhenyu':'夏振宇刊本','xiongqingbo':'熊清波藜光堂本',
+    'zhengshaoyuan':'鄭少垣刊本','zhongbojing':'鍾伯敬評本','zhudingchen':'朱鼎臣刊本'};
   const pdfEd = pdfOf[it.id] || '';
+  const unitWord = it.ocr ? (it.kind==='volume'?'卷':'冊') : (it.id==='sanguozhi'?'卷':it.id==='huang'?'則':'回');
   $('main').innerHTML=`
     <div class="titlebar">
-      <div><h2>${esc(it.title)}</h2><div class="meta">${esc(it.note)}</div></div>
+      <div><h2>${esc(it.title)}</h2>${it.ocr?`<span class="badge">OCR · 僅檢索用</span>`:''}<div class="meta">${esc(it.note)}</div></div>
       <div class="meta">${pdfEd?`<a href="pdf-viewer.html#ed=${encodeURIComponent(pdfEd)}&f=1" style="color:var(--cinnabar);font-weight:600">影印本 →</a> · `:''}${esc(it.source)}</div>
     </div>
     <div class="toolbar">
@@ -260,7 +269,7 @@ function renderEdition(it){
     <div class="critic" id="critic-panel"></div>
     <div class="pager">
       <button id="prev2" ${state.idx===0?'disabled':''}>← ${state.idx>0?esc(state.units[state.idx-1].title).slice(0,30):'已是首篇'}</button>
-      <span>${it.units} ${it.id==='sanguozhi'?'卷':it.id==='huang'?'則':'回'} · 約 ${(it.chars).toLocaleString()} 字</span>
+      <span>${it.units} ${unitWord} · 約 ${(it.chars).toLocaleString()} 字</span>
       <button id="next2" ${state.idx===n-1?'disabled':''}>${state.idx<n-1?esc(state.units[state.idx+1].title).slice(0,30):'已是末篇'} →</button>
     </div>`;
   $('unit-select').onchange=e=>{ state.idx=+e.target.value; renderEdition(it); };

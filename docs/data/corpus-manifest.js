@@ -1,8 +1,8 @@
 // 三国演义公版语料库清单（自动生成）
 const SANGUO_CORPUS = {
-  "updated": "2026-11-22",
+  "updated": "2026-11-25",
   "note": "《三国演义》公版语料库。正文均来自中文维基文库或公开电子本，许可为 PD-old。",
-  "totalChars": 6404704,
+  "totalChars": 10935386,
   "items": [
     {
       "id": "mao",
@@ -69,6 +69,83 @@ const SANGUO_CORPUS = {
       "kind": "marker",
       "ocr": true,
       "chars": 2157193
+    },
+    {
+      "id": "lizhuowu",
+      "file": "李卓吾評本_OCR.txt",
+      "title": "李卓吾評本（OCR）",
+      "note": "明萬曆間建陽刊《李卓吾先生批評三國志》，卷首+二十三冊；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 23,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 1050461
+    },
+    {
+      "id": "liyu",
+      "file": "笠翁評閱本_OCR.txt",
+      "title": "笠翁評閱本（OCR）",
+      "note": "清初李漁（笠翁）評閱本，卷首+二十六冊；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 26,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 1050275
+    },
+    {
+      "id": "xiazhenyu",
+      "file": "夏振宇刊本_OCR.txt",
+      "title": "夏振宇刊本（OCR）",
+      "note": "明萬曆間夏振宇刊《三國志傳通俗演義》，十二卷存八卷；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 8,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 196929
+    },
+    {
+      "id": "xiongqingbo",
+      "file": "熊清波藜光堂本_OCR.txt",
+      "title": "熊清波藜光堂本（OCR）",
+      "note": "明萬曆間閩建熊清波刊《三國全傳》，二十卷存十六冊；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 16,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 386877
+    },
+    {
+      "id": "zhengshaoyuan",
+      "file": "鄭少垣刊本_OCR.txt",
+      "title": "鄭少垣刊本（OCR）",
+      "note": "明萬曆間閩建鄭少垣聯輝堂刊《三國志傳》，八冊；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 8,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 387864
+    },
+    {
+      "id": "zhongbojing",
+      "file": "鍾伯敬評本_OCR.txt",
+      "title": "鍾伯敬評本（OCR）",
+      "note": "明末鍾惺（伯敬）批評本，卷首+卷一至卷十六（卷十七至二十缺）；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 17,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 1050239
+    },
+    {
+      "id": "zhudingchen",
+      "file": "朱鼎臣刊本_OCR.txt",
+      "title": "朱鼎臣刊本（OCR）",
+      "note": "明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，二十卷存十一冊；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 11,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 387237
     },
     {
       "id": "pinghua",
@@ -179,6 +256,28 @@ const SANGUO_CORPUS = {
       "kind": "marker",
       "ocr": false,
       "chars": 67674
+    },
+    {
+      "id": "jiajing-ws",
+      "file": "嘉靖壬午本_维基文库转录.txt",
+      "title": "嘉靖壬午本（维基文库转录本）",
+      "note": "明嘉靖壬午（1522）刊《三国志通俗演义》24卷240则，维基文库独立转录，繁体原貌，与嘉靖壬午本.txt同版异录，可对勘",
+      "source": "中文维基文库 嘉靖本三國志通俗演義（https://zh.wikisource.org/wiki/嘉靖本三國志通俗演義）",
+      "units": 240,
+      "kind": "volume",
+      "ocr": false,
+      "chars": 720724
+    },
+    {
+      "id": "sankuo-en",
+      "file": "SanKuo_BrewittTaylor英译本.txt",
+      "title": "San Kuo 英译本（Brewitt-Taylor 1925）",
+      "note": "Charles Henry Brewitt-Taylor 1925 年英译全本，120回，公版",
+      "source": "英文维基文库 San Kuo（https://en.wikisource.org/wiki/San_Kuo）",
+      "units": 120,
+      "kind": "chapter",
+      "ocr": false,
+      "chars": 0
     }
   ],
   "commentaries": [

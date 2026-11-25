@@ -83,13 +83,14 @@ const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'
 /* ---- 8 个版本元数据（与 D:\src\books 落盘一一对应）---- */
 const VERSIONS = [
   { id:"周曰校刊本",    note:"周曰校刊本，明萬曆間金陵周曰校刊《新刊校正古本大字音釋三國志通俗演義》，十二卷十二冊，正文系統。", count:12, textId:"jiajing" },
-  { id:"熊清波藜光堂本", note:"熊清波藜光堂本，明萬曆間閩建熊清波刊《三國全傳》，十六冊，志傳系統。", count:16, textId:"" },
-  { id:"朱鼎臣刊本",    note:"朱鼎臣刊本，明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，八冊，志傳系統，全像插圖。", count:8, textId:"" },
-  { id:"鄭少垣刊本",    note:"鄭少垣刊本，明萬曆間閩建鄭少垣聯輝堂刊《三國志傳》，八冊，志傳系統。", count:8, textId:"" },
+  { id:"熊清波藜光堂本", note:"熊清波藜光堂本，明萬曆間閩建熊清波刊《三國全傳》，十六冊，志傳系統。", count:16, textId:"xiongqingbo" },
+  { id:"朱鼎臣刊本",    note:"朱鼎臣刊本，明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，八冊，志傳系統，全像插圖。", count:8, textId:"zhudingchen" },
+  { id:"鄭少垣刊本",    note:"鄭少垣刊本，明萬曆間閩建鄭少垣聯輝堂刊《三國志傳》，八冊，志傳系統。", count:8, textId:"zhengshaoyuan" },
   { id:"李卓吾評本",    note:"李卓吾評本，明萬曆間建陽刊《李卓吾先生批評三國志》，二十三冊，合併為一二〇回。", count:23, textId:"cmt-li" },
   { id:"鍾伯敬評本",    note:"鍾伯敬評本，明末鍾惺（伯敬）批評本，十七冊（卷首+卷一至卷十六；卷十七至二十缺）。", count:17, textId:"cmt-zhong" },
   { id:"笠翁評閱本",    note:"笠翁評閱本，清初李漁（笠翁）評閱本，二十六冊，承毛評而有新見。", count:26, textId:"cmt-liyu" },
-  { id:"夏振宇刊本",    note:"夏振宇刊本，明萬曆間夏振宇刊《三國志傳》，十二冊，志傳系統。", count:12, textId:"" },
+  { id:"夏振宇刊本",    note:"夏振宇刊本，明萬曆間夏振宇刊《三國志傳》，十二冊，志傳系統。", count:12, textId:"xiazhenyu" },
+  { id:"余象斗刊本",    note:"余象斗刊本，明萬曆二十年（1592）建陽雙峰堂余象斗刊《新刻按鑑全像批評三國志傳》，存四冊，志傳系統。", count:4, textId:"yuxiangdou" },
 ];
 const state = { ed:null, vol:null };
 
