@@ -1,7 +1,7 @@
 {
-  "updated": "2026-11-22",
+  "updated": "2026-11-25",
   "note": "《三国演义》公版语料库。正文均来自中文维基文库或公开电子本，许可为 PD-old。",
-  "totalChars": 4247511,
+  "totalChars": 11673971,
   "items": [
     {
       "id": "mao",
@@ -57,6 +57,94 @@
       "kind": "marker",
       "ocr": true,
       "chars": 109839
+    },
+    {
+      "id": "zhouyue",
+      "file": "周曰校刊本_OCR.txt",
+      "title": "周曰校刊本（OCR）",
+      "note": "明万历十九年（1591）金陵万卷楼周曰校刊《新刊校正古本大字音釋三國志通俗演義》，日本内阁文库藏，卷首+卷一~卷十二（245则）；多模态高精图文对照识读",
+      "source": "日本国立公文书馆内阁文库藏本（附1-8，漢17847）；Wikimedia Commons NAJDA-附001-0008",
+      "units": 246,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 2157193
+    },
+    {
+      "id": "lizhuowu",
+      "file": "李卓吾評本_OCR.txt",
+      "title": "李卓吾評本（OCR）",
+      "note": "明萬曆間建陽刊《李卓吾先生批評三國志》，卷首+二十三冊；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 23,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 1050461
+    },
+    {
+      "id": "liyu",
+      "file": "笠翁評閱本_OCR.txt",
+      "title": "笠翁評閱本（OCR）",
+      "note": "清初李漁（笠翁）評閱本，卷首+二十六冊；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 26,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 1050275
+    },
+    {
+      "id": "xiazhenyu",
+      "file": "夏振宇刊本_OCR.txt",
+      "title": "夏振宇刊本（OCR，殘本）",
+      "note": "明萬曆間夏振宇刊《三國志傳通俗演義》，十二卷殘存六卷（三、四、五、六、九、十，卷之六含北大藏本補配重出段）；夏振宇舊藏本本身殘缺，卷一、二、七、八、十一、十二源本無存；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）；日本名古屋蓬左文庫藏全本未公開數字化",
+      "units": 7,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 196939
+    },
+    {
+      "id": "xiongqingbo",
+      "file": "熊清波藜光堂本_OCR.txt",
+      "title": "熊清波藜光堂本（OCR）",
+      "note": "明萬曆間閩建熊清波刊《三國全傳》，二十卷存十六冊；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 16,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 386877
+    },
+    {
+      "id": "zhengshaoyuan",
+      "file": "鄭少垣刊本_OCR.txt",
+      "title": "鄭少垣刊本（OCR）",
+      "note": "明萬曆間閩建鄭少垣聯輝堂刊《三國志傳》，八冊；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 8,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 387864
+    },
+    {
+      "id": "zhongbojing",
+      "file": "鍾伯敬評本_OCR.txt",
+      "title": "鍾伯敬評本（OCR）",
+      "note": "明末鍾惺（伯敬）批評本，卷首+卷一至卷十六（卷十七至二十缺）；識典古籍 OCR，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 17,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 1050239
+    },
+    {
+      "id": "zhudingchen",
+      "file": "朱鼎臣刊本_OCR.txt",
+      "title": "朱鼎臣刊本（OCR）",
+      "note": "明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，二十卷二百四十則全；識典古籍 OCR，卷十六至二十（第181-240則）已以多模态大模型 VLM 逐页补全，僅檢索用",
+      "source": "識典古籍（https://www.shidianguji.com/）",
+      "units": 240,
+      "kind": "marker",
+      "ocr": true,
+      "chars": 425888
     },
     {
       "id": "pinghua",
@@ -167,6 +255,28 @@
       "kind": "marker",
       "ocr": false,
       "chars": 67674
+    },
+    {
+      "id": "jiajing-ws",
+      "file": "嘉靖壬午本_维基文库转录.txt",
+      "title": "嘉靖壬午本（维基文库转录本）",
+      "note": "明嘉靖壬午（1522）刊《三国志通俗演义》24卷240则，维基文库独立转录，繁体原貌，与嘉靖壬午本.txt同版异录，可对勘",
+      "source": "中文维基文库 嘉靖本三國志通俗演義（https://zh.wikisource.org/wiki/嘉靖本三國志通俗演義）",
+      "units": 240,
+      "kind": "volume",
+      "ocr": false,
+      "chars": 720724
+    },
+    {
+      "id": "sankuo-en",
+      "file": "SanKuo_BrewittTaylor英译本.txt",
+      "title": "San Kuo 英译本（Brewitt-Taylor 1925）",
+      "note": "Charles Henry Brewitt-Taylor 1925 年英译全本，120回，公版",
+      "source": "英文维基文库 San Kuo（https://en.wikisource.org/wiki/San_Kuo）",
+      "units": 120,
+      "kind": "chapter",
+      "ocr": false,
+      "chars": 0
     }
   ],
   "commentaries": [
@@ -271,17 +381,17 @@
     {
       "edition": "夏振宇刊本",
       "system": "演義系統",
-      "tier": "可獲影印",
-      "status": "未獲文本",
-      "form": "全本影印（PDF，公開下載）",
-      "holder": "日本名古屋蓬左文庫藏（國內無存）；國家圖書館出版社影印本",
-      "volumes": "十二卷二百四十回，全；NLC892 12 冊約 588 頁",
+      "tier": "可獲影印（殘本）",
+      "status": "已獲殘本（OCR，僅檢索用）",
+      "form": "殘本影印 12 冊（夏振宇屯溪藏本殘 + 北大藏本補配），非全本",
+      "holder": "屯溪夏振宇舊藏殘本（中國國家圖書館藏，經維基共享資源公開）；日本名古屋蓬左文庫藏全本未公開數字化",
+      "volumes": "十二卷殘存六卷（卷之三、四、五、六、九、十；卷之六含北大藏本補配重出段），共 7 標記 19.7 萬字；pdf08 手寫「缺卷7-卷8」",
       "url": "https://commons.wikimedia.org/wiki/File:NLC892-411999031496-74196_新刊校正古本出像大字音釋三國志傳通俗演義_第1冊.pdf",
-      "download": "可下載",
+      "download": "可下載（屯溪藏本殘本）",
       "resolution": "1129×1787（單葉）/49 頁每冊，中等偏低",
-      "missing": "無缺卷（待逐冊核）",
-      "detail": "明萬曆間夏振宇刊《三國志傳通俗演義》十二卷，國內無存，僅藏日本蓬左文庫。中國國家圖書館藏本已數字化並經維基共享資源公開 12 冊；另國圖出版社《日本藏夏振宇刊本三國志傳通俗演義》全三冊影印本。",
-      "path": "維基共享資源 NLC892-411999031496（12 冊）；國圖出版社影印本。"
+      "missing": "缺卷一、卷二、卷七、卷八、卷十一、卷十二（共 6 卷，源本無存）；日本蓬左文庫藏全本未公開數字化",
+      "detail": "明萬曆間夏振宇刊《三國志傳通俗演義》十二卷，國內僅此一殘本，1957 年夏振宇得於屯溪。手跋自述：「現存三、四、五、六、九、十計六卷……曾假北大本補配……於三、四、五三卷亦無法補任之矣。」經 VLM 逐頁核驗 12 份 PDF 書口，pdf08 首頁手寫標註「缺卷7-卷8」；卷之七/卷之八源本確無；卷之六後半（pdf11）為北大藏本卷之六補配重出段，OCR 人員曾誤標為「卷之七」，已糾正。日本蓬左文庫藏 12 卷全本未公開數字化；國圖出版社 2010 年影印本版權保護期內。",
+      "path": "維基共享資源 NLC892-411999031496（12 冊，殘本）；OCR 已落盤 docs/texts/夏振宇刊本_OCR.txt；日本蓬左文庫藏全本未上傳。"
     },
     {
       "edition": "朱鼎臣刊本",
