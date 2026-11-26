@@ -467,7 +467,26 @@
     let viewLabel = '';
     let viewDesc = '';
     let sourceLayer = '';
-    if(!readable){
+    // 白话导读层由站内元数据（events/stratagems/persons 等）派生，与所选版本是否全文入库无关，
+    // 因此白话模式不因版本 partial/absent 短路——始终显示导读层；原文层按可读性追加。
+    if(mode==='vernacular'){
+      // 白话：导读层在上、原文正文在下并存，不替换正文（切走后再切回不丢原文）
+      const simplifiedBody = chapterText.text ? simpleT2S(chapterText.text) : '';
+      let lowerNote = '';
+      if(!readable){
+        const st = vrow ? vrow.status : 'absent';
+        lowerNote = `<div class="empty-state mt-4">
+          <p class="text-sm">所选版本「${esc(vrow ? vrow.title : readerState.edition)}」文本状态：<strong>${TEXT_STATUS_LABEL[st] || st}</strong>${vrow && vrow.gapNote ? `（${esc(vrow.gapNote)}）` : ''}，下方不附原文；${st === 'partial' ? '本版本已入库语料库，' : '本版本无入库可读文本，'}可至「多版本语料库」查看该版正文。</p>
+        </div>`;
+      }
+      bodyHTML = renderVernacularGuide(chapterNum)
+        + `<div class="guide-body-sep mt-4 pt-3 border-t border-[#c9b896]"></div>`
+        + `<div class="guide-backlink mb-3"><button class="btn btn-sm" onclick="appSetReaderMode('traditional')">↑ 只看原文（繁体）</button></div>`
+        + (readable ? simplifiedBody : lowerNote);
+      viewLabel = '白话导读' + (readable ? ' + 原文' : '');
+      viewDesc = '编者所撰导读在上' + (readable ? '，毛宗岗本原文（简体）在下，两层并存' : '，原文层依版本可读性而定') + '。';
+      sourceLayer = '编者导读层' + (readable ? ' + 原文层 · 毛宗岗本正文（t2s.js 繁转简）' : '（版本未全文入库，无原文层）');
+    } else if(!readable){
       const st = vrow ? vrow.status : 'absent';
       bodyHTML = `<div class="empty-state">
         <h3 class="text-lg font-bold mb-2">本版本无可读全文</h3>
@@ -487,16 +506,6 @@
       viewLabel = '简体';
       viewDesc = '以 t2s.js 繁→简逐字转换，仅供现代读者快速浏览。';
       sourceLayer = '原文层 · 毛宗岗本正文（t2s.js 繁转简）';
-    } else if(mode==='vernacular'){
-      // 白话：导读层在上、原文正文在下并存，不替换正文（切走后再切回不丢原文）
-      const simplifiedBody = simpleT2S(chapterText.text || '');
-      bodyHTML = renderVernacularGuide(chapterNum)
-        + `<div class="guide-body-sep mt-4 pt-3 border-t border-[#c9b896]"></div>`
-        + `<div class="guide-backlink mb-3"><button class="btn btn-sm" onclick="appSetReaderMode('traditional')">↑ 只看原文（繁体）</button></div>`
-        + simplifiedBody;
-      viewLabel = '白话导读 + 原文';
-      viewDesc = '编者所撰导读在上，毛宗岗本原文（简体）在下，两层并存。';
-      sourceLayer = '编者导读层 + 原文层 · 毛宗岗本正文（t2s.js 繁转简）';
     }
 
     const prevChapter = chapterNum - 1;
@@ -1721,6 +1730,28 @@
     </div>`;
   }
 
+  // echarts 尺寸守卫：容器宽高为 0 时 echarts.init 会内部崩溃（graph series dataIndex 未定义）。
+  // 用 requestAnimationFrame 等待布局稳定并检查 clientWidth/Height>0，0 尺寸时重试，最多约 12 帧。
+  function initEchartsContainer(domId, cb){
+    if(typeof echarts === 'undefined') return;
+    let tries = 0;
+    function attempt(){
+      const dom = document.getElementById(domId);
+      if(!dom) return;
+      if(dom.clientWidth > 0 && dom.clientHeight > 0){
+        try{
+          const chart = echarts.init(dom);
+          cb(chart);
+        }catch(e){
+          if(++tries < 12) requestAnimationFrame(attempt);
+        }
+        return;
+      }
+      if(++tries < 12) requestAnimationFrame(attempt);
+    }
+    requestAnimationFrame(attempt);
+  }
+
   function renderRelationGraph(el){
     el.innerHTML = `
     <div class="max-w-6xl mx-auto">
@@ -1728,9 +1759,7 @@
       <p class="text-sm text-[#8b6914] mb-2">共 ${(data.persons||[]).length} 人、${relations.length} 条关系。蓝色蜀汉、红色曹魏、绿色东吴、灰色群雄；可拖动、缩放。</p>
       <div id="graph-container" class="ancient-border rounded w-full" style="height: 72vh"></div>
     </div>`;
-    setTimeout(() => {
-      if(typeof echarts==='undefined') return;
-      const chart = echarts.init(document.getElementById('graph-container'));
+    initEchartsContainer('graph-container', (chart) => {
       const persons = data.persons||[];
       const idMap = {};
       persons.forEach(p=>idMap[p.id]=p.name);
@@ -1742,8 +1771,9 @@
         tooltip:{formatter:p=>p.dataType==='edge'?(p.data.source+' — '+p.data.value+' → '+p.data.target):(p.name+'（'+(catNames[p.category]||'')+'）')},
         series:[{type:'graph', layout:'force', roam:true, data:nodes, links:links, categories:catNames.map(n=>({name:n})), force:{repulsion:220, edgeLength:[50,160]}, label:{show:true, position:'right', fontSize:11}, lineStyle:{opacity:0.45}}]
       });
+      chart.resize();
       window.addEventListener('resize',()=>chart.resize());
-    }, 100);
+    });
   }
 
   function renderMap(el){
