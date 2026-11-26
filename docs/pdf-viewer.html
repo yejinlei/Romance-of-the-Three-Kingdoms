@@ -149,9 +149,6 @@ function renderSide(){
   document.querySelectorAll('.vols button').forEach(b=>{
     b.onclick=()=>load(+b.dataset.vi, +b.dataset.fi, 1);
   });
-  document.querySelectorAll('.ed').forEach(b=>{
-    b.onclick=()=>load(+b.dataset.vi, 0, 1);
-  });
 }
 
 function pdfSrc(){
@@ -166,6 +163,11 @@ function renderMain(){
   const f = volFiles(v)[state.fi];
   const npages = v.pages[state.fi];
   $('main').innerHTML = `
+    <div id="pdf-fail" style="display:none">
+      <div style="margin-top:26px;font-size:15px;color:#c0392b;font-weight:700">影印文件暫無法載入</div>
+      <div id="pdf-fail-msg" style="margin-top:8px;font-size:12.5px;color:#555;line-height:1.9">目前冊的 PDF 缺失或網絡中斷，請換一冊或稍後再試。</div>
+      <a id="pdf-fail-link" href="#" target="_blank" rel="noopener" style="display:inline-block;margin:14px 0 28px;font-size:13px;color:#8b0000;border:1px solid #8b0000;border-radius:5px;padding:4px 14px;text-decoration:none">直接打開該文件 ↗</a>
+    </div>
     <div class="titlebar">
       <div><h2>${esc(v.label)}<span class="badge">${esc(f.replace('.pdf',''))} 冊 / 共 ${v.count} 冊</span><span class="badge">仅影印，无文本</span></h2>
         <div class="meta">${esc(v.note)}</div></div>
@@ -207,9 +209,34 @@ function renderFrame(){
     <div class="pdfscale" id="pdfscale" style="width:${state.scale*100}%">
       <iframe id="pdf-frame" src="${pdfSrc()}" title="${esc(v.label)} ${esc(f)} 第${state.page}页"></iframe>
     </div>`;
+  bindPdfCheck(v, f);
   const cur = $('page-cur'); if(cur) cur.textContent = state.page;
   const inp = $('page-input'); if(inp) inp.value = state.page;
   syncHash();
+}
+/* 影印文件加载失败兜底：iframe 无法跨源读取内容，改用 HEAD 探测该册文件是否可达 */
+function bindPdfCheck(v, f){
+  const fr = $('pdf-frame');
+  if(fr) fr.addEventListener('load', ()=>pdfCheck(v, f));
+  pdfCheck(v, f);
+}
+function pdfCheck(v, f){
+  const fail = $('pdf-fail');
+  if(!fail) return;
+  const url = 'pdf/'+encodeURIComponent(v.dir)+'/'+encodeURIComponent(f);
+  const link = $('pdf-fail-link');
+  if(link) link.href = url;
+  fail.style.display = 'block';
+  fetch(url, {method:'HEAD', cache:'no-store'})
+    .then(r => {
+      if(r.ok){ fail.style.display = 'none'; return; }
+      const msg = $('pdf-fail-msg');
+      if(msg) msg.textContent = `《${v.label}》${f.replace('.pdf','')} 冊：服务器返回 ${r.status}，該冊影印文件缺失或不可達。`;
+    })
+    .catch(() => {
+      const msg = $('pdf-fail-msg');
+      if(msg) msg.textContent = `《${v.label}》${f.replace('.pdf','')} 冊：請求失敗（網絡中斷或文件缺失）。`;
+    });
 }
 function syncZoom(){
   const s = $('pdfscale');

@@ -416,7 +416,10 @@ const SANGUO_DATA = {
     {id:"pl57", name:"麦城", level:"城邑", modernLocation:"湖北当阳", coord:[111.82,30.86]},
     {id:"pl58", name:"虎牢关", level:"关隘", modernLocation:"河南荥阳", coord:[113.31,34.83]},
     {id:"pl59", name:"汜水关", level:"关隘", modernLocation:"河南荥阳", coord:[113.26,34.81]},
-    {id:"pl60", name:"五关", level:"关隘组", modernLocation:"河南一线", coord:[]}
+    {id:"pl60", name:"五关", level:"关隘组", modernLocation:"河南一线", coord:[]},
+    {id:"pl62", name:"雒城", level:"城邑", modernLocation:"四川广汉", coord:[104.18,30.99]},
+    {id:"nanz", name:"南中", level:"地域", modernLocation:"云贵川交界", coord:[102.70,25.05]},
+    {id:"xic", name:"西城", level:"城邑", modernLocation:"甘肃秦安", coord:[105.72,34.90]}
   ],
 
   // 战役实体（30+，按本体属性：id/name/year/placeId/result/keyPersons）

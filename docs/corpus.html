@@ -90,6 +90,7 @@
       <h3>史傳 · 說唱</h3><div id="ed-extra"></div>
       <h3>批語輯錄</h3><div id="ed-cmt"></div>
       <h3>序跋 · 讀法</h3><div id="ed-front"></div>
+      <div id="ed-total" style="margin:16px 0 4px;padding:10px 4px 12px;border-top:1px double #8b4513;font-size:12.5px;color:#3a1c00;line-height:1.9"></div>
     </aside>
     <section class="card main" id="main">
       <div class="empty">正在載入語料清單…</div>
@@ -209,6 +210,13 @@ function renderSide(){
   $('ed-extra').innerHTML=groups.extra.map(btn).join('');
   $('ed-cmt').innerHTML=groups.cmt.map(btn).join('');
   $('ed-front').innerHTML=groups.front.map(btn).join('');
+  const total=$('ed-total');
+  if(total){
+    const items=SANGUO_CORPUS.items||[];
+    const sum=items.reduce((a,b)=>a+(b.chars||0),0);
+    total.innerHTML=`語料共 <b>${items.length} 種</b>，合計 <b>${(sum/10000).toFixed(1)} 萬字</b>（精確 ${sum.toLocaleString()} 字）`
+      +`<div style="margin-top:4px;color:#8a6a3a">另登記缺口 <b>${(SANGUO_CORPUS.gaps||[]).length}</b> 項（見 <a href="gaps.html">版本缺口清單</a>）</div>`;
+  }
   document.querySelectorAll('.ed').forEach(b=>b.onclick=()=>selectEdition(b.dataset.ed));
 }
 
