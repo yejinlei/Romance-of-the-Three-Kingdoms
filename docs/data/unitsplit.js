@@ -38,7 +38,10 @@ const UNITSplit = (function(){
       if(!t || t.startsWith('#')) continue;
       if(/^\d{1,4}$/.test(t)) continue; // 页码残迹
       if(/^---+$/.test(t)) continue;
+      if(/^=+$/.test(t)) continue;
       if(/^>/.test(t)) continue;
+      if(/^\[Volume\s+\d/i.test(t)) continue;      // 英译本卷/回标记行
+      if(/^CHAPTER\s*[IVXLC]+\.?$/i.test(t)) continue; // 英译本回号行（已作单元号）
       t=t.replace(/\*\*/g,'');
       out.push(t);
     }
@@ -46,7 +49,7 @@ const UNITSplit = (function(){
   }
 
   /* ---- 按单元形制切分 ---- */
-  // kind: 'chapter'(第N回) | 'ze'(第N則) | 'volume'(卷之N) | 'bullet'(●) | 'marker'(===)
+  // kind: 'chapter'(第N回) | 'ze'(第N則) | 'volume'(卷之N) | 'bullet'(●) | 'marker'(===) | 'en-chapter'([Volume · Chapter])
   // opts 可选：{ prefix:'###'|'==='|null, unit:'回'|'則' } 覆盖默认标题检测（OCR 版本格式不一）
   function splitByKind(text, kind, opts){
     text=String(text||'');
@@ -69,10 +72,24 @@ const UNITSplit = (function(){
       else if(kind==='volume') m=line.match(/^卷之([一二三四五六七八九十百零〇0-9]+)\s*$/);
       else if(kind==='bullet') m=line.match(/^\s*●\s*(.+)$/);
       else if(kind==='marker') m=line.match(/^===\s*(.+?)\s*===$/);
+      else if(kind==='en-chapter') m=line.match(/^\[(Volume\s*\d+\s*\S[^\]]*)\]\s*$/i);
       if(m){
         if(kind==='bullet'){ cur={title:m[1].trim(),lines:[]}; }
         else if(kind==='marker'){ cur={title:m[1],lines:[]}; }
         else if(kind==='volume'){ cur={title:'卷之'+m[1],n:cmpCnNum(m[1]),lines:[]}; }
+        else if(kind==='en-chapter'){
+        // 英译本：[Volume 1 · Chapter 1] 标记；回号取自标记内 Chapter N（该译本缺回6/20/25/60/75/114，保留真实回号而非连号）
+        const cn=(m[1].match(/Chapter\s*(\d+)/i)||[])[1];
+        let subj='';
+        const start=lines.indexOf(line)+1;
+        for(let j=start; j<Math.min(lines.length, start+12); j++){
+          const t=String(lines[j]).trim();
+          if(!t) continue;
+          if(/^=+$/i.test(t) || /^CHAPTER\s*[IVXLC]+\.?$/i.test(t)) continue;
+          subj=t; break;
+        }
+        cur={ title:subj||m[1], n:cn?parseInt(cn,10):units.length+1, lines:[] };
+      }
         else { cur={n:m.n,title:m.title,volume,lines:[]}; }
         units.push(cur);
       }

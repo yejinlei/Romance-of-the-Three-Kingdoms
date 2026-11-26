@@ -1156,10 +1156,25 @@ sg:textStatus_partial a skos:Concept ;
     skos:prefLabel "部分入库"@zh ;
     skos:definition "存残卷或部分单元。"@zh .
 
+sg:textStatus_readable a skos:Concept ;
+    skos:inScheme sg:Vocab_textStatus ;
+    skos:prefLabel "全文入库"@zh ;
+    skos:definition "非毛本整理本：texts 目录已按单元（回/则/卷）接入站内阅读。"@zh .
+
 sg:textStatus_ocr a skos:Concept ;
     skos:inScheme sg:Vocab_textStatus ;
-    skos:prefLabel "仅OCR（检索用）"@zh ;
-    skos:definition "OCR 文本正确率未达 97% 验收线，只作检索，不作对勘底本。"@zh .
+    skos:prefLabel "仅OCR（未整理）"@zh ;
+    skos:definition "OCR 文本未接入阅读，只作检索。"@zh .
+
+sg:textStatus_ocrReadable a skos:Concept ;
+    skos:inScheme sg:Vocab_textStatus ;
+    skos:prefLabel "OCR可读（未校勘）"@zh ;
+    skos:definition "OCR 文本已接入站内阅读，但未校勘、正确率未达 97% 验收线，不作对勘底本。"@zh .
+
+sg:textStatus_catalog a skos:Concept ;
+    skos:inScheme sg:Vocab_textStatus ;
+    skos:prefLabel "仅存目次"@zh ;
+    skos:definition "仅存卷目次而无可读正文（如钱氏藏书本），不作阅读底本。"@zh .
 
 sg:textStatus_facsimile a skos:Concept ;
     skos:inScheme sg:Vocab_textStatus ;

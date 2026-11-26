@@ -196,6 +196,12 @@ function cleanLines(lines){
     let t=raw.replace(/\r/g,'').trim();
     if(!t || t.startsWith('#')) continue;
     if(/^\d{1,4}$/.test(t)) continue; // 页码残迹
+    if(/^---+$/.test(t)) continue;
+    if(/^=+$/.test(t)) continue;
+    if(/^>/.test(t)) continue;
+    if(/^\[Volume\s+\d/i.test(t)) continue;      // 英譯本卷/回標記行
+    if(/^CHAPTER\s*[IVXLC]+\.?$/i.test(t)) continue; // 英譯本回號行（已作單元號）
+    t=t.replace(/\*\*/g,'');
     out.push(t);
   }
   return out;
@@ -262,6 +268,26 @@ function splitZe(text){
   }
   return units.map(u=>({title:u.title,n:u.n,volume:u.volume,paras:cleanLines(u.lines)}));
 }
+// 按「[Volume N · Chapter M]」切分英譯本（San Kuo 英譯本；回號取自標記內 Chapter M）
+function splitEnChapter(text){
+  const lines=text.replace(/\r/g,'').split('\n'); const units=[]; let cur=null;
+  for(let i=0;i<lines.length;i++){
+    const m=lines[i].match(/^\[(Volume\s*\d+\s*\S[^\]]*)\]\s*$/i);
+    if(m){
+      const cn=(m[1].match(/Chapter\s*(\d+)/i)||[])[1];
+      let subj='';
+      for(let j=i+1;j<Math.min(lines.length,i+13);j++){
+        const t=String(lines[j]).trim();
+        if(!t) continue;
+        if(/^=+$/i.test(t) || /^CHAPTER\s*[IVXLC]+\.?$/i.test(t)) continue;
+        subj=t; break;
+      }
+      cur={n:cn?parseInt(cn,10):units.length+1,title:subj||m[1],lines:[]}; units.push(cur);
+    }
+    else if(cur) cur.lines.push(lines[i]);
+  }
+  return units.map(u=>({title:u.title,n:u.n,paras:cleanLines(u.lines)}));
+}
 
 function fmtPara(p){
   let s=esc(p);
@@ -281,7 +307,7 @@ function renderSide(){
     if(it.id==='mao'||it.id==='jiajing'||it.id==='huiping'||it.id==='huang'||
        it.id==='lizhuowu'||it.id==='liyu'||it.id==='xiazhenyu'||it.id==='xiongqingbo'||
        it.id==='zhengshaoyuan'||it.id==='zhongbojing'||it.id==='zhudingchen') groups.body.push(it);
-    else if(it.id==='pinghua'||it.id==='huaguan'||it.id==='sanguozhi') groups.extra.push(it);
+    else if(it.id==='pinghua'||it.id==='huaguan'||it.id==='sanguozhi'||it.id==='sankuo-en') groups.extra.push(it);
     else if(it.id.startsWith('cmt-')) groups.cmt.push(it);
     else groups.front.push(it);
   }
@@ -313,6 +339,7 @@ async function loadEdition(id){
     else if(it.kind==='bullet') units=splitBullet(text);
     else if(it.kind==='volume') units=splitVolume(text);
     else if(it.kind==='ze') units=splitZe(text);
+    else if(it.kind==='en-chapter') units=splitEnChapter(text);
     else units=splitMarker(text);
     if(it.id==='sanguozhi') units=mergeSubheads(units,t=>/^(魏書|蜀書|吳書)/.test(t));
     if(it.id==='jiajing-front') units=mergeSubheads(units,t=>/^(序|引|三國志宗僚|三国志宗僚)$/.test(t));
@@ -352,7 +379,7 @@ function renderEdition(it){
       </aside>
       <div class="units-body">
         <div class="titlebar">
-          <div><h2>${esc(it.title)}</h2>${it.ocr?`<span class="badge">OCR · 僅檢索用</span>`:''}<div class="meta">${esc(it.note)}</div></div>
+          <div><h2>${esc(it.title)}</h2>${it.ocr?`<span class="badge">OCR · 已接閱讀（未校勘）</span>`:''}<div class="meta">${esc(it.note)}</div></div>
           <div class="meta">${pdfEd?`<a href="pdf-viewer.html#ed=${encodeURIComponent(pdfEd)}&f=1" style="color:var(--cinnabar);font-weight:600">影印本 →</a> · `:''}${esc(it.source)}</div>
         </div>
         <div class="toolbar">

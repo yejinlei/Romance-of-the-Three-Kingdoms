@@ -67,7 +67,10 @@ const SANGUO_ONTOLOGY = {
       terms: [
         { id: 'full', label: '全文入库', desc: '校勘文本已入库，可全文检索与对读。' },
         { id: 'partial', label: '部分入库', desc: '存残卷或部分单元。' },
-        { id: 'ocr', label: '仅OCR（检索用）', desc: 'OCR 文本正确率未达 97% 验收线，只作检索，不作对勘底本。' },
+        { id: 'readable', label: '全文入库', desc: '非毛本整理本：texts 目录已按单元（回/则/卷）接入站内阅读。' },
+        { id: 'ocr', label: '仅OCR（未整理）', desc: 'OCR 文本未接入阅读，只作检索。' },
+        { id: 'ocrReadable', label: 'OCR可读（未校勘）', desc: 'OCR 文本已接入站内阅读，但未校勘、正确率未达 97% 验收线，不作对勘底本。' },
+        { id: 'catalog', label: '仅存目次', desc: '仅存卷目次而无可读正文（如钱氏藏书本），不作阅读底本。' },
         { id: 'facsimile', label: '仅影印', desc: '有公开影印（PDF/JPG）而无文本。' },
         { id: 'absent', label: '未获', desc: '仅书目著录，未见公开影像。' }
       ]

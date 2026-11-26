@@ -356,21 +356,53 @@
   let readerUrlParsed = false;
 
   // textStatus 受控词表标签（与 ontology-schema.js Vocab_textStatus 一致）
-  const TEXT_STATUS_LABEL = { full:'全文入库', partial:'部分入库', ocr:'仅OCR（检索用）', facsimile:'仅影印', absent:'未获' };
+  const TEXT_STATUS_LABEL = {
+    full:'全文入库', partial:'部分入库', absent:'未获',
+    readable:'全文入库',            // 非毛本整理本：texts 目录已按单元接入阅读
+    ocr:'仅OCR（未整理）',         // 未接入阅读、仅检索
+    ocrReadable:'OCR可读（未校勘）',  // OCR 本：已接入阅读，未校勘
+    catalog:'仅存目次',            // 目录本：仅存卷目次，无正文
+    facsimile:'仅影印'
+  };
+  // 可读状态集：凡可展示正文（full=毛本 CHAPTER_TEXT，readable=整理本，ocrReadable=OCR 本）
+  const TEXT_STATUS_READABLE = ['full','readable','ocrReadable'];
 
-  // 由 corpus-manifest 清单字段派生 textStatus（清单无该字段，运行时派生）
-  function deriveItemTextStatus(it){
+  // 由 corpus-manifest 清单字段 + VERSION_ONTOLOGY 可读性派生 textStatus。
+  // 关键：有 texts 文件且可接入阅读的版本，无论整理本还是 OCR 本，都是「全文入库/可读」，
+  // 不再一律标 partial（部分入库）——那是「未获抓取网上版本」时的旧派生逻辑。
+  function deriveItemTextStatus(it, ont){
     if(!it) return 'absent';
     if(it.id === 'mao') return 'full';      // text.js 120 回全文已接入站内阅读
-    if(it.ocr) return 'ocr';                // 仅 OCR，检索用
-    if(it.chars > 0) return 'partial';      // 文本已入库语料库
+    if(it.chars > 0){
+      if(ont && ont.catalogOnly) return 'catalog'; // 目录本：仅存目次，无正文
+      if(ont && ont.file) return it.ocr ? 'ocrReadable' : 'readable';
+      return 'partial';                           // 无版本配置，未接入阅读
+    }
     return 'absent';                        // 文本未入库
   }
   function deriveGapTextStatus(g){
-    if(/OCR/.test(g.status || '')) return 'ocr';
-    if(/部分可得/.test(g.status || '')) return 'partial';
-    if(/不收錄|不收录|拿不到/.test((g.status || '') + (g.tier || ''))) return 'absent';
+    const s = g.status || '';
+    if(/OCR/.test(s) && /、未校勘/.test(s)) return 'ocrReadable'; // OCR 本已接入阅读
+    if(/OCR/.test(s)) return 'ocr';                                  // 未接入阅读、仅检索
+    if(/部分可得/.test(s)) return 'partial';
+    if(/不收錄|不收录|拿不到|無可抓取|无可抓取/.test(s + (g.tier || ''))) return 'absent';
     return 'facsimile';                     // 未獲文本而有影印 → 仅影印
+  }
+  // 下拉标签后缀：版本名已含「（OCR）」「（OCR，殘本）」等括号者，不再追加重复前缀，避免双重括号
+  // 下拉/对照选项的完整显示文本。
+  // OCR 本标题已自带「（OCR）」括号，状态后缀合并进该括号，避免「（OCR）（可读·未校勘）」双重括号
+  function versionLabel(v){
+    const st = TEXT_STATUS_LABEL[v.status] || v.status;
+    const t = String(v.title || '');
+    if(v.status === 'ocrReadable'){
+      const m = t.match(/[（(]OCR([^）)]*)[）)]/);
+      if(m){
+        const extra = String(m[1] || '').replace(/^[，,、\s]+/, '');
+        const merged = ['OCR', extra, '可读 · 未校勘'].filter(Boolean).join(' · ');
+        return t.replace(m[0], '（' + merged + '）');
+      }
+    }
+    return t + '（' + st + '）';
   }
 
   // 版本单元缓存（文件级）：fileName → units 数组
@@ -502,10 +534,12 @@
     const norm = s => String(s || '').replace(/[（(][^)）]*[)）]/g, '').replace(/[/／\s·、]/g, '');
     const seenTitles = {};
     if(corpus && Array.isArray(corpus.items)){
+      const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
       corpus.items.forEach(it => {
         if(/^cmt-/.test(it.id) || /-front$/.test(it.id) || it.id === 'mao-dufa') return; // 卷首/评语辑录不作阅读版本
         seenTitles[norm(it.title)] = true;
-        rows.push({ id: it.id, title: it.title, status: deriveItemTextStatus(it), chars: it.chars || 0, units: it.units || null });
+        const ont = (VONT && VONT.editions) ? VONT.editions[it.id] : null;
+        rows.push({ id: it.id, title: it.title, status: deriveItemTextStatus(it, ont), chars: it.chars || 0, units: it.units || null });
       });
     }
     if(corpus && Array.isArray(corpus.gaps)){
@@ -583,14 +617,14 @@
     // 版本行（corpus-manifest 派生 textStatus）
     const vrows = buildVersionRows();
     const vrow = vrows.find(v => v.id === readerState.edition) || null;
-    // 目录本（仅存目次无正文，如钱氏藏书本）：不进阅读，明确说明
-    const catalogOnly = !!(edMeta && edMeta.catalogOnly);
-    // 可读性：full / partial / ocr 均可展示正文（full 走 CHAPTER_TEXT，其余按版本单元异步取文）
-    const readable = !!(vrow && ['full','partial','ocr'].includes(vrow.status)) && !catalogOnly;
-    const ocrReadable = readable; // 兼容：凡可读版本按单元取章
-    // VERSION_ONTOLOGY 版本元信息（切分配置 + 映射规则）
+    // 版本元信息（切分配置 + 映射规则）：先于可读性判定声明
     const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
     const edMeta = (VONT && VONT.editions) ? VONT.editions[readerState.edition] : null;
+    // 目录本（仅存目次无正文，如钱氏藏书本）：不进阅读，明确说明
+    const catalogOnly = !!(edMeta && edMeta.catalogOnly);
+    // 可读性：full / readable / ocrReadable 均展示正文（full 走 CHAPTER_TEXT，其余按版本单元异步取文）
+    const readable = !!(vrow && ['full','readable','ocrReadable'].includes(vrow.status)) && !catalogOnly;
+    const ocrReadable = readable; // 兼容：凡可读版本按单元取章
     // 通用版本单元定位：非毛本且有版本配置 → 返回该版本文本元信息（file + editionId）
     const ocrInfo = (function(){
       if(!vrow || vrow.status === 'full') return null; // 毛本走 CHAPTER_TEXT
@@ -731,11 +765,11 @@
               <select id="edition-select" class="border border-[#c9b896] rounded px-2 py-1 bg-white"
                 onchange="appSetEdition(this.value)">
                 ${vrows.map(v=>{
-                  const dis = (v.status!=='full' && v.status!=='partial' && v.status!=='ocr');
+                  const dis = (v.status!=='full' && v.status!=='readable' && v.status!=='ocrReadable');
                   const ont = (VONT && VONT.editions && VONT.editions[v.id]);
-                  // 无版本本体配置的 partial/ocr 版本（如卷首/辑录类）仍不可读；目录本（仅目次）不可读
+                  // 无版本本体配置的版本（如卷首/辑录类）仍不可读；目录本（仅目次）不可读
                   const dis2 = dis || (!ont && v.status!=='full') || (ont && ont.catalogOnly);
-                  return `<option value="${esc(v.id)}" ${v.id===readerState.edition?'selected':''} ${dis2?'disabled':''}>${esc(v.title)}（${TEXT_STATUS_LABEL[v.status]||v.status}）</option>`;
+                  return `<option value="${esc(v.id)}" ${v.id===readerState.edition?'selected':''} ${dis2?'disabled':''}>${esc(versionLabel(v))}</option>`;
                 }).join('')}
               </select>
             </div>
@@ -746,7 +780,7 @@
               <button class="btn btn-sm ${mode==='vernacular'?'active':''}" onclick="appSetReaderMode('vernacular')">白话</button>
             </div>
             <div class="text-sm text-[#8b6914]">
-              第 ${chapterNum} 回 / 共 120 回${vrow ? ` · ${esc(vrow.title)}（${TEXT_STATUS_LABEL[vrow.status]||vrow.status}）` : ''}
+              第 ${chapterNum} 回 / 共 120 回${vrow ? ` · ${esc(versionLabel(vrow))}` : ''}
             </div>
             <a class="text-sm text-[#8b0000] underline ml-auto" href="corpus.html#ed=${encodeURIComponent(readerState.edition)}&c=${chapterNum}">多版本对读 →</a>
           </div>
@@ -1299,7 +1333,7 @@
   let compareState = { ids: COMPARE_DEFAULT_IDS.slice(), lang: 'traditional' };
   function renderMultiCompare(el){
     const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
-    const vrows = buildVersionRows().filter(r => ['full','partial','ocr'].includes(r.status));
+    const vrows = buildVersionRows().filter(r => TEXT_STATUS_READABLE.includes(r.status));
     // 可对照版本 = 有 VERSION_ONTOLOGY 配置（毛本走 CHAPTER_TEXT）
     const selectable = vrows.filter(r => r.id === 'mao' || (VONT && VONT.editions && VONT.editions[r.id]));
     el.innerHTML = `
@@ -1812,9 +1846,9 @@
   }
   function cmpOptions(sel){
     return buildVersionRows()
-      .filter(r => ['full','partial','ocr'].includes(r.status))
+      .filter(r => TEXT_STATUS_READABLE.includes(r.status))
       .map(r => '<option value="' + esc(r.id) + '"' + (r.id === sel ? ' selected' : '') + '>'
-        + esc(r.title) + '（' + TEXT_STATUS_LABEL[r.status] + '）</option>')
+        + esc(versionLabel(r)) + '</option>')
       .join('');
   }
 
@@ -1835,10 +1869,10 @@
       const unitNote = '叙事单元：毛本第 ' + unit + ' 回「' + esc(chTitle) + '」'
         + (range ? '（jiajingId：嘉靖本第 ' + range.s + '–' + range.e + ' 则）' : '');
       const warn = [];
-      if(rows[selA.value] && rows[selA.value].status === 'ocr')
-        warn.push('甲本「' + esc(rows[selA.value].title) + '」为仅OCR（检索用）文本：逐行录入、未经校勘，未达 97% 验收线，不作对勘底本，仅作参照。');
-      if(rows[selB.value] && rows[selB.value].status === 'ocr')
-        warn.push('乙本「' + esc(rows[selB.value].title) + '」为仅OCR（检索用）文本：逐行录入、未经校勘，未达 97% 验收线，不作对勘底本，仅作参照。');
+      if(rows[selA.value] && rows[selA.value].status === 'ocrReadable')
+        warn.push('甲本「' + esc(rows[selA.value].title) + '」为 OCR 可读文本：逐行录入、未经校勘，未达 97% 验收线，不作对勘底本，仅作参照。');
+      if(rows[selB.value] && rows[selB.value].status === 'ocrReadable')
+        warn.push('乙本「' + esc(rows[selB.value].title) + '」为 OCR 可读文本：逐行录入、未经校勘，未达 97% 验收线，不作对勘底本，仅作参照。');
 
       function colHtml(side, id, res){
         const row = rows[id] || { title: id, status: '' };

@@ -2,7 +2,7 @@
 const SANGUO_CORPUS = {
   "updated": "2026-11-25",
   "note": "《三国演义》公版语料库。正文均来自中文维基文库或公开电子本，许可为 PD-old。",
-  "totalChars": 11673971,
+  "totalChars": 12675862,
   "items": [
     {
       "id": "mao",
@@ -13,7 +13,7 @@ const SANGUO_CORPUS = {
       "units": 120,
       "kind": "marker",
       "ocr": false,
-      "chars": 599157
+      "chars": 594612
     },
     {
       "id": "jiajing",
@@ -24,7 +24,7 @@ const SANGUO_CORPUS = {
       "units": 240,
       "kind": "volume",
       "ocr": false,
-      "chars": 750299
+      "chars": 727587
     },
     {
       "id": "huiping",
@@ -35,7 +35,7 @@ const SANGUO_CORPUS = {
       "units": 120,
       "kind": "chapter",
       "ocr": false,
-      "chars": 1057640
+      "chars": 1040710
     },
     {
       "id": "huang",
@@ -46,7 +46,7 @@ const SANGUO_CORPUS = {
       "units": 180,
       "kind": "bullet",
       "ocr": false,
-      "chars": 379277
+      "chars": 367208
     },
     {
       "id": "yuxiangdou",
@@ -57,7 +57,7 @@ const SANGUO_CORPUS = {
       "units": 180,
       "kind": "ze",
       "ocr": true,
-      "chars": 367205
+      "chars": 384893
     },
     {
       "id": "zhouyue",
@@ -68,7 +68,7 @@ const SANGUO_CORPUS = {
       "units": 246,
       "kind": "marker",
       "ocr": true,
-      "chars": 2157193
+      "chars": 718329
     },
     {
       "id": "lizhuowu",
@@ -79,7 +79,7 @@ const SANGUO_CORPUS = {
       "units": 23,
       "kind": "marker",
       "ocr": true,
-      "chars": 1050461
+      "chars": 1035145
     },
     {
       "id": "liyu",
@@ -90,7 +90,7 @@ const SANGUO_CORPUS = {
       "units": 26,
       "kind": "marker",
       "ocr": true,
-      "chars": 1050275
+      "chars": 1034938
     },
     {
       "id": "xiazhenyu",
@@ -101,7 +101,7 @@ const SANGUO_CORPUS = {
       "units": 7,
       "kind": "marker",
       "ocr": true,
-      "chars": 196939
+      "chars": 193392
     },
     {
       "id": "xiongqingbo",
@@ -112,7 +112,7 @@ const SANGUO_CORPUS = {
       "units": 16,
       "kind": "marker",
       "ocr": true,
-      "chars": 386877
+      "chars": 376318
     },
     {
       "id": "zhengshaoyuan",
@@ -123,7 +123,7 @@ const SANGUO_CORPUS = {
       "units": 8,
       "kind": "marker",
       "ocr": true,
-      "chars": 387864
+      "chars": 377273
     },
     {
       "id": "zhongbojing",
@@ -134,7 +134,7 @@ const SANGUO_CORPUS = {
       "units": 17,
       "kind": "marker",
       "ocr": true,
-      "chars": 1050239
+      "chars": 1034963
     },
     {
       "id": "zhudingchen",
@@ -145,7 +145,7 @@ const SANGUO_CORPUS = {
       "units": 240,
       "kind": "marker",
       "ocr": true,
-      "chars": 425888
+      "chars": 414723
     },
     {
       "id": "pinghua",
@@ -156,7 +156,7 @@ const SANGUO_CORPUS = {
       "units": 3,
       "kind": "marker",
       "ocr": false,
-      "chars": 68961
+      "chars": 67027
     },
     {
       "id": "huaguan",
@@ -167,7 +167,7 @@ const SANGUO_CORPUS = {
       "units": 4,
       "kind": "marker",
       "ocr": false,
-      "chars": 40926
+      "chars": 40431
     },
     {
       "id": "sanguozhi",
@@ -178,7 +178,7 @@ const SANGUO_CORPUS = {
       "units": 65,
       "kind": "marker",
       "ocr": false,
-      "chars": 858337
+      "chars": 850270
     },
     {
       "id": "mao-front",
@@ -189,7 +189,7 @@ const SANGUO_CORPUS = {
       "units": 3,
       "kind": "marker",
       "ocr": false,
-      "chars": 2172
+      "chars": 2287
     },
     {
       "id": "jiajing-front",
@@ -200,7 +200,7 @@ const SANGUO_CORPUS = {
       "units": 3,
       "kind": "marker",
       "ocr": false,
-      "chars": 8405
+      "chars": 7599
     },
     {
       "id": "mao-dufa",
@@ -211,7 +211,7 @@ const SANGUO_CORPUS = {
       "units": 1,
       "kind": "marker",
       "ocr": false,
-      "chars": 4967
+      "chars": 4893
     },
     {
       "id": "cmt-li",
@@ -222,7 +222,7 @@ const SANGUO_CORPUS = {
       "units": 120,
       "kind": "marker",
       "ocr": false,
-      "chars": 48870
+      "chars": 44258
     },
     {
       "id": "cmt-zhong",
@@ -233,7 +233,7 @@ const SANGUO_CORPUS = {
       "units": 120,
       "kind": "marker",
       "ocr": false,
-      "chars": 44894
+      "chars": 41704
     },
     {
       "id": "cmt-mao",
@@ -244,7 +244,7 @@ const SANGUO_CORPUS = {
       "units": 120,
       "kind": "marker",
       "ocr": false,
-      "chars": 206093
+      "chars": 196324
     },
     {
       "id": "cmt-liyu",
@@ -255,7 +255,7 @@ const SANGUO_CORPUS = {
       "units": 120,
       "kind": "marker",
       "ocr": false,
-      "chars": 67674
+      "chars": 61195
     },
     {
       "id": "jiajing-ws",
@@ -266,18 +266,18 @@ const SANGUO_CORPUS = {
       "units": 240,
       "kind": "volume",
       "ocr": false,
-      "chars": 720724
+      "chars": 707067
     },
     {
       "id": "sankuo-en",
       "file": "SanKuo_BrewittTaylor英译本.txt",
       "title": "San Kuo 英译本（Brewitt-Taylor 1925）",
-      "note": "Charles Henry Brewitt-Taylor 1925 年英译全本，120回，公版",
+      "note": "Charles Henry Brewitt-Taylor 1925 年英译全本（公版），120 回缺 6 回（第6/20/25/60/75/114回），实存 114 回",
       "source": "英文维基文库 San Kuo（https://en.wikisource.org/wiki/San_Kuo）",
-      "units": 120,
-      "kind": "chapter",
+      "units": 114,
+      "kind": "en-chapter",
       "ocr": false,
-      "chars": 0
+      "chars": 2352716
     }
   ],
   "commentaries": [
@@ -307,7 +307,7 @@ const SANGUO_CORPUS = {
       "edition": "周曰校刊本",
       "system": "演義系統",
       "tier": "可獲影印",
-      "status": "已獲文本（OCR，僅檢索用）",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
       "form": "全本影印（PDF，公開下載）＋卷首 OCR 試點",
       "holder": "日本內閣文庫藏本；《中華再造善本》影印本",
       "volumes": "十二卷二百四十則，全；內閣文庫 12 冊約 1428 頁；已 OCR 20 頁（第4-23頁）",
@@ -338,7 +338,7 @@ const SANGUO_CORPUS = {
       "edition": "余象斗刊本",
       "system": "志傳系統",
       "tier": "可獲影印",
-      "status": "已獲文本（OCR）",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
       "form": "OCR 文本（識典古籍分卷按則整理）",
       "holder": "識典古籍 CADAL02015947",
       "volumes": "卷首＋卷一至卷八（存 9 單元）",
@@ -353,7 +353,7 @@ const SANGUO_CORPUS = {
       "edition": "熊清波／藜光堂本",
       "system": "志傳系統",
       "tier": "可獲影印",
-      "status": "未獲文本",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
       "form": "全本影印（PDF，公開下載）",
       "holder": "台北國家圖書館藏（原北平圖書館）；藜光堂本（劉榮吾刊）大英博物館藏",
       "volumes": "二十卷，全；NCL-08607 共 16 冊約 560 頁",
@@ -368,7 +368,8 @@ const SANGUO_CORPUS = {
       "edition": "葉逢春刊本",
       "system": "志傳系統",
       "tier": "可獲影印",
-      "status": "未獲文本",
+      "status": "未獲文本（無可抓取源）",
+      "reason": "BabelStone 僅存微縮膠片掃描影像（1351×1093 雙葉、710 幅），無文本層；缺卷三、卷十；無公開 OCR 文本可抓。",
       "form": "殘本影像（JPG，公開下載）",
       "holder": "西班牙埃斯科里亞爾皇家圖書館藏孤本",
       "volumes": "十卷存八卷（缺卷三、卷十），710 影幅",
@@ -383,7 +384,7 @@ const SANGUO_CORPUS = {
       "edition": "夏振宇刊本",
       "system": "演義系統",
       "tier": "可獲影印（殘本）",
-      "status": "已獲殘本（OCR，僅檢索用）",
+      "status": "已獲殘本（OCR，已接閱讀、未校勘）",
       "form": "殘本影印 12 冊（夏振宇屯溪藏本殘 + 北大藏本補配），非全本",
       "holder": "屯溪夏振宇舊藏殘本（中國國家圖書館藏，經維基共享資源公開）；日本名古屋蓬左文庫藏全本未公開數字化",
       "volumes": "十二卷殘存六卷（卷之三、四、五、六、九、十；卷之六含北大藏本補配重出段），共 7 標記 19.7 萬字；pdf08 手寫「缺卷7-卷8」",
@@ -398,7 +399,7 @@ const SANGUO_CORPUS = {
       "edition": "朱鼎臣刊本",
       "system": "志傳系統",
       "tier": "可獲影印",
-      "status": "未獲文本",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
       "form": "全本影印（PDF，公開下載）",
       "holder": "美國哈佛大學哈佛燕京圖書館藏",
       "volumes": "二十卷，8 冊約 528 頁，全",
@@ -413,7 +414,8 @@ const SANGUO_CORPUS = {
       "edition": "楊美生本",
       "system": "志傳系統",
       "tier": "確實拿不到",
-      "status": "未獲文本",
+      "status": "未獲文本（僅館藏無影像）",
+      "reason": "日本大谷大學藏（神田喜一郎舊藏），未見公開影像或影印本，僅有書目著錄，故無可抓取源。",
       "form": "僅館藏，未見公開影像",
       "holder": "日本大谷大學藏（神田喜一郎舊藏）",
       "volumes": "二十卷二百四十回，存",
@@ -428,7 +430,8 @@ const SANGUO_CORPUS = {
       "edition": "劉龍田本",
       "system": "志傳系統",
       "tier": "可獲影印",
-      "status": "未獲文本",
+      "status": "未獲文本（殘卷影像無文本源）",
+      "reason": "天理圖書館殘本（卷一至六、卷十八至二十）與牛津殘卷均為影像；學兔兔 40773 僅存卷十七、十八，且需登錄下載，非文本源；缺卷七至十七。",
       "form": "殘本影像／影印（存卷十七、十八）",
       "holder": "日本天理圖書館殘本（存卷一至六、卷十八至二十）；牛津大學殘本；《古本小說叢刊》影印",
       "volumes": "二十卷，殘",
@@ -443,7 +446,7 @@ const SANGUO_CORPUS = {
       "edition": "鄭少垣刊本",
       "system": "志傳系統",
       "tier": "可獲影印",
-      "status": "未獲文本",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
       "form": "全本影印（PDF，公開下載）",
       "holder": "日本內閣文庫藏",
       "volumes": "二十卷二百四十回，全；NAJDA 6 冊約 558 頁",
@@ -458,7 +461,7 @@ const SANGUO_CORPUS = {
       "edition": "李卓吾評本（全本）",
       "system": "評本",
       "tier": "可獲影印",
-      "status": "部分可得（批語已輯）",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
       "form": "全本影印（PDF，公開下載）",
       "holder": "日本早稻田大學圖書館藏（WUL-he21 03536）；美國國會圖書館僅卷一",
       "volumes": "二十四卷一百二十回，23 冊約 1840 頁，全",
@@ -473,7 +476,7 @@ const SANGUO_CORPUS = {
       "edition": "鍾伯敬評本（全本）",
       "system": "評本",
       "tier": "可獲影印",
-      "status": "部分可得（批語已輯）",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
       "form": "全本影印（PDF，公開下載）",
       "holder": "東京大學東洋文化研究所藏（D8633200，雙紅堂-小說-7）",
       "volumes": "二十卷一百二十回，10 冊約 600 頁，全",
@@ -488,7 +491,7 @@ const SANGUO_CORPUS = {
       "edition": "笠翁評閱本",
       "system": "評本",
       "tier": "可獲影印",
-      "status": "未獲文本",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
       "form": "全本影印（PDF，公開下載）",
       "holder": "中國國家圖書館藏（兩衡堂刻本）；首都圖書館藏；京都大學文學部藏芥子園本",
       "volumes": "二十四卷一百二十回，24 冊，全",

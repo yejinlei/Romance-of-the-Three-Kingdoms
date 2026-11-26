@@ -117,6 +117,14 @@ const VERSION_ONTOLOGY = {
       id: 'huaguan', label: '花关索传', kind: 'juan', splitKind: 'marker',
       splitOpts: {}, unitKind: '篇', unitCount: 4, file: '花关索传.txt',
       note: '明成化十四年说唱词话，四种。'
+    },
+    'sankuo-en': {
+      id: 'sankuo-en', label: 'San Kuo 英译本（Brewitt-Taylor 1925）', kind: 'hui',
+      splitKind: 'en-chapter', splitOpts: {}, unitKind: '回', unitCount: 114,
+      file: 'SanKuo_BrewittTaylor英译本.txt',
+      gapUnits: [6, 20, 25, 60, 75, 114], // 该译本缺此 6 回
+      lang: 'en',
+      note: 'Charles Henry Brewitt-Taylor 1925 年英译全本（公版），120回缺6回（6/20/25/60/75/114），回号取自 [Volume N · Chapter M] 标记。'
     }
   }
 };
