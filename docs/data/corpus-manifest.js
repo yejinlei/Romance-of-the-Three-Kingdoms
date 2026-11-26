@@ -57,7 +57,7 @@ const SANGUO_CORPUS = {
       "units": 9,
       "kind": "marker",
       "ocr": true,
-      "chars": 109839
+      "chars": 367205
     },
     {
       "id": "zhouyue",
@@ -339,14 +339,14 @@ const SANGUO_CORPUS = {
       "system": "志傳系統",
       "tier": "可獲影印",
       "status": "已獲文本（OCR）",
-      "form": "OCR 文本（識典古籍逐卷抓取）",
+      "form": "OCR 文本（識典古籍分卷按則整理）",
       "holder": "識典古籍 CADAL02015947",
       "volumes": "卷首＋卷一至卷八（存 9 單元）",
       "url": "https://www.shidianguji.com/book/CADAL02015947",
       "download": "可下載（逐卷抓取）",
       "resolution": "識典古籍在線影像，已抓取 9 單元",
       "missing": "其餘卷次未見",
-      "detail": "明萬曆二十年建陽余象斗雙峰堂刊《批評三國志傳》系統；自識典古籍逐卷抓取卷首及卷一至卷八，存 9 個單元、約 10.98 萬字。OCR 文本未經全面校勘，雙行小字批語尚未完全分離。",
+      "detail": "明萬曆二十年建陽余象斗雙峰堂刊《批評三國志傳》系統；自識典古籍按則分卷整理卷首及卷一至卷八，存 9 個單元、約 36.7 萬字。OCR 文本未經全面校勘，異體字未逐一校正。",
       "path": "已落盤 texts/余象斗刊本_OCR.txt 與 texts/ocr/余象斗刊本/；其餘卷次俟續補或另尋藏本。"
     },
     {
