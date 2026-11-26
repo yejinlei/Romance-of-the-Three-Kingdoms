@@ -372,6 +372,41 @@
     return 'facsimile';                     // 未獲文本而有影印 → 仅影印
   }
 
+  // 按「第N則」切分 OCR 志传系文本（复用 cmpCnNum 转汉字数字），捕获卷名
+  function splitZeText(txt){
+    const lines = String(txt || '').split('\n');
+    const marks = [];
+    let volume = '';
+    for(let i = 0; i < lines.length; i++){
+      const line = lines[i].replace(/\r$/, '');
+      const vm = line.match(/^===\s*(.+?)\s*===\s*$/);
+      if(vm){ volume = vm[1]; continue; }
+      const m = line.match(/^###\s*第([0-9０-９一二三四五六七八九十百零〇]{1,6})則[　\s]*(.*)$/);
+      if(m) marks.push({ num: cmpCnNum(m[1]), title: String(m[2]||'').trim(), line: i, volume: volume });
+    }
+    return marks.map((mk, k) => {
+      const end = (k + 1 < marks.length) ? marks[k+1].line : lines.length;
+      const paras = lines.slice(mk.line + 1, end)
+        .filter(l => l.trim() && !/^>/.test(l.trim()) && !/^---+$/.test(l.trim()))
+        .map(l => l.replace(/\*\*/g, '').trim());
+      return { n: mk.num, title: mk.title, volume: mk.volume, paras: paras };
+    });
+  }
+  const ocrZeCache = {};
+  // 取指定 OCR 版本的某一则正文（按卷/则切分后按编号定位）
+  async function getOcrZeByNum(fileName, zeNum){
+    if(ocrZeCache[fileName + '#' + zeNum]) return ocrZeCache[fileName + '#' + zeNum];
+    if(!ocrZeCache[fileName]){
+      const res = await fetch('texts/' + encodeURIComponent(fileName));
+      if(!res.ok) throw new Error(fileName + ' HTTP ' + res.status);
+      ocrZeCache[fileName] = splitZeText(await res.text());
+    }
+    const unit = (ocrZeCache[fileName] || []).find(u => u.n === zeNum);
+    const out = unit ? { n: unit.n, title: unit.title, volume: unit.volume, paras: unit.paras } : null;
+    ocrZeCache[fileName + '#' + zeNum] = out;
+    return out;
+  }
+
   // 版本清单（corpus items + gaps 合并去重），含派生 textStatus
   function buildVersionRows(){
     const corpus = (typeof SANGUO_CORPUS !== 'undefined') ? SANGUO_CORPUS : null;
@@ -461,6 +496,27 @@
     const vrows = buildVersionRows();
     const vrow = vrows.find(v => v.id === readerState.edition) || null;
     const readable = !!(vrow && vrow.status === 'full');
+    // OCR 版本（status='ocr'）已入库且可读（按则取章），仅不作异文对勘底本
+    const ocrReadable = !!(vrow && (vrow.status === 'ocr' || vrow.status === 'full'));
+    // OCR 版本文本元信息（文件、则编号），供正文层异步取章
+    const ocrInfo = (function(){
+      if(!ocrReadable || !vrow) return null;
+      if(vrow.status === 'full') return null; // 毛本走 CHAPTER_TEXT
+      const corpus = (typeof SANGUO_CORPUS !== 'undefined') ? SANGUO_CORPUS : null;
+      const it = corpus && corpus.items ? corpus.items.find(x => x.id === vrow.id) : null;
+      if(!it || !it.file) return null;
+      return { file: it.file, editionId: vrow.id };
+    })();
+    // 余象斗等志传系：用 unitMappings 定位毛本回对应的则号（若 YXD_ONTOLOGY 已加载）
+    const ocrZeForChapter = (function(){
+      if(!ocrInfo) return null;
+      const yxd = (typeof YXD_ONTOLOGY !== 'undefined') ? YXD_ONTOLOGY : null;
+      if(!yxd) return null;
+      const map = (yxd.unitMappings || []).find(m => m.to === 'mao-ch' + chapterNum);
+      if(!map) return null;
+      const zm = String(map.from).match(/第([0-9]+)則/);
+      return zm ? parseInt(zm[1], 10) : null;
+    })();
 
     // 三体处理：繁=原文原样 / 简=t2s.js 转换 / 白=编者自撰导读
     let bodyHTML = '';
@@ -473,19 +529,37 @@
       // 白话：导读层在上、原文正文在下并存，不替换正文（切走后再切回不丢原文）
       const simplifiedBody = chapterText.text ? simpleT2S(chapterText.text) : '';
       let lowerNote = '';
-      if(!readable){
-        const st = vrow ? vrow.status : 'absent';
-        lowerNote = `<div class="empty-state mt-4">
-          <p class="text-sm">所选版本「${esc(vrow ? vrow.title : readerState.edition)}」文本状态：<strong>${TEXT_STATUS_LABEL[st] || st}</strong>${vrow && vrow.gapNote ? `（${esc(vrow.gapNote)}）` : ''}，下方不附原文；${st === 'partial' ? '本版本已入库语料库，' : '本版本无入库可读文本，'}可至「多版本语料库」查看该版正文。</p>
-        </div>`;
+      // OCR 版本：导读层 + 该则 OCR 正文（按则取章），不再给「无可读全文」提示
+      if(ocrInfo && ocrZeForChapter){
+        bodyHTML = renderVernacularGuide(chapterNum)
+          + `<div class="guide-body-sep mt-4 pt-3 border-t border-[#c9b896]"></div>`
+          + `<div class="guide-backlink mb-3"><button class="btn btn-sm" onclick="appSetReaderMode('traditional')">↑ 只看原文（繁体）</button></div>`
+          + `<div class="ocr-ze-wrap" id="ocr-ze-body"><div class="text-sm text-[#8b6914]">正在载入该则 OCR 正文…</div></div>`;
+        viewLabel = '白话导读 + OCR 原文';
+        viewDesc = '编者所撰导读在上，该版本文本（OCR·未校勘）在下；仅作浏览，不作异文对勘底本。';
+        sourceLayer = '编者导读层 + 原文层 · ' + esc(vrow.title) + '（OCR 按则取章）';
+      } else {
+        // 非 OCR 白话：导读层 +（可读 ? 简化正文 : 版本说明），不再被上支覆盖
+        if(!readable){
+          const st = vrow ? vrow.status : 'absent';
+          lowerNote = `<div class="empty-state mt-4">
+            <p class="text-sm">所选版本「${esc(vrow ? vrow.title : readerState.edition)}」文本状态：<strong>${TEXT_STATUS_LABEL[st] || st}</strong>${vrow && vrow.gapNote ? `（${esc(vrow.gapNote)}）` : ''}，下方不附原文；${st === 'partial' ? '本版本已入库语料库，' : '本版本无入库可读文本，'}可至「多版本语料库」查看该版正文。</p>
+          </div>`;
+        }
+        bodyHTML = renderVernacularGuide(chapterNum)
+          + `<div class="guide-body-sep mt-4 pt-3 border-t border-[#c9b896]"></div>`
+          + `<div class="guide-backlink mb-3"><button class="btn btn-sm" onclick="appSetReaderMode('traditional')">↑ 只看原文（繁体）</button></div>`
+          + (readable ? simplifiedBody : lowerNote);
+        viewLabel = '白话导读' + (readable ? ' + 原文' : '');
+        viewDesc = '编者所撰导读在上' + (readable ? '，毛宗岗本原文（简体）在下，两层并存' : '，原文层依版本可读性而定') + '。';
+        sourceLayer = '编者导读层' + (readable ? ' + 原文层 · 毛宗岗本正文（t2s.js 繁转简）' : '（版本未全文入库，无原文层）');
       }
-      bodyHTML = renderVernacularGuide(chapterNum)
-        + `<div class="guide-body-sep mt-4 pt-3 border-t border-[#c9b896]"></div>`
-        + `<div class="guide-backlink mb-3"><button class="btn btn-sm" onclick="appSetReaderMode('traditional')">↑ 只看原文（繁体）</button></div>`
-        + (readable ? simplifiedBody : lowerNote);
-      viewLabel = '白话导读' + (readable ? ' + 原文' : '');
-      viewDesc = '编者所撰导读在上' + (readable ? '，毛宗岗本原文（简体）在下，两层并存' : '，原文层依版本可读性而定') + '。';
-      sourceLayer = '编者导读层' + (readable ? ' + 原文层 · 毛宗岗本正文（t2s.js 繁转简）' : '（版本未全文入库，无原文层）');
+    } else if(ocrInfo && ocrZeForChapter){
+      // OCR 版本传统/简体：按则取正文显示（繁体原样 / t2s 转简体）
+      bodyHTML = `<div class="ocr-ze-wrap" id="ocr-ze-body"><div class="text-sm text-[#8b6914]">正在载入该则 OCR 正文…</div></div>`;
+      viewLabel = (mode === 'simplified') ? '简体（OCR）' : '繁体原文（OCR）';
+      viewDesc = '该版本文本（OCR·未校勘）按则显示；仅作浏览，不作异文对勘底本。';
+      sourceLayer = '原文层 · ' + esc(vrow.title) + '（OCR 按则取章' + (mode === 'simplified' ? '，t2s.js 繁转简' : '，繁体原样') + '）';
     } else if(!readable){
       const st = vrow ? vrow.status : 'absent';
       bodyHTML = `<div class="empty-state">
@@ -552,7 +626,7 @@
               <select id="edition-select" class="border border-[#c9b896] rounded px-2 py-1 bg-white"
                 onchange="appSetEdition(this.value)">
                 ${vrows.map(v=>{
-                  const dis = (v.status!=='full' && v.status!=='partial');
+                  const dis = (v.status!=='full' && v.status!=='partial' && v.status!=='ocr');
                   return `<option value="${esc(v.id)}" ${v.id===readerState.edition?'selected':''} ${dis?'disabled':''}>${esc(v.title)}（${TEXT_STATUS_LABEL[v.status]||v.status}）</option>`;
                 }).join('')}
               </select>
@@ -607,6 +681,18 @@
     </div>`;
     applyAnnotVisibility();
     syncReaderUrl();
+    // OCR 版本：异步取该则正文，填充 #ocr-ze-body（渲染占位后加载）
+    if(ocrInfo && ocrZeForChapter){
+      const bodyEl = el.querySelector('#ocr-ze-body');
+      if(bodyEl){
+        getOcrZeByNum(ocrInfo.file, ocrZeForChapter).then(ze => {
+          if(!ze){ bodyEl.innerHTML = `<div class="text-sm text-[#a33]">未找到该则（第${ocrZeForChapter}则）正文。</div>`; return; }
+          const raw = (ze.paras || []).map(p => `<p>${esc(mode === 'simplified' ? simpleT2S(p) : p)}</p>`).join('');
+          const head = `<div class="text-sm text-[#8b6914] mb-2">${esc(ze.volume ? ze.volume + ' · ' : '')}第${ze.n}則 ${esc(ze.title)}（OCR · 未校勘 · 不作异文对勘底本）</div>`;
+          bodyEl.innerHTML = head + raw;
+        }).catch(e => { bodyEl.innerHTML = `<div class="text-sm text-[#a33]">载入失败：${esc(e && e.message ? e.message : e)}</div>`; });
+      }
+    }
   }
 
   // 批注显隐：单一真相源 = readerState.annot 四家标志；总开关为全选/全清便利开关

@@ -250,6 +250,18 @@ function splitVolume(text){
   }
   return units.map(u=>({title:u.title,n:u.n,paras:cleanLines(u.lines)}));
 }
+// 按「第N則」切分 OCR 志传系文本（余象斗等 180 则）
+function splitZe(text){
+  const lines=text.replace(/\r/g,'').split('\n'); const units=[]; let cur=null; let volume='';
+  for(const line of lines){
+    const vm=line.match(/^===\s*(.+?)\s*===\s*$/);
+    if(vm){ volume=vm[1]; continue; }
+    const m=line.match(/^###\s*第([一二三四五六七八九十百零〇0-9]{1,6})則[\s　]*(.*)$/);
+    if(m){ cur={n:cn2num(m[1]),title:line.trim(),volume,lines:[]}; units.push(cur); }
+    else if(cur) cur.lines.push(line);
+  }
+  return units.map(u=>({title:u.title,n:u.n,volume:u.volume,paras:cleanLines(u.lines)}));
+}
 
 function fmtPara(p){
   let s=esc(p);
@@ -300,6 +312,7 @@ async function loadEdition(id){
     if(it.kind==='chapter') units=splitChapter(text);
     else if(it.kind==='bullet') units=splitBullet(text);
     else if(it.kind==='volume') units=splitVolume(text);
+    else if(it.kind==='ze') units=splitZe(text);
     else units=splitMarker(text);
     if(it.id==='sanguozhi') units=mergeSubheads(units,t=>/^(魏書|蜀書|吳書)/.test(t));
     if(it.id==='jiajing-front') units=mergeSubheads(units,t=>/^(序|引|三國志宗僚|三国志宗僚)$/.test(t));
@@ -322,7 +335,7 @@ function renderEdition(it){
     'lizhuowu':'李卓吾評本','liyu':'笠翁評閱本','xiazhenyu':'夏振宇刊本','xiongqingbo':'熊清波藜光堂本',
     'zhengshaoyuan':'鄭少垣刊本','zhongbojing':'鍾伯敬評本','zhudingchen':'朱鼎臣刊本'};
   const pdfEd = pdfOf[it.id] || '';
-  const unitWord = it.ocr ? (it.kind==='volume'?'卷':'冊') : (it.id==='sanguozhi'?'卷':it.id==='huang'?'則':'回');
+  const unitWord = it.ocr ? (it.kind==='ze'?'則':(it.kind==='volume'?'卷':'冊')) : (it.id==='sanguozhi'?'卷':it.id==='huang'?'則':'回');
   $('main').innerHTML=`
     <div class="corpus-layout">
       <aside class="units-side">

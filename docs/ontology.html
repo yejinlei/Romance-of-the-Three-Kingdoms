@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="./assets/style.css">
 <script src="./assets/tailwind.js"></script>
 <script src="./data/ontology-schema.js"></script>
+<script src="./data/ocr-ontology.js"></script>
 <style>
 /* ===== 本体落地页专属样式（不入 style.css） ===== */
 code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
@@ -261,6 +262,8 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     <div id="gran-ladder"></div>
     <h3 class="sub-h">实例栈下钻示例（点击逐级展开）</h3>
     <div id="drill-wrap"></div>
+    <h3 class="sub-h">A1 轴实例 · 余象斗刊本（OCR）<span class="sub">来自 ocr-ontology.js · 180 則</span></h3>
+    <div id="ocr-inst-wrap"></div>
   </section>
 
 </main>
@@ -716,6 +719,50 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     }
   }
 
+  /* ---------- A1 轴实例 · 余象斗刊本（OCR） ---------- */
+  function renderOcrInst(){
+    const wrap = document.getElementById('ocr-inst-wrap');
+    if(!wrap) return;
+    const Y = (typeof YXD_ONTOLOGY !== 'undefined') ? YXD_ONTOLOGY : window.YXD_ONTOLOGY;
+    if(!Y || !Y.edition){
+      wrap.innerHTML = '<p class="layer-desc">（ocr-ontology.js 未載入，無 A1 軸 OCR 實例）</p>';
+      return;
+    }
+    const ed = Y.edition;
+    const maps = Y.unitMappings || [];
+    const vars = Y.variants || [];
+    const mapRows = maps.slice(0, 12).map(m=>`
+      <tr><td><code>${esc(m.from)}</code></td><td><code>${esc(m.to)}</code></td><td>${esc(m.alignNote||'')}</td></tr>`).join('');
+    const mapMore = maps.length>12 ? `<tr><td colspan="3" class="layer-desc">…共 ${maps.length} 條對齊（其餘略）</td></tr>` : '';
+    const varRows = vars.map(v=>`
+      <tr><td><code>${esc(v.unit||'')}</code></td><td><code>${esc(v.variantKind||'')}</code></td><td>${esc(v.note||'')}</td></tr>`).join('');
+    wrap.innerHTML = `
+      <div class="stat-grid" style="margin-bottom:14px">
+        <div class="stat-card"><div class="num">${esc(String(ed.unitCount||0))}</div><div class="lbl">${esc(ed.unitKind==='ze'?'則':'單元')}</div><div class="sub">${esc(ed.label||'')}</div></div>
+        <div class="stat-card"><div class="num">${maps.length}</div><div class="lbl">單元對齊</div><div class="sub">UnitMapping</div></div>
+        <div class="stat-card"><div class="num">${vars.length}</div><div class="lbl">異文</div><div class="sub">VariantReading</div></div>
+      </div>
+      <div class="proj-card" style="margin-bottom:14px">
+        <div class="axis-head"><span class="axis-id">A1</span><h3>${esc(ed.label||'余象斗刊本')}</h3><span class="axis-en">${esc(ed.id||'')}</span></div>
+        <div class="proj-sec"><b>單元形制：</b>${esc(ed.unitKind==='ze'?'則（180 則制 · 志傳系統）':ed.unitKind)} · <b>文本源：</b><code>${esc(ed.unitSource&&ed.unitSource.file?ed.unitSource.file:'')}</code></div>
+        <div class="proj-sec"><b>說明：</b>${esc(ed.note||'')}</div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-sec"><b>單元對齊（UnitMapping · 餘象斗則 → 毛本回）：</b></div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:6px">
+          <thead><tr style="text-align:left;color:#8b6914"><th style="padding:4px 8px;border:1px solid #c9b896">餘象斗</th><th style="padding:4px 8px;border:1px solid #c9b896">毛本</th><th style="padding:4px 8px;border:1px solid #c9b896">對齊說明</th></tr></thead>
+          <tbody>${mapRows}${mapMore}</tbody>
+        </table>
+      </div>
+      ${varRows?`<div class="proj-card" style="margin-top:14px">
+        <div class="proj-sec"><b>異文（VariantReading）：</b></div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:6px">
+          <thead><tr style="text-align:left;color:#8b6914"><th style="padding:4px 8px;border:1px solid #c9b896">單元</th><th style="padding:4px 8px;border:1px solid #c9b896">類型</th><th style="padding:4px 8px;border:1px solid #c9b896">說明</th></tr></thead>
+          <tbody>${varRows}</tbody>
+        </table>
+      </div>`:''}`;
+  }
+
   function renderDrill(){
     const wrap = document.getElementById('drill-wrap');
     if(!wrap) return;
@@ -764,6 +811,7 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     renderQuotes();
     renderNTuple();
     renderGranLadder();
+    renderOcrInst();
     renderDrill();
   }
 

@@ -689,6 +689,44 @@ const SANGUO_ONTOLOGY = {
         diffChar: '当 ↔ 尚',
         diffSpan: [2, 3]
       }
+    },
+    /* ---- 余象斗刊本（OCR）下钻链：OCR 版本同样纳入 A1 轴，链止于 G4 ---- */
+    {
+      id: 'unit-yxd-ze1',
+      granularity: 'G2',
+      parentOf: null,
+      axis: 'A1',
+      layer: 'L4',
+      class: 'Unit',
+      label: '余象斗刊本第 1 则 · 宴桃园豪杰三结义',
+      desc: '余象斗刊本（OCR）第一则，承载桃园结义开端；本刊为 180 则制（志传系统），文本按则分卷入库，未校勘、不作异文对勘底本。'
+    },
+    {
+      id: 'map-yxd-ze1-mao-ch1',
+      granularity: 'G3',
+      parentOf: 'unit-yxd-ze1',
+      axis: 'A1',
+      layer: 'L3',
+      class: 'UnitMapping',
+      label: '第 1 则 → 毛本第 1 回',
+      desc: '余象斗刊本第 1 则与毛本第 1 回同源，二者叙事单元对齐（UnitMapping）；本刊按则分卷，非毛本一回对一则。'
+    },
+    {
+      id: 'var-yxd-guan-suo',
+      granularity: 'G4',
+      parentOf: 'map-yxd-ze1-mao-ch1',
+      axis: 'A1',
+      layer: 'L4',
+      class: 'VariantReading',
+      label: '关索情节增删（志传系统有／毛本无）',
+      desc: '余象斗刊本属志传系统，多存关索故事；毛本系统删去关索情节（variantKind=plot 情节增删）。G4 字词/情节级为下钻终点。',
+      evidence: {
+        editionPair: 'yuxiangdou:mao',
+        variantKind: 'plot',
+        yxdReading: '存关索（花关索传等）',
+        maoReading: '无关索情节',
+        note: '志传系统（含余象斗刊本）保留关索，毛本删去；此为两大系统之标志性异文。'
+      }
     }
   ],
 

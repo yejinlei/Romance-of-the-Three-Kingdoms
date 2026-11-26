@@ -54,8 +54,8 @@ const SANGUO_CORPUS = {
       "title": "余象斗刊本（OCR）",
       "note": "明万历余象斗双峰堂刊《三国志传评林》，存卷首+8卷；识典古籍 OCR",
       "source": "识典古籍 CADAL02015947（https://www.shidianguji.com/book/CADAL02015947）",
-      "units": 9,
-      "kind": "marker",
+      "units": 180,
+      "kind": "ze",
       "ocr": true,
       "chars": 367205
     },
