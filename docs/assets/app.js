@@ -256,6 +256,7 @@
       case 'poems':         renderPoems(content); break;
       case 'versions':      renderVersions(content); break;
       case 'variants':      renderVariants(content); break;
+      case 'compare':       renderMultiCompare(content); break;
       case 'comments':      renderComments(content); break;
       case 'historical':    renderHistorical(content); break;
       case 'prophecy':      renderProphecy(content); break;
@@ -372,8 +373,95 @@
     return 'facsimile';                     // 未獲文本而有影印 → 仅影印
   }
 
-  // 按「第N則」切分 OCR 志传系文本（复用 cmpCnNum 转汉字数字），捕获卷名
+  // 版本单元缓存（文件级）：fileName → units 数组
+  const edUnitCacheAll = {};
+  // 按 VERSION_ONTOLOGY 配置切分指定版本全部单元（用 unitsplit.js，替换旧 splitZeText）
+  async function getEditionUnits(fileName, meta){
+    const key = fileName + '|' + meta.id + '|' + JSON.stringify(meta.splitOpts||{});
+    if(edUnitCacheAll[key]) return edUnitCacheAll[key];
+    const res = await fetch('texts/' + encodeURIComponent(fileName));
+    if(!res.ok) throw new Error(fileName + ' HTTP ' + res.status);
+    let units = (typeof UNITSplit !== 'undefined') ? UNITSplit.splitByKind(await res.text(), meta.splitKind, meta.splitOpts) : [];
+    units = normalizeUnits(units, meta);
+    edUnitCacheAll[key] = units;
+    return units;
+  }
+  // 版本单元归一化：按配置修正 n、去重、过滤标题
+  function normalizeUnits(units, meta){
+    let arr = (units || []).slice();
+    // 过滤标题（如裴注只取「魏書/蜀書/吳書」卷）
+    if(meta && meta.filterTitle){
+      arr = arr.filter(u => meta.filterTitle.test(u.title || ''));
+    }
+    // 夏振宇等乱序残本：按则号去重（目录污染重复），保留原则号（按文件出现序）
+    if(meta && meta.unordered){
+      const st = new Set(); const dd = [];
+      for(const u of arr){
+        if(u.n === undefined){ dd.push(u); continue; }
+        if(st.has(u.n)) continue;
+        st.add(u.n); dd.push(u);
+      }
+      return dd;
+    }
+    // 依 n 去重（保序）：同一则号出现多次（目录污染）只留首个；无 n 的正文段一律保留
+    const seen = new Set(); const dedup = [];
+    for(const u of arr){
+      if(u.n === undefined){ dedup.push(u); continue; }
+      if(seen.has(u.n)) continue;
+      seen.add(u.n); dedup.push(u);
+    }
+    arr = dedup;
+    // 全无编号单元（如裴注卷、黄正甫则题名）：按文件出现顺序编 1..N
+    if(arr.length && arr.every(u => u.n === undefined) && !(meta && meta.splitKind === 'volume')){
+      arr = arr.map((u,i) => ({ ...u, n: i+1 }));
+      return arr;
+    }
+    // 嘉靖系：卷内则无编号（splitKind=volume），按「卷序×perVolume+卷内序」生成则号
+    if(meta && meta.splitKind === 'volume' && meta.perVolume){
+      const numbered = [];
+      let volIdx = 0, inner = 0;
+      for(const u of arr){
+        if(u.title && /^卷之/.test(u.title)){
+          volIdx = u.n || (volIdx+1); inner = 0;
+        } else {
+          inner += 1;
+          const zeN = (volIdx-1) * meta.perVolume + inner;
+          numbered.push({ ...u, n: zeN, volume: u.volume || ('卷之' + cnNum(volIdx)) });
+        }
+      }
+      arr = numbered;
+    }
+    return arr;
+  }
+  // 十进制 → 中文（仅用于卷号显示，≤24）
+  function cnNum(n){
+    const d=['零','一','二','三','四','五','六','七','八','九','十'];
+    if(n<=10) return d[n]||String(n);
+    if(n<20) return '十'+(n%10?d[n%10]:'');
+    return d[Math.floor(n/10)]+'十'+(n%10?d[n%10]:'');
+  }
+  // 该毛本回 → 版本单元号数组（映射规则运行时推导）
+  function computeUnitNsForChapter(meta, chapterNum){
+    if(!meta) return null;
+    if(meta.kind === 'hui') return [chapterNum];                 // 回=回恒等
+    if(meta.kind === 'jiajing'){                                 // 每回2则
+      return [chapterNum*2-1, chapterNum*2];
+    }
+    if(meta.kind === 'ze'){                                      // 按比例近似，返回区间
+      const total = meta.unitCount || 180;
+      const n = Math.round(chapterNum * total / 120);
+      const c = Math.max(1, Math.min(total, n));
+      const prev = Math.max(1, Math.min(total, Math.round((chapterNum-1) * total / 120)));
+      const ns = [];
+      for(let k = prev; k <= c; k++) ns.push(k);
+      return ns.length ? ns : [c];
+    }
+    return null; // juan 系无则回
+  }
+
+  // 按「第N則」切分 OCR 志传系文本（委托 unitsplit.js，保留兼容导出）
   function splitZeText(txt){
+    if(typeof UNITSplit !== 'undefined') return UNITSplit.splitZeText(txt);
     const lines = String(txt || '').split('\n');
     const marks = [];
     let volume = '';
@@ -495,28 +583,42 @@
     // 版本行（corpus-manifest 派生 textStatus）
     const vrows = buildVersionRows();
     const vrow = vrows.find(v => v.id === readerState.edition) || null;
-    const readable = !!(vrow && vrow.status === 'full');
-    // OCR 版本（status='ocr'）已入库且可读（按则取章），仅不作异文对勘底本
-    const ocrReadable = !!(vrow && (vrow.status === 'ocr' || vrow.status === 'full'));
-    // OCR 版本文本元信息（文件、则编号），供正文层异步取章
+    // 目录本（仅存目次无正文，如钱氏藏书本）：不进阅读，明确说明
+    const catalogOnly = !!(edMeta && edMeta.catalogOnly);
+    // 可读性：full / partial / ocr 均可展示正文（full 走 CHAPTER_TEXT，其余按版本单元异步取文）
+    const readable = !!(vrow && ['full','partial','ocr'].includes(vrow.status)) && !catalogOnly;
+    const ocrReadable = readable; // 兼容：凡可读版本按单元取章
+    // VERSION_ONTOLOGY 版本元信息（切分配置 + 映射规则）
+    const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
+    const edMeta = (VONT && VONT.editions) ? VONT.editions[readerState.edition] : null;
+    // 通用版本单元定位：非毛本且有版本配置 → 返回该版本文本元信息（file + editionId）
     const ocrInfo = (function(){
-      if(!ocrReadable || !vrow) return null;
-      if(vrow.status === 'full') return null; // 毛本走 CHAPTER_TEXT
-      const corpus = (typeof SANGUO_CORPUS !== 'undefined') ? SANGUO_CORPUS : null;
-      const it = corpus && corpus.items ? corpus.items.find(x => x.id === vrow.id) : null;
-      if(!it || !it.file) return null;
-      return { file: it.file, editionId: vrow.id };
+      if(!vrow || vrow.status === 'full') return null; // 毛本走 CHAPTER_TEXT
+      if(!edMeta || !edMeta.file) return null;
+      if(edMeta.catalogOnly) return null; // 目录本（仅存目次无正文），不进阅读
+      return { file: edMeta.file, editionId: vrow.id, meta: edMeta };
     })();
-    // 余象斗等志传系：用 unitMappings 定位毛本回对应的则号（若 YXD_ONTOLOGY 已加载）
+    // 该毛本回对应的版本单元号（数组，嘉靖每回 2 则；ze 系按比例近似）
     const ocrZeForChapter = (function(){
       if(!ocrInfo) return null;
-      const yxd = (typeof YXD_ONTOLOGY !== 'undefined') ? YXD_ONTOLOGY : null;
-      if(!yxd) return null;
-      const map = (yxd.unitMappings || []).find(m => m.to === 'mao-ch' + chapterNum);
-      if(!map) return null;
-      const zm = String(map.from).match(/第([0-9]+)則/);
-      return zm ? parseInt(zm[1], 10) : null;
+      const meta = edMeta;
+      // 显式映射优先：余象斗等（YXD_ONTOLOGY.unitMappings → 'mao-chN'）
+      if(meta && meta.explicitMapping === 'YXD_ONTOLOGY'){
+        const yxd = (typeof YXD_ONTOLOGY !== 'undefined') ? YXD_ONTOLOGY : null;
+        if(yxd){
+          const map = (yxd.unitMappings || []).find(m => m.to === 'mao-ch' + chapterNum);
+          if(map){
+            const zm = String(map.from).match(/第([0-9]+)則/);
+            if(zm) return [parseInt(zm[1],10)];
+          }
+        }
+      }
+      return computeUnitNsForChapter(meta, chapterNum);
     })();
+    // 版本单元缓存（文件级）
+    const edUnitCache = edUnitCacheAll;
+    // 该版本全部单元（异步获取，供正文层取文；含 normalizeUnits 后的 n 连续化）
+    const edUnitsPromise = ocrInfo ? getEditionUnits(ocrInfo.file, edMeta) : null;
 
     // 三体处理：繁=原文原样 / 简=t2s.js 转换 / 白=编者自撰导读
     let bodyHTML = '';
@@ -535,9 +637,9 @@
           + `<div class="guide-body-sep mt-4 pt-3 border-t border-[#c9b896]"></div>`
           + `<div class="guide-backlink mb-3"><button class="btn btn-sm" onclick="appSetReaderMode('traditional')">↑ 只看原文（繁体）</button></div>`
           + `<div class="ocr-ze-wrap" id="ocr-ze-body"><div class="text-sm text-[#8b6914]">正在载入该则 OCR 正文…</div></div>`;
-        viewLabel = '白话导读 + OCR 原文';
-        viewDesc = '编者所撰导读在上，该版本文本（OCR·未校勘）在下；仅作浏览，不作异文对勘底本。';
-        sourceLayer = '编者导读层 + 原文层 · ' + esc(vrow.title) + '（OCR 按则取章）';
+        viewLabel = '白话导读 + 原文（按单元）';
+        viewDesc = '编者所撰导读在上，该版本文本（' + (edMeta && edMeta.ocr ? 'OCR·未校勘' : '整理本') + '）在下；仅作浏览。';
+        sourceLayer = '编者导读层 + 原文层 · ' + esc(vrow.title) + '（按版本单元取章）';
       } else {
         // 非 OCR 白话：导读层 +（可读 ? 简化正文 : 版本说明），不再被上支覆盖
         if(!readable){
@@ -555,20 +657,23 @@
         sourceLayer = '编者导读层' + (readable ? ' + 原文层 · 毛宗岗本正文（t2s.js 繁转简）' : '（版本未全文入库，无原文层）');
       }
     } else if(ocrInfo && ocrZeForChapter){
-      // OCR 版本传统/简体：按则取正文显示（繁体原样 / t2s 转简体）
-      bodyHTML = `<div class="ocr-ze-wrap" id="ocr-ze-body"><div class="text-sm text-[#8b6914]">正在载入该则 OCR 正文…</div></div>`;
-      viewLabel = (mode === 'simplified') ? '简体（OCR）' : '繁体原文（OCR）';
-      viewDesc = '该版本文本（OCR·未校勘）按则显示；仅作浏览，不作异文对勘底本。';
-      sourceLayer = '原文层 · ' + esc(vrow.title) + '（OCR 按则取章' + (mode === 'simplified' ? '，t2s.js 繁转简' : '，繁体原样') + '）';
+      // 非毛本版本传统/简体：按版本单元取正文显示（繁体原样 / t2s 转简体）
+      bodyHTML = `<div class="ocr-ze-wrap" id="ocr-ze-body"><div class="text-sm text-[#8b6914]">正在载入该版本单元正文…</div></div>`;
+      viewLabel = (mode === 'simplified') ? '简体（版本原文）' : '繁体原文（版本原文）';
+      viewDesc = '该版本文本（' + (edMeta && edMeta.ocr ? 'OCR·未校勘' : '整理本') + '）按版本单元显示；仅作浏览。';
+      sourceLayer = '原文层 · ' + esc(vrow.title) + '（按版本单元取章' + (mode === 'simplified' ? '，t2s.js 繁转简' : '，繁体原样') + '）';
     } else if(!readable){
       const st = vrow ? vrow.status : 'absent';
+      const catNote = catalogOnly
+        ? '。本文件为钱氏藏书电子本，仅存卷目次（24 卷 × 10 则题名），正文另见「嘉靖壬午本（维基文库转录本）」'
+        : '';
       bodyHTML = `<div class="empty-state">
         <h3 class="text-lg font-bold mb-2">本版本无可读全文</h3>
-        <p class="text-sm">版本「${esc(vrow ? vrow.title : readerState.edition)}」文本状态：<strong>${TEXT_STATUS_LABEL[st] || st}</strong>${vrow && vrow.gapNote ? `（${esc(vrow.gapNote)}）` : ''}。</p>
-        <p class="text-sm mt-2">站内逐回全文现仅接入毛宗岗本（text.js 120 回）；${st === 'partial' ? '本版本材料已入库语料库，' : '本版本无入库可读文本，'}可至「多版本语料库」「影印本阅读」查看相关材料。</p>
+        <p class="text-sm">版本「${esc(vrow ? vrow.title : readerState.edition)}」文本状态：<strong>${TEXT_STATUS_LABEL[st] || st}</strong>${vrow && vrow.gapNote ? `（${esc(vrow.gapNote)}）` : ''}${esc(catNote)}。</p>
+        <p class="text-sm mt-2">docs/texts 下各版本已按单元接入阅读（按回/则/卷自动取章）；${catalogOnly ? '本目录本不含正文，不可作阅读底本。' : '本版本无入库可读正文，'}可至「多版本语料库」「影印本阅读」查看相关材料。</p>
       </div>`;
       viewLabel = '版本说明';
-      viewDesc = '所选版本未接入站内全文阅读。';
+      viewDesc = catalogOnly ? '所选版本仅存目次，未接入站内全文阅读。' : '所选版本未接入站内全文阅读。';
       sourceLayer = '无正文层（版本状态说明）';
     } else if(mode==='traditional'){
       bodyHTML = chapterText.text || '';
@@ -627,7 +732,10 @@
                 onchange="appSetEdition(this.value)">
                 ${vrows.map(v=>{
                   const dis = (v.status!=='full' && v.status!=='partial' && v.status!=='ocr');
-                  return `<option value="${esc(v.id)}" ${v.id===readerState.edition?'selected':''} ${dis?'disabled':''}>${esc(v.title)}（${TEXT_STATUS_LABEL[v.status]||v.status}）</option>`;
+                  const ont = (VONT && VONT.editions && VONT.editions[v.id]);
+                  // 无版本本体配置的 partial/ocr 版本（如卷首/辑录类）仍不可读；目录本（仅目次）不可读
+                  const dis2 = dis || (!ont && v.status!=='full') || (ont && ont.catalogOnly);
+                  return `<option value="${esc(v.id)}" ${v.id===readerState.edition?'selected':''} ${dis2?'disabled':''}>${esc(v.title)}（${TEXT_STATUS_LABEL[v.status]||v.status}）</option>`;
                 }).join('')}
               </select>
             </div>
@@ -681,17 +789,41 @@
     </div>`;
     applyAnnotVisibility();
     syncReaderUrl();
-    // OCR 版本：异步取该则正文，填充 #ocr-ze-body（渲染占位后加载）
+    // 非毛本版本：异步取该版本单元正文，填充 #ocr-ze-body（渲染占位后加载）
     if(ocrInfo && ocrZeForChapter){
       const bodyEl = el.querySelector('#ocr-ze-body');
       if(bodyEl){
-        getOcrZeByNum(ocrInfo.file, ocrZeForChapter).then(ze => {
-          if(!ze){ bodyEl.innerHTML = `<div class="text-sm text-[#a33]">未找到该则（第${ocrZeForChapter}则）正文。</div>`; return; }
-          const raw = (ze.paras || []).map(p => `<p>${esc(mode === 'simplified' ? simpleT2S(p) : p)}</p>`).join('');
-          const head = `<div class="text-sm text-[#8b6914] mb-2">${esc(ze.volume ? ze.volume + ' · ' : '')}第${ze.n}則 ${esc(ze.title)}（OCR · 未校勘 · 不作异文对勘底本）</div>`;
-          bodyEl.innerHTML = head + raw;
-        }).catch(e => { bodyEl.innerHTML = `<div class="text-sm text-[#a33]">载入失败：${esc(e && e.message ? e.message : e)}</div>`; });
+        fillEditionUnits(bodyEl, ocrInfo.file, edMeta, ocrZeForChapter, mode);
       }
+    }
+  }
+
+  // 按单元号填充版本正文（支持多则，如嘉靖每回2则）
+  async function fillEditionUnits(bodyEl, fileName, meta, unitNs, mode){
+    try{
+      const units = await getEditionUnits(fileName, meta);
+      const picked = unitNs.map(n => units.find(u => u.n === n)).filter(Boolean);
+      if(!picked.length){
+        bodyEl.innerHTML = `<div class="text-sm text-[#a33]">该版本无对应单元正文（第 ${unitNs.join('、')} 单元未找到，可能为残本缺卷）。</div>`;
+        return;
+      }
+      const parts = picked.map(ze => {
+        const raw = (ze.paras || []).map(p => `<p>${esc(mode === 'simplified' ? simpleT2S(p) : p)}</p>`).join('');
+        const head = `<div class="text-sm text-[#8b6914] mb-2">${esc(ze.volume ? ze.volume + ' · ' : '')}${esc(ze.title)}${meta && meta.ocr ? '（OCR · 未校勘 · 仅作浏览）' : ''}</div>`;
+        return head + raw;
+      });
+      bodyEl.innerHTML = parts.join('<div class="border-t border-[#c9b896] my-3"></div>');
+      // 批注：正文内联【】高亮（评点本）；parts 用 <p> 直接渲染，选择器为 bodyEl 内 p
+      if(meta && meta.hasAnno && typeof UNITSplit !== 'undefined'){
+        bodyEl.querySelectorAll('p').forEach(p => {
+          const t = p.textContent;
+          if(/【/.test(t)){
+            p.innerHTML = UNITSplit.fmtAnnoHtml(esc(p.textContent));
+          }
+        });
+      }
+    }catch(e){
+      bodyEl.innerHTML = `<div class="text-sm text-[#a33]">载入失败：${esc(e && e.message ? e.message : e)}</div>`;
     }
   }
 
@@ -1158,6 +1290,121 @@
         </div>
       </div>
     </div>`;
+  }
+
+  /* ======================== 多版本对照（Task 8 · AC） ========================
+     同回并排对照最多 4 个版本：回次选择 + 版本多选（checkbox≤4） + 繁/简切换 +
+     CSS grid 并排。每列按 VERSION_ONTOLOGY 切分并映射到毛本回。 */
+  const COMPARE_DEFAULT_IDS = ['mao','jiajing-ws','huiping','huang'];
+  let compareState = { ids: COMPARE_DEFAULT_IDS.slice(), lang: 'traditional' };
+  function renderMultiCompare(el){
+    const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
+    const vrows = buildVersionRows().filter(r => ['full','partial','ocr'].includes(r.status));
+    // 可对照版本 = 有 VERSION_ONTOLOGY 配置（毛本走 CHAPTER_TEXT）
+    const selectable = vrows.filter(r => r.id === 'mao' || (VONT && VONT.editions && VONT.editions[r.id]));
+    el.innerHTML = `
+    <div class="max-w-7xl mx-auto">
+      <h1 class="text-2xl font-bold ink-title pb-2 mb-2">多版本对照</h1>
+      <p class="mb-4 text-sm text-[#8b6914]">同回并排对照最多 4 个版本；映射以毛本 120 回为枢纽，嘉靖系每回 2 则、志传系按则目近似对应。可切换繁/简。</p>
+      <div class="ancient-border p-4 rounded mb-4">
+        <div class="flex flex-wrap gap-3 items-center mb-3">
+          <label class="text-sm font-bold">回次：<input id="mc-unit" type="number" min="1" max="120" value="${currentChapter||1}" style="width:70px;border:1px solid #c9b896;border-radius:4px;padding:3px 8px"></label>
+          <button class="btn btn-sm" onclick="appMcRun()">对照</button>
+          <div class="flex gap-2 items-center text-sm">
+            <span class="font-bold">语体：</span>
+            <button class="btn btn-sm ${compareState.lang==='traditional'?'active':''}" onclick="appMcLang('traditional')">繁体</button>
+            <button class="btn btn-sm ${compareState.lang==='simplified'?'active':''}" onclick="appMcLang('simplified')">简体</button>
+          </div>
+        </div>
+        <div class="text-sm mb-1 font-bold text-[#8b0000]">选择版本（最多 4 个）：</div>
+        <div class="flex flex-wrap gap-2 text-sm" id="mc-picks">
+          ${selectable.map(r=>`
+            <label class="flex items-center gap-1 mc-pick-label" data-id="${esc(r.id)}">
+              <input type="checkbox" class="mc-pick" value="${esc(r.id)}" ${compareState.ids.includes(r.id)?'checked':''} ${compareState.ids.length>=4 && !compareState.ids.includes(r.id)?'disabled':''}>
+              ${esc(r.title)}
+            </label>`).join('')}
+        </div>
+      </div>
+      <div id="mc-result"><div class="empty-state">请选择版本与回次后点击「对照」。</div></div>
+    </div>`;
+    // 版本勾选事件（受 ≤4 约束）
+    el.querySelectorAll('.mc-pick').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const checked = Array.from(el.querySelectorAll('.mc-pick:checked')).map(x => x.value);
+        if(cb.checked && checked.length > 4){
+          cb.checked = false;
+          alert('最多同时对照 4 个版本。');
+        }
+        // 未勾选时重新启用所有被禁用的（只要未达上限）
+        const cur = Array.from(el.querySelectorAll('.mc-pick:checked')).map(x => x.value);
+        compareState.ids = cur;
+        el.querySelectorAll('.mc-pick').forEach(x => x.disabled = cur.length >= 4 && !x.checked);
+        if(global.appMcRun) global.appMcRun();
+      });
+    });
+    setTimeout(()=>{ if(global.appMcRun) global.appMcRun(); }, 0);
+  }
+  global.appMcLang = function(m){
+    if(m === 'traditional' || m === 'simplified'){
+      compareState.lang = m;
+      // 只更新按钮态并重跑，不重建视图（保留回次输入）
+      const btns = document.querySelectorAll('button[onclick^="appMcLang"]');
+      btns.forEach(b => b.classList.toggle('active', (b.getAttribute('onclick')||'').indexOf("'"+m+"'") >= 0));
+      if(global.appMcRun) global.appMcRun();
+    }
+  };
+  global.appMcRun = async function(){
+    const result = document.getElementById('mc-result');
+    if(!result) return;
+    const unitEl = document.getElementById('mc-unit');
+    let unit = parseInt(unitEl ? unitEl.value : '1', 10);
+    if(!unit || unit < 1 || unit > 120){ unit = Math.max(1, Math.min(120, currentChapter || 1)); if(unitEl) unitEl.value = unit; }
+    const checked = Array.from(document.querySelectorAll('.mc-pick:checked')).map(x => x.value);
+    if(!checked.length){ result.innerHTML = '<div class="empty-state">请至少勾选 1 个版本。</div>'; return; }
+    result.innerHTML = '<div class="text-sm text-[#8b6914]">正在载入对照文本……</div>';
+    const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
+    const CH_TXT = (typeof CHAPTER_TEXT !== 'undefined') ? CHAPTER_TEXT : null;
+    const cols = [];
+    for(const id of checked){
+      let title = '';
+      const vrow = buildVersionRows().find(v => v.id === id);
+      title = vrow ? vrow.title : id;
+      const meta = (VONT && VONT.editions) ? VONT.editions[id] : null;
+      cols.push({ id, title, meta });
+    }
+    const results = await Promise.all(cols.map(async col => {
+      let paras = [];
+      let unitLabel = '';
+      if(col.id === 'mao'){
+        const t = (CH_TXT && CH_TXT[unit]) ? CH_TXT[unit] : null;
+        paras = t ? t.text.split(/\n+/).map(s => s.trim()).filter(Boolean) : [];
+        unitLabel = '第' + unit + '回 ' + ((CH_TXT && CH_TXT[unit] && CH_TXT[unit].title) || '');
+      } else if(col.meta){
+        const units = await getEditionUnits(col.meta.file, col.meta);
+        const ns = computeUnitNsForChapter(col.meta, unit);
+        const picked = (ns||[]).map(n => units.find(u => u.n === n)).filter(Boolean);
+        paras = picked.reduce((acc, z) => acc.concat(z.paras || []), []);
+        unitLabel = picked.map(z => (z.volume ? z.volume + ' · ' : '') + z.title).join('；') || (ns ? '第' + ns.join('、') + '单元' : '');
+      }
+      const lang = compareState.lang;
+      return { ...col, paras: paras.map(p => lang === 'simplified' ? simpleT2S(p) : p), unitLabel };
+    }));
+    result.innerHTML = `
+      <div class="mc-grid">
+        ${results.map(c => `
+          <div class="mc-col ancient-border">
+            <div class="mc-head"><strong>${esc(c.title)}</strong><div class="text-xs text-[#8b6914]">${esc(c.unitLabel)}</div></div>
+            <div class="mc-text">${c.paras.length ? c.paras.map(p => `<p>${esc(p)}</p>`).join('') : '<div class="text-sm text-[#a33]">该版本无此回对应单元（可能为残本缺卷）。</div>'}</div>
+          </div>`).join('')}
+      </div>
+      <style>
+        .mc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+        .mc-col{border:1px solid #c9b896;border-radius:6px;overflow:hidden;background:#fffdf8}
+        .mc-head{background:#f5ecd8;font-weight:bold;color:#8b0000;padding:6px 10px;font-size:13px;border-bottom:1px solid #c9b896}
+        .mc-text{padding:10px;max-height:600px;overflow:auto;font-size:14px;line-height:1.9}
+        .mc-text p{margin:0 0 8px;text-indent:2em}
+        @media(max-width:800px){.mc-grid{grid-template-columns:1fr}}
+      </style>`;
   }
 
   function renderVariants(el){
@@ -2117,7 +2364,9 @@
     appSetReaderMode: global.appSetReaderMode,
     appSetEdition: global.appSetEdition,
     appSetAnnot: global.appSetAnnot,
-    appCmpRun: global.appCmpRun
+    appCmpRun: global.appCmpRun,
+    appMcRun: global.appMcRun,
+    appMcLang: global.appMcLang
   };
 
   // 自动初始化（等待 DOM ready）

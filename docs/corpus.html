@@ -177,16 +177,16 @@ function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('sho
 
 function cn2num(s){
   const d={'零':0,'〇':0,'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9};
-  if(/^\d+$/.test(s)) return +s;
-  if(s==='十') return 10;
-  if(s.includes('百')){
-    const [a,b='']=s.split('百'); let n=(d[a]||1)*100;
-    if(b.startsWith('十')) n+=10+(d[b[1]]||0);
-    else if(b) n+=(d[b[0]]||0)*10+(d[b[1]]||0);
-    return n;
+  s=String(s||'').trim();
+  if(/^\d+$/.test(s)) return parseInt(s,10);
+  let total=0, cur=0;
+  for(const c of s){
+    if(c==='十'){ total+=(cur||1)*10; cur=0; }
+    else if(c==='百'){ total+=(cur||1)*100; cur=0; }
+    else if(c==='零'||c==='〇'){ cur=0; }
+    else if(d[c]!==undefined){ cur=d[c]; }
   }
-  if(s.includes('十')){ const [a,b='']=s.split('十'); return (d[a]||1)*10+(d[b]||0); }
-  return d[s]||0;
+  return total+cur;
 }
 function numLabel(n){ return n; }
 

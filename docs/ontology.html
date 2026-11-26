@@ -8,6 +8,7 @@
 <script src="./assets/tailwind.js"></script>
 <script src="./data/ontology-schema.js"></script>
 <script src="./data/ocr-ontology.js"></script>
+<script src="./data/version-ontology.js"></script>
 <style>
 /* ===== 本体落地页专属样式（不入 style.css） ===== */
 code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
@@ -264,6 +265,8 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     <div id="drill-wrap"></div>
     <h3 class="sub-h">A1 轴实例 · 余象斗刊本（OCR）<span class="sub">来自 ocr-ontology.js · 180 則</span></h3>
     <div id="ocr-inst-wrap"></div>
+    <h3 class="sub-h">A1 轴 · 全部版本单元对齐<span class="sub">来自 version-ontology.js · L3 层 UnitMapping · 下钻止于 G4</span></h3>
+    <div id="allver-align-wrap"></div>
   </section>
 
 </main>
@@ -763,6 +766,52 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
       </div>`:''}`;
   }
 
+  // ---------- A1 轴 · 全部版本单元对齐（L3 UnitMapping，下钻止于 G4） ----------
+  function renderAllVerAlign(){
+    const wrap = document.getElementById('allver-align-wrap');
+    if(!wrap) return;
+    const V = (typeof VERSION_ONTOLOGY !== 'undefined') ? VERSION_ONTOLOGY : window.VERSION_ONTOLOGY;
+    if(!V || !V.editions){
+      wrap.innerHTML = '<p class="layer-desc">（version-ontology.js 未載入，無全部版本單元對齊）</p>';
+      return;
+    }
+    const KIND_LABEL = { hui:'回=回 恒等', jiajing:'每回2則（近似）', ze:'按比例（近似）', juan:'卷系（無則回）' };
+    const kindLabel = (k, m)=>{
+      if(k === 'hui') return '回號恒等：第N回 → 第N回';
+      if(k === 'jiajing') return '每回2則：第N回 → 第2N-1、2N 則（近似）';
+      if(k === 'ze') return `按比例：第N回 → 第${Math.max(1, Math.round(m.unitCount/120))}..${Math.max(1, Math.round(m.unitCount/120))} 則附近（近似）`;
+      return '卷系（無毛本回對應，整卷瀏覽）';
+    };
+    const rows = Object.entries(V.editions).map(([id, m])=>{
+      const stat = m.catalogOnly ? '<span class="chip" title="僅存目次無正文">目錄本</span>'
+        : (m.ocr ? '<span class="chip" title="未校勘，僅作瀏覽">OCR</span>' : '');
+      return `<tr>
+        <td style="padding:4px 8px;border:1px solid #c9b896"><code>${esc(id)}</code></td>
+        <td style="padding:4px 8px;border:1px solid #c9b896">${esc(m.label||'')}</td>
+        <td style="padding:4px 8px;border:1px solid #c9b896">${esc(m.unitKind||'')} · ${esc(String(m.unitCount||''))}</td>
+        <td style="padding:4px 8px;border:1px solid #c9b896">${kindLabel(m.kind, m)}</td>
+        <td style="padding:4px 8px;border:1px solid #c9b896">${stat}${m.hasAnno?'<span class="chip">批註</span>':''}</td>
+        <td style="padding:4px 8px;border:1px solid #c9b896"><code>${esc(m.file||'')}</code></td>
+      </tr>`;
+    }).join('');
+    wrap.innerHTML = `
+      <div class="proj-card">
+        <div class="proj-sec"><b>說明：</b>${esc(V.meta && V.meta.note || '')}</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px">
+          <thead><tr style="text-align:left;color:#8b6914">
+            <th style="padding:4px 8px;border:1px solid #c9b896">id</th>
+            <th style="padding:4px 8px;border:1px solid #c9b896">版本</th>
+            <th style="padding:4px 8px;border:1px solid #c9b896">單元</th>
+            <th style="padding:4px 8px;border:1px solid #c9b896">映射規則</th>
+            <th style="padding:4px 8px;border:1px solid #c9b896">屬性</th>
+            <th style="padding:4px 8px;border:1px solid #c9b896">文本源</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <div class="layer-desc" style="margin-top:6px">共 ${Object.keys(V.editions).length} 個版本 · 對齊為近似（按序對應），不聲稱精確文本對齊 · 下鑽止於 L3/G4</div>
+      </div>`;
+  }
+
   function renderDrill(){
     const wrap = document.getElementById('drill-wrap');
     if(!wrap) return;
@@ -812,6 +861,7 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     renderNTuple();
     renderGranLadder();
     renderOcrInst();
+    renderAllVerAlign();
     renderDrill();
   }
 

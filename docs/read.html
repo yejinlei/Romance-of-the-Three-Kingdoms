@@ -11,6 +11,8 @@
 <script src="./data/sanguo-topics.js"></script>
 <script src="./data/corpus-manifest.js"></script>
 <script src="./data/ocr-ontology.js"></script>
+<script src="./data/unitsplit.js"></script>
+<script src="./data/version-ontology.js"></script>
 <script src="./data/ontology-schema.js"></script>
 <script src="./data/annotations.js"></script>
 <script src="./text.js"></script>
@@ -40,6 +42,7 @@
     <div class="subtab active" onclick="SANGUO_APP.showView('reader'); switchSub('reader')">版本阅读器</div>
     <div class="subtab" onclick="SANGUO_APP.showView('versions'); switchSub('versions')">版本谱</div>
     <div class="subtab" onclick="SANGUO_APP.showView('variants'); switchSub('variants')">异文对勘</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('compare'); switchSub('compare')">多版本对照</div>
     <div class="subtab" onclick="location.href='corpus.html'">多版本语料库 →</div>
     <div class="subtab" onclick="location.href='gaps.html'">版本缺口 →</div>
     <div class="subtab" onclick="location.href='pdf-viewer.html'">影印本阅读 →</div>
@@ -53,10 +56,10 @@
 </footer>
 
 <script>
-  const _subMap = { reader:0, versions:1, variants:2 };
+  const _subMap = { reader:0, versions:1, variants:2, compare:3 };
   function switchSub(name){
     document.querySelectorAll('.subtab').forEach((el,i)=>{
-      if(i<3) el.classList.toggle('active', _subMap[name]===i);
+      if(i<4) el.classList.toggle('active', _subMap[name]===i);
     });
   }
   document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('reader'); });
