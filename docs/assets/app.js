@@ -1761,14 +1761,17 @@
     </div>`;
     initEchartsContainer('graph-container', (chart) => {
       const persons = data.persons||[];
-      const idMap = {};
-      persons.forEach(p=>idMap[p.id]=p.name);
+      // 节点带唯一 id（person.id），边 source/target 直接用该 id：
+      // 避免重名（如法正/严颜各有两条记录）导致 echarts graph 按 name 解析边端点时
+      // dataIndex 映射被破坏而抛「Cannot set properties of undefined (setting 'dataIndex')」。
       const colorMap = {"蜀汉":"#2563eb","曹魏":"#dc2626","东吴":"#16a34a","群雄":"#6b7280","汉室":"#9333ea","黄巾":"#ca8a04"};
       const catNames = Object.keys(colorMap);
-      const nodes = persons.map(p=>{ const c=(p.faction||'').split('→')[0]; return {name:p.name, symbolSize: Math.min(34, (p.mentionCount||0)/60 + 10), itemStyle:{color:colorMap[c]||'#6b7280'}, category: Math.max(0, catNames.indexOf(c))}; });
-      const links = relations.filter(r=>idMap[r.subject]&&idMap[r.object]).map(r=>({source:idMap[r.subject], target:idMap[r.object], value:r.predicate, label:{show:false}}));
+      const nodes = persons.map(p=>{ const c=(p.faction||'').split('→')[0]; return {id:p.id, name:p.name, symbolSize: Math.min(34, (p.mentionCount||0)/60 + 10), itemStyle:{color:colorMap[c]||'#6b7280'}, category: Math.max(0, catNames.indexOf(c))}; });
+      const idName = {};
+      persons.forEach(p => idName[p.id] = p.name);
+      const links = relations.filter(r=>persons.some(p=>p.id===r.subject) && persons.some(p=>p.id===r.object)).map(r=>({source:r.subject, target:r.object, value:r.predicate, label:{show:false}}));
       chart.setOption({
-        tooltip:{formatter:p=>p.dataType==='edge'?(p.data.source+' — '+p.data.value+' → '+p.data.target):(p.name+'（'+(catNames[p.category]||'')+'）')},
+        tooltip:{formatter:p=>p.dataType==='edge'?((idName[p.data.source]||p.data.source)+' — '+p.data.value+' → '+(idName[p.data.target]||p.data.target)):(p.name+'（'+(catNames[p.category]||'')+'）')},
         series:[{type:'graph', layout:'force', roam:true, data:nodes, links:links, categories:catNames.map(n=>({name:n})), force:{repulsion:220, edgeLength:[50,160]}, label:{show:true, position:'right', fontSize:11}, lineStyle:{opacity:0.45}}]
       });
       chart.resize();
