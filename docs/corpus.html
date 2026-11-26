@@ -61,6 +61,24 @@
   .anno.yu{color:#7a4a8a;border-left-color:rgba(122,74,138,.4);background:linear-gradient(90deg,rgba(122,74,138,.06),transparent 70%)}
   .hide-anno .anno{display:none}
   .pager{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--ink3)}
+  /* ---- 篇章导航侧栏 ---- */
+  .corpus-layout{display:grid;grid-template-columns:216px 1fr;gap:14px;align-items:start}
+  @media(max-width:900px){.corpus-layout{grid-template-columns:1fr}}
+  .units-side{border:1px solid var(--line);border-radius:3px;background:linear-gradient(180deg,rgba(255,253,248,.9),rgba(253,248,238,.85));overflow:hidden}
+  .units-head{padding:8px 10px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#faf4e6,#f6eed9)}
+  .units-head input[type=search]{width:100%;font-size:12.5px;padding:4px 8px;border:1px solid var(--line);border-radius:2px;background:#fffdf8;color:var(--ink2)}
+  .units-count{font-size:11.5px;color:var(--ink3);margin-top:5px;text-align:center}
+  .units-list{max-height:60vh;overflow-y:auto}
+  .corpus-unit-item{display:block;width:100%;text-align:left;border:0;border-bottom:1px dotted #eee3cf;background:none;font:inherit;
+    font-size:12.5px;color:var(--ink2);padding:6px 9px;cursor:pointer;line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .corpus-unit-item:hover{background:rgba(158,43,37,.06);color:var(--cinnabar)}
+  .corpus-unit-item.on{background:linear-gradient(180deg,#c2504a,var(--cinnabar));border-color:var(--cinnabar-d);color:#fdf6ec;font-weight:600}
+  .corpus-unit-item .u-n{opacity:.62;margin-right:4px}
+  .units-empty{display:none;padding:14px 10px;text-align:center;font-size:12.5px;color:var(--ink3)}
+  .units-jump{display:flex;gap:6px;align-items:center;padding:8px 10px;border-top:1px solid var(--line);background:#faf4e6}
+  .units-jump input{width:72px;font-size:12.5px;padding:3px 6px;border:1px solid var(--line);border-radius:2px;background:#fffdf8;color:var(--ink2)}
+  .units-jump button{font-size:12px;padding:3px 8px}
+  .units-body{min-width:0}
   .critic{border-top:1px solid var(--line);margin-top:20px;padding-top:12px}
   .critic h3{font-size:15px;color:var(--cinnabar);margin:0 0 8px}
   .critic .cmt{font-family:var(--kai);font-size:14.5px;border-bottom:1px dotted #e9ddc7;padding:5px 0;color:#4a4438}
@@ -94,16 +112,66 @@
     </aside>
     <section class="card main" id="main">
       <div class="empty">正在載入語料清單…</div>
-    </section>
-  </div>
+    </section>  </div>
 </main>
 <div class="toast" id="toast"></div>
 <script src="./data/corpus-manifest.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const state = { ed: 'mao', idx: 1, units: [], onlyText: false, critic: '' };
+const state = { ed: 'mao', idx: 0, units: [], onlyText: false, critic: '' };
 let criticCache = {};
+
+/* ---- 篇章导航：过滤 / 快速跳转 / localStorage 记忆 ---- */
+const LS_KEY = 'corpus-state';
+function lsLoad(){
+  try{ const s=localStorage.getItem(LS_KEY); if(s){ const o=JSON.parse(s); if(o&&o.ed&&typeof o.idx==='number') return o; } }catch(e){}
+  return null;
+}
+function lsSave(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({ed:state.ed, idx:state.idx})); }catch(e){} }
+function unitLabel(u){
+  if(u.n!=null) return String(u.n);
+  const m=(u.title||'').match(/第([一二三四五六七八九十百零〇0-9]{1,6})回/);
+  return m?String(cn2num(m[1])):'';
+}
+function renderUnitsList(){
+  const list=$('units-list'); if(!list) return;
+  const q=($('unit-filter').value||'').trim().toLowerCase();
+  const items=state.units.map((u,i)=>{
+    const t=(u.title||'').toLowerCase();
+    const hit=!q||t.includes(q);
+    return `<button class="corpus-unit-item ${i===state.idx?'on':''}" data-i="${i}" style="display:${hit?'':'none'}">`+
+      (unitLabel(u)?`<span class="u-n">${esc(unitLabel(u))}.</span>`:'')+
+      `${esc(u.title)}</button>`;
+  }).join('');
+  list.innerHTML=items||'';
+  const visible=state.units.filter(u=>{ const t=(u.title||'').toLowerCase(); return !q||t.includes(q); }).length;
+  const cnt=$('units-count'); if(cnt) cnt.textContent=`${q?`匹配 ${visible} / `:''}共 ${state.units.length} 篇`;
+  const empty=$('units-empty'); if(empty) empty.style.display=visible?'none':'block';
+  list.querySelectorAll('.corpus-unit-item').forEach(b=>b.onclick=()=>go(+b.dataset.i));
+  // 当前项滚动到可视区
+  const on=list.querySelector('.corpus-unit-item.on'); if(on) on.scrollIntoView({block:'nearest'});
+}
+function go(i){
+  if(i<0||i>=state.units.length) return;
+  state.idx=i; state.critic='';
+  const it=SANGUO_CORPUS.items.find(x=>x.id===state.ed)||SANGUO_CORPUS.items[0];
+  renderEdition(it); lsSave();
+}
+function jumpTo(){
+  const inp=$('jump-n'); if(!inp) return;
+  const n=+inp.value;
+  if(!n||isNaN(n)) return;
+  let i=state.units.findIndex(u=>u.n===n);
+  if(i<0) i=n-1; // 回/卷号与序号未必对齐：回退按序号
+  if(i<0) i=0; if(i>=state.units.length) i=state.units.length-1;
+  inp.value=''; go(i);
+}
+function bindUnitsFilter(){
+  const f=$('unit-filter'); if(f) f.oninput=()=>renderUnitsList();
+  const j=$('jump-n'); if(j) j.addEventListener('keydown',e=>{ if(e.key==='Enter') jumpTo(); });
+  const b=$('jump-btn'); if(b) b.onclick=jumpTo;
+}
 
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); }
 
@@ -256,35 +324,51 @@ function renderEdition(it){
   const pdfEd = pdfOf[it.id] || '';
   const unitWord = it.ocr ? (it.kind==='volume'?'卷':'冊') : (it.id==='sanguozhi'?'卷':it.id==='huang'?'則':'回');
   $('main').innerHTML=`
-    <div class="titlebar">
-      <div><h2>${esc(it.title)}</h2>${it.ocr?`<span class="badge">OCR · 僅檢索用</span>`:''}<div class="meta">${esc(it.note)}</div></div>
-      <div class="meta">${pdfEd?`<a href="pdf-viewer.html#ed=${encodeURIComponent(pdfEd)}&f=1" style="color:var(--cinnabar);font-weight:600">影印本 →</a> · `:''}${esc(it.source)}</div>
-    </div>
-    <div class="toolbar">
-      <label>篇章：</label>
-      <select id="unit-select">${state.units.map((u,i)=>`<option value="${i}" ${i===state.idx?'selected':''}>${esc(u.title).slice(0,60)}</option>`).join('')}</select>
-      <button id="prev">← 上一</button><button id="next">下一 →</button>
-      ${it.id==='huiping'?`<label><input type="checkbox" id="onlyText" ${state.onlyText?'checked':''}> 只看正文</label>`:''}
-      ${showCritic?`<label>批語對照：</label><select id="critic"><option value="">不顯示</option>${criticOpts}</select>`:''}
-      <span class="meta">${state.idx+1} / ${n}</span>
-    </div>
-    <div class="body-text ${state.onlyText?'hide-anno':''}" id="content">
-      ${cur.paras.length?cur.paras.map(fmtPara).join(''):'<div class="empty">本篇暫無正文段落。</div>'}
-    </div>
-    <div class="critic" id="critic-panel"></div>
-    <div class="pager">
-      <button id="prev2" ${state.idx===0?'disabled':''}>← ${state.idx>0?esc(state.units[state.idx-1].title).slice(0,30):'已是首篇'}</button>
-      <span>${it.units} ${unitWord} · 約 ${(it.chars).toLocaleString()} 字</span>
-      <button id="next2" ${state.idx===n-1?'disabled':''}>${state.idx<n-1?esc(state.units[state.idx+1].title).slice(0,30):'已是末篇'} →</button>
+    <div class="corpus-layout">
+      <aside class="units-side">
+        <div class="units-head">
+          <input type="search" id="unit-filter" placeholder="過濾篇目…">
+          <div class="units-count" id="units-count">共 ${n} 篇</div>
+        </div>
+        <div class="units-list" id="units-list"></div>
+        <div class="units-empty" id="units-empty">無匹配篇目</div>
+        <div class="units-jump">
+          <input type="number" id="jump-n" min="1" placeholder="回/卷號">
+          <button id="jump-btn">跳轉</button>
+        </div>
+      </aside>
+      <div class="units-body">
+        <div class="titlebar">
+          <div><h2>${esc(it.title)}</h2>${it.ocr?`<span class="badge">OCR · 僅檢索用</span>`:''}<div class="meta">${esc(it.note)}</div></div>
+          <div class="meta">${pdfEd?`<a href="pdf-viewer.html#ed=${encodeURIComponent(pdfEd)}&f=1" style="color:var(--cinnabar);font-weight:600">影印本 →</a> · `:''}${esc(it.source)}</div>
+        </div>
+        <div class="toolbar">
+          <button id="prev">← 上一</button><button id="next">下一 →</button>
+          ${it.id==='huiping'?`<label><input type="checkbox" id="onlyText" ${state.onlyText?'checked':''}> 只看正文</label>`:''}
+          ${showCritic?`<label>批語對照：</label><select id="critic"><option value="">不顯示</option>${criticOpts}</select>`:''}
+          <span class="meta">${state.idx+1} / ${n}</span>
+        </div>
+        <div class="body-text ${state.onlyText?'hide-anno':''}" id="content">
+          ${cur.paras.length?cur.paras.map(fmtPara).join(''):'<div class="empty">本篇暫無正文段落。</div>'}
+        </div>
+        <div class="critic" id="critic-panel"></div>
+        <div class="pager">
+          <button id="prev2" ${state.idx===0?'disabled':''}>← ${state.idx>0?esc(state.units[state.idx-1].title).slice(0,30):'已是首篇'}</button>
+          <span>${esc(cur.title)} · ${it.units} ${unitWord} · 約 ${(it.chars).toLocaleString()} 字</span>
+          <button id="next2" ${state.idx===n-1?'disabled':''}>${state.idx<n-1?esc(state.units[state.idx+1].title).slice(0,30):'已是末篇'} →</button>
+        </div>
+      </div>
     </div>`;
-  $('unit-select').onchange=e=>{ state.idx=+e.target.value; renderEdition(it); };
-  const go=d=>{ const i=state.idx+d; if(i>=0&&i<state.units.length){ state.idx=i; renderEdition(it); } };
-  $('prev').onclick=()=>go(-1); $('next').onclick=()=>go(1);
-  $('prev2').onclick=()=>go(-1); $('next2').onclick=()=>go(1);
+  renderUnitsList();
+  bindUnitsFilter();
+  const go2=d=>{ const i=state.idx+d; if(i>=0&&i<state.units.length){ state.idx=i; renderEdition(it); } };
+  $('prev').onclick=()=>go2(-1); $('next').onclick=()=>go2(1);
+  $('prev2').onclick=()=>go2(-1); $('next2').onclick=()=>go2(1);
   const ot=$('onlyText'); if(ot) ot.onchange=e=>{ state.onlyText=e.target.checked; $('content').classList.toggle('hide-anno',state.onlyText); };
   const cs=$('critic'); if(cs) cs.onchange=e=>{ state.critic=e.target.value; renderCritic(it); };
   renderCritic(it);
   location.hash=`ed=${it.id}&c=${state.idx+1}`;
+  lsSave();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -322,15 +406,17 @@ async function renderCritic(it){
 function selectEdition(id){
   state.critic=''; state.onlyText=false;
   loadEdition(id);
-}
-
-function bootFromHash(){
+}function bootFromHash(){
   const h=location.hash.replace(/^#/,'');
   const p=new URLSearchParams(h.replace(/&/g,'&'));
-  const ed=p.get('ed'); const c=+(p.get('c')||1);
-  if(ed && SANGUO_CORPUS.items.some(x=>x.id===ed)){
-    loadEdition(ed).then(()=>{ if(c>1 && c<=state.units.length){ state.idx=c-1; renderEdition(SANGUO_CORPUS.items.find(x=>x.id===ed)); } });
-  } else loadEdition('mao').then(()=>{ state.idx=0; renderEdition(SANGUO_CORPUS.items.find(x=>x.id==='mao')); });
+  const ed=p.get('ed'); const c=+(p.get('c')||0);
+  const saved=lsLoad();
+  const startEd = (ed && SANGUO_CORPUS.items.some(x=>x.id===ed)) ? ed : (saved && saved.ed) || 'mao';
+  const startIdx = (ed ? c-1 : (saved && saved.idx)) || 0;
+  loadEdition(startEd).then(()=>{
+    if(startIdx>=0 && startIdx<state.units.length){ state.idx=startIdx; }
+    renderEdition(SANGUO_CORPUS.items.find(x=>x.id===startEd));
+  });
 }
 
 if(typeof SANGUO_CORPUS==='undefined'){
