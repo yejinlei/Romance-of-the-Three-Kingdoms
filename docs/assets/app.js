@@ -488,10 +488,15 @@
       viewDesc = '以 t2s.js 繁→简逐字转换，仅供现代读者快速浏览。';
       sourceLayer = '原文层 · 毛宗岗本正文（t2s.js 繁转简）';
     } else if(mode==='vernacular'){
-      bodyHTML = renderVernacularGuide(chapterNum);
-      viewLabel = '白话导读';
-      viewDesc = '编者所撰 · 非原文：据站内元数据编排的本回导读，非原文翻译。';
-      sourceLayer = '编者导读层 · 编者所撰（非原文）';
+      // 白话：导读层在上、原文正文在下并存，不替换正文（切走后再切回不丢原文）
+      const simplifiedBody = simpleT2S(chapterText.text || '');
+      bodyHTML = renderVernacularGuide(chapterNum)
+        + `<div class="guide-body-sep mt-4 pt-3 border-t border-[#c9b896]"></div>`
+        + `<div class="guide-backlink mb-3"><button class="btn btn-sm" onclick="appSetReaderMode('traditional')">↑ 只看原文（繁体）</button></div>`
+        + simplifiedBody;
+      viewLabel = '白话导读 + 原文';
+      viewDesc = '编者所撰导读在上，毛宗岗本原文（简体）在下，两层并存。';
+      sourceLayer = '编者导读层 + 原文层 · 毛宗岗本正文（t2s.js 繁转简）';
     }
 
     const prevChapter = chapterNum - 1;
