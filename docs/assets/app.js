@@ -608,28 +608,141 @@
     });
   }
 
-  // 白话导读（编者所撰 · 非原文）：据站内元数据编排，非原文翻译，不增饰史实细节
+  // 白话导读（编者所撰 · 非原文）：逐字取材于站内元数据的既有字段（含 desc/outcome/note 等成文描述），
+  // 仅做分组、排序与繁→简转换，不新增史实细节、不改写事实。
   function renderVernacularGuide(chapterNum){
+    const st = s => esc(simpleT2S(s == null ? '' : String(s)));
     const meta = (data.chapters || []).find(c => c.id === chapterNum) || {};
-    const events = meta.events || [];
-    const persons = meta.keyPersons || [];
-    const places = meta.keyPlaces || [];
-    const virtuals = meta.isVirtual || [];
     const title = meta.title || (typeof CHAPTER_TEXT !== 'undefined' && CHAPTER_TEXT[chapterNum] ? CHAPTER_TEXT[chapterNum].title : '');
+    const evNames = meta.events || [];
+    const virtuals = meta.isVirtual || [];
+
+    const personById = {}; (data.persons || []).forEach(p => { personById[p.name] = p; });
+    const placeById = {};  (data.places || []).forEach(p => { placeById[p.id] = p; placeById[p.name] = p; });
+    const evList0 = (TOP.events || []).filter(e => e.chapter === chapterNum);
+    // 战役记录不挂 chapter 字段：以「本章事件名 / 本章地名」与战役名、战役地名做归一化交集匹配
+    const nv = s => normName(s || '');
+    const chEvNames = (meta.events || []).map(nv);
+    const chPlaces = (meta.keyPlaces || []).concat(evList0.map(e => e.place)).map(nv).filter(Boolean);
+    const battles = (data.battles || []).filter(b => {
+      const bn = nv(b.name);
+      const bPlaces = (b.placeIds || []).map(id => { const p = (data.places||[]).find(x => x.id === id); return p ? p.name : ''; }).map(nv);
+      return chEvNames.indexOf(bn) >= 0 || bPlaces.some(x => x && chPlaces.indexOf(x) >= 0);
+    });
+    const evList = evList0;
+    const sgList = (TOP.stratagems || []).filter(s => s.chapter === chapterNum);
+    const arList = (TOP.artifacts || []).filter(a => a.chapter === chapterNum);
+    const pmList = (TOP.poems || []).filter(p => p.chapter === chapterNum || (chapterNum === 1 && p.chapter === 0));
+    const prList = (TOP.prophecies || []).filter(p => p.chapter === chapterNum);
+
+    // 本回涉及人物：优先 keyPersons，其次事件 persons；补入人物表已注册的简介
+    const nameSet = [];
+    [meta.keyPersons || [], [].concat(...evList.map(e => e.persons || []))].flat().forEach(n => {
+      if(n && nameSet.indexOf(n) < 0) nameSet.push(n);
+    });
+    const personCards = nameSet.map(n => {
+      const p = personById[n] || personById[simpleT2S(n)] || {};
+      const bits = [];
+      if(p.style) bits.push('字' + p.style);
+      if(p.faction) bits.push(p.faction);
+      if(p.birth || p.death) bits.push((p.birth||'?') + '–' + (p.death||'?'));
+      if(p.title) bits.push('称' + p.title);
+      if(p.nativePlace) bits.push(p.nativePlace);
+      if(p.mentionCount) bits.push('全书提及 ' + p.mentionCount + ' 次');
+      return `<li><b>${st(n)}</b>${bits.length ? '（' + st(bits.join(' · ')) + '）' : ''}</li>`;
+    }).join('');
+
+    // 地理：回目 keyPlaces + 事件 place + 战役 placeIds
+    const placeSet = [];
+    [meta.keyPlaces || [], evList.map(e => e.place)].flat().forEach(n => {
+      if(n && placeSet.indexOf(n) < 0) placeSet.push(n);
+    });
+    battles.forEach(b => (b.placeIds || []).forEach(id => {
+      const p = placeById[id]; if(p && placeSet.indexOf(p.name) < 0) placeSet.push(p.name);
+    }));
+    const placeCards = placeSet.map(n => {
+      const p = placeById[n] || placeById[simpleT2S(n)] || {};
+      const bits = [];
+      if(p.level) bits.push(p.level);
+      if(p.modernLocation) bits.push('今' + p.modernLocation);
+      return `<li><b>${st(n)}</b>${bits.length ? '（' + st(bits.join(' · ')) + '）' : ''}</li>`;
+    }).join('');
+
+    const evCards = evList.map(e => `
+      <li class="mb-2">
+        <b>${st(e.name)}</b>
+        <span class="text-xs text-[#4a6741]">（${e.year === 0 || !e.year ? '年代不详' : e.year + ' 年'}${e.place ? ' · ' + st(e.place) : ''}${e.type ? ' · ' + st(e.type) : ''}${e.virtual ? ' · 小说虚构' : ''}）</span>
+        ${e.desc ? `<div class="mt-1">${st(e.desc)}</div>` : ''}
+      </li>`).join('');
+
+    const sgCards = sgList.map(s => `
+      <li class="mb-2">
+        <b>${st(s.name)}</b>
+        <span class="text-xs text-[#4a6741]">（献计：${st(s.user)}；针对：${st(s.target)}${s.type ? '；类型：' + st(s.type) : ''}）</span>
+        ${s.desc ? `<div class="mt-1">${st(s.desc)}</div>` : ''}
+        ${s.outcome ? `<div class="mt-1"><b class="text-[#006400]">结果：</b>${st(s.outcome)}</div>` : ''}
+      </li>`).join('');
+
+    const arCards = arList.map(a => `
+      <li class="mb-1"><b>${st(a.name)}</b>
+        <span class="text-xs text-[#4a6741]">（${st(a.type)}${a.owner ? ' · 主：' + st(a.owner) : ''}${a.virtual ? ' · 小说虚构' : ''}）</span>
+        ${a.desc ? `<span class="text-sm"> ${st(a.desc)}</span>` : ''}</li>`).join('');
+
+    const pmCards = pmList.map(p => `
+      <li class="mb-2">
+        <div><b>${st(p.title)}</b><span class="text-xs text-[#4a6741]">（${st(p.author)}${p.type ? ' · ' + st(p.type) : ''}${p.chapter === 0 ? ' · 卷首词' : ''}）</span></div>
+        <div class="mt-1 pl-3 border-l-2 border-[#8fbc8f] whitespace-pre-wrap">${st(p.content)}</div>
+        ${p.note ? `<div class="mt-1 text-xs text-[#4a6741]">${st(p.note)}</div>` : ''}
+      </li>`).join('');
+
+    const prCards = prList.map(p => `
+      <li class="mb-2">
+        <div class="font-bold">「${st(p.content)}」</div>
+        <div class="text-sm mt-1">${p.prophet ? '预言者：<b>' + st(p.prophet) + '</b>。' : ''}${p.fulfilled ? '应验：' + st(p.fulfilled) : ''}${p.note ? '<span class="text-xs text-[#4a6741]"> 按：' + st(p.note) + '</span>' : ''}</div>
+      </li>`).join('');
+
+    const btCards = battles.map(b => {
+      const names = (b.keyPersonIds || []).map(id => {
+        const p = (data.persons || []).find(x => x.id === id); return p ? p.name : '';
+      }).filter(Boolean);
+      const pname = (b.placeIds || []).map(id => { const p = placeById[id]; return p ? p.name : ''; }).filter(Boolean).join('、');
+      return `<li class="mb-2"><b>${st(b.name)}</b><span class="text-xs text-[#4a6741]">（${b.year || '年代不详'}${pname ? ' · ' + st(pname) : ''}${names.length ? ' · ' + st(names.join('、')) : ''}）</span>
+        ${b.result ? `<div class="mt-1"><b class="text-[#006400]">结局：</b>${st(b.result)}</div>` : ''}</li>`;
+    }).join('');
+
+    const sec = (h, body) => `
+      <div class="guide-sec mt-3">
+        <div class="font-bold text-[#006400] border-b border-[#d8e8d8] pb-1 mb-2">${h}</div>
+        ${body}
+      </div>`;
+
+    const covered = !!(evCards || sgCards || arCards || pmCards || prCards || btCards);
     return `
       <div class="vernacular-guide p-3 bg-[#f0f4ea] rounded border border-[#8fbc8f]">
         <div class="guide-banner text-sm mb-3 pb-2 border-b border-[#8fbc8f]">
           <strong class="text-[#006400]">编者所撰 · 非原文</strong>
           <div class="mt-1">本层为<strong>编者导读层</strong>，是编者自撰的本回导读，非毛宗岗本原文、亦非原文翻译。</div>
-          <div class="text-xs text-[#4a6741] mt-1">所据材料：本回回目与本回事件 / 人物 / 地理元数据、虚实注记（站内 <code>data/sanguo-data.js</code> chapters 字段：title、events、keyPersons、keyPlaces、isVirtual），不引原文，不采史实细节。</div>
+          <div class="text-xs text-[#4a6741] mt-1">所据材料：站内 <code>data/sanguo-data.js</code>（chapters、persons、places、battles）与 <code>data/sanguo-topics.js</code>（events、stratagems、artifacts、poems、prophecies）中 <b>已录入</b>的字段，逐字转录、仅繁转简，不引原文、不新增史实。</div>
         </div>
-        <h3 class="font-bold mb-2">本回导读（编者所撰）</h3>
-        <p class="mb-2">本回回目作《${esc(title)}》。据本回事件条目，所叙关目有：${events.length ? esc(events.join('、')) : '（本回暂无事件条目）'}。</p>
-        <p class="mb-2">出场要角：${persons.length ? esc(persons.join('、')) : '（本回暂无人物条目）'}；地理所涉：${places.length ? esc(places.join('、')) : '（本回暂无地理条目）'}。</p>
+        <h3 class="font-bold mb-2">第${chapterNum}回 导读（编者所撰）</h3>
+        <p class="mb-1">本回回目作《${st(title)}》。</p>
+        ${evNames.length ? `<p class="mb-0">回目点出关目：${st(evNames.join('、'))}。</p>` : ''}
+        ${covered ? '' : `
+        <div class="text-sm mt-2 p-2 bg-[#fdf3e7] rounded border-l-4 border-[#d8a24a]">
+          <b class="text-[#8b4513]">元数据覆盖说明：</b>站内结构化元数据尚未覆盖本回的事件 / 计谋 / 器物 / 诗词 / 谶语条目，故本回导读仅含回目与出场人物、地理、虚实注记。阅读内容请以下方原文为准。
+        </div>`}
+        ${btCards ? sec('本回战役', `<ul class="list-disc ml-5">${btCards}</ul>`) : ''}
+        ${evCards ? sec('本回事件', `<ul class="list-disc ml-5">${evCards}</ul>`) : ''}
+        ${sgCards ? sec('本回计谋', `<ul class="list-disc ml-5">${sgCards}</ul>`) : ''}
+        ${personCards ? sec('出场要角', `<ul class="list-disc ml-5 text-sm">${personCards}</ul>`) : ''}
+        ${placeCards ? sec('地理所涉', `<ul class="list-disc ml-5 text-sm">${placeCards}</ul>`) : ''}
+        ${arCards ? sec('器物', `<ul class="list-disc ml-5 text-sm">${arCards}</ul>`) : ''}
+        ${pmCards ? sec('诗词', `<ul class="list-disc ml-5 text-sm">${pmCards}</ul>`) : ''}
+        ${prCards ? sec('谶纬童谣', `<ul class="list-disc ml-5 text-sm">${prCards}</ul>`) : ''}
         ${virtuals.length ? `
-        <div class="guide-virtual text-sm mt-2 p-2 bg-[#fdf3e7] rounded">
+        <div class="guide-virtual text-sm mt-3 p-2 bg-[#fdf3e7] rounded border-l-4 border-[#d8a24a]">
           <strong class="text-[#8b4513]">虚实提示（据站内注记）：</strong>
-          <ul class="list-disc ml-5 mt-1">${virtuals.map(v => `<li>${esc(v)}</li>`).join('')}</ul>
+          <ul class="list-disc ml-5 mt-1">${virtuals.map(v => `<li>${st(v)}</li>`).join('')}</ul>
         </div>` : ''}
         <p class="guide-foot text-xs text-[#4a6741] mt-3 pt-2 border-t border-[#8fbc8f]">以上导读由编者依据上述站内元数据自撰（编者所撰 · 非原文），仅供快速把握本回梗概；欲观文学原貌，请切回「繁体」或「简体」视图阅读原文层。</p>
       </div>`;
