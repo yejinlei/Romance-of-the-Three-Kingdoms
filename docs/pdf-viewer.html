@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>影印本閱讀 · 三國演義本體論</title>
+<title>影印本阅读 · 三国演义本体论</title>
 <style>
   :root{
     --ink:#2f2a25; --ink2:#5d5449; --ink3:#8a7f6d;
@@ -47,32 +47,39 @@
   .titlebar h2{margin:0;font-size:21px;letter-spacing:.06em}
   .meta{font-size:12.5px;color:var(--ink3)}
   .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px;font-size:13.5px}
+  .toolbar .sep{color:var(--line)}
+  .toolbar input{width:64px;padding:3px 6px;font-size:13px;border:1px solid var(--line);border-radius:2px;font-family:inherit;background:#fffdf8;color:var(--ink2)}
   button{font-family:inherit;cursor:pointer;background:linear-gradient(180deg,rgba(255,253,248,.93),rgba(247,240,226,.9));
     border:1px solid var(--line);border-radius:2px;padding:3px 10px;font-size:13px;color:var(--ink2)}
   button:hover{border-color:var(--cinnabar);color:var(--cinnabar)}
   button.on{background:linear-gradient(180deg,#c2504a,var(--cinnabar));border-color:var(--cinnabar-d);color:#fdf6ec}
-  .pdfwrap{width:100%;height:72vh;border:1px solid var(--line);border-radius:2px;background:#4a4438;overflow:hidden}
+  .pdfwrap{width:100%;height:72vh;border:1px solid var(--line);border-radius:2px;background:#4a4438;overflow:auto}
+  .pdfscale{width:100%;height:100%}
   .pdfwrap iframe{width:100%;height:100%;border:0;display:block}
   .empty{padding:40px;text-align:center;color:var(--ink3)}
   .note{font-size:12.5px;color:#a05a00;background:#fff7ea;border:1px solid #f0d3a0;border-radius:2px;padding:5px 10px;margin-bottom:10px}
+  .source{font-size:12.5px;color:var(--ink2);background:#f7f2e6;border:1px dashed var(--line);border-radius:2px;padding:5px 10px;margin-bottom:10px}
   .badge{display:inline-block;font-size:11px;border:1px solid var(--line);border-radius:9px;padding:0 7px;color:var(--ink3);margin-left:5px}
 </style>
 </head>
 <body>
 <header>
-  <h1>三國演義 · 影印本閱讀</h1>
-  <div class="sub">公版古本 · 八種版刻 · 一百二十二冊</div>
+  <h1>三国演义 · 影印本阅读</h1>
+  <div class="sub">公版古本 · 九种版刻 · 一百二十六册 · 仅影印，无文本</div>
   <nav>
-    <a href="./index.html">← 返回本體論總覽</a>
-    <a href="./corpus.html">多版本語料庫</a>
-    <a href="./gaps.html">版本缺口</a>
+    <a href="index.html">导论·总览</a>
+    <a href="read.html">版本阅读</a>
+    <a href="graph.html">本体图谱</a>
+    <a href="ontology.html">本体</a>
+    <a href="research.html">学术研究</a>
+    <a href="topics.html">专题深研</a>
   </nav>
 </header>
 <main>
   <div class="layout">
     <aside class="card side" id="side"></aside>
     <section class="card main" id="main">
-      <div class="empty">正在載入影印清單…</div>
+      <div class="empty">正在载入影印清单…</div>
     </section>
   </div>
 </main>
@@ -80,66 +87,199 @@
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-/* ---- 8 个版本元数据（与 D:\src\books 落盘一一对应）---- */
-const VERSIONS = [
-  { id:"周曰校刊本",    note:"周曰校刊本，明萬曆間金陵周曰校刊《新刊校正古本大字音釋三國志通俗演義》，十二卷十二冊，正文系統。", count:12, textId:"jiajing" },
-  { id:"熊清波藜光堂本", note:"熊清波藜光堂本，明萬曆間閩建熊清波刊《三國全傳》，十六冊，志傳系統。", count:16, textId:"xiongqingbo" },
-  { id:"朱鼎臣刊本",    note:"朱鼎臣刊本，明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，八冊，志傳系統，全像插圖。", count:8, textId:"zhudingchen" },
-  { id:"鄭少垣刊本",    note:"鄭少垣刊本，明萬曆間閩建鄭少垣聯輝堂刊《三國志傳》，八冊，志傳系統。", count:8, textId:"zhengshaoyuan" },
-  { id:"李卓吾評本",    note:"李卓吾評本，明萬曆間建陽刊《李卓吾先生批評三國志》，二十三冊，合併為一二〇回。", count:23, textId:"cmt-li" },
-  { id:"鍾伯敬評本",    note:"鍾伯敬評本，明末鍾惺（伯敬）批評本，十七冊（卷首+卷一至卷十六；卷十七至二十缺）。", count:17, textId:"cmt-zhong" },
-  { id:"笠翁評閱本",    note:"笠翁評閱本，清初李漁（笠翁）評閱本，二十六冊，承毛評而有新見。", count:26, textId:"cmt-liyu" },
-  { id:"夏振宇刊本",    note:"夏振宇刊本，明萬曆間夏振宇刊《三國志傳通俗演義》十二卷，存殘本六卷（缺卷7-卷8等）；日本蓬左文庫藏全本未公開。", count:12, textId:"xiazhenyu" },
-  { id:"余象斗刊本",    note:"余象斗刊本，明萬曆二十年（1592）建陽雙峰堂余象斗刊《新刻按鑑全像批評三國志傳》，存四冊，志傳系統。", count:4, textId:"yuxiangdou" },
+/* ---- 9 个版本目录（与 docs/pdf/ 落盘文件一一对应；pages 为逐册实际页数）---- */
+const PDF_VERSIONS = [
+  { dir:"周曰校刊本", label:"周曰校刊本", count:12,
+    note:"明万历十九年（1591）金陵万卷楼周曰校刊《新刊校正古本大字音释三国志通俗演义》，十二卷十二册，正文系统。",
+    source:"影印来源：日本国立公文书馆内阁文库藏本（附1-8，漢17847）；Wikimedia Commons（NAJDA-附001-0008）。",
+    pages:[119,101,106,95,105,95,99,93,96,98,98,100] },
+  { dir:"熊清波藜光堂本", label:"熊清波藜光堂本", count:16,
+    note:"明万历间闽建熊清波刊《三国全传》，十六册，志传系统。",
+    source:"影印来源：识典古籍（shidianguji.com）公开影印。",
+    pages:[35,34,38,34,34,35,34,35,38,33,34,36,34,34,37,30] },
+  { dir:"朱鼎臣刊本", label:"朱鼎臣刊本", count:8,
+    note:"明万历间朱鼎臣刊《新刻按鉴全像三国志传》，八册，志传系统，全像插图。",
+    source:"影印来源：识典古籍（shidianguji.com）公开影印。",
+    pages:[72,92,91,61,66,89,93,60] },
+  { dir:"鄭少垣刊本", label:"郑少垣刊本", count:8,
+    note:"明万历间闽建郑少垣联辉堂刊《三国志传》，八册，志传系统。",
+    source:"影印来源：识典古籍（shidianguji.com）公开影印。",
+    pages:[93,114,74,105,75,111,73,102] },
+  { dir:"李卓吾評本", label:"李卓吾评本", count:23,
+    note:"明万历间建阳刊《李卓吾先生批评三国志》，二十三册，合并为一百二十回。",
+    source:"影印来源：识典古籍（shidianguji.com）公开影印。",
+    pages:[85,80,79,78,76,71,63,69,71,68,56,69,71,77,77,75,78,69,67,74,68,67,68] },
+  { dir:"鍾伯敬評本", label:"钟伯敬评本", count:17,
+    note:"明末钟惺（伯敬）批评本，十七册（卷首+卷一至卷十六；卷十七至二十缺）。",
+    source:"影印来源：识典古籍（shidianguji.com）公开影印。",
+    pages:[5,52,55,58,46,55,49,55,46,46,55,52,50,52,51,56,53] },
+  { dir:"笠翁評閱本", label:"笠翁评阅本", count:26,
+    note:"清初李渔（笠翁）评阅本，二十六册，承毛评而有新见。",
+    source:"影印来源：识典古籍（shidianguji.com）公开影印。",
+    pages:[81,64,61,56,67,67,52,60,55,58,59,47,53,64,59,60,58,57,58,62,61,61,55,75,42,71] },
+  { dir:"夏振宇刊本", label:"夏振宇刊本", count:12,
+    note:"明万历间夏振宇刊《三国志传通俗演义》十二卷，存残本（缺卷一、二、七、八、十一、十二等）；日本名古屋蓬左文库藏全本未公开。",
+    source:"影印来源：公开数字化影印（识典古籍 / Wikimedia Commons 等公开渠道）。",
+    pages:[49,53,57,47,49,50,45,51,53,52,51,52] },
+  { dir:"余象斗刊本", label:"余象斗刊本", count:4,
+    note:"明万历二十年（1592）建阳双峰堂余象斗刊《新刻按鉴全像批评三国志传》，存四册，志传系统。",
+    source:"影印来源：识典古籍（CADAL02015947）等公开影印。",
+    pages:[65,78,90,89] }
 ];
-const state = { ed:null, vol:null };
+/* 逐册真实文件名（余象斗刊本册号不连续：01/02/03/07） */
+const PDF_FILES = {
+  "余象斗刊本":["01.pdf","02.pdf","03.pdf","07.pdf"]
+};
+function volFiles(v){
+  return PDF_FILES[v.dir] || Array.from({length:v.count},(_,i)=>String(i+1).padStart(2,'0')+'.pdf');
+}
+const state = { vi:0, fi:0, page:1, scale:1 };
 
-/* 册号格式化为 01/02/… */
-function fnum(n){ return String(n).padStart(2,'0'); }
+function volLabel(v, i){ return volFiles(v)[i].replace('.pdf','') + ' 冊'; }
 
-/* 生成侧栏：每版本一个展开分组，册号按钮 */
+/* ---- 侧栏：9 个版本目录 + 册号按钮 ---- */
 function renderSide(){
-  $('side').innerHTML = VERSIONS.map(v=>`
-    <h3>${esc(v.id)}<span class="badge">${v.count} 冊</span></h3>
+  $('side').innerHTML = PDF_VERSIONS.map((v,vi)=>`
+    <h3>${esc(v.label)}<span class="badge">${v.count} 冊</span></h3>
     <div class="vols">
-      ${Array.from({length:v.count},(_,i)=>`
-        <button class="${state.ed===v.id&&state.vol===i+1?'on':''}"
-          data-ed="${esc(v.id)}" data-vol="${i+1}">${fnum(i+1)}</button>`).join('')}
+      ${volFiles(v).map((f,i)=>`
+        <button class="${state.vi===vi&&state.fi===i?'on':''}"
+          data-vi="${vi}" data-fi="${i}">${esc(f.replace('.pdf',''))}</button>`).join('')}
     </div>`).join('');
   document.querySelectorAll('.vols button').forEach(b=>{
-    b.onclick=()=>load(b.dataset.ed, +b.dataset.vol);
+    b.onclick=()=>load(+b.dataset.vi, +b.dataset.fi, 1);
+  });
+  document.querySelectorAll('.ed').forEach(b=>{
+    b.onclick=()=>load(+b.dataset.vi, 0, 1);
   });
 }
 
-/* 加载某版本某册的 PDF 到主区 iframe */
-function load(ed, vol){
-  state.ed=ed; state.vol=vol;
-  const v=VERSIONS.find(x=>x.id===ed);
-  const src='pdf/'+encodeURIComponent(ed)+'/'+encodeURIComponent(fnum(vol))+'.pdf';
-  $('main').innerHTML=`
-    <div class="titlebar">
-      <div><h2>${esc(ed)}<span class="badge">第 ${fnum(vol)} 冊 / 共 ${v.count} 冊</span></h2>
-        <div class="meta">${esc(v.note)}</div></div>
-      <div class="meta">
-        ${v.textId?`<a href="corpus.html#ed=${encodeURIComponent(v.textId)}&c=1" style="color:var(--cinnabar);font-weight:600">📖 看文本 →</a> · `:''}
-        <a href="${src}" target="_blank">在新視窗開啟 ↗</a> · <a href="${src}" download>下載本冊</a>
-      </div>
-    </div>
-    <div class="note">影印古本 · 瀏覽器內嵌原生 PDF 檢視器，可縮放／翻頁／全螢幕閱讀。OCR 文本正於「多版本語料庫」處理中。</div>
-    <div class="pdfwrap"><iframe src="${src}" title="${esc(ed)} 第${fnum(vol)}冊"></iframe></div>`;
-  renderSide();
-  location.hash='ed='+encodeURIComponent(ed)+'&f='+vol;
-  window.scrollTo({top:0,behavior:'smooth'});
+function pdfSrc(){
+  const v = PDF_VERSIONS[state.vi];
+  const f = volFiles(v)[state.fi];
+  return 'pdf/'+encodeURIComponent(v.dir)+'/'+encodeURIComponent(f)+'#page='+state.page;
 }
 
-/* 从 URL 哈希恢复，默认打开第一版本第一册 */
+/* ---- 主区：工具栏 + 页码 + 缩放 + 原生 iframe 内嵌 PDF ---- */
+function renderMain(){
+  const v = PDF_VERSIONS[state.vi];
+  const f = volFiles(v)[state.fi];
+  const npages = v.pages[state.fi];
+  $('main').innerHTML = `
+    <div class="titlebar">
+      <div><h2>${esc(v.label)}<span class="badge">${esc(f.replace('.pdf',''))} 冊 / 共 ${v.count} 冊</span><span class="badge">仅影印，无文本</span></h2>
+        <div class="meta">${esc(v.note)}</div></div>
+      <div class="meta"><a href="${'pdf/'+encodeURIComponent(v.dir)+'/'+encodeURIComponent(f)}" target="_blank">在新窗口打开 ↗</a>
+        · <a href="${'pdf/'+encodeURIComponent(v.dir)+'/'+encodeURIComponent(f)}" download>下载本册</a></div>
+    </div>
+    <div class="source">${esc(v.source)}本页仅提供影印图像浏览，无文本层；如需检索文本请至 <a href="corpus.html">多版本语料库</a>（OCR 文本仅供检索，未达 97% 验收线，不作对勘底本）。</div>
+    <div class="note">影印古本 · 浏览器原生 PDF 内嵌阅读（iframe + #page 定位），支持翻页 / 跳页 / 缩放。</div>
+    <div class="toolbar">
+      <button onclick="prevVol()">上一册</button>
+      <button onclick="nextVol()">下一册</button>
+      <span class="sep">|</span>
+      <button onclick="prevPage()">上一页</button>
+      <button onclick="nextPage()">下一页</button>
+      <label>跳页 <input id="page-input" type="number" min="1" max="${npages}" value="${state.page}"></label>
+      <button onclick="gotoPage()">跳转</button>
+      <span class="meta">当前页：<b id="page-cur">${state.page}</b> / ${npages}</span>
+      <span class="sep">|</span>
+      <button onclick="zoomOut()">缩小</button>
+      <button onclick="fitWidth()">适应宽度</button>
+      <button onclick="zoomIn()">放大</button>
+      <span class="meta">缩放：<b id="zoom-cur">${Math.round(state.scale*100)}%</b></span>
+    </div>
+    <div class="pdfwrap" id="pdfwrap">
+      <div class="pdfscale" id="pdfscale" style="width:${state.scale*100}%">
+        <iframe id="pdf-frame" src="${pdfSrc()}" title="${esc(v.label)} ${esc(f)} 第${state.page}页"></iframe>
+      </div>
+    </div>`;
+  syncHash();
+}
+
+/* 翻页/跳页时重建 iframe，使 #page=N 定位可靠生效；缩放不动 src，当前页不丢 */
+function renderFrame(){
+  const v = PDF_VERSIONS[state.vi];
+  const f = volFiles(v)[state.fi];
+  const wrap = $('pdfwrap');
+  if(!wrap){ renderMain(); return; }
+  wrap.innerHTML = `
+    <div class="pdfscale" id="pdfscale" style="width:${state.scale*100}%">
+      <iframe id="pdf-frame" src="${pdfSrc()}" title="${esc(v.label)} ${esc(f)} 第${state.page}页"></iframe>
+    </div>`;
+  const cur = $('page-cur'); if(cur) cur.textContent = state.page;
+  const inp = $('page-input'); if(inp) inp.value = state.page;
+  syncHash();
+}
+function syncZoom(){
+  const s = $('pdfscale');
+  if(s) s.style.width = (state.scale*100)+'%';
+  const z = $('zoom-cur'); if(z) z.textContent = Math.round(state.scale*100)+'%';
+}
+function syncHash(){
+  const v = PDF_VERSIONS[state.vi];
+  location.hash = 'ed='+encodeURIComponent(v.dir)+'&f='+(state.fi+1)+'&p='+state.page+'&z='+state.scale;
+}
+
+/* ---- 交互：册 / 页 / 缩放（页码 1..N 回绕；册在本版本内回绕）---- */
+function load(vi, fi, page){
+  state.vi = vi; state.fi = fi;
+  const npages = PDF_VERSIONS[vi].pages[fi];
+  state.page = Math.min(Math.max(1, page||1), npages);
+  renderSide();
+  renderMain();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function prevVol(){
+  const v = PDF_VERSIONS[state.vi];
+  let fi = state.fi - 1, vi = state.vi;
+  if(fi < 0){ fi = v.count - 1; }
+  load(vi, fi, 1);
+}
+function nextVol(){
+  const v = PDF_VERSIONS[state.vi];
+  let fi = state.fi + 1, vi = state.vi;
+  if(fi >= v.count){ fi = 0; }
+  load(vi, fi, 1);
+}
+function prevPage(){
+  const npages = PDF_VERSIONS[state.vi].pages[state.fi];
+  state.page = state.page - 1 < 1 ? npages : state.page - 1;
+  renderFrame();
+}
+function nextPage(){
+  const npages = PDF_VERSIONS[state.vi].pages[state.fi];
+  state.page = state.page + 1 > npages ? 1 : state.page + 1;
+  renderFrame();
+}
+function gotoPage(){
+  const npages = PDF_VERSIONS[state.vi].pages[state.fi];
+  const inp = $('page-input');
+  let p = parseInt(inp && inp.value, 10);
+  if(isNaN(p)) p = state.page;
+  state.page = Math.min(Math.max(1, p), npages);
+  renderFrame();
+}
+function zoomIn(){ state.scale = Math.min(3, Math.round((state.scale+0.25)*100)/100); syncZoom(); syncHash(); }
+function zoomOut(){ state.scale = Math.max(0.5, Math.round((state.scale-0.25)*100)/100); syncZoom(); syncHash(); }
+function fitWidth(){ state.scale = 1; syncZoom(); syncHash(); }
+
+/* ---- URL 哈希恢复：#ed=<目录>&f=<册号>&p=<页>&z=<缩放> ---- */
 function bootFromHash(){
-  const h=location.hash.replace(/^#/,'');
-  const p=new URLSearchParams(h.replace(/&/g,'&'));
-  const ed=p.get('ed'); const f=+(p.get('f')||1);
-  const v=VERSIONS.find(x=>x.id===ed);
-  if(v){ load(v.id, Math.min(Math.max(1,f), v.count)); }
-  else{ load(VERSIONS[0].id, 1); }
+  const h = location.hash.replace(/^#/,'');
+  const p = new URLSearchParams(h.replace(/&/g,'&'));
+  const ed = p.get('ed');
+  const vi = PDF_VERSIONS.findIndex(x => x.dir === ed);
+  const vI = vi >= 0 ? vi : 0;
+  const v = PDF_VERSIONS[vI];
+  let fi = (parseInt(p.get('f'),10) || 1) - 1;
+  fi = Math.min(Math.max(0, fi), v.count - 1);
+  const npages = v.pages[fi];
+  let page = parseInt(p.get('p'),10) || 1;
+  page = Math.min(Math.max(1, page), npages);
+  let z = parseFloat(p.get('z'));
+  if(!isNaN(z)) state.scale = Math.min(3, Math.max(0.5, z));
+  load(vI, fi, page);
 }
 
 bootFromHash();

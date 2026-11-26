@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三国演义深度本体论 · 本体规范</title>
+<link rel="stylesheet" href="./assets/style.css">
+<script src="./assets/tailwind.js"></script>
+<script src="./data/ontology-schema.js"></script>
+<style>
+/* ===== 本体落地页专属样式（不入 style.css） ===== */
+code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
+
+/* 头图 */
+.onto-hero { padding:26px 30px; margin-bottom:28px; }
+.onto-hero h1 { font-size:26px; font-weight:700; color:#3a1c00; line-height:1.4; }
+.onto-hero h1 .en { display:block; font-size:13px; color:#8b6914; font-weight:400; letter-spacing:1px; margin-top:2px; }
+.onto-hero .scope { color:#5a3a1a; font-size:14px; line-height:1.9; margin-top:10px; }
+
+/* 章节 */
+.sec { margin-bottom:40px; }
+.sec-h2 { display:flex; align-items:center; gap:10px; color:#3a1c00; font-size:20px; font-weight:700;
+  border-bottom:2px double #8b4513; padding-bottom:8px; margin-bottom:16px; }
+.sec-h2 .no { background:#8b0000; color:#fffdf5; width:28px; height:28px; border-radius:4px;
+  display:inline-flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.sec-h2 .sub { font-size:12px; color:#8b6914; font-weight:400; margin-left:auto; text-align:right; }
+
+/* 统计卡 */
+.stat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(165px,1fr)); gap:12px; }
+.stat-card { border:1px solid #c9b896; border-radius:6px; background:#fffdf5; padding:14px 16px; text-align:center; }
+.stat-card .num { font-size:30px; font-weight:700; color:#8b0000; line-height:1.2; }
+.stat-card .lbl { font-size:13px; color:#3a1c00; font-weight:600; margin-top:4px; }
+.stat-card .sub { font-size:11px; color:#8b6914; margin-top:4px; line-height:1.6; }
+
+/* 芯片 */
+.chip { display:inline-block; background:#f0e6d2; border:1px solid #c9b896; color:#5a3a1a;
+  border-radius:10px; padding:1px 9px; font-size:12px; margin:2px 3px 2px 0; }
+.chip i { font-style:normal; color:#8b6914; font-size:11px; }
+.chip-cell { background:#fffdf5; font-family:Consolas,monospace; }
+.chip-sm { font-size:11px; padding:0 7px; }
+
+/* 四轴卡片 */
+.axis-head { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:6px; }
+.axis-id { background:#8b0000; color:#fffdf5; border-radius:4px; padding:2px 8px; font-size:13px; font-weight:700; }
+.axis-head h3 { color:#3a1c00; font-size:17px; font-weight:700; margin:0; }
+.axis-en { font-size:12px; color:#8b6914; }
+.axis-desc { font-size:13px; color:#5a3a1a; line-height:1.8; margin-bottom:10px; }
+.axis-classes-n { font-size:12px; color:#8b0000; font-weight:600; margin-right:4px; }
+
+/* 七层阶梯 */
+.layer-wrap { display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap; }
+.layer-stage { flex:1; min-width:320px; perspective:1100px; }
+#layer-ladder { transform-style:preserve-3d; transition:transform .25s ease; }
+.layer-row { display:flex; gap:12px; align-items:center; background:#fffdf5;
+  border:1px solid #c9b896; border-left:6px solid #8b4513; border-radius:6px;
+  padding:10px 14px; margin-bottom:8px; cursor:pointer; transition:all .15s; }
+.layer-row:hover, .layer-row.active { border-color:#8b0000; border-left-color:#8b0000;
+  background:#faf3e4; box-shadow:0 4px 12px rgba(139,69,19,.15); }
+.layer-no { flex-shrink:0; background:#8b4513; color:#fffdf5; border-radius:4px;
+  padding:4px 9px; font-size:13px; font-weight:700; font-family:Consolas,monospace; }
+.layer-row:hover .layer-no, .layer-row.active .layer-no { background:#8b0000; }
+.layer-name { font-size:15px; font-weight:700; color:#3a1c00; white-space:nowrap; }
+.layer-name .en { font-size:11px; color:#8b6914; font-weight:400; margin-left:6px; }
+.layer-desc { font-size:12px; color:#5a3a1a; line-height:1.7; flex:1; min-width:120px; }
+.layer-cnt { flex-shrink:0; font-size:11px; color:#8b0000; background:#f0e6d2;
+  border:1px solid #c9b896; border-radius:10px; padding:2px 8px; }
+.layer-caption { text-align:center; color:#8b6914; font-size:13px; margin:10px 0 4px; }
+.layer-caption .arrow { color:#8b0000; font-size:18px; font-weight:700; }
+.layer-detail { width:330px; flex-shrink:0; position:sticky; top:84px;
+  border:1px solid #8b4513; border-radius:6px; background:#fffdf5; padding:18px 20px; }
+.layer-detail h4 { color:#8b0000; font-size:17px; font-weight:700; margin-bottom:2px; }
+.layer-detail .en { font-size:12px; color:#8b6914; display:block; margin-bottom:8px; }
+.layer-detail .desc { font-size:13px; color:#5a3a1a; line-height:1.9; margin-bottom:10px; }
+.layer-detail .hint { color:#8b6914; font-size:13px; line-height:1.9; }
+.layer-controls { display:flex; gap:18px; align-items:center; flex-wrap:wrap;
+  padding:10px 14px; border:1px solid #c9b896; border-radius:6px; background:#fffdf5; margin-bottom:12px; }
+.layer-controls label { font-size:13px; color:#5a3a1a; display:flex; align-items:center; gap:8px; }
+
+/* 28 格矩阵 */
+.matrix { border-collapse:collapse; width:100%; table-layout:fixed; }
+.matrix th, .matrix td { border:1px solid #c9b896; vertical-align:top; }
+.matrix thead th { background:#f0e6d2; color:#3a1c00; text-align:center; padding:8px 6px; font-size:13px; }
+.matrix .corner { background:#f5ead6; font-size:12px; color:#8b6914; }
+.matrix .th-en { display:block; font-size:10px; color:#8b6914; font-weight:400; margin-top:2px; }
+.matrix .rowhead { background:#f5ead6; text-align:center; width:112px; padding:6px; font-size:12px; color:#3a1c00; }
+.m-cell { padding:8px; font-size:12px; background:#fffdf5; cursor:help; line-height:1.7;
+  transition:background .15s; color:#5a3a1a; }
+.m-cell:hover, .m-cell:focus { background:#faf3e4; outline:2px solid #8b0000; outline-offset:-2px; }
+.m-cell.primary { background:#3a1c00; color:#fffdf5; font-weight:700; }
+.m-cell.primary:hover, .m-cell.primary:focus { background:#552900; }
+.m-cell.na { background:#faf6ec; color:#b09a6d; font-style:italic; }
+.m-flag { margin-top:5px; font-size:10px; color:#f0c97a; letter-spacing:2px; font-weight:700; }
+.m-classes { margin-top:5px; }
+.m-cell.primary .m-classes .chip { background:rgba(255,253,245,.14); border-color:rgba(255,253,245,.38); color:#f5ead6; }
+#m-tip { position:fixed; z-index:200; max-width:380px; background:#3a1c00; color:#fffdf5;
+  border:1px solid #8b4513; border-radius:6px; padding:10px 14px; font-size:12px; line-height:1.9;
+  pointer-events:none; display:none; box-shadow:0 6px 20px rgba(0,0,0,.35); }
+#m-tip b { color:#f0c97a; }
+
+/* 类体系 */
+.cls-group { margin-bottom:22px; }
+.cls-group h3 { color:#3a1c00; font-size:16px; font-weight:700; margin-bottom:8px; }
+.cls-group h3 .cnt { font-size:12px; color:#8b0000; background:#f0e6d2; border:1px solid #c9b896;
+  border-radius:10px; padding:1px 10px; margin-left:8px; font-weight:600; }
+.cls-group td.est { font-weight:700; color:#8b0000; text-align:right; white-space:nowrap; }
+.cls-group code { font-size:12px; }
+
+/* 核心关系 */
+.rel-featured-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; margin-bottom:22px; }
+.rel-card { border:1px solid #c9b896; border-top:3px solid #8b0000; border-radius:6px; background:#fffdf5; padding:16px 18px; }
+.rel-card h4 { color:#8b0000; font-size:16px; font-weight:700; display:inline-block; margin-right:8px; }
+.rel-card .rel-id { font-family:Consolas,monospace; font-size:12px; color:#8b6914; }
+.rel-card .rel-flow { font-family:Consolas,monospace; font-size:13px; background:#f5f0e6;
+  padding:3px 10px; border-radius:4px; display:inline-block; margin:8px 0; color:#3a1c00; }
+.rel-card .rel-def { font-size:13px; color:#5a3a1a; line-height:1.8; }
+.rel-group-title { font-size:15px; font-weight:700; color:#3a1c00; margin:16px 0 8px; }
+.rel-group-title .cnt { font-size:12px; color:#8b0000; background:#f0e6d2; border:1px solid #c9b896;
+  border-radius:10px; padding:1px 10px; margin-left:8px; font-weight:600; }
+.rel-list { columns:2; column-gap:28px; }
+.rel-item { break-inside:avoid; padding:6px 0; border-bottom:1px dashed #e0d3b4; font-size:13px; color:#5a3a1a; }
+.rel-item .name { font-weight:700; color:#3a1c00; }
+.rel-item .pid { font-family:Consolas,monospace; font-size:11px; color:#8b6914; }
+.rel-item .flow { font-family:Consolas,monospace; font-size:12px; color:#8b0000; }
+
+/* 版本系统投影 */
+.proj-card .proj-sec { margin-top:10px; font-size:12px; color:#5a3a1a; line-height:2; }
+.proj-card .proj-sec b { color:#3a1c00; }
+
+/* 能力问题 */
+.cq-item { display:flex; gap:14px; padding:13px 0; border-bottom:1px dashed #c9b896; }
+.cq-no { flex-shrink:0; width:36px; height:36px; border-radius:50%; background:#8b0000; color:#fffdf5;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; }
+.cq-q { font-size:15px; color:#3a1c00; font-weight:600; line-height:1.9; }
+.cq-hint { font-size:12px; color:#8b6914; margin-top:3px; line-height:1.8; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="topnav-brand" href="index.html">三国演义深度本体论</a>
+    <span class="topnav-sub">OWL · 公版结论 · 虚实有据</span>
+    <div class="topnav-links">
+      <a href="index.html">导论·总览</a>
+      <a href="read.html">版本阅读</a>
+      <a href="graph.html">本体图谱</a>
+      <a href="ontology.html" class="active">本体</a>
+      <a href="research.html">学术研究</a>
+      <a href="topics.html">专题深研</a>
+    </div>
+  </div>
+</nav>
+
+<main class="main-container">
+
+  <header class="onto-hero ancient-border" id="onto-hero"></header>
+
+  <section class="sec" id="sec-stats">
+    <h2 class="sec-h2"><span class="no">一</span>统计总览<span class="sub">全部数字由 ontology-schema.js 实时聚合</span></h2>
+    <div class="stat-grid" id="stat-grid"></div>
+  </section>
+
+  <section class="sec" id="sec-axes">
+    <h2 class="sec-h2"><span class="no">二</span>四轴 · 横向分类维度<span class="sub">回答互不重叠的四类问题</span></h2>
+    <div class="card-grid" id="axes-grid"></div>
+  </section>
+
+  <section class="sec" id="sec-layers">
+    <h2 class="sec-h2"><span class="no">三</span>七层 · 纵向抽象阶梯<span class="sub">上层统摄下层 · 悬停/点击查看层详情</span></h2>
+    <div class="layer-controls">
+      <label>旋转 <input type="range" id="lg-rotate" min="-24" max="24" value="0" step="1"> <span id="lg-rotate-val">0°</span></label>
+      <label>缩放 <input type="range" id="lg-scale" min="80" max="120" value="100" step="1"> <span id="lg-scale-val">100%</span></label>
+      <button class="btn btn-sm" id="lg-reset" type="button">复位</button>
+    </div>
+    <div class="layer-wrap">
+      <div class="layer-stage">
+        <div id="layer-ladder"></div>
+        <div class="layer-caption"><span class="arrow">↑</span> 上层统摄下层：高位层统摄其下各层的判词、谱系与文献</div>
+      </div>
+      <aside class="layer-detail" id="layer-detail"></aside>
+    </div>
+  </section>
+
+  <section class="sec" id="sec-matrix">
+    <h2 class="sec-h2"><span class="no">四</span>28 格正交矩阵（轴 × 层）<span class="sub">深色为主承载格 · 悬停查看格详情</span></h2>
+    <div id="matrix-wrap"></div>
+  </section>
+
+  <section class="sec" id="sec-classes">
+    <h2 class="sec-h2"><span class="no">五</span>类体系（按轴分组）<span class="sub">id · 中文名 · 所属层 · 估算实例数 · 定义</span></h2>
+    <div id="classes-wrap"></div>
+  </section>
+
+  <section class="sec" id="sec-relations">
+    <h2 class="sec-h2"><span class="no">六</span>核心关系（Properties）<span class="sub">对象属性 / 数据属性 · domain → range</span></h2>
+    <div class="rel-featured-grid" id="rel-featured"></div>
+    <div class="rel-group-title">对象属性（Object Properties）<span class="cnt" id="rel-obj-cnt"></span></div>
+    <div class="rel-list" id="rel-objects"></div>
+    <div class="rel-group-title">数据属性（Data Properties）<span class="cnt" id="rel-data-cnt"></span></div>
+    <div class="rel-list" id="rel-data"></div>
+  </section>
+
+  <section class="sec" id="sec-projections">
+    <h2 class="sec-h2"><span class="no">七</span>版本系统投影（Projections）<span class="sub">六系统对 28 格矩阵的覆盖</span></h2>
+    <div class="card-grid" id="proj-grid"></div>
+  </section>
+
+  <section class="sec" id="sec-cq">
+    <h2 class="sec-h2"><span class="no">八</span>能力问题（Competency Questions）<span class="sub">本体必须能够回答的问题</span></h2>
+    <div id="cq-list"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  纯静态站 · GitHub Pages 托管 · 以本库 19 种古本为文献基础 · 虚实皆有依据
+</footer>
+
+<div id="m-tip"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  const O = (typeof SANGUO_ONTOLOGY !== 'undefined') ? SANGUO_ONTOLOGY : window.SANGUO_ONTOLOGY;
+
+  /* 转义（本页自带，不依赖 app.js） */
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function layersSorted(){ return (O.layers||[]).slice().sort((a,b)=>(a.order-b.order)); }
+  function classesAt(axisId, layerId){
+    return (O.classes||[]).filter(c=>c.axis===axisId && c.layer===layerId);
+  }
+  function layerLabel(layerId){
+    const l = (O.layers||[]).find(x=>x.id===layerId);
+    return l ? l.label : '';
+  }
+
+  /* ---------- 头图（meta） ---------- */
+  function renderHero(){
+    const m = O.meta||{};
+    document.getElementById('onto-hero').innerHTML = `
+      <h1>${esc(m.title||'《三国演义》深度本体论')}<span class="en">${esc(m.subtitle||'')}</span></h1>
+      <div style="margin-top:10px">
+        <span class="chip">Schema v${esc(m.version||'')}</span>
+        <span class="chip">更新 ${esc(m.updated||'')}</span>
+        <span class="chip">${esc(m.architecture||'')}</span>
+        <span class="chip">${esc(m.formalism||'')}</span>
+      </div>
+      <p class="scope">${esc(m.scope||'')}</p>
+      <p class="scope">命名空间：<code>${esc(m.iri||'')}</code> · 前缀 <code>${esc(m.prefix||'')}</code></p>`;
+  }
+
+  /* ---------- 一、统计卡（全部由数据聚合） ---------- */
+  function renderStats(){
+    const props = O.properties||[];
+    const vocabs = O.vocabularies||{};
+    const objN = props.filter(p=>p.type==='object').length;
+    const dataN = props.filter(p=>p.type==='data').length;
+    const primaryN = (O.matrix||[]).filter(m=>m.primary).length;
+    const stats = [
+      { num:(O.axes||[]).length,               lbl:'轴 Axes',              sub:'横向分类维度' },
+      { num:(O.layers||[]).length,             lbl:'层 Layers',            sub:'纵向抽象阶梯' },
+      { num:(O.classes||[]).length,            lbl:'类 Classes',           sub:'均带 axis × layer 坐标' },
+      { num:props.length,                      lbl:'属性 Properties',      sub:`对象 ${objN} · 数据 ${dataN}` },
+      { num:(O.matrix||[]).length,             lbl:'矩阵格 Matrix Cells',  sub:`主承载格 ${primaryN}` },
+      { num:(O.projections||[]).length,        lbl:'版本系统 Projections', sub:'投影覆盖矩阵格' },
+      { num:Object.keys(vocabs).length,        lbl:'受控词表 Vocabularies',sub:'SKOS 受控词表组' },
+      { num:(O.competencyQuestions||[]).length,lbl:'能力问题 CQ',          sub:'Competency Questions' }
+    ];
+    document.getElementById('stat-grid').innerHTML = stats.map(s=>`
+      <div class="stat-card">
+        <div class="num">${s.num}</div>
+        <div class="lbl">${esc(s.lbl)}</div>
+        <div class="sub">${esc(s.sub)}</div>
+      </div>`).join('');
+  }
+
+  /* ---------- 二、四轴卡片 ---------- */
+  function renderAxes(){
+    document.getElementById('axes-grid').innerHTML = (O.axes||[]).map(ax=>{
+      const list = (O.classes||[]).filter(c=>c.axis===ax.id)
+        .sort((a,b)=>a.layer===b.layer ? (a.id>b.id?1:-1) : (a.layer>b.layer?1:-1));
+      return `
+      <div class="card axis-card">
+        <div class="axis-head">
+          <span class="axis-id">${esc(ax.id)}</span>
+          <h3>${esc(ax.label)}</h3>
+          <span class="axis-en">${esc(ax.en||'')}</span>
+        </div>
+        <p class="axis-desc">${esc(ax.desc||'')}</p>
+        <div>
+          <span class="axis-classes-n">所辖类 ${list.length}：</span>
+          ${list.map(c=>`<span class="chip" title="${esc(c.def||'')}">${esc(c.label)} <i>${esc(c.id)}</i></span>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ---------- 三、七层纵向阶梯（可旋转/缩放/悬停） ---------- */
+  function renderLayers(){
+    const ls = layersSorted();
+    document.getElementById('layer-ladder').innerHTML = ls.map((l,i)=>{
+      const n = (O.classes||[]).filter(c=>c.layer===l.id).length;
+      return `
+      <div class="layer-row" data-layer="${esc(l.id)}" tabindex="0" style="margin-left:${i*14}px">
+        <span class="layer-no">${esc(l.id)}</span>
+        <div>
+          <div class="layer-name">${esc(l.label)}<span class="en">${esc(l.en||'')}</span></div>
+        </div>
+        <div class="layer-desc">${esc(l.desc||'')}</div>
+        <span class="layer-cnt">该层类 ${n}</span>
+      </div>`;
+    }).join('');
+    showLayerDetail(ls.length ? ls[0].id : null, null);
+  }
+
+  function showLayerDetail(layerId, rowEl){
+    const box = document.getElementById('layer-detail');
+    if(!layerId){ box.innerHTML = '<p class="hint">悬停左侧阶梯查看该层详情。</p>'; return; }
+    const l = (O.layers||[]).find(x=>x.id===layerId);
+    if(!l){ box.innerHTML = '<p class="hint">未找到该层。</p>'; return; }
+    const list = (O.classes||[]).filter(c=>c.layer===l.id);
+    const lower = layersSorted().filter(x=>x.order>l.order);
+    box.innerHTML = `
+      <h4>${esc(l.id)} · ${esc(l.label)}</h4>
+      <span class="en">${esc(l.en||'')}</span>
+      <p class="desc">${esc(l.desc||'')}</p>
+      <div style="margin-bottom:10px">
+        <span class="axis-classes-n">该层类 ${list.length}：</span>
+        ${list.length ? list.map(c=>`<span class="chip">${esc(c.label)} <i>${esc(c.id)}</i></span>`).join('') : '<span class="chip">—</span>'}
+      </div>
+      <p class="hint">统摄关系：本层（${esc(l.id)}）统摄其下 ${lower.length} 层${lower.length?'（'+esc(lower.map(x=>x.id).join('、'))+'）':''}；上层定义下层的判读坐标。</p>`;
+    document.querySelectorAll('.layer-row').forEach(r=>r.classList.toggle('active', rowEl ? r===rowEl : r.dataset.layer===layerId));
+  }
+
+  function bindLayerInteractions(){
+    const list = document.getElementById('layer-ladder');
+    list.addEventListener('mouseover', e=>{
+      const row = e.target.closest('.layer-row');
+      if(row) showLayerDetail(row.dataset.layer, row);
+    });
+    list.addEventListener('focusin', e=>{
+      const row = e.target.closest('.layer-row');
+      if(row) showLayerDetail(row.dataset.layer, row);
+    });
+    list.addEventListener('click', e=>{
+      const row = e.target.closest('.layer-row');
+      if(row) showLayerDetail(row.dataset.layer, row);
+    });
+
+    const rot = document.getElementById('lg-rotate');
+    const sca = document.getElementById('lg-scale');
+    const ladder = document.getElementById('layer-ladder');
+    function apply(){
+      const r = parseFloat(rot.value), s = parseFloat(sca.value)/100;
+      ladder.style.transform = `rotateX(${r}deg) scale(${s})`;
+      document.getElementById('lg-rotate-val').textContent = r + '°';
+      document.getElementById('lg-scale-val').textContent = sca.value + '%';
+    }
+    rot.addEventListener('input', apply);
+    sca.addEventListener('input', apply);
+    document.getElementById('lg-reset').addEventListener('click', ()=>{
+      rot.value = 0; sca.value = 100; apply();
+    });
+    apply();
+  }
+
+  /* ---------- 四、28 格正交矩阵 ---------- */
+  function renderMatrix(){
+    const ls = layersSorted();
+    const ax = O.axes||[];
+    let html = `<table class="matrix"><thead><tr><th class="corner">轴 ＼ 层</th>`;
+    ax.forEach(a=>{
+      html += `<th>${esc(a.id)} ${esc(a.label)}<span class="th-en">${esc(a.en||'')}</span></th>`;
+    });
+    html += `</tr></thead><tbody>`;
+    ls.forEach(l=>{
+      html += `<tr><th class="rowhead">${esc(l.id)} ${esc(l.label)}<span class="th-en">${esc(l.en||'')}</span></th>`;
+      ax.forEach(a=>{
+        const m = (O.matrix||[]).find(x=>x.axis===a.id && x.layer===l.id) || {};
+        const cls = classesAt(a.id, l.id);
+        const concept = m.concept || '（数据未定义）';
+        const na = String(concept).startsWith('—');
+        html += `<td class="m-cell ${m.primary?'primary':''} ${na?'na':''}" data-axis="${esc(a.id)}" data-layer="${esc(l.id)}" tabindex="0">
+          <div class="m-concept">${esc(concept)}</div>
+          ${cls.length ? `<div class="m-classes">${cls.map(c=>`<span class="chip chip-sm">${esc(c.id)}</span>`).join('')}</div>` : ''}
+          ${m.primary ? '<div class="m-flag">主承载格</div>' : ''}
+        </td>`;
+      });
+      html += `</tr>`;
+    });
+    html += `</tbody></table>`;
+    document.getElementById('matrix-wrap').innerHTML = html;
+  }
+
+  function bindMatrixTip(){
+    const wrap = document.getElementById('matrix-wrap');
+    const tip = document.getElementById('m-tip');
+
+    function tipHTML(cell){
+      const aId = cell.dataset.axis, lId = cell.dataset.layer;
+      const a = (O.axes||[]).find(x=>x.id===aId) || {};
+      const l = (O.layers||[]).find(x=>x.id===lId) || {};
+      const m = (O.matrix||[]).find(x=>x.axis===aId && x.layer===lId) || {};
+      const cls = classesAt(aId, lId);
+      return `<b>${esc(aId)} × ${esc(lId)}</b>　${esc(a.label||'')} × ${esc(l.label||'')}
+        <div style="margin:4px 0">${esc(m.concept||'（数据未定义）')}</div>
+        <div>主承载格：${m.primary ? '是' : '否'}</div>
+        <div>坐标内类 ${cls.length}${cls.length ? '：' + cls.map(c=>esc(c.label)+'('+esc(c.id)+','+esc(c.estCount!=null?c.estCount:'—')+'例)').join('、') : ''}</div>`;
+    }
+    function move(e){
+      const pad = 16;
+      let x = e.clientX + pad, y = e.clientY + pad;
+      const r = tip.getBoundingClientRect();
+      if(x + r.width > window.innerWidth - 8) x = e.clientX - r.width - pad;
+      if(y + r.height > window.innerHeight - 8) y = e.clientY - r.height - pad;
+      tip.style.left = x + 'px'; tip.style.top = y + 'px';
+    }
+    wrap.addEventListener('mouseover', e=>{
+      const cell = e.target.closest('.m-cell');
+      if(!cell) return;
+      tip.innerHTML = tipHTML(cell);
+      tip.style.display = 'block';
+      move(e);
+    });
+    wrap.addEventListener('mousemove', e=>{ if(tip.style.display==='block') move(e); });
+    wrap.addEventListener('mouseout', e=>{
+      const cell = e.target.closest('.m-cell');
+      const to = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest('.m-cell') : null;
+      if(cell && !to) tip.style.display = 'none';
+    });
+    wrap.addEventListener('focusin', e=>{
+      const cell = e.target.closest('.m-cell');
+      if(!cell) return;
+      tip.innerHTML = tipHTML(cell);
+      tip.style.display = 'block';
+      const r = cell.getBoundingClientRect();
+      tip.style.left = Math.min(r.left, window.innerWidth - 400) + 'px';
+      tip.style.top = (r.bottom + 8) + 'px';
+    });
+    wrap.addEventListener('focusout', ()=>{ tip.style.display = 'none'; });
+  }
+
+  /* ---------- 五、类体系（按轴分组） ---------- */
+  function renderClasses(){
+    const groups = (O.axes||[]).map(ax=>({ id:ax.id, label:ax.label, en:ax.en,
+      list:(O.classes||[]).filter(c=>c.axis===ax.id) }));
+    const grouped = new Set((O.axes||[]).map(a=>a.id));
+    const rest = (O.classes||[]).filter(c=>!grouped.has(c.axis));
+    if(rest.length) groups.push({ id:'—', label:'未归轴类', en:'', list:rest });
+
+    document.getElementById('classes-wrap').innerHTML = groups.map(g=>{
+      const list = g.list.slice().sort((a,b)=>a.layer===b.layer ? (a.id>b.id?1:-1) : (a.layer>b.layer?1:-1));
+      return `
+      <div class="cls-group">
+        <h3>${esc(g.id)} ${esc(g.label)}<span class="cnt">${list.length} 类</span></h3>
+        <table>
+          <thead><tr><th style="width:150px">类 id</th><th style="width:140px">中文名</th>
+            <th style="width:150px">所属层</th><th style="width:100px">估算实例数</th><th>定义</th></tr></thead>
+          <tbody>
+            ${list.map(c=>`<tr>
+              <td><code>${esc(c.id)}</code></td>
+              <td class="font-bold">${esc(c.label)}</td>
+              <td><span class="chip">${esc(c.layer)} ${esc(layerLabel(c.layer))}</span></td>
+              <td class="est">${c.estCount!=null ? esc(c.estCount) : '—'}</td>
+              <td>${esc(c.def||'')}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+    }).join('');
+  }
+
+  /* ---------- 六、核心关系 ---------- */
+  /* 重点关系 id（编辑部遴选；渲染内容全部来自数据） */
+  const KEY_REL_IDS = ['derivedFrom','mapsTo','derivesFrom','appearsIn','judgedBy',
+                       'annotatedBy','participatesIn','narrates','symbolizes','about'];
+
+  function renderRelations(){
+    const props = O.properties||[];
+    const flow = p => `${p.domain||'*'} → ${p.range||'—'}`;
+
+    document.getElementById('rel-featured').innerHTML = KEY_REL_IDS.map(id=>{
+      const p = props.find(x=>x.id===id);
+      if(!p) return '';
+      return `
+      <div class="rel-card">
+        <h4>${esc(p.label)}</h4><span class="rel-id">${esc(p.id)}</span>
+        <div><span class="rel-flow">${esc(flow(p))}</span></div>
+        ${p.def ? `<p class="rel-def">${esc(p.def)}</p>` : ''}
+      </div>`;
+    }).join('');
+
+    const objs = props.filter(p=>p.type==='object');
+    const datas = props.filter(p=>p.type==='data');
+    function rows(list){
+      return list.map(p=>`
+        <div class="rel-item">
+          <span class="name">${esc(p.label)}</span>
+          <span class="pid">${esc(p.id)}</span>
+          <span class="flow">${esc(flow(p))}</span>
+        </div>`).join('');
+    }
+    document.getElementById('rel-obj-cnt').textContent = objs.length;
+    document.getElementById('rel-data-cnt').textContent = datas.length;
+    document.getElementById('rel-objects').innerHTML = rows(objs);
+    document.getElementById('rel-data').innerHTML = rows(datas);
+  }
+
+  /* ---------- 七、版本系统投影 ---------- */
+  function renderProjections(){
+    document.getElementById('proj-grid').innerHTML = (O.projections||[]).map(p=>`
+      <div class="card proj-card">
+        <div class="axis-head">
+          <h3>${esc(p.label)}</h3><span class="axis-en">${esc(p.en||'')}</span>
+        </div>
+        <p class="axis-desc">${esc(p.desc||'')}</p>
+        <div class="proj-sec"><b>所辖版本 editions：</b><br>
+          ${(p.editions||[]).map(e=>`<span class="chip">${esc(e)}</span>`).join('')}
+        </div>
+        <div class="proj-sec"><b>覆盖格 cells ${ (p.cells||[]).length }：</b><br>
+          ${(p.cells||[]).map(c=>`<span class="chip chip-cell">${esc(c.axis)}×${esc(c.layer)}</span>`).join('')}
+        </div>
+      </div>`).join('');
+  }
+
+  /* ---------- 八、能力问题 ---------- */
+  function renderCQ(){
+    document.getElementById('cq-list').innerHTML = (O.competencyQuestions||[]).map((q,i)=>{
+      const s = String(q);
+      const m = s.match(/^(.*？)\s*（(.*)）\s*$/);
+      const main = m ? m[1] : s;
+      const hint = m ? m[2] : '';
+      return `
+      <div class="cq-item">
+        <div class="cq-no">${i+1}</div>
+        <div>
+          <div class="cq-q">${esc(main)}</div>
+          ${hint ? `<div class="cq-hint">涉及：${esc(hint)}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ---------- 总渲染 ---------- */
+  function renderAll(){
+    renderHero();
+    renderStats();
+    renderAxes();
+    renderLayers();
+    renderMatrix();
+    renderClasses();
+    renderRelations();
+    renderProjections();
+    renderCQ();
+  }
+
+  window.ontoRender = renderAll;
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    renderAll();
+    bindLayerInteractions();
+    bindMatrixTip();
+  });
+})();
+</script>
+
+</body>
+</html>

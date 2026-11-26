@@ -270,7 +270,7 @@
       { id: "h-034", chapter: 120, plot: "三分归一",
         history: "西晋代魏、吴亡，三国归晋为史实。",
         status: "fact", note: "正史所载。" },
-      { id: "h-035", chapter: 首回, plot: "董卓进京、汉灵帝驾崩",
+      { id: "h-035", chapter: "首回", plot: "董卓进京、汉灵帝驾崩",
         history: "基本情节属实。",
         status: "fact", note: "史实。" },
       { id: "h-036", chapter: 20, plot: "吕布辕门射戟",

@@ -4,133 +4,1935 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix schema: <http://schema.org/> .
 
 ################################################################
-# 三國演義本體論 · Romance of the Three Kingdoms Ontology
-# 由 data/sanguo-data.js + data/sanguo-topics.js + data/corpus-manifest.js 生成
-# 生成日期：2026-11-22
+# 《三国演义》深度本体论 · Schema v3.0
+# 4 轴 × 7 层 × N 实例（正交本体）
+# 本文件由 .build/gen_ttl.js 从 docs/data/ontology-schema.js 自动生成，
+# 请勿手工编辑；修改请改规范文件后重新生成。
+# 生成日期：2026-11-26
 ################################################################
 
 <https://example.org/sanguo>
     a owl:Ontology ;
-    rdfs:label "三國演義本體論"@zh ;
-    rdfs:comment "以 OWL 2 DL 描述《三國演義》的人物、勢力、地理、戰役、事件、計謀、器物、詩詞、讖緯、評點、版本與異文；每條實例盡量掛接回目出處。"@zh .
+    schema:dateModified "2026-11-26" ;
+    rdfs:label "《三国演义》深度本体论"@zh ;
+    rdfs:comment "以本库 19 种古本/评本/史书语料（约 640 万字）为底，覆盖 120 回叙事、200+ 人物、66 地理、36 战役、4 家评点、13+ 虚实对照。"@zh .
 
 ################################
-# 一、類（Class）
+# 〇、四轴（Axes）
 ################################
-sg:Person a owl:Class ; rdfs:label "人物"@zh .
-sg:Faction a owl:Class ; rdfs:label "勢力"@zh .
-sg:Place a owl:Class ; rdfs:label "地理"@zh .
-sg:Battle a owl:Class ; rdfs:subClassOf sg:Event ; rdfs:label "戰役"@zh .
-sg:Event a owl:Class ; rdfs:label "事件"@zh .
-sg:Stratagem a owl:Class ; rdfs:label "計謀"@zh .
-sg:Artifact a owl:Class ; rdfs:label "器物"@zh .
-sg:Prophecy a owl:Class ; rdfs:label "讖緯"@zh .
-sg:Poem a owl:Class ; rdfs:label "詩詞"@zh .
-sg:Edition a owl:Class ; rdfs:label "版本"@zh .
-sg:Chapter a owl:Class ; rdfs:label "回目"@zh .
-sg:VariantReading a owl:Class ; rdfs:label "異文"@zh .
-sg:Commentary a owl:Class ; rdfs:label "評點"@zh .
-sg:Critic a owl:Class ; rdfs:label "評點家"@zh .
-sg:OfficialTitle a owl:Class ; rdfs:label "官職"@zh .
-sg:Polity a owl:Class ; rdfs:label "政權"@zh .
-sg:Genealogy a owl:Class ; rdfs:label "世系"@zh .
-sg:Adaptation a owl:Class ; rdfs:label "衍生作品"@zh .
-sg:EditionGap a owl:Class ; rdfs:label "版本缺口"@zh .
-sg:Lord a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "君主"@zh .
-sg:Minister a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "臣屬"@zh .
-sg:General a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "武將"@zh .
-sg:Strategist a owl:Class ; rdfs:subClassOf sg:Person ; rdfs:label "謀士"@zh .
-sg:City a owl:Class ; rdfs:subClassOf sg:Place ; rdfs:label "城邑"@zh .
-sg:Pass a owl:Class ; rdfs:subClassOf sg:Place ; rdfs:label "關隘"@zh .
-sg:Battlefield a owl:Class ; rdfs:subClassOf sg:Place ; rdfs:label "戰場"@zh .
+sg:Axis_A1 a owl:Class, skos:Concept ;
+    rdfs:label "版本形制轴"@zh ;
+    rdfs:comment "回答\"哪本书、哪一制、哪一版\"：演义系统/志传系统/评本/汇评/平话/史书注 → 单元形制（回/则/卷/卷·则）→ 刊本 → 刊刻者与藏地。"@zh ;
+    sg:axisId "A1" ;
+    sg:axisEn "Edition Axis" ;
+    rdfs:seeAlso sg:Edition , sg:Unit , sg:UnitMapping , sg:Paratext , sg:VariantReading , sg:EditionGap , sg:PrintingWork .
+
+sg:Axis_A2 a owl:Class, skos:Concept ;
+    rdfs:label "叙事内容轴"@zh ;
+    rdfs:comment "回答\"写什么、怎么写、以何意趣\"：义理（义·忠·智·勇·天命）→ 论断范畴 → 意象 → 文体范畴 → 技法（伏笔、草蛇灰线、虚实相生）→ 章法 → 句/字/韵。"@zh ;
+    sg:axisId "A2" ;
+    sg:axisEn "Narrative Axis" ;
+    rdfs:seeAlso sg:DoctrineConcept , sg:AssertionCategory , sg:Imagery , sg:StyleCategory , sg:NarrativeTechnique , sg:ChapterCraft , sg:TextualSpan , sg:Prophecy , sg:Poem , sg:HistoricalAssessment .
+
+sg:Axis_A3 a owl:Class, skos:Concept ;
+    rdfs:label "人物传承轴"@zh ;
+    rdfs:comment "回答\"谁、谁属谁、谁评\"：圣贤化人物 → 君主/宗臣 → 名将/谋士 → 幕僚/文士 → 评点家·注家 → 演义/评书再叙述者。"@zh ;
+    sg:axisId "A3" ;
+    sg:axisEn "Figure Axis" ;
+    rdfs:seeAlso sg:Person , sg:Critic , sg:Annotator , sg:Reteller , sg:Genealogy , sg:OfficialTitle .
+
+sg:Axis_A4 a owl:Class, skos:Concept ;
+    rdfs:label "时代事件轴"@zh ;
+    rdfs:comment "回答\"何时、何缘、何背景\"：朝代（汉末→三国→西晋）→ 政局/党争/结社 → 交游/师承 → 创作·成书·刊刻·流传。"@zh ;
+    sg:axisId "A4" ;
+    sg:axisEn "Era Axis" ;
+    rdfs:seeAlso sg:Polity , sg:Faction , sg:Dynasty , sg:Event , sg:Battle , sg:Stratagem , sg:Place , sg:PoliticalSituation , sg:HistoricalEvent , sg:ChronologyLayer .
 
 ################################
-# 二、對象屬性（Object Property）
+# 一、七层（Layers）
 ################################
-sg:lordOf a owl:ObjectProperty ; rdfs:label "君臨"@zh .
-sg:vassalOf a owl:ObjectProperty ; owl:inverseOf sg:lordOf ; rdfs:label "臣屬"@zh .
-sg:memberOf a owl:ObjectProperty ; rdfs:label "隸屬勢力"@zh .
-sg:parentOf a owl:ObjectProperty ; rdfs:label "父"@zh .
-sg:childOf a owl:ObjectProperty ; owl:inverseOf sg:parentOf ; rdfs:label "子"@zh .
-sg:siblingOf a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "兄弟 / 姊妹"@zh .
-sg:spouseOf a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "夫妻"@zh .
-sg:swornBrotherOf a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "結義"@zh .
-sg:mentorOf a owl:ObjectProperty ; rdfs:label "師"@zh .
-sg:discipleOf a owl:ObjectProperty ; owl:inverseOf sg:mentorOf ; rdfs:label "徒"@zh .
-sg:foughtIn a owl:ObjectProperty ; rdfs:label "參戰"@zh .
-sg:partiesIn a owl:ObjectProperty ; rdfs:label "參與方"@zh .
-sg:occursAt a owl:ObjectProperty ; rdfs:label "發生於"@zh .
-sg:usesStratagem a owl:ObjectProperty ; rdfs:label "用計"@zh .
-sg:usedBy a owl:ObjectProperty ; rdfs:label "使用者"@zh .
-sg:targetedBy a owl:ObjectProperty ; rdfs:label "計謀所向"@zh .
-sg:usesArtifact a owl:ObjectProperty ; rdfs:label "持用器物"@zh .
-sg:owner a owl:ObjectProperty ; rdfs:label "持有者"@zh .
-sg:kills a owl:ObjectProperty ; rdfs:label "殺 / 斬"@zh .
-sg:killedBy a owl:ObjectProperty ; owl:inverseOf sg:kills ; rdfs:label "被殺"@zh .
-sg:successorOf a owl:ObjectProperty ; rdfs:label "繼承"@zh .
-sg:descendantOf a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:label "後裔"@zh .
-sg:alliesWith a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "結盟"@zh .
-sg:enemyOf a owl:ObjectProperty, owl:SymmetricProperty ; rdfs:label "為敵"@zh .
-sg:foretells a owl:ObjectProperty ; rdfs:label "預言"@zh .
-sg:fulfilledBy a owl:ObjectProperty ; rdfs:label "應驗"@zh .
-sg:derivedFrom a owl:ObjectProperty, owl:TransitiveProperty ; rdfs:label "衍生自"@zh .
-sg:hasVariant a owl:ObjectProperty ; rdfs:label "異文對應"@zh .
-sg:commentsOn a owl:ObjectProperty ; rdfs:label "評點"@zh .
-sg:hasCommentary a owl:ObjectProperty ; owl:inverseOf sg:commentsOn ; rdfs:label "有評"@zh .
-sg:wrote a owl:ObjectProperty ; rdfs:label "著述"@zh .
-sg:inChapter a owl:ObjectProperty ; rdfs:label "見於回目"@zh .
-sg:leader a owl:ObjectProperty ; rdfs:label "君主"@zh .
-sg:capital a owl:ObjectProperty ; rdfs:label "都城"@zh .
+sg:Layer_L0 a owl:Class, skos:Concept ;
+    rdfs:label "元模型层"@zh ;
+    rdfs:comment "本体的轴、层、粒度、横切维度自身的定义——回答\"这套坐标怎么成立\"。"@zh ;
+    sg:layerId "L0" ;
+    sg:layerOrder "0"^^xsd:integer ;
+    sg:layerEn "Meta" .
+
+sg:Layer_L1 a owl:Class, skos:Concept ;
+    rdfs:label "义理层"@zh ;
+    rdfs:comment "道·正统·天命·义·忠·智·勇——全书的最高义理坐标，统摄一切判词与评点。"@zh ;
+    sg:layerId "L1" ;
+    sg:layerOrder "1"^^xsd:integer ;
+    sg:layerEn "Doctrine" .
+
+sg:Layer_L2 a owl:Class, skos:Concept ;
+    rdfs:label "论断层"@zh ;
+    rdfs:comment "评点范畴与虚实判词：古人与学者的判断性表述（虚实四级、褒贬判词）。"@zh ;
+    sg:layerId "L2" ;
+    sg:layerOrder "2"^^xsd:integer ;
+    sg:layerEn "Judgement" .
+
+sg:Layer_L3 a owl:Class, skos:Concept ;
+    rdfs:label "谱系层"@zh ;
+    rdfs:comment "系统性的归属关系：版本系统谱系、势力与政权谱系、师承与交游。"@zh ;
+    sg:layerId "L3" ;
+    sg:layerOrder "3"^^xsd:integer ;
+    sg:layerEn "Genealogy" .
+
+sg:Layer_L4 a owl:Class, skos:Concept ;
+    rdfs:label "文献层"@zh ;
+    rdfs:comment "版本、文本单元、序跋凡例、异文、缺口——回答\"哪本书、哪一回、什么字\"。"@zh ;
+    sg:layerId "L4" ;
+    sg:layerOrder "4"^^xsd:integer ;
+    sg:layerEn "Textus" .
+
+sg:Layer_L5 a owl:Class, skos:Concept ;
+    rdfs:label "人物叙事层"@zh ;
+    rdfs:comment "人物、地理、战役、事件、计谋、器物、诗词、谶纬、官职、世系——回答\"谁、何时、何地、做了什么\"。"@zh ;
+    sg:layerId "L5" ;
+    sg:layerOrder "5"^^xsd:integer ;
+    sg:layerEn "Fabula" .
+
+sg:Layer_L6 a owl:Class, skos:Concept ;
+    rdfs:label "外延层"@zh ;
+    rdfs:comment "历史背景、正史对照、刊刻出版、地理空间、后世接受——本书与外部世界的连接面。"@zh ;
+    sg:layerId "L6" ;
+    sg:layerOrder "6"^^xsd:integer ;
+    sg:layerEn "Extension" .
 
 ################################
-# 三、數據屬性（Datatype Property）
+# 二、类（Classes，41）
 ################################
-sg:surname a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:givenName a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:styleName a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:sobriquet a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:birthYear a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:deathYear a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:nativePlace a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:title a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:posthumousName a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:referenceCount a owl:DatatypeProperty ; rdfs:range xsd:integer .
-sg:compositionYear a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:storyYear a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:charCount a owl:DatatypeProperty ; rdfs:range xsd:integer .
-sg:troopStrength a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:outcome a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:modernName a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:coordinates a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:prophecyText a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:titleText a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:contentText a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:chapterNumber a owl:DatatypeProperty ; rdfs:range xsd:integer .
-sg:placeName a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:virtual a owl:DatatypeProperty ; rdfs:range xsd:boolean .
-sg:description a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:artifactType a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:poemType a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:authorName a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:prophet a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:fulfilledByText a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:commenter a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:commentText a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:editionSystem a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:editionUnits a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:editionStatus a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:holdingForm a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:gapNote a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:acquisitionPath a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:capitalName a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:period a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:placeLevel a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:userName a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:targetName a owl:DatatypeProperty ; rdfs:range xsd:string .
-sg:ownerName a owl:DatatypeProperty ; rdfs:range xsd:string .
+sg:Edition a owl:Class ;
+    rdfs:label "版本/刊本"@zh ;
+    rdfs:comment "一种独立刊刻或整理的《三国演义》相关文本实体。"@zh ;
+    sg:axis sg:Axis_A1 ;
+    sg:layer sg:Layer_L4 ;
+    sg:axisId "A1" ;
+    sg:layerId "L4" ;
+    sg:estCount "19"^^xsd:integer .
+  /* 例：嘉靖壬午本 / 毛宗岗评本 / 余象斗刊本 */
 
+sg:Unit a owl:Class ;
+    rdfs:label "文本单元（回/则/卷）"@zh ;
+    rdfs:comment "版本内部的叙事切分单位。不同版本单元数不同（120 回 / 240 则 / 180 则），通过 UnitMapping 互相对齐。"@zh ;
+    sg:axis sg:Axis_A1 ;
+    sg:layer sg:Layer_L4 ;
+    sg:axisId "A1" ;
+    sg:layerId "L4" ;
+    sg:estCount "2400"^^xsd:integer .
+  /* 例：毛本第 5 回 / 嘉靖本第 10 则 */
+
+sg:UnitMapping a owl:Class ;
+    rdfs:label "单元对齐"@zh ;
+    rdfs:comment "跨版本单元对齐关系：以毛本 120 回为主干，映射嘉靖本 240 则、志传本则目。回目分合差异（如嘉靖一则=毛本半回）以此表达。"@zh ;
+    sg:axis sg:Axis_A1 ;
+    sg:layer sg:Layer_L3 ;
+    sg:axisId "A1" ;
+    sg:layerId "L3" ;
+    sg:estCount "240"^^xsd:integer .
+
+sg:Paratext a owl:Class ;
+    rdfs:label "序跋/凡例/读法"@zh ;
+    rdfs:comment "卷首卷末的非叙事文本：序、引、凡例、读法、宗僚表。"@zh ;
+    sg:axis sg:Axis_A1 ;
+    sg:layer sg:Layer_L4 ;
+    sg:axisId "A1" ;
+    sg:layerId "L4" ;
+    sg:estCount "10"^^xsd:integer .
+  /* 例：毛宗岗本序 / 读三国志法 / 嘉靖本序引宗僚 */
+
+sg:VariantReading a owl:Class ;
+    rdfs:label "异文"@zh ;
+    rdfs:comment "同一叙事单元在不同版本中的文字/情节差异。按差异性质分：字词异文、情节增删（如关索故事）、分回差异。"@zh ;
+    sg:axis sg:Axis_A1 ;
+    sg:layer sg:Layer_L4 ;
+    sg:axisId "A1" ;
+    sg:layerId "L4" ;
+    sg:estCount "200"^^xsd:integer .
+
+sg:EditionGap a owl:Class ;
+    rdfs:label "版本缺口"@zh ;
+    rdfs:comment "已著录而文本未获/不全的版本及其获取状态（影印、OCR 验收结论）。"@zh ;
+    sg:axis sg:Axis_A1 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A1" ;
+    sg:layerId "L6" ;
+    sg:estCount "13"^^xsd:integer .
+  /* 例：杨美生本（确实拿不到） / 周曰校本 OCR 试点（0.48，未达 97% 验收线） */
+
+sg:PrintingWork a owl:Class ;
+    rdfs:label "刊刻出版"@zh ;
+    rdfs:comment "刊刻行为本身：书坊、刻工、藏地、版刻年代，供版本流传史与出版史研究。"@zh ;
+    sg:axis sg:Axis_A1 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A1" ;
+    sg:layerId "L6" ;
+    sg:estCount "19"^^xsd:integer .
+
+sg:DoctrineConcept a owl:Class ;
+    rdfs:label "义理概念"@zh ;
+    rdfs:comment "全书最高义理坐标：天命、正统、仁义、忠、智、勇、大势。一切褒贬与评点以此裁断。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L1 ;
+    sg:axisId "A2" ;
+    sg:layerId "L1" ;
+    sg:estCount "12"^^xsd:integer .
+  /* 例：天命 / 正统 / 仁义 / 忠义 / 智勇 */
+
+sg:OrthodoxyView a owl:Class ;
+    rdfs:label "正统观"@zh ;
+    rdfs:comment "评点家与后世论者对\"正统\"归属的判择，取值受控于 orthodoxy 词表。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L1 ;
+    sg:axisId "A2" ;
+    sg:layerId "L1" ;
+    sg:estCount "4"^^xsd:integer .
+
+sg:AssertionCategory a owl:Class ;
+    rdfs:label "论断范畴"@zh ;
+    rdfs:comment "评点家的判断性范畴：褒贬判词、褒贬二分（褒贬/褒贬抑扬）、真伪判定等。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L2 ;
+    sg:axisId "A2" ;
+    sg:layerId "L2" ;
+    sg:estCount "20"^^xsd:integer .
+
+sg:Imagery a owl:Class ;
+    rdfs:label "意象"@zh ;
+    rdfs:comment "反复出现并承载义理的文学意象（剑、马、玉玺、桃、火、星、月），取值受控于 imagery 词表。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L2 ;
+    sg:axisId "A2" ;
+    sg:layerId "L2" ;
+    sg:estCount "24"^^xsd:integer .
+
+sg:HistoricalAssessment a owl:Class ;
+    rdfs:label "虚实断语"@zh ;
+    rdfs:comment "具体情节/人物的虚实判词，取值受控于 historicalStatus 词表，附正史对照说明。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L2 ;
+    sg:axisId "A2" ;
+    sg:layerId "L2" ;
+    sg:estCount "80"^^xsd:integer .
+
+sg:Poem a owl:Class ;
+    rdfs:label "诗词"@zh ;
+    rdfs:comment "回中诗词赞语（\"后人有诗赞曰\"类）。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A2" ;
+    sg:layerId "L5" ;
+    sg:estCount "40"^^xsd:integer .
+
+sg:Prophecy a owl:Class ;
+    rdfs:label "谶纬"@zh ;
+    rdfs:comment "童谣、谶语、梦兆及其应验——义理层\"天命\"的叙事落地。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L2 ;
+    sg:axisId "A2" ;
+    sg:layerId "L2" ;
+    sg:estCount "12"^^xsd:integer .
+
+sg:StyleCategory a owl:Class ;
+    rdfs:label "文体范畴"@zh ;
+    rdfs:comment "叙述体式的受控分类：述赞、韵语、对话、战阵铺陈、议论、回目对偶。供文体计量统计。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A2" ;
+    sg:layerId "L5" ;
+    sg:estCount "8"^^xsd:integer .
+
+sg:NarrativeTechnique a owl:Class ;
+    rdfs:label "叙事技法"@zh ;
+    rdfs:comment "评点家所揭示的笔法：草蛇灰线、虚实相生、烘云托月、互影回文、倒叙插叙，取值受控于 narrativeTechnique 词表。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A2" ;
+    sg:layerId "L5" ;
+    sg:estCount "60"^^xsd:integer .
+
+sg:ChapterCraft a owl:Class ;
+    rdfs:label "章法"@zh ;
+    rdfs:comment "回目级的结构安排：起承转合、章回首尾、双线并叙、章次呼应。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A2" ;
+    sg:layerId "L5" ;
+    sg:estCount "40"^^xsd:integer .
+
+sg:TextualSpan a owl:Class ;
+    rdfs:label "句·字·韵"@zh ;
+    rdfs:comment "句/字/韵级文本片段：回目格律的平仄、韵脚、异文位，供文体计量与回目格律研究。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A2" ;
+    sg:layerId "L5" ;
+    sg:estCount "240"^^xsd:integer .
+
+sg:Commentary a owl:Class ;
+    rdfs:label "评注"@zh ;
+    rdfs:comment "逐回批点文字。四家评语辑录共 36.8 万字，另有七家汇评本夹批总评 105 万字待接入。位置受控于 commentaryPos。"@zh ;
+    sg:axis sg:Axis_A1 ;
+    sg:layer sg:Layer_L4 ;
+    sg:axisId "A1" ;
+    sg:layerId "L4" ;
+    sg:estCount "6000"^^xsd:integer .
+  /* 例：毛宗岗第一回回前评 / 李卓吾夹批 */
+
+sg:ReadingMethod a owl:Class ;
+    rdfs:label "读法"@zh ;
+    rdfs:comment "通论性批评文本：《读三国志法》等。"@zh ;
+    sg:axis sg:Axis_A1 ;
+    sg:layer sg:Layer_L4 ;
+    sg:axisId "A1" ;
+    sg:layerId "L4" ;
+    sg:estCount "3"^^xsd:integer .
+
+sg:Person a owl:Class ;
+    rdfs:label "人物"@zh ;
+    rdfs:comment "演义叙事中的人物。含史实人物与虚构人物，一律以 historicalStatus 标注虚实，不排除虚构者。"@zh ;
+    sg:axis sg:Axis_A3 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A3" ;
+    sg:layerId "L5" ;
+    sg:estCount "200"^^xsd:integer .
+  /* 例：刘备（史实） / 貂蝉（虚构） / 关索（虚构/志传系统特有） */
+
+sg:OfficialTitle a owl:Class ;
+    rdfs:label "官职"@zh ;
+    rdfs:comment "官爵名号，供人物任职链查询。"@zh ;
+    sg:axis sg:Axis_A3 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A3" ;
+    sg:layerId "L5" ;
+    sg:estCount "60"^^xsd:integer .
+
+sg:Genealogy a owl:Class ;
+    rdfs:label "世系"@zh ;
+    rdfs:comment "宗族谱系（刘汉宗亲、曹氏夏侯、孙氏吴郡……），兼作谱系层的家族归属关系。"@zh ;
+    sg:axis sg:Axis_A3 ;
+    sg:layer sg:Layer_L3 ;
+    sg:axisId "A3" ;
+    sg:layerId "L3" ;
+    sg:estCount "20"^^xsd:integer .
+
+sg:Critic a owl:Class ;
+    rdfs:label "评点家"@zh ;
+    rdfs:comment "评点者/史家：毛宗岗、李卓吾、钟伯敬、李渔、金圣叹、陈寿、裴松之、鲁迅等。"@zh ;
+    sg:axis sg:Axis_A3 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A3" ;
+    sg:layerId "L5" ;
+    sg:estCount "8"^^xsd:integer .
+  /* 例：毛宗岗（评语 206,093 字） / 李卓吾（48,870 字） / 钟伯敬（44,894 字） / 李渔（67,674 字） */
+
+sg:Annotator a owl:Class ;
+    rdfs:label "注家"@zh ;
+    rdfs:comment "正史注文家：裴松之（《三国志》注）等，为虚实考辨提供外部基准。"@zh ;
+    sg:axis sg:Axis_A3 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A3" ;
+    sg:layerId "L6" ;
+    sg:estCount "3"^^xsd:integer .
+
+sg:Reteller a owl:Class ;
+    rdfs:label "再叙述者"@zh ;
+    rdfs:comment "后世再叙述者：评书家、戏曲家、影视改编者——本书进入\"接受史\"的通道。"@zh ;
+    sg:axis sg:Axis_A3 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A3" ;
+    sg:layerId "L6" ;
+    sg:estCount "5"^^xsd:integer .
+
+sg:Faction a owl:Class ;
+    rdfs:label "势力"@zh ;
+    rdfs:comment "政治军事集团：蜀汉、曹魏、东吴、群雄、汉室等。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L3 ;
+    sg:axisId "A4" ;
+    sg:layerId "L3" ;
+    sg:estCount "12"^^xsd:integer .
+  /* 例：蜀汉 / 曹魏 / 东吴 */
+
+sg:Polity a owl:Class ;
+    rdfs:label "政权"@zh ;
+    rdfs:comment "具名号的国家实体（魏蜀吴及汉、晋），与 Faction 区分：Faction 为势力班底，Polity 为正统名号。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L3 ;
+    sg:axisId "A4" ;
+    sg:layerId "L3" ;
+    sg:estCount "6"^^xsd:integer .
+
+sg:Dynasty a owl:Class ;
+    rdfs:label "朝代"@zh ;
+    rdfs:comment "汉末 → 三国 → 西晋的朝代序列，叙事纪年的最高框架。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L3 ;
+    sg:axisId "A4" ;
+    sg:layerId "L3" ;
+    sg:estCount "3"^^xsd:integer .
+
+sg:PoliticalSituation a owl:Class ;
+    rdfs:label "政局/结社"@zh ;
+    rdfs:comment "党争、结社、盟约等关系性政局单元：桃园结义、衣带诏、关洛同盟。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L3 ;
+    sg:axisId "A4" ;
+    sg:layerId "L3" ;
+    sg:estCount "15"^^xsd:integer .
+
+sg:Place a owl:Class ;
+    rdfs:label "地理"@zh ;
+    rdfs:comment "州郡县、关隘、山川、城邑。含古今地名对照与经纬度。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A4" ;
+    sg:layerId "L5" ;
+    sg:estCount "66"^^xsd:integer .
+  /* 例：洛阳 / 赤壁 / 五丈原 */
+
+sg:Battle a owl:Class ;
+    rdfs:label "战役"@zh ;
+    rdfs:comment "具名战役。含年份、地点、参战人物、结果与虚实标注。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A4" ;
+    sg:layerId "L5" ;
+    sg:estCount "36"^^xsd:integer .
+  /* 例：官渡之战 / 赤壁之战 / 夷陵之战 */
+
+sg:Event a owl:Class ;
+    rdfs:label "事件"@zh ;
+    rdfs:comment "具名情节单元（桃园结义、三顾茅庐、白帝托孤……），可跨回目。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A4" ;
+    sg:layerId "L5" ;
+    sg:estCount "120"^^xsd:integer .
+  /* 例：桃园结义 / 温酒斩华雄（移花接木） */
+
+sg:Stratagem a owl:Class ;
+    rdfs:label "计谋"@zh ;
+    rdfs:comment "具名计谋单元，含使用者、对象、结果。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A4" ;
+    sg:layerId "L5" ;
+    sg:estCount "40"^^xsd:integer .
+  /* 例：连环计 / 空城计（虚构） / 草船借箭（虚构） */
+
+sg:Artifact a owl:Class ;
+    rdfs:label "器物"@zh ;
+    rdfs:comment "兵器、坐骑、印玺、信物等。演义多夸张虚构，须标虚实。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L5 ;
+    sg:axisId "A4" ;
+    sg:layerId "L5" ;
+    sg:estCount "30"^^xsd:integer .
+  /* 例：青龙偃月刀 / 赤兔马 / 传国玉玺 */
+
+sg:HistoricalEvent a owl:Class ;
+    rdfs:label "正史事件"@zh ;
+    rdfs:comment "《三国志》及裴注所记之对应史事，为演义事件提供外部基准。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A4" ;
+    sg:layerId "L6" ;
+    sg:estCount "80"^^xsd:integer .
+
+sg:ChronologyLayer a owl:Class ;
+    rdfs:label "编年层"@zh ;
+    rdfs:comment "叙事纪年与史实纪年的对应刻度（虚构年月 ↔ 真实年代），供时间三分维度使用。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A4" ;
+    sg:layerId "L6" ;
+    sg:estCount "60"^^xsd:integer .
+
+sg:ConsensusConclusion a owl:Class ;
+    rdfs:label "公版结论"@zh ;
+    rdfs:comment "学界公论，出自公版（PD）学术文献，须著明出处。如：嘉靖壬午本为现存最早刻本；演义\"七实三虚\"；志传系统多存关索故事。"@zh ;
+    sg:axis sg:Axis_A2 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A2" ;
+    sg:layerId "L6" ;
+    sg:estCount "60"^^xsd:integer .
+
+sg:CriticConclusion a owl:Class ;
+    rdfs:label "名家结论"@zh ;
+    rdfs:comment "具名学者/评点家的论断。如胡适评毛宗岗\"不是批评家，乃是改作家\"；鲁迅论三国\"描写过实\"。"@zh ;
+    sg:axis sg:Axis_A3 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A3" ;
+    sg:layerId "L6" ;
+    sg:estCount "120"^^xsd:integer .
+
+sg:Work a owl:Class ;
+    rdfs:label "公版文献"@zh ;
+    rdfs:comment "结论所本的公版（PD）学术文献与书目：鲁迅《中国小说史略》、胡适序、孙楷第目录等。"@zh ;
+    sg:axis sg:Axis_A3 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A3" ;
+    sg:layerId "L6" ;
+    sg:estCount "15"^^xsd:integer .
+
+sg:IntertextText a owl:Class ;
+    rdfs:label "互文文本节点"@zh ;
+    rdfs:comment "与本书构成互文关系的文本系统节点：《三国志》裴松之注、《三国志平话》、话本、元杂剧三国戏、评书、后世改编。本期为书目级登记，不做逐出对勘。"@zh ;
+    sg:axis sg:Axis_A4 ;
+    sg:layer sg:Layer_L6 ;
+    sg:axisId "A4" ;
+    sg:layerId "L6" ;
+    sg:estCount "10"^^xsd:integer .
+
+################################
+# 三、对象属性（Object Property，61）
+################################
+sg:derivedFrom a owl:ObjectProperty ;
+    rdfs:label "承袭自"@zh ;
+    rdfs:comment "版本谱系承袭关系：毛宗岗评本 ← 李卓吾评本 ← 嘉靖壬午本。"@zh ;
+    rdfs:domain sg:Edition ;
+    rdfs:range sg:Edition .
+
+sg:mapsTo a owl:ObjectProperty ;
+    rdfs:label "单元对齐"@zh ;
+    rdfs:comment "跨版本单元映射（经 UnitMapping）。"@zh ;
+    rdfs:domain sg:Unit ;
+    rdfs:range sg:Unit .
+
+sg:hasParatext a owl:ObjectProperty ;
+    rdfs:label "卷首文本"@zh ;
+    rdfs:domain sg:Edition ;
+    rdfs:range sg:Paratext .
+
+sg:hasUnit a owl:ObjectProperty ;
+    rdfs:label "含单元"@zh ;
+    rdfs:domain sg:Edition ;
+    rdfs:range sg:Unit .
+
+sg:inEdition a owl:ObjectProperty ;
+    rdfs:label "属于版本"@zh ;
+    rdfs:domain sg:Unit ;
+    rdfs:range sg:Edition .
+
+sg:inUnit a owl:ObjectProperty ;
+    rdfs:label "见于单元"@zh ;
+    rdfs:domain sg:TextualSpan ;
+    rdfs:range sg:Unit .
+
+sg:occursIn a owl:ObjectProperty ;
+    rdfs:label "异文见于"@zh ;
+    rdfs:domain sg:VariantReading ;
+    rdfs:range sg:Edition .
+
+sg:faction a owl:ObjectProperty ;
+    rdfs:label "所属势力"@zh ;
+    rdfs:domain sg:Person ;
+    rdfs:range sg:Faction .
+
+sg:ruler a owl:ObjectProperty ;
+    rdfs:label "君主"@zh ;
+    rdfs:domain sg:Faction ;
+    rdfs:range sg:Person .
+
+sg:kinOf a owl:ObjectProperty ;
+    rdfs:label "亲缘"@zh ;
+    rdfs:comment "父子/兄弟/婚姻/宗亲。"@zh ;
+    rdfs:domain sg:Person ;
+    rdfs:range sg:Person .
+
+sg:masterOf a owl:ObjectProperty ;
+    rdfs:label "师承"@zh ;
+    rdfs:domain sg:Person ;
+    rdfs:range sg:Person .
+
+sg:participatesIn a owl:ObjectProperty ;
+    rdfs:label "参与"@zh ;
+    rdfs:domain sg:Person ;
+    rdfs:range sg:Event .
+
+sg:foughtAt a owl:ObjectProperty ;
+    rdfs:label "战于"@zh ;
+    rdfs:domain sg:Battle ;
+    rdfs:range sg:Place .
+
+sg:narrates a owl:ObjectProperty ;
+    rdfs:label "叙述"@zh ;
+    rdfs:comment "单元所叙述的事件。"@zh ;
+    rdfs:domain sg:Unit ;
+    rdfs:range sg:Event .
+
+sg:narratedIn a owl:ObjectProperty ;
+    rdfs:label "叙于"@zh ;
+    rdfs:domain sg:Event ;
+    rdfs:range sg:Unit .
+
+sg:foretells a owl:ObjectProperty ;
+    rdfs:label "预言"@zh ;
+    rdfs:domain sg:Prophecy ;
+    rdfs:range sg:Event .
+
+sg:byCritic a owl:ObjectProperty ;
+    rdfs:label "评点者"@zh ;
+    rdfs:domain sg:Commentary ;
+    rdfs:range sg:Critic .
+
+sg:onUnit a owl:ObjectProperty ;
+    rdfs:label "批于"@zh ;
+    rdfs:domain sg:Commentary ;
+    rdfs:range sg:Unit .
+
+sg:about a owl:ObjectProperty ;
+    rdfs:label "论及"@zh ;
+    rdfs:comment "结论的靶标：版本/人物/事件/情节皆可。"@zh ;
+    rdfs:domain sg:ConsensusConclusion ;
+    rdfs:range owl:Thing .
+
+sg:source a owl:ObjectProperty ;
+    rdfs:label "出处"@zh ;
+    rdfs:comment "结论所本的公版文献。"@zh ;
+    rdfs:domain sg:ConsensusConclusion ;
+    rdfs:range sg:Work .
+
+sg:sourceCited a owl:ObjectProperty ;
+    rdfs:label "史书出处"@zh ;
+    rdfs:comment "正史/裴注的具体篇目出处。"@zh ;
+    rdfs:domain sg:HistoricalEvent ;
+    rdfs:range sg:Work .
+
+sg:recordedIn a owl:ObjectProperty ;
+    rdfs:label "见于史书"@zh ;
+    rdfs:domain sg:HistoricalEvent ;
+    rdfs:range sg:Edition .
+
+sg:exemplifiedIn a owl:ObjectProperty ;
+    rdfs:label "例见"@zh ;
+    rdfs:comment "技法在文本中的例证单元。"@zh ;
+    rdfs:domain sg:NarrativeTechnique ;
+    rdfs:range sg:Unit .
+
+sg:notedBy a owl:ObjectProperty ;
+    rdfs:label "评出"@zh ;
+    rdfs:domain sg:NarrativeTechnique ;
+    rdfs:range sg:Critic .
+
+sg:exemplifiedBy a owl:ObjectProperty ;
+    rdfs:label "以之为例"@zh ;
+    rdfs:domain sg:DoctrineConcept ;
+    rdfs:range sg:Event .
+
+sg:symbolizes a owl:ObjectProperty ;
+    rdfs:label "象征"@zh ;
+    rdfs:domain sg:Imagery ;
+    rdfs:range sg:DoctrineConcept .
+
+sg:appearsIn a owl:ObjectProperty ;
+    rdfs:label "意象见于"@zh ;
+    rdfs:domain sg:Imagery ;
+    rdfs:range sg:Unit .
+
+sg:judgedBy a owl:ObjectProperty ;
+    rdfs:label "判于"@zh ;
+    rdfs:domain sg:AssertionCategory ;
+    rdfs:range sg:Critic .
+
+sg:advocatedBy a owl:ObjectProperty ;
+    rdfs:label "倡于"@zh ;
+    rdfs:domain sg:OrthodoxyView ;
+    rdfs:range sg:Critic .
+
+sg:authoredBy a owl:ObjectProperty ;
+    rdfs:label "撰于"@zh ;
+    rdfs:domain sg:Paratext ;
+    rdfs:range sg:Person .
+
+sg:annotatedBy a owl:ObjectProperty ;
+    rdfs:label "注于"@zh ;
+    rdfs:domain sg:VariantReading ;
+    rdfs:range sg:Critic .
+
+sg:usedBy a owl:ObjectProperty ;
+    rdfs:label "用计者"@zh ;
+    rdfs:domain sg:Stratagem ;
+    rdfs:range sg:Person .
+
+sg:targetOf a owl:ObjectProperty ;
+    rdfs:label "计施于"@zh ;
+    rdfs:domain sg:Stratagem ;
+    rdfs:range sg:Person .
+
+sg:heldBy a owl:ObjectProperty ;
+    rdfs:label "任职者"@zh ;
+    rdfs:domain sg:OfficialTitle ;
+    rdfs:range sg:Person .
+
+sg:battleAt a owl:ObjectProperty ;
+    rdfs:label "战于地"@zh ;
+    rdfs:domain sg:Battle ;
+    rdfs:range sg:Place .
+
+sg:capitalOf a owl:ObjectProperty ;
+    rdfs:label "都于"@zh ;
+    rdfs:domain sg:Place ;
+    rdfs:range sg:Polity .
+
+sg:owner a owl:ObjectProperty ;
+    rdfs:label "属主"@zh ;
+    rdfs:domain sg:Artifact ;
+    rdfs:range sg:Person .
+
+sg:prophet a owl:ObjectProperty ;
+    rdfs:label "预言者"@zh ;
+    rdfs:domain sg:Prophecy ;
+    rdfs:range sg:Person .
+
+sg:hasCommentary a owl:ObjectProperty ;
+    rdfs:label "有评"@zh ;
+    rdfs:domain sg:Unit ;
+    rdfs:range sg:Commentary .
+
+sg:hasConclusion a owl:ObjectProperty ;
+    rdfs:label "有论断"@zh ;
+    rdfs:domain sg:Critic ;
+    rdfs:range sg:CriticConclusion .
+
+sg:hasCommentaryOn a owl:ObjectProperty ;
+    rdfs:label "有批点"@zh ;
+    rdfs:domain sg:Critic ;
+    rdfs:range sg:Commentary .
+
+sg:forEdition a owl:ObjectProperty ;
+    rdfs:label "缺口所属版本"@zh ;
+    rdfs:domain sg:EditionGap ;
+    rdfs:range sg:Edition .
+
+sg:mapsFrom a owl:ObjectProperty ;
+    rdfs:label "对齐自"@zh ;
+    rdfs:domain sg:UnitMapping ;
+    rdfs:range sg:Unit .
+
+sg:members a owl:ObjectProperty ;
+    rdfs:label "成员"@zh ;
+    rdfs:domain sg:Genealogy ;
+    rdfs:range sg:Person .
+
+sg:ancestor a owl:ObjectProperty ;
+    rdfs:label "宗祖"@zh ;
+    rdfs:domain sg:Genealogy ;
+    rdfs:range sg:Person .
+
+sg:author a owl:ObjectProperty ;
+    rdfs:label "作者"@zh ;
+    rdfs:domain sg:Poem ;
+    rdfs:range sg:Person .
+
+sg:works a owl:ObjectProperty ;
+    rdfs:label "著述"@zh ;
+    rdfs:domain sg:Critic ;
+    rdfs:range sg:Work .
+
+sg:annotatedOn a owl:ObjectProperty ;
+    rdfs:label "注于书"@zh ;
+    rdfs:domain sg:Annotator ;
+    rdfs:range sg:Edition .
+
+sg:derivesFrom a owl:ObjectProperty ;
+    rdfs:label "本于"@zh ;
+    rdfs:domain sg:Reteller ;
+    rdfs:range sg:Edition .
+
+sg:notedIn a owl:ObjectProperty ;
+    rdfs:label "见载于"@zh ;
+    rdfs:domain sg:IntertextText ;
+    rdfs:range sg:Work .
+
+sg:intertextWith a owl:ObjectProperty ;
+    rdfs:label "互文于"@zh ;
+    rdfs:comment "与外部文本系统（裴注/平话/元杂剧/评书/后世改编）的书目级互文关系。"@zh ;
+    rdfs:domain sg:Edition ;
+    rdfs:range sg:IntertextText .
+
+sg:involves a owl:ObjectProperty ;
+    rdfs:label "涉事"@zh ;
+    rdfs:domain sg:PoliticalSituation ;
+    rdfs:range sg:Person .
+
+sg:successor a owl:ObjectProperty ;
+    rdfs:label "继统于"@zh ;
+    rdfs:domain sg:Dynasty ;
+    rdfs:range sg:Dynasty .
+
+sg:foundedBy a owl:ObjectProperty ;
+    rdfs:label "肇基于"@zh ;
+    rdfs:domain sg:Polity ;
+    rdfs:range sg:Person .
+
+sg:territory a owl:ObjectProperty ;
+    rdfs:label "辖地"@zh ;
+    rdfs:domain sg:Faction ;
+    rdfs:range sg:Place .
+
+sg:nativePlace a owl:ObjectProperty ;
+    rdfs:label "籍贯"@zh ;
+    rdfs:domain sg:Person ;
+    rdfs:range sg:Place .
+
+sg:mentions a owl:ObjectProperty ;
+    rdfs:label "提及"@zh ;
+    rdfs:comment "单元所提及的人物（G2 粒度下的人物提及计数基础）。"@zh ;
+    rdfs:domain sg:Unit ;
+    rdfs:range sg:Person .
+
+sg:onText a owl:ObjectProperty ;
+    rdfs:label "批于字"@zh ;
+    rdfs:comment "评点所针对的句/字片段。"@zh ;
+    rdfs:domain sg:Commentary ;
+    rdfs:range sg:TextualSpan .
+
+sg:capital a owl:ObjectProperty ;
+    rdfs:label "都城"@zh ;
+    rdfs:domain sg:Faction ;
+    rdfs:range sg:Place .
+
+sg:persons a owl:ObjectProperty ;
+    rdfs:label "涉事人物集"@zh ;
+    rdfs:domain sg:Event ;
+    rdfs:range sg:Person .
+
+sg:places a owl:ObjectProperty ;
+    rdfs:label "涉事地理集"@zh ;
+    rdfs:domain sg:Event ;
+    rdfs:range sg:Place .
+
+################################
+# 四、数据属性（Datatype Property，65）
+################################
+sg:status a owl:DatatypeProperty ;
+    rdfs:label "虚实取值"@zh ;
+    rdfs:comment "虚实断语所取的等级：fact/embellished/transposed/fictional。"@zh ;
+    rdfs:range xsd:string .
+
+sg:historicalStatus a owl:DatatypeProperty ;
+    rdfs:label "虚实"@zh ;
+    rdfs:comment "取值：fact / embellished / transposed / fictional。"@zh ;
+    rdfs:range xsd:string .
+
+sg:editionSystem a owl:DatatypeProperty ;
+    rdfs:label "版本系统"@zh ;
+    rdfs:range xsd:string .
+
+sg:textStatus a owl:DatatypeProperty ;
+    rdfs:label "文本状态"@zh ;
+    rdfs:range xsd:string .
+
+sg:unitKind a owl:DatatypeProperty ;
+    rdfs:label "单元形制"@zh ;
+    rdfs:range xsd:string .
+
+sg:unitCount a owl:DatatypeProperty ;
+    rdfs:label "单元数"@zh ;
+    rdfs:range xsd:integer .
+
+sg:year a owl:DatatypeProperty ;
+    rdfs:label "年份"@zh ;
+    rdfs:range xsd:integer .
+
+sg:route a owl:DatatypeProperty ;
+    rdfs:label "路径"@zh ;
+    rdfs:comment "行军/迁址路径上的地理 id 序列（地理信息系统方法用）。"@zh ;
+    rdfs:range xsd:string .
+
+sg:coord a owl:DatatypeProperty ;
+    rdfs:label "坐标"@zh ;
+    rdfs:comment "今地经纬度，供舆地图投影。"@zh ;
+    rdfs:range xsd:string .
+
+sg:modernName a owl:DatatypeProperty ;
+    rdfs:label "今地名"@zh ;
+    rdfs:range xsd:string .
+
+sg:style a owl:DatatypeProperty ;
+    rdfs:label "表字"@zh ;
+    rdfs:range xsd:string .
+
+sg:mentionCount a owl:DatatypeProperty ;
+    rdfs:label "提及次数"@zh ;
+    rdfs:range xsd:integer .
+
+sg:confidence a owl:DatatypeProperty ;
+    rdfs:label "置信度"@zh ;
+    rdfs:comment "公版结论的置信标注（0-1），OCR 结论另附验收线说明。"@zh ;
+    rdfs:range xsd:double .
+
+sg:tags a owl:DatatypeProperty ;
+    rdfs:label "标签"@zh ;
+    rdfs:range xsd:string .
+
+sg:variantKind a owl:DatatypeProperty ;
+    rdfs:label "异文种类"@zh ;
+    rdfs:comment "取值：char / unit / plot / system。"@zh ;
+    rdfs:range xsd:string .
+
+sg:variantText a owl:DatatypeProperty ;
+    rdfs:label "异文文本"@zh ;
+    rdfs:range xsd:string .
+
+sg:alignNote a owl:DatatypeProperty ;
+    rdfs:label "对齐说明"@zh ;
+    rdfs:range xsd:string .
+
+sg:commentaryPos a owl:DatatypeProperty ;
+    rdfs:label "评点位置"@zh ;
+    rdfs:comment "取值：jia（夹批）/ mei（眉批）/ bang（旁批）/ huqian（回前）/ huhou（回后）/ zongping（总评）。"@zh ;
+    rdfs:range xsd:string .
+
+sg:byCriticId a owl:DatatypeProperty ;
+    rdfs:label "评点家 ID"@zh ;
+    rdfs:range xsd:string .
+
+sg:kind a owl:DatatypeProperty ;
+    rdfs:label "种类"@zh ;
+    rdfs:range xsd:string .
+
+sg:verdict a owl:DatatypeProperty ;
+    rdfs:label "判词"@zh ;
+    rdfs:range xsd:string .
+
+sg:historyRecord a owl:DatatypeProperty ;
+    rdfs:label "史书记载"@zh ;
+    rdfs:range xsd:string .
+
+sg:doctrineKind a owl:DatatypeProperty ;
+    rdfs:label "义理门类"@zh ;
+    rdfs:range xsd:string .
+
+sg:orthodoxy a owl:DatatypeProperty ;
+    rdfs:label "正统取向"@zh ;
+    rdfs:range xsd:string .
+
+sg:imageryKind a owl:DatatypeProperty ;
+    rdfs:label "意象门类"@zh ;
+    rdfs:range xsd:string .
+
+sg:techniqueKind a owl:DatatypeProperty ;
+    rdfs:label "技法门类"@zh ;
+    rdfs:range xsd:string .
+
+sg:styleKind a owl:DatatypeProperty ;
+    rdfs:label "文体门类"@zh ;
+    rdfs:range xsd:string .
+
+sg:craftKind a owl:DatatypeProperty ;
+    rdfs:label "章法门类"@zh ;
+    rdfs:range xsd:string .
+
+sg:notes a owl:DatatypeProperty ;
+    rdfs:label "按语"@zh ;
+    rdfs:range xsd:string .
+
+sg:text a owl:DatatypeProperty ;
+    rdfs:label "文本"@zh ;
+    rdfs:range xsd:string .
+
+sg:tokenKind a owl:DatatypeProperty ;
+    rdfs:label "词性"@zh ;
+    rdfs:comment "取值：content / function / modal。文体计量用。"@zh ;
+    rdfs:range xsd:string .
+
+sg:tone a owl:DatatypeProperty ;
+    rdfs:label "平仄"@zh ;
+    rdfs:comment "取值：ping（平）/ ze（仄）。回目格律用。"@zh ;
+    rdfs:range xsd:string .
+
+sg:rhymeGroup a owl:DatatypeProperty ;
+    rdfs:label "韵部"@zh ;
+    rdfs:range xsd:string .
+
+sg:diffSpan a owl:DatatypeProperty ;
+    rdfs:label "差异位"@zh ;
+    rdfs:comment "异文 diff 的字符区间。"@zh ;
+    rdfs:range xsd:string .
+
+sg:editionPair a owl:DatatypeProperty ;
+    rdfs:label "对勘版本对"@zh ;
+    rdfs:comment "形如 \"mao:jiajing\"。"@zh ;
+    rdfs:range xsd:string .
+
+sg:sentimentPolarity a owl:DatatypeProperty ;
+    rdfs:label "情感极性"@zh ;
+    rdfs:range xsd:double .
+
+sg:sentimentDomain a owl:DatatypeProperty ;
+    rdfs:label "情感域"@zh ;
+    rdfs:comment "取值：loyalty / grief / heroism / restraint / cunning / lament。"@zh ;
+    rdfs:range xsd:string .
+
+sg:cooccurrenceScene a owl:DatatypeProperty ;
+    rdfs:label "共现场景"@zh ;
+    rdfs:range xsd:string .
+
+sg:ocrVerdict a owl:DatatypeProperty ;
+    rdfs:label "OCR 验收"@zh ;
+    rdfs:range xsd:string .
+
+sg:tier a owl:DatatypeProperty ;
+    rdfs:label "分级"@zh ;
+    rdfs:range xsd:string .
+
+sg:printer a owl:DatatypeProperty ;
+    rdfs:label "刊刻者"@zh ;
+    rdfs:range xsd:string .
+
+sg:holder a owl:DatatypeProperty ;
+    rdfs:label "藏地"@zh ;
+    rdfs:range xsd:string .
+
+sg:colophon a owl:DatatypeProperty ;
+    rdfs:label "牌记"@zh ;
+    rdfs:range xsd:string .
+
+sg:level a owl:DatatypeProperty ;
+    rdfs:label "地名层级"@zh ;
+    rdfs:range xsd:string .
+
+sg:placeIds a owl:DatatypeProperty ;
+    rdfs:label "地点集"@zh ;
+    rdfs:range xsd:string .
+
+sg:keyPersonIds a owl:DatatypeProperty ;
+    rdfs:label "要人集"@zh ;
+    rdfs:range xsd:string .
+
+sg:result a owl:DatatypeProperty ;
+    rdfs:label "结果"@zh ;
+    rdfs:range xsd:string .
+
+sg:eraName a owl:DatatypeProperty ;
+    rdfs:label "国号"@zh ;
+    rdfs:range xsd:string .
+
+sg:reignStart a owl:DatatypeProperty ;
+    rdfs:label "始年"@zh ;
+    rdfs:range xsd:integer .
+
+sg:reignEnd a owl:DatatypeProperty ;
+    rdfs:label "末年"@zh ;
+    rdfs:range xsd:integer .
+
+sg:successorOf a owl:DatatypeProperty ;
+    rdfs:label "继统"@zh ;
+    rdfs:range xsd:string .
+
+sg:omenText a owl:DatatypeProperty ;
+    rdfs:label "谶语"@zh ;
+    rdfs:range xsd:string .
+
+sg:rank a owl:DatatypeProperty ;
+    rdfs:label "品级"@zh ;
+    rdfs:range xsd:string .
+
+sg:birth a owl:DatatypeProperty ;
+    rdfs:label "生年"@zh ;
+    rdfs:range xsd:integer .
+
+sg:death a owl:DatatypeProperty ;
+    rdfs:label "卒年"@zh ;
+    rdfs:range xsd:integer .
+
+sg:officialTitle a owl:DatatypeProperty ;
+    rdfs:label "官衔"@zh ;
+    rdfs:range xsd:string .
+
+sg:era a owl:DatatypeProperty ;
+    rdfs:label "时代"@zh ;
+    rdfs:range xsd:string .
+
+sg:medium a owl:DatatypeProperty ;
+    rdfs:label "媒介"@zh ;
+    rdfs:range xsd:string .
+
+sg:workKind a owl:DatatypeProperty ;
+    rdfs:label "文献门类"@zh ;
+    rdfs:range xsd:string .
+
+sg:intertextKind a owl:DatatypeProperty ;
+    rdfs:label "互文类型"@zh ;
+    rdfs:comment "取值：peizhu / pinghua / huaben / yuanzaju / pingbook / adaptation。"@zh ;
+    rdfs:range xsd:string .
+
+sg:relationKind a owl:DatatypeProperty ;
+    rdfs:label "关系类型"@zh ;
+    rdfs:range xsd:string .
+
+sg:isVirtual a owl:DatatypeProperty ;
+    rdfs:label "虚实标记"@zh ;
+    rdfs:range xsd:boolean .
+
+sg:narrativeYear a owl:DatatypeProperty ;
+    rdfs:label "叙事纪年"@zh ;
+    rdfs:range xsd:string .
+
+sg:historicalYear a owl:DatatypeProperty ;
+    rdfs:label "史实纪年"@zh ;
+    rdfs:range xsd:integer .
+
+sg:offsetNote a owl:DatatypeProperty ;
+    rdfs:label "纪年差说明"@zh ;
+    rdfs:range xsd:string .
+
+################################
+# 五、受控词表（SKOS Concept Scheme）
+################################
+sg:Vocab_historicalStatus a skos:ConceptScheme ;
+    rdfs:label "虚实标注"@zh .
+
+sg:historicalStatus_fact a skos:Concept ;
+    skos:inScheme sg:Vocab_historicalStatus ;
+    skos:prefLabel "史实"@zh ;
+    skos:definition "与正史基本相合，可坐实。"@zh .
+
+sg:historicalStatus_embellished a skos:Concept ;
+    skos:inScheme sg:Vocab_historicalStatus ;
+    skos:prefLabel "史实加工"@zh ;
+    skos:definition "本于史而有增饰渲染，骨干真实、细节虚设。"@zh .
+
+sg:historicalStatus_transposed a skos:Concept ;
+    skos:inScheme sg:Vocab_historicalStatus ;
+    skos:prefLabel "移花接木"@zh ;
+    skos:definition "史有其事而张冠李戴、时空挪移（如\"温酒斩华雄\"移孙坚之事予关羽）。"@zh .
+
+sg:historicalStatus_fictional a skos:Concept ;
+    skos:inScheme sg:Vocab_historicalStatus ;
+    skos:prefLabel "虚构"@zh ;
+    skos:definition "史所未载，出于小说家创造（如貂蝉、草船借箭、关索）。"@zh .
+
+sg:Vocab_editionSystem a skos:ConceptScheme ;
+    rdfs:label "版本系统"@zh .
+
+sg:editionSystem_yanyi a skos:Concept ;
+    skos:inScheme sg:Vocab_editionSystem ;
+    skos:prefLabel "演义系统"@zh ;
+    skos:definition "《三国志通俗演义》二百四十则系：嘉靖壬午本为现存最早刻本，周曰校本、夏振宇本属此系。"@zh .
+
+sg:editionSystem_zhizhuan a skos:Concept ;
+    skos:inScheme sg:Vocab_editionSystem ;
+    skos:prefLabel "志传系统"@zh ;
+    skos:definition "《三国志传》系：多存关索故事，叶逢春本、黄正甫本、余象斗本、熊清波本、朱鼎臣本、郑少垣本、刘龙田本属此系。"@zh .
+
+sg:editionSystem_pingben a skos:Concept ;
+    skos:inScheme sg:Vocab_editionSystem ;
+    skos:prefLabel "评本"@zh ;
+    skos:definition "李卓吾评本、钟伯敬评本、笠翁评阅本、毛宗岗评本等带批点的刊本。"@zh .
+
+sg:editionSystem_huiping a skos:Concept ;
+    skos:inScheme sg:Vocab_editionSystem ;
+    skos:prefLabel "汇评本"@zh ;
+    skos:definition "汇辑诸家批语之本，如七家汇评本。"@zh .
+
+sg:editionSystem_pinghua a skos:Concept ;
+    skos:inScheme sg:Vocab_editionSystem ;
+    skos:prefLabel "平话·词话"@zh ;
+    skos:definition "演义成书前的讲史底本：《三国志平话》《花关索传》。"@zh .
+
+sg:editionSystem_shishu a skos:Concept ;
+    skos:inScheme sg:Vocab_editionSystem ;
+    skos:prefLabel "史书注释"@zh ;
+    skos:definition "《三国志》及裴松之注，虚实考辨的正史基准。"@zh .
+
+sg:Vocab_textStatus a skos:ConceptScheme ;
+    rdfs:label "文本可得性"@zh .
+
+sg:textStatus_full a skos:Concept ;
+    skos:inScheme sg:Vocab_textStatus ;
+    skos:prefLabel "全文入库"@zh ;
+    skos:definition "校勘文本已入库，可全文检索与对读。"@zh .
+
+sg:textStatus_partial a skos:Concept ;
+    skos:inScheme sg:Vocab_textStatus ;
+    skos:prefLabel "部分入库"@zh ;
+    skos:definition "存残卷或部分单元。"@zh .
+
+sg:textStatus_ocr a skos:Concept ;
+    skos:inScheme sg:Vocab_textStatus ;
+    skos:prefLabel "仅OCR（检索用）"@zh ;
+    skos:definition "OCR 文本正确率未达 97% 验收线，只作检索，不作对勘底本。"@zh .
+
+sg:textStatus_facsimile a skos:Concept ;
+    skos:inScheme sg:Vocab_textStatus ;
+    skos:prefLabel "仅影印"@zh ;
+    skos:definition "有公开影印（PDF/JPG）而无文本。"@zh .
+
+sg:textStatus_absent a skos:Concept ;
+    skos:inScheme sg:Vocab_textStatus ;
+    skos:prefLabel "未获"@zh ;
+    skos:definition "仅书目著录，未见公开影像。"@zh .
+
+sg:Vocab_assertionType a skos:ConceptScheme ;
+    rdfs:label "结论/标注类型"@zh .
+
+sg:assertionType_consensus a skos:Concept ;
+    skos:inScheme sg:Vocab_assertionType ;
+    skos:prefLabel "公版结论"@zh ;
+    skos:definition "学界公论，出自公版（PD）学术文献：鲁迅《中国小说史略》、胡适《三国志演义序》、郑振铎《三国志演义的演化》、孙楷第书目、谢肇淛《五杂俎》、章学诚《丙辰札记》等。"@zh .
+
+sg:assertionType_critic a skos:Concept ;
+    skos:inScheme sg:Vocab_assertionType ;
+    skos:prefLabel "名家结论"@zh ;
+    skos:definition "具名评点家/学者的论断：毛宗岗、李卓吾（李贽）、钟伯敬（钟惺）、李渔（笠翁）、金圣叹、陈寿、裴松之等。"@zh .
+
+sg:assertionType_commentary a skos:Concept ;
+    skos:inScheme sg:Vocab_assertionType ;
+    skos:prefLabel "评注"@zh ;
+    skos:definition "逐回逐段批点文字，依附于具体单元（回/则）与文本位置。"@zh .
+
+sg:assertionType_editor a skos:Concept ;
+    skos:inScheme sg:Vocab_assertionType ;
+    skos:prefLabel "编者按"@zh ;
+    skos:definition "本站编者校勘记、对齐说明、OCR 校情等。"@zh .
+
+sg:Vocab_unitKind a skos:ConceptScheme ;
+    rdfs:label "文本单元形制"@zh .
+
+sg:unitKind_hui a skos:Concept ;
+    skos:inScheme sg:Vocab_unitKind ;
+    skos:prefLabel "回"@zh ;
+    skos:definition "毛本、评本等一百二十回制。"@zh .
+
+sg:unitKind_ze a skos:Concept ;
+    skos:inScheme sg:Vocab_unitKind ;
+    skos:prefLabel "则"@zh ;
+    skos:definition "嘉靖本、演义系统二百四十则制。"@zh .
+
+sg:unitKind_juan a skos:Concept ;
+    skos:inScheme sg:Vocab_unitKind ;
+    skos:prefLabel "卷"@zh ;
+    skos:definition "志传系统二十卷制、平话三卷制等。"@zh .
+
+sg:unitKind_juan_ze a skos:Concept ;
+    skos:inScheme sg:Vocab_unitKind ;
+    skos:prefLabel "卷·则"@zh ;
+    skos:definition "卷下分则，如周曰校本十二卷二百四十则。"@zh .
+
+sg:Vocab_narrativeTechnique a skos:ConceptScheme ;
+    rdfs:label "叙事技法"@zh .
+
+sg:narrativeTechnique_foreshadow a skos:Concept ;
+    skos:inScheme sg:Vocab_narrativeTechnique ;
+    skos:prefLabel "草蛇灰线"@zh ;
+    skos:definition "前文暗伏、后文照应（如诸葛亮的锦囊、关羽的丹凤眼）。"@zh .
+
+sg:narrativeTechnique_virtualReal a skos:Concept ;
+    skos:inScheme sg:Vocab_narrativeTechnique ;
+    skos:prefLabel "虚实相生"@zh ;
+    skos:definition "以虚写实、以实带虚，虚实互为表里。"@zh .
+
+sg:narrativeTechnique_doubleWrite a skos:Concept ;
+    skos:inScheme sg:Vocab_narrativeTechnique ;
+    skos:prefLabel "互影回文"@zh ;
+    skos:definition "两回并写、互为镜像（如关羽失荆州与刘备伐吴）。"@zh .
+
+sg:narrativeTechnique_contrast a skos:Concept ;
+    skos:inScheme sg:Vocab_narrativeTechnique ;
+    skos:prefLabel "烘云托月"@zh ;
+    skos:definition "以众人之弱烘一人之强，以次要人物衬主要人物。"@zh .
+
+sg:narrativeTechnique_inverted a skos:Concept ;
+    skos:inScheme sg:Vocab_narrativeTechnique ;
+    skos:prefLabel "倒叙插叙"@zh ;
+    skos:definition "叙事情序与叙述顺序错位，含补叙、追叙。"@zh .
+
+sg:narrativeTechnique_echoing a skos:Concept ;
+    skos:inScheme sg:Vocab_narrativeTechnique ;
+    skos:prefLabel "首尾呼应"@zh ;
+    skos:definition "回末设疑、次回揭底，形成连环扣。"@zh .
+
+sg:Vocab_imagery a skos:ConceptScheme ;
+    rdfs:label "意象"@zh .
+
+sg:imagery_sword a skos:Concept ;
+    skos:inScheme sg:Vocab_imagery ;
+    skos:prefLabel "剑·刀"@zh ;
+    skos:definition "青龙偃月刀、七星剑、雌雄双股剑：英雄身份与义气之象征。"@zh .
+
+sg:imagery_horse a skos:Concept ;
+    skos:inScheme sg:Vocab_imagery ;
+    skos:prefLabel "马"@zh ;
+    skos:definition "赤兔、的卢：命运与忠义之载体（\"的卢马\"救主）。"@zh .
+
+sg:imagery_jadeSeal a skos:Concept ;
+    skos:inScheme sg:Vocab_imagery ;
+    skos:prefLabel "玉玺"@zh ;
+    skos:definition "传国印信：正统与天命之焦点。"@zh .
+
+sg:imagery_peach a skos:Concept ;
+    skos:inScheme sg:Vocab_imagery ;
+    skos:prefLabel "桃·桃园"@zh ;
+    skos:definition "结义之盟，义气的空间化。"@zh .
+
+sg:imagery_fire a skos:Concept ;
+    skos:inScheme sg:Vocab_imagery ;
+    skos:prefLabel "火·赤壁"@zh ;
+    skos:definition "火烧连营、赤壁鏖兵：天命转移的场面意象。"@zh .
+
+sg:imagery_starfall a skos:Concept ;
+    skos:inScheme sg:Vocab_imagery ;
+    skos:prefLabel "星陨"@zh ;
+    skos:definition "将星陨落：气数与命运的天象化。"@zh .
+
+sg:imagery_moon a skos:Concept ;
+    skos:inScheme sg:Vocab_imagery ;
+    skos:prefLabel "月"@zh ;
+    skos:definition "月下对饮、煮酒论月：智谋与孤独的意象。"@zh .
+
+sg:Vocab_orthodoxy a skos:ConceptScheme ;
+    rdfs:label "正统观"@zh .
+
+sg:orthodoxy_shuLegit a skos:Concept ;
+    skos:inScheme sg:Vocab_orthodoxy ;
+    skos:prefLabel "蜀汉正统"@zh ;
+    skos:definition "以\"尊刘\"为本位，视蜀汉为汉之正统（毛宗岗一派之立场）。"@zh .
+
+sg:orthodoxy_weiLegit a skos:Concept ;
+    skos:inScheme sg:Vocab_orthodoxy ;
+    skos:prefLabel "曹魏正统"@zh ;
+    skos:definition "以禅代为名分所归，视魏承汉统。"@zh .
+
+sg:orthodoxy_duoZheng a skos:Concept ;
+    skos:inScheme sg:Vocab_orthodoxy ;
+    skos:prefLabel "吴魏双轨"@zh ;
+    skos:definition "承认魏、吴并立各有其政。"@zh .
+
+sg:orthodoxy_antiLegit a skos:Concept ;
+    skos:inScheme sg:Vocab_orthodoxy ;
+    skos:prefLabel "消解正统"@zh ;
+    skos:definition "不判正统而只论兴亡，如部分史家叙事立场。"@zh .
+
+################################
+# 六、4×7 正交矩阵（28 格）
+################################
+sg:Cell_A1_L0 a sg:MatrixCell ;
+    sg:matrixIndex "0"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A1 ;
+    sg:matrixLayer sg:Layer_L0 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "版本形制的元定义：单元形制词表（回/则/卷/卷·则）与坐标系本身"@zh .
+
+sg:Cell_A1_L1 a sg:MatrixCell ;
+    sg:matrixIndex "1"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A1 ;
+    sg:matrixLayer sg:Layer_L1 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "书史义理：以何系统为正统底本之辨（版本优劣的正统判断）"@zh .
+
+sg:Cell_A1_L2 a sg:MatrixCell ;
+    sg:matrixIndex "2"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A1 ;
+    sg:matrixLayer sg:Layer_L2 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "版本优劣判词（如\"毛本删改最劣\"）"@zh .
+
+sg:Cell_A1_L3 a sg:MatrixCell ;
+    sg:matrixIndex "3"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A1 ;
+    sg:matrixLayer sg:Layer_L3 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "版本系统谱系：UnitMapping 单元对齐、derivedFrom 承袭链"@zh .
+
+sg:Cell_A1_L4 a sg:MatrixCell ;
+    sg:matrixIndex "4"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A1 ;
+    sg:matrixLayer sg:Layer_L4 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "刊本 Edition、文本单元 Unit、序跋 Paratext、异文 VariantReading"@zh .
+
+sg:Cell_A1_L5 a sg:MatrixCell ;
+    sg:matrixIndex "5"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A1 ;
+    sg:matrixLayer sg:Layer_L5 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "—（版本不直接承载叙事实体）"@zh .
+
+sg:Cell_A1_L6 a sg:MatrixCell ;
+    sg:matrixIndex "6"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A1 ;
+    sg:matrixLayer sg:Layer_L6 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "刊刻出版 PrintingWork、藏地、版本缺口 EditionGap"@zh .
+
+sg:Cell_A2_L0 a sg:MatrixCell ;
+    sg:matrixIndex "7"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A2 ;
+    sg:matrixLayer sg:Layer_L0 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "技法/文体范畴编码（narrativeTechnique、styleKind 词表）"@zh .
+
+sg:Cell_A2_L1 a sg:MatrixCell ;
+    sg:matrixIndex "8"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A2 ;
+    sg:matrixLayer sg:Layer_L1 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "义理概念 DoctrineConcept、正统观 OrthodoxyView"@zh .
+
+sg:Cell_A2_L2 a sg:MatrixCell ;
+    sg:matrixIndex "9"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A2 ;
+    sg:matrixLayer sg:Layer_L2 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "论断范畴 AssertionCategory、意象 Imagery、虚实断语、谶纬"@zh .
+
+sg:Cell_A2_L3 a sg:MatrixCell ;
+    sg:matrixIndex "10"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A2 ;
+    sg:matrixLayer sg:Layer_L3 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "—（义理不形成谱系）"@zh .
+
+sg:Cell_A2_L4 a sg:MatrixCell ;
+    sg:matrixIndex "11"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A2 ;
+    sg:matrixLayer sg:Layer_L4 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "评注挂接位（评点范畴在文本中的落点）"@zh .
+
+sg:Cell_A2_L5 a sg:MatrixCell ;
+    sg:matrixIndex "12"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A2 ;
+    sg:matrixLayer sg:Layer_L5 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "文体范畴、叙事技法、章法、句·字·韵、诗词"@zh .
+
+sg:Cell_A2_L6 a sg:MatrixCell ;
+    sg:matrixIndex "13"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A2 ;
+    sg:matrixLayer sg:Layer_L6 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "公版结论 ConsensusConclusion（\"七实三虚\"之判）"@zh .
+
+sg:Cell_A3_L0 a sg:MatrixCell ;
+    sg:matrixIndex "14"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A3 ;
+    sg:matrixLayer sg:Layer_L0 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "人物身份类型编码（圣贤化/君主/谋士/幕僚/评点家）"@zh .
+
+sg:Cell_A3_L1 a sg:MatrixCell ;
+    sg:matrixIndex "15"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A3 ;
+    sg:matrixLayer sg:Layer_L1 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "—（义理由人物承载而非人物承载义理）"@zh .
+
+sg:Cell_A3_L2 a sg:MatrixCell ;
+    sg:matrixIndex "16"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A3 ;
+    sg:matrixLayer sg:Layer_L2 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "—（评价另见 A2 论断层）"@zh .
+
+sg:Cell_A3_L3 a sg:MatrixCell ;
+    sg:matrixIndex "17"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A3 ;
+    sg:matrixLayer sg:Layer_L3 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "世系 Genealogy（宗族谱系）"@zh .
+
+sg:Cell_A3_L4 a sg:MatrixCell ;
+    sg:matrixIndex "18"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A3 ;
+    sg:matrixLayer sg:Layer_L4 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "—（评点文本另见 A1 文献层）"@zh .
+
+sg:Cell_A3_L5 a sg:MatrixCell ;
+    sg:matrixIndex "19"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A3 ;
+    sg:matrixLayer sg:Layer_L5 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "人物 Person、官职 OfficialTitle、评点家 Critic"@zh .
+
+sg:Cell_A3_L6 a sg:MatrixCell ;
+    sg:matrixIndex "20"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A3 ;
+    sg:matrixLayer sg:Layer_L6 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "注家 Annotator、再叙述者 Reteller、名家结论、公版文献 Work"@zh .
+
+sg:Cell_A4_L0 a sg:MatrixCell ;
+    sg:matrixIndex "21"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A4 ;
+    sg:matrixLayer sg:Layer_L0 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "纪年编码（叙事纪年/史实纪年的坐标约定）"@zh .
+
+sg:Cell_A4_L1 a sg:MatrixCell ;
+    sg:matrixIndex "22"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A4 ;
+    sg:matrixLayer sg:Layer_L1 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "—（天命观另见 A2 义理层）"@zh .
+
+sg:Cell_A4_L2 a sg:MatrixCell ;
+    sg:matrixIndex "23"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A4 ;
+    sg:matrixLayer sg:Layer_L2 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "—（史事评判另见 A2）"@zh .
+
+sg:Cell_A4_L3 a sg:MatrixCell ;
+    sg:matrixIndex "24"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A4 ;
+    sg:matrixLayer sg:Layer_L3 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "朝代 Dynasty、政权 Polity、势力 Faction、政局 PoliticalSituation"@zh .
+
+sg:Cell_A4_L4 a sg:MatrixCell ;
+    sg:matrixIndex "25"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A4 ;
+    sg:matrixLayer sg:Layer_L4 ;
+    sg:isPrimaryCell "false"^^xsd:boolean ;
+    rdfs:comment "—（事件的时间定位另见 L6 编年层）"@zh .
+
+sg:Cell_A4_L5 a sg:MatrixCell ;
+    sg:matrixIndex "26"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A4 ;
+    sg:matrixLayer sg:Layer_L5 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "事件 Event、战役 Battle、地理 Place、计谋 Stratagem、器物 Artifact"@zh .
+
+sg:Cell_A4_L6 a sg:MatrixCell ;
+    sg:matrixIndex "27"^^xsd:integer ;
+    sg:matrixAxis sg:Axis_A4 ;
+    sg:matrixLayer sg:Layer_L6 ;
+    sg:isPrimaryCell "true"^^xsd:boolean ;
+    rdfs:comment "正史事件 HistoricalEvent、编年层 ChronologyLayer、互文节点 IntertextText"@zh .
+
+################################
+# 七、N 的粒度栈与横切维度
+################################
+sg:Granularity_G1 a owl:Class, skos:Concept ;
+    rdfs:label "实体级"@zh ;
+    rdfs:comment "人物 / 战役 / 器物 / 势力 / 地理 / 计谋——本体的一等实体。"@zh ;
+    sg:mounts "人物谱系、战役聚合、势力消长、地理信息系统"@zh .
+
+sg:Granularity_G2 a owl:Class, skos:Concept ;
+    rdfs:label "单元级"@zh ;
+    rdfs:comment "回 / 则 / 卷 + 单元对齐——版本对勘与评点密度的最小统计单位。"@zh ;
+    sg:mounts "版本对勘、评点密度、回目格律聚合"@zh .
+
+sg:Granularity_G3 a owl:Class, skos:Concept ;
+    rdfs:label "段句级"@zh ;
+    rdfs:comment "自然段 / 句——情感曲线与人物共现的最小场景。"@zh ;
+    sg:mounts "情感曲线、文体计量、人物共现、句长统计"@zh .
+
+sg:Granularity_G4 a owl:Class, skos:Concept ;
+    rdfs:label "字词级"@zh ;
+    rdfs:comment "字 / 词 / 韵脚 / 异文位——下钻终点。"@zh ;
+    sg:mounts "平仄格律、异文 diff、词频、功能词统计"@zh .
+
+sg:TimeLine_narrative a skos:Concept ;
+    skos:prefLabel "叙事纪年"@zh ;
+    skos:definition "虚构年月，如\"建安十三年\"——演义自身的时序。"@zh .
+
+sg:TimeLine_textual a skos:Concept ;
+    skos:prefLabel "文本时序"@zh ;
+    skos:definition "fabula ↔ syuzhet：叙事情序与叙述顺序，含倒叙/补叙/插叙标记。"@zh .
+
+sg:TimeLine_dissemination a skos:Concept ;
+    skos:prefLabel "传播时序"@zh ;
+    skos:definition "成书 → 刊刻 → 评点 → 流传 → 电子化。"@zh .
+
+sg:VariantKind_char a skos:Concept ;
+    skos:prefLabel "字词异文"@zh ;
+    skos:definition "字/词层面的异写与异字。"@zh .
+
+sg:VariantKind_unit a skos:Concept ;
+    skos:prefLabel "单元异文"@zh ;
+    skos:definition "分合回、则目分合造成的结构差异。"@zh .
+
+sg:VariantKind_plot a skos:Concept ;
+    skos:prefLabel "情节异文"@zh ;
+    skos:definition "如\"温酒斩华雄\"——同一事件在版本间的情节位移。"@zh .
+
+sg:VariantKind_system a skos:Concept ;
+    skos:prefLabel "系统异文"@zh ;
+    skos:definition "如关索故事——某系统特有而另一系统全无。"@zh .
+
+sg:Intertext_pei-zhu a sg:IntertextText, owl:NamedIndividual ;
+    rdfs:label "《三国志》裴松之注"@zh ;
+    sg:intertextKind "peizhu" .
+
+sg:Intertext_pinghua-24 a sg:IntertextText, owl:NamedIndividual ;
+    rdfs:label "《三国志平话》"@zh ;
+    sg:intertextKind "pinghua" .
+
+sg:Intertext_huaginsuo a sg:IntertextText, owl:NamedIndividual ;
+    rdfs:label "《花关索传》"@zh ;
+    sg:intertextKind "huaben" .
+
+sg:Intertext_yuanzaju-sanguo a sg:IntertextText, owl:NamedIndividual ;
+    rdfs:label "元杂剧三国戏"@zh ;
+    sg:intertextKind "yuanzaju" .
+
+sg:Intertext_pingbook a sg:IntertextText, owl:NamedIndividual ;
+    rdfs:label "评书（三国讲史）"@zh ;
+    sg:intertextKind "pingbook" .
+
+sg:Intertext_later-adaptation a sg:IntertextText, owl:NamedIndividual ;
+    rdfs:label "后世改编"@zh ;
+    sg:intertextKind "adaptation" .
+
+################################
+# 八、前沿研究方法的挂载契约
+################################
+sg:Method_styleMetrics a sg:ResearchMethod ;
+    rdfs:label "文体计量"@zh ;
+    rdfs:comment "实词/虚词/语气词比例统计，跨版本比较白话纯度。"@zh ;
+    sg:methodGranularity sg:Granularity_G4 .
+
+sg:Method_sentimentCurve a sg:ResearchMethod ;
+    rdfs:label "情感曲线"@zh ;
+    rdfs:comment "按回/按段的情感极性轨迹（忠义/悲愤/豪迈/隐忍/智谋/哀婉六域）。"@zh ;
+    sg:methodGranularity sg:Granularity_G3 .
+
+sg:Method_chapterMeter a sg:ResearchMethod ;
+    rdfs:label "回目格律"@zh ;
+    rdfs:comment "回目对偶句的平仄与韵脚统计。"@zh ;
+    sg:methodGranularity sg:Granularity_G4 .
+
+sg:Method_personCooccurrence a sg:ResearchMethod ;
+    rdfs:label "人物共现"@zh ;
+    rdfs:comment "同一场景（自然段）内共现人物集合，生成人物关系网络。"@zh ;
+    sg:methodGranularity sg:Granularity_G3 .
+
+sg:Method_variantCollation a sg:ResearchMethod ;
+    rdfs:label "异文对勘"@zh ;
+    rdfs:comment "两版本同一单元的字词级差异定位与高亮。"@zh ;
+    sg:methodGranularity sg:Granularity_G4 .
+
+sg:Method_gisRoute a sg:ResearchMethod ;
+    rdfs:label "地理信息系统"@zh ;
+    rdfs:comment "战役/行军的地理落点与路径（G1 实体 + G3 段句定位）。"@zh ;
+    sg:methodGranularity sg:Granularity_G1 .
+
+sg:Method_commentaryDensity a sg:ResearchMethod ;
+    rdfs:label "评点密度"@zh ;
+    rdfs:comment "按回统计评点字数与位置分布（夹批/眉批/旁批/回前/回后/总评）。"@zh ;
+    sg:methodGranularity sg:Granularity_G2 .
+
+sg:Lord a owl:Class ;
+    rdfs:subClassOf sg:Person ;
+    rdfs:label "君主"@zh ;
+    sg:axisId "A3" ;
+    sg:layerId "L5" .
+
+sg:Minister a owl:Class ;
+    rdfs:subClassOf sg:Person ;
+    rdfs:label "臣属"@zh ;
+    sg:axisId "A3" ;
+    sg:layerId "L5" .
+
+sg:General a owl:Class ;
+    rdfs:subClassOf sg:Person ;
+    rdfs:label "武将"@zh ;
+    sg:axisId "A3" ;
+    sg:layerId "L5" .
+
+sg:Strategist a owl:Class ;
+    rdfs:subClassOf sg:Person ;
+    rdfs:label "谋士"@zh ;
+    sg:axisId "A3" ;
+    sg:layerId "L5" .
+
+sg:City a owl:Class ;
+    rdfs:subClassOf sg:Place ;
+    rdfs:label "城邑"@zh ;
+    sg:axisId "A4" ;
+    sg:layerId "L5" .
+
+sg:Pass a owl:Class ;
+    rdfs:subClassOf sg:Place ;
+    rdfs:label "关隘"@zh ;
+    sg:axisId "A4" ;
+    sg:layerId "L5" .
+
+sg:Battlefield a owl:Class ;
+    rdfs:subClassOf sg:Place ;
+    rdfs:label "战场"@zh ;
+    sg:axisId "A4" ;
+    sg:layerId "L5" .
+
+sg:Chapter a owl:Class ;
+    rdfs:subClassOf sg:Unit ;
+    rdfs:label "回目"@zh ;
+    sg:axisId "A1" ;
+    sg:layerId "L4" .
+
+sg:Adaptation a owl:Class ;
+    rdfs:subClassOf sg:IntertextText ;
+    rdfs:label "衍生作品"@zh ;
+    sg:axisId "A4" ;
+    sg:layerId "L6" .
+
+################################
+# 九、结构性元属性
+################################
+sg:axisId a owl:DatatypeProperty ;
+    rdfs:comment "本体坐标：所属轴编号（A1-A4）"@zh ;
+    rdfs:range xsd:string .
+
+sg:axisEn a owl:DatatypeProperty ;
+    rdfs:comment "轴英文名"@zh ;
+    rdfs:range xsd:string .
+
+sg:layerId a owl:DatatypeProperty ;
+    rdfs:comment "本体坐标：所属层编号（L0-L6）"@zh ;
+    rdfs:range xsd:string .
+
+sg:layerOrder a owl:DatatypeProperty ;
+    rdfs:comment "层的抽象顺序（0=元模型 … 6=外延）"@zh ;
+    rdfs:range xsd:integer .
+
+sg:layerEn a owl:DatatypeProperty ;
+    rdfs:comment "层英文名"@zh ;
+    rdfs:range xsd:string .
+
+sg:estCount a owl:DatatypeProperty ;
+    rdfs:comment "该类的估算实例数（N 的量级估计）"@zh ;
+    rdfs:range xsd:integer .
+
+sg:matrixIndex a owl:DatatypeProperty ;
+    rdfs:comment "正交矩阵中的格序号（0-27）"@zh ;
+    rdfs:range xsd:integer .
+
+sg:isPrimaryCell a owl:DatatypeProperty ;
+    rdfs:comment "是否为主承载格"@zh ;
+    rdfs:range xsd:boolean .
+
+sg:mounts a owl:DatatypeProperty ;
+    rdfs:comment "该粒度挂载的前沿研究方法列表"@zh ;
+    rdfs:range xsd:string .
+
+sg:methodGranularity a owl:DatatypeProperty ;
+    rdfs:comment "研究方法声明的挂载粒度"@zh ;
+    rdfs:range xsd:string .
+
+sg:granularity a owl:DatatypeProperty ;
+    rdfs:comment "实例粒度（G1-G4）"@zh ;
+    rdfs:range xsd:string .
+
+sg:timeLine a owl:DatatypeProperty ;
+    rdfs:comment "时间三分：narrative/textual/dissemination"@zh ;
+    rdfs:range xsd:string .
+
+sg:parentOf a owl:DatatypeProperty ;
+    rdfs:comment "粒度栈父实例引用"@zh ;
+    rdfs:range xsd:string .
+
+sg:matrixAxis a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range owl:Thing .
+
+sg:matrixLayer a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range owl:Thing .
+
+sg:axis a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range owl:Thing .
+
+sg:layer a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range owl:Thing .
+
+
+################################################################
+# 十、v2 沿用谓词（供既有 ABox 使用，未列入 v3 坐标体系）
+################################################################
+sg:chapterNumber a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:styleName a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:title a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:birthYear a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:deathYear a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:referenceCount a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:capitalName a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:period a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:troopStrength a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:description a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:placeLevel a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:coordinates a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:storyYear a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:outcome a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:occursAt a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:pl62 a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:nanz a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:xic a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:inChapter a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:placeName a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:virtual a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:userName a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:targetName a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:artifactType a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:ownerName a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:titleText a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:authorName a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:poemType a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:contentText a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:prophecyText a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:fulfilledByText a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:commenter a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:commentText a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:editionUnits a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:editionStatus a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:holdingForm a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:gapNote a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:acquisitionPath a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:childOf a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:siblingOf a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:vassalOf a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:lordOf a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:spouseOf a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:swornBrotherOf a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:enemyOf a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:killedBy a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:leader a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:memberOf a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:usesArtifact a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:foughtIn a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:kills a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:mentorOf a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:usesStratagem a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:alliesWith a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:compositionYear a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:partiesIn a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:targetedBy a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:wrote a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+sg:commentsOn a owl:DatatypeProperty ;
+    rdfs:range xsd:string .
+
+################################################################
+# 十一、既有 ABox（章回骨架与代表性实例）
+# 本段由 sanguo-data.js / sanguo-topics.js 派生，生成器原样保留。
+################################################################
 ################################
 # 四、章回骨架
 ################################
