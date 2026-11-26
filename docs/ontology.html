@@ -132,6 +132,45 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
   display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; }
 .cq-q { font-size:15px; color:#3a1c00; font-weight:600; line-height:1.9; }
 .cq-hint { font-size:12px; color:#8b6914; margin-top:3px; line-height:1.8; }
+
+/* 经典引文 */
+.quote-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:14px; margin-top:14px; }
+.quote-card { border:1px solid #c9b896; border-left:5px solid #8b4513; border-radius:6px; background:#fffdf5;
+  padding:18px 20px; display:flex; flex-direction:column; gap:10px; }
+.quote-text { font-size:14.5px; color:#3a1c00; line-height:2.1; font-weight:600; font-style:normal; }
+.quote-text::before { content:"「"; color:#8b0000; font-size:16px; }
+.quote-text::after { content:"」"; color:#8b0000; font-size:16px; }
+.quote-src { font-size:12.5px; color:#8b6914; line-height:1.9; margin-top:auto; }
+.quote-src b { color:#8b0000; font-weight:700; }
+.quote-tag { align-self:flex-start; font-size:11px; color:#8b0000; background:#f0e6d2;
+  border:1px solid #c9b896; border-radius:10px; padding:1px 10px; font-weight:600; }
+/* 九、N 的结构（五元组 · 粒度栈 · 实例栈下钻） */
+.sub-h { color:#8b0000; font-size:15px; font-weight:700; margin:22px 0 10px;
+  border-left:4px solid #8b0000; padding-left:10px; }
+.n-formula { background:#3a1c00; color:#fffdf5; border-radius:6px; padding:14px 22px;
+  font-size:19px; font-weight:700; letter-spacing:1px; margin:12px 0; }
+.n-comps { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; margin:12px 0; }
+.n-comp { border:1px solid #c9b896; border-top:3px solid #8b0000; border-radius:6px; background:#fffdf5; padding:12px 14px; }
+.n-comp-label { font-size:15px; font-weight:700; color:#3a1c00; }
+.n-comp-label .axis-en { margin-left:8px; }
+.n-comp-desc { font-size:12px; color:#5a3a1a; line-height:1.9; margin-top:4px; }
+.n-cross-item { border:1px solid #c9b896; border-radius:6px; background:#fffdf5; padding:12px 16px; margin:10px 0; }
+.n-cross-vals { margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; }
+.gran-row { display:flex; gap:12px; align-items:flex-start; border:1px solid #c9b896;
+  border-left:6px solid #8b4513; border-radius:6px; background:#fffdf5; padding:12px 16px; margin-bottom:8px; }
+.gran-main { flex:1; min-width:0; }
+.gran-mounts { margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; align-items:baseline; }
+.gran-arrow { color:#8b0000; font-size:14px; font-weight:700; margin:0 0 8px 26px; }
+.dd-controls { margin:10px 0 14px; }
+.dd-card { border:1px solid #8b4513; border-radius:6px; background:#fffdf5; padding:14px 18px; margin-bottom:10px; }
+.dd-head { display:flex; gap:12px; align-items:flex-start; }
+.dd-ids { margin-top:6px; display:flex; flex-wrap:wrap; gap:6px; align-items:baseline; font-size:12px; color:#5a3a1a; }
+.dd-ids code { font-family:Consolas,monospace; font-size:11px; color:#8b0000; }
+.dd-chain { margin-top:8px; font-family:Consolas,monospace; font-size:12px; color:#8b0000;
+  background:#f5f0e6; border-radius:4px; padding:4px 10px; display:inline-block; }
+.dd-quote { margin-top:8px; padding:8px 12px; background:#f5f0e6; border-left:3px solid #8b4513;
+  border-radius:4px; font-size:13px; line-height:2; }
+.dd-evi { margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; }
 </style>
 </head>
 <body>
@@ -208,6 +247,20 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
   <section class="sec" id="sec-cq">
     <h2 class="sec-h2"><span class="no">八</span>能力问题（Competency Questions）<span class="sub">本体必须能够回答的问题</span></h2>
     <div id="cq-list"></div>
+  </section>
+
+  <section class="sec" id="sec-quotes">
+    <h2 class="sec-h2"><span class="no">九</span>经典引文<span class="sub">本体所据 · 虚实有据 · 含出处</span></h2>
+    <div class="quote-grid" id="quote-grid"></div>
+  </section>
+
+  <section class="sec" id="sec-nstructure">
+    <h2 class="sec-h2"><span class="no">十</span>N 的结构<span class="sub">五元组 · 粒度栈 · 实例栈下钻 · 全部内容来自 ontology-schema.js</span></h2>
+    <div id="n-tuple"></div>
+    <h3 class="sub-h">粒度栈阶梯（label / desc / 承载方法）</h3>
+    <div id="gran-ladder"></div>
+    <h3 class="sub-h">实例栈下钻示例（点击逐级展开）</h3>
+    <div id="drill-wrap"></div>
   </section>
 
 </main>
@@ -544,6 +597,159 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     }).join('');
   }
 
+  /* ---------- 九、经典引文（F2.6） ---------- */
+  function renderQuotes(){
+    const list = O.classicQuotes || [];
+    document.getElementById('quote-grid').innerHTML = list.map(q => `
+      <figure class="quote-card">
+        <span class="quote-tag">${esc(q.tag||'')}</span>
+        <blockquote class="quote-text">${esc(q.text)}</blockquote>
+        <figcaption class="quote-src">出处：<b>${esc(q.source)}</b></figcaption>
+      </figure>`).join('');
+  }
+
+  /* ---------- 十、N 的结构（五元组 · 粒度栈 · 实例栈下钻） ---------- */
+  let ddShown = 1;
+  function ddSteps(){ return O.drilldownExamples || []; }
+  function ddChain(s, byId){
+    const chain = [];
+    let cur = s, guard = 0;
+    while(cur && guard++ < 20){ chain.unshift(cur.id); cur = cur.parentOf ? byId[cur.parentOf] : null; }
+    return chain;
+  }
+
+  function renderNTuple(){
+    const box = document.getElementById('n-tuple');
+    if(!box) return;
+    const t = O.nTuple || {};
+    const comps = t.components || [];
+    const cross = O.crossDimensions || {};
+    const crossKeys = Object.keys(cross);
+    const crossCards = crossKeys.map(key=>{
+      const d = cross[key];
+      const vals = Array.isArray(d) ? d : (d.nodes || []);
+      const pair = Array.isArray(d) ? '' : ` <i>${esc(d.domain||'')} → ${esc(d.range||'')}</i>`;
+      return `
+        <div class="n-cross-item">
+          <div class="axis-head"><h3>${esc(d.label||key)}</h3><span class="axis-en">${esc(key)}${pair}</span></div>
+          <div class="axis-desc">${esc(d.desc||'')}</div>
+          <div class="n-cross-vals">${vals.map(v=>`<span class="chip chip-sm" title="${esc(v.desc||v.kind||'')}">${esc(v.label)} <i>${esc(v.id)}</i></span>`).join('')}</div>
+        </div>`;
+    }).join('');
+    box.innerHTML = `
+      <div class="n-formula">${esc(t.formula||'')}</div>
+      <div class="axis-desc">${esc(t.desc||'')}</div>
+      <div class="n-comps">
+        ${comps.map(c=>`
+          <div class="n-comp">
+            <div class="n-comp-label">${esc(c.label)}<span class="axis-en">${esc(c.id)}</span></div>
+            <div class="n-comp-desc">${esc(c.desc||'')}</div>
+          </div>`).join('')}
+      </div>
+      <h3 class="sub-h">横切维度（${crossKeys.length} 个 · 实例的额外坐标，不新增轴）</h3>
+      ${crossCards}`;
+  }
+
+  function renderGranLadder(){
+    const box = document.getElementById('gran-ladder');
+    if(!box) return;
+    const gran = O.granularities || [];
+    const methods = O.researchMethods || [];
+    box.innerHTML = gran.map((g,i)=>{
+      const mounted = methods.filter(m=>m.granularity===g.id);
+      return `
+      <div class="gran-row" style="margin-left:${i*22}px">
+        <span class="layer-no">${esc(g.id)}</span>
+        <div class="gran-main">
+          <div class="layer-name">${esc(g.label)}<span class="en">承载方法 ${(g.mounts||[]).length} · 研究方法 ${mounted.length}</span></div>
+          <div class="layer-desc">${esc(g.desc||'')}</div>
+          <div class="gran-mounts"><span class="axis-classes-n">承载方法：</span>${(g.mounts||[]).map(m=>`<span class="chip chip-sm">${esc(m)}</span>`).join('')}</div>
+          ${mounted.length?`<div class="gran-mounts"><span class="axis-classes-n">研究方法：</span>${mounted.map(m=>`<span class="chip chip-sm" title="${esc(m.desc||'')}">${esc(m.label)} <i>${esc(m.id)}</i></span>`).join('')}</div>`:''}
+        </div>
+        <span class="layer-cnt">${mounted.length}</span>
+      </div>
+      ${i<gran.length-1?'<div class="gran-arrow">↓</div>':''}`;
+    }).join('');
+  }
+
+  function renderDrillInner(){
+    const list = document.getElementById('dd-list');
+    const hint = document.getElementById('dd-hint');
+    const btn = document.getElementById('dd-next');
+    if(!list) return;
+    const steps = ddSteps();
+    if(!steps.length){ list.innerHTML = ''; if(hint) hint.textContent = '（暂无下钻示例数据）'; return; }
+    const byId = {};
+    steps.forEach(s=>byId[s.id]=s);
+    const shown = Math.max(1, Math.min(ddShown, steps.length));
+    list.innerHTML = steps.slice(0, shown).map(s=>{
+      const g = (O.granularities||[]).find(x=>x.id===s.granularity) || {};
+      const ax = (O.axes||[]).find(x=>x.id===s.axis) || {};
+      const ly = (O.layers||[]).find(x=>x.id===s.layer) || {};
+      const chain = ddChain(s, byId);
+      const parentDisp = s.parentOf ? esc(s.parentOf) : '—（栈根）';
+      return `
+      <div class="dd-card" data-gran="${esc(s.granularity||'')}">
+        <div class="dd-head">
+          <span class="layer-no">${esc(s.granularity||'')}</span>
+          <div class="gran-main">
+            <div class="layer-name">${esc(s.label||'')}<span class="en">${esc(s.class||'')}</span></div>
+            <div class="dd-ids"><span class="axis-classes-n">实例 id</span> <code>${esc(s.id)}</code><span class="axis-classes-n">granularity</span> <code>${esc(s.granularity||'')} ${esc(g.label||'')}</code><span class="axis-classes-n">parentOf</span> <code>${parentDisp}</code></div>
+            <div class="dd-chain">回溯链：${chain.map(esc).join(' ← ')}</div>
+            <div class="layer-desc">坐标：${esc(s.axis||'')} ${esc(ax.label||'')} × ${esc(s.layer||'')} ${esc(ly.label||'')}</div>
+            <div class="layer-desc">${esc(s.desc||'')}</div>
+            ${s.quote?`<div class="dd-quote">${esc(s.quote)}</div>`:''}
+            ${s.evidence?`<div class="dd-evi">${Object.keys(s.evidence).map(k=>`<span class="chip chip-sm">${esc(k)} <code>${esc(Array.isArray(s.evidence[k])?'['+s.evidence[k].join(', ')+']':String(s.evidence[k]))}</code></span>`).join('')}</div>`:''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    if(btn) btn.disabled = shown >= steps.length;
+    if(hint){
+      if(shown >= steps.length){
+        const last = steps[steps.length-1];
+        const gl = (O.granularities||[]).find(x=>x.id===last.granularity) || {};
+        hint.textContent = `已到 ${last.granularity||''}（${gl.label||''}）：${gl.desc||''}`;
+      } else {
+        hint.textContent = `已展开 ${shown} / ${steps.length} 级，点击「逐级下钻」继续。`;
+      }
+    }
+  }
+
+  function renderDrill(){
+    const wrap = document.getElementById('drill-wrap');
+    if(!wrap) return;
+    wrap.innerHTML = `
+      <div class="dd-controls layer-controls">
+        <button class="btn btn-sm" id="dd-next" type="button">逐级下钻</button>
+        <button class="btn btn-sm" id="dd-all" type="button">全部展开</button>
+        <button class="btn btn-sm btn-ghost" id="dd-reset" type="button">重置</button>
+        <span class="layer-caption" id="dd-hint"></span>
+      </div>
+      <div id="dd-list"></div>`;
+    ddShown = 1;
+    renderDrillInner();
+  }
+
+  function bindDrillInteractions(){
+    const wrap = document.getElementById('drill-wrap');
+    if(!wrap) return;
+    wrap.addEventListener('click', e=>{
+      const steps = ddSteps();
+      const b = e.target.closest('button');
+      if(b){
+        if(b.id === 'dd-next'){ ddShown = Math.min(ddShown+1, steps.length); renderDrillInner(); }
+        else if(b.id === 'dd-all'){ ddShown = steps.length; renderDrillInner(); }
+        else if(b.id === 'dd-reset'){ ddShown = 1; renderDrillInner(); }
+        return;
+      }
+      if(e.target.closest('.dd-card') && ddShown < steps.length){
+        ddShown = Math.min(ddShown+1, steps.length);
+        renderDrillInner();
+      }
+    });
+  }
+
   /* ---------- 总渲染 ---------- */
   function renderAll(){
     renderHero();
@@ -555,6 +761,10 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     renderRelations();
     renderProjections();
     renderCQ();
+    renderQuotes();
+    renderNTuple();
+    renderGranLadder();
+    renderDrill();
   }
 
   window.ontoRender = renderAll;
@@ -563,6 +773,7 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     renderAll();
     bindLayerInteractions();
     bindMatrixTip();
+    bindDrillInteractions();
   });
 })();
 </script>

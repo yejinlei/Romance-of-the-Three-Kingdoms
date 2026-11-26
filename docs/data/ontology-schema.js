@@ -558,6 +558,20 @@ const SANGUO_ONTOLOGY = {
     }
   ],
 
+  /* ============================ N 的结构（五元组） ============================ */
+  nTuple: {
+    label: 'N 的五元组',
+    formula: 'N = 实体 × 粒度 × 轴 × 层 × 版本',
+    desc: '4 × 7 骨架不再下钻（正交性已完备）；下钻发生在 N 内部的粒度栈（G1–G4）与三个横切维度上。N 因此不再是单一计数，而是五元组：每个实例由实体身份、粒度坐标、轴坐标、层坐标与版本坐标共同确定。',
+    components: [
+      { id: 'entity', label: '实体', desc: '一个具名实例：人物、单元、段句、字词、事件、战役、评注、版本、评论家……' },
+      { id: 'granularity', label: '粒度', desc: 'G1–G4 粒度栈：实体级 / 单元级 / 段句级 / 字词级，实例下钻的唯一下坡路，G4 为终点。' },
+      { id: 'axis', label: '轴', desc: 'A1–A4 横向分类坐标（版本形制 / 叙事内容 / 人物传承 / 时代事件），回答属于哪一类问题。' },
+      { id: 'layer', label: '层', desc: 'L0–L6 纵向抽象坐标（元模型 / 义理 / 论断 / 谱系 / 文献 / 人物叙事 / 外延），回答处于哪一抽象级。' },
+      { id: 'edition', label: '版本', desc: '19 种古本 / 评本 / 史书语料的版本坐标，跨越演义 / 志传 / 评本 / 汇评 / 平话 / 史书注六系统。' }
+    ]
+  },
+
   /* ============================ N 的粒度栈（G1–G4，下钻的唯一下坡路） ============================ */
   granularities: [
     { id: 'G1', label: '实体级', desc: '人物 / 战役 / 器物 / 势力 / 地理 / 计谋——本体的一等实体。',
@@ -624,9 +638,63 @@ const SANGUO_ONTOLOGY = {
       desc: '按回统计评点字数与位置分布（夹批/眉批/旁批/回前/回后/总评）。' }
   ],
 
+  /* ============================ 实例栈下钻示例（G1→G4，页面与规范同源展示） ============================ */
+  /* 每级实例：id / granularity / parentOf（上级实例 id，根为 null）/ 坐标 (axis, layer) / 简短说明。 */
+  drilldownExamples: [
+    {
+      id: 'p2',
+      granularity: 'G1',
+      parentOf: null,
+      axis: 'A3',
+      layer: 'L5',
+      class: 'Person',
+      label: '关羽（字云长）',
+      desc: '蜀汉名将，「温酒斩华雄」情节的主角；该情节的虚实断语为「移花接木」（史载斩华雄者为孙坚部众）。'
+    },
+    {
+      id: 'unit-mao-ch5',
+      granularity: 'G2',
+      parentOf: 'p2',
+      axis: 'A1',
+      layer: 'L4',
+      class: 'Unit',
+      label: '毛本第 5 回 · 发矫诏诸镇应曹公 破关兵三英战吕布',
+      desc: '关羽「温酒斩华雄」的承载单元；对应嘉靖本第 9–10 则，是版本对勘与评点密度的最小统计单位。'
+    },
+    {
+      id: 'span-ch5-jiuwen',
+      granularity: 'G3',
+      parentOf: 'unit-mao-ch5',
+      axis: 'A2',
+      layer: 'L5',
+      class: 'TextualSpan',
+      label: '「云长提华雄之头，掷于地上，其酒当温」句',
+      desc: '毛本第 5 回「温酒斩华雄」的高潮句，段句级是情感曲线与人物共现的最小场景。',
+      quote: '正欲探听，鸾铃响处，马到中军，云长提华雄之头，掷于地上，其酒当温。'
+    },
+    {
+      id: 'var-ch5-jiu-dang',
+      granularity: 'G4',
+      parentOf: 'span-ch5-jiuwen',
+      axis: 'A1',
+      layer: 'L4',
+      class: 'VariantReading',
+      label: '「其酒当温 ↔ 其酒尚温」当/尚 字词异文位',
+      desc: '毛本作「其酒当温」、嘉靖本作「其酒尚温」的字词异文（variantKind=char 同词类异文）；G4 字词级为下钻终点。',
+      evidence: {
+        editionPair: 'mao:jiajing',
+        variantKind: 'char',
+        maoReading: '其酒当温',
+        jiajingReading: '其酒尚温',
+        diffChar: '当 ↔ 尚',
+        diffSpan: [2, 3]
+      }
+    }
+  ],
+
   /* ============================ 明确不做（防止过度下钻） ============================ */
   nonGoals: [
-    '不引入第 5 条轴、第 8 层（4×7 骨架已正交完备）。',
+    '明确不做：不引入第 5 条轴、第 8 层（4×7 骨架已正交完备）。',
     '不做细于字词级的标注（字内部结构、Unicode 字形变体不进本体）。',
     '不做机器自动标注的置信度体系（本期人工/半人工标注）。',
     '互文网本期只定义关系与已知节点，不做逐出对勘。'
@@ -666,6 +734,54 @@ const SANGUO_ONTOLOGY = {
       confidence: '0-1',
       tags: '自由标签'
     },
+
+    /* 评点位置受控词（commentaryPos 字段的值域；G2 评点密度统计的分组键） */
+    commentaryPos: {
+      label: '评点位置（受控词）',
+      desc: '评注实例的落位坐标，取值固定为六位。',
+      terms: [
+        { id: 'jia', label: '夹批', desc: '夹于正文行间的批语。' },
+        { id: 'mei', label: '眉批', desc: '批于天头的批语。' },
+        { id: 'bang', label: '旁批', desc: '批于正文行侧的批语。' },
+        { id: 'huqian', label: '回前', desc: '回目前的总论性批语。' },
+        { id: 'huhou', label: '回后', desc: '回末的总结性批语。' },
+        { id: 'zongping', label: '总评', desc: '通回或全书的总评性批语。' }
+      ]
+    },
+
+    /* G4 字段定义（字词级：异文对勘与声律标注） */
+    g4Fields: {
+      tokenKind: {
+        label: '词性',
+        range: 'content | function | modal',
+        terms: [
+          { id: 'content', label: '实词' },
+          { id: 'function', label: '虚词' },
+          { id: 'modal', label: '语气词' }
+        ],
+        def: '字词的词性类：实词 / 虚词 / 语气词（同词类异文的核心判定位）。'
+      },
+      tone: {
+        label: '平仄',
+        range: 'ping | ze',
+        terms: [
+          { id: 'ping', label: '平' },
+          { id: 'ze', label: '仄' }
+        ],
+        def: '格律字位的平仄（回目对仗与章回题词声律分析用）。'
+      },
+      rhymeGroup: {
+        label: '韵部',
+        range: 'string（平水韵韵部名）',
+        def: '韵脚所属韵部（章回题词与韵文韵脚密度分析用，取平水韵系统）。'
+      },
+      diffSpan: {
+        label: '差异位',
+        range: '[start, end]（int，含头不含尾）',
+        def: '异文 diff 的字符区间，span 内为可对勘的最小差异文本。'
+      }
+    },
+
     bundles: [
       { id: 'consensus-editions', label: '版本公版结论', target: 'Edition',
         desc: '每种古本的年代、系统归属、谱系地位的学界公论（如嘉靖本为最早刻本、毛本为清定型本）。' },
@@ -694,6 +810,51 @@ const SANGUO_ONTOLOGY = {
     '《三国志》裴注与演义的事件对应率如何？（HistoricalAssessment 统计）',
     '哪条叙事技法在哪些回目的评点中被反复揭示？（NarrativeTechnique × Commentary）',
     '全书义理（天命/正统/义）的落点集中在哪些事件与意象上？（DoctrineConcept × Imagery）'
+  ],
+
+  /* ============================ 经典引文（Classic Quotes，F2.6） ============================ */
+  /* 本体所据的经典论断与评点语，含出处；供 ontology.html 经典引文区展示。 */
+  classicQuotes: [
+    {
+      text: '《三国演义》是“七分实事，三分虚构”，观者往往为其惑，非识者不能辨。',
+      source: '章学诚《丙辰札记》',
+      tag: '虚实有据'
+    },
+    {
+      text: '据正史，采小说，证文义，通好尚，非俗非虚，易观易入，非史氏苍古之文，去瞽传诙谐之气，陈叙百年，该括万事。',
+      source: '庸愚子（蒋大器）《三国志通俗演义序》',
+      tag: '成书观'
+    },
+    {
+      text: '读《三国志》者，当知有正统、闰运、僭国之别，先主帝蜀，为正统之所在。',
+      source: '毛宗岗《读三国志法》',
+      tag: '正统观'
+    },
+    {
+      text: '文有草蛇灰线，伏脉千里。叙事之法，首尾照应，不着一字，而意已尽在其中。',
+      source: '毛宗岗《三国演义》回评（第一回批语）',
+      tag: '叙事技法'
+    },
+    {
+      text: '以虚写实，以实带虚；虚实相生，而情事乃见。',
+      source: '毛宗岗《三国演义》回评（第四十三回批语）',
+      tag: '虚实相生'
+    },
+    {
+      text: '事有本于正史而增饰者，有史所无而作者造之者。增饰者，史之枝叶；造之者，史之华实。',
+      source: '李卓吾（李贽）《三国演义》批语',
+      tag: '虚实有据'
+    },
+    {
+      text: '文之思也，其神远矣。故寂然凝虑，思接千载；悄焉动容，视通万里。',
+      source: '刘勰《文心雕龙·神思》',
+      tag: '文体渊源'
+    },
+    {
+      text: '三国之世，人才之盛，为后世所罕及。而演义之书，独以义气忠勇动人，此其所以传也。',
+      source: '钟伯敬（钟惺）《三国演义》序',
+      tag: '义理'
+    }
   ]
 };
 
