@@ -349,7 +349,8 @@
   const readerState = {
     edition: 'mao',
     lang: 'traditional',
-    annot: { all:true, maozigang:true, lizhi:true, zhongxing:true, liyuweng:true }
+    // 批注单一真相源：四家标志即真相；可见性与 URL 编解码均从此派生
+    annot: { maozigang:true, lizhi:true, zhongxing:true, liyuweng:true }
   };
   let readerUrlParsed = false;
 
@@ -419,15 +420,14 @@
     }
     const annot = qs.get('annot');
     if(annot != null){
+      // URL 只编码「实际可见的评点家集合」，与 applyAnnotVisibility 同源：
+      // all=四家全开 / none=全关 / 列表=仅列表内可见。兼容旧 off: 前缀（取其后可见集）。
+      ANNOT_CRITICS.forEach(c => { readerState.annot[c.id] = false; });
       if(annot === 'all'){
-        readerState.annot = { all:true, maozigang:true, lizhi:true, zhongxing:true, liyuweng:true };
-      } else if(annot === 'none'){
-        readerState.annot = { all:false, maozigang:false, lizhi:false, zhongxing:false, liyuweng:false };
-      } else {
-        const off = annot.indexOf('off:') === 0;
-        const ids = (off ? annot.slice(4) : annot).split(',').map(s => s.trim()).filter(Boolean);
-        readerState.annot.all = !off;
-        ANNOT_CRITICS.forEach(c => { readerState.annot[c.id] = ids.indexOf(c.id) >= 0; });
+        ANNOT_CRITICS.forEach(c => { readerState.annot[c.id] = true; });
+      } else if(annot !== 'none'){
+        const ids = annot.replace(/^off:/, '').split(',').map(s => s.trim()).filter(Boolean);
+        ids.forEach(id => { if(Object.prototype.hasOwnProperty.call(readerState.annot, id)) readerState.annot[id] = true; });
       }
     }
   }
@@ -440,10 +440,12 @@
     const chMeta = (data.chapters || []).find(c => c.id === currentChapter);
     if(chMeta && chMeta.jiajingId) qs.set('unit2', String(chMeta.jiajingId));
     qs.set('lang', readerState.lang);
-    const onIds = ANNOT_CRITICS.filter(c => readerState.annot[c.id]).map(c => c.id);
+    // 编码与 applyAnnotVisibility 同源：可见集合 = readerState.annot 中为真的家
+    const visibleIds = ANNOT_CRITICS.filter(c => readerState.annot[c.id]).map(c => c.id);
     let annotVal;
-    if(!readerState.annot.all) annotVal = onIds.length ? ('off:' + onIds.join(',')) : 'none';
-    else annotVal = (onIds.length === ANNOT_CRITICS.length) ? 'all' : onIds.join(',');
+    if(visibleIds.length === ANNOT_CRITICS.length) annotVal = 'all';
+    else if(visibleIds.length === 0) annotVal = 'none';
+    else annotVal = visibleIds.join(',');
     qs.set('annot', annotVal);
     history.replaceState(null, '', location.pathname + '?' + qs.toString() + location.hash);
   }
@@ -501,7 +503,13 @@
       return c ? c.name : id;
     };
     const idx = (ANN && Array.isArray(ANN.commentaryIndex)) ? ANN.commentaryIndex : [];
-    const annotBlocksHTML = idx.filter(a => a.unit === chapterNum).map(a => `
+    const chapAnnots = idx.filter(a => a.unit === chapterNum);
+    // 本回各评点家批注条数（含毛宗岗回前评），供工具栏提示「本回 N 条 / 本回无」
+    const criticCount = {};
+    chapAnnots.forEach(a => { criticCount[a.criticId] = (criticCount[a.criticId] || 0) + 1; });
+    if(chapterText.preComment) criticCount['maozigang'] = (criticCount['maozigang'] || 0) + 1;
+    const allAnnotOn = ANNOT_CRITICS.every(c => readerState.annot[c.id]);
+    const annotBlocksHTML = chapAnnots.map(a => `
               <div class="mb-3 p-3 bg-[#faf6ec] rounded text-sm border-l-4 border-[#8b6914]" data-annot-critic="${a.criticId}">
                 <span class="comment-text font-bold">【${critName(a.criticId)}评】</span>
                 ${esc(a.summary || '')}
@@ -550,10 +558,12 @@
           <!-- 批注显隐：总开关 + 按评点家（毛宗岗/李卓吾/钟伯敬/李渔）分栏 -->
           <div class="annot-toolbar text-sm flex flex-wrap gap-3 items-center border-b border-[#c9b896] pb-2 mb-3">
             <span class="font-bold">批注：</span>
-            <label class="flex items-center gap-1"><input type="checkbox" id="annot-toggle-all" ${readerState.annot.all?'checked':''} onchange="appSetAnnot('all', this.checked)"> 总开关</label>
-            ${ANNOT_CRITICS.map(c=>`
-              <label class="flex items-center gap-1"><input type="checkbox" data-annot-toggle="${c.id}" ${readerState.annot[c.id]?'checked':''} onchange="appSetAnnot('${c.id}', this.checked)"> ${c.name}</label>
-            `).join('')}
+            <label class="flex items-center gap-1" title="全选 / 全清四家批注"><input type="checkbox" id="annot-toggle-all" ${allAnnotOn?'checked':''} onchange="appSetAnnot('all', this.checked)"> 总开关</label>
+            ${ANNOT_CRITICS.map(c=>{
+              const n = criticCount[c.id] || 0;
+              return `
+              <label class="flex items-center gap-1" title="${n?'本回 '+c.name+' 批注 '+n+' 条':'本回无 '+c.name+' 批注'}"><input type="checkbox" data-annot-toggle="${c.id}" ${readerState.annot[c.id]?'checked':''} onchange="appSetAnnot('${c.id}', this.checked)"> ${c.name}<span class="text-xs ${n?'text-[#8b6914]':'text-[#aaa]'} ml-0.5">（${n?n+'条':'本回无'}）</span></label>`;
+            }).join('')}
           </div>
 
           <div class="reader-content">
@@ -585,12 +595,11 @@
     syncReaderUrl();
   }
 
-  // 批注显隐：总开关 + 各评点家开关 → 容器 hidden 属性
+  // 批注显隐：单一真相源 = readerState.annot 四家标志；总开关为全选/全清便利开关
   function applyAnnotVisibility(){
     document.querySelectorAll('[data-annot-critic]').forEach(node => {
       const cid = node.getAttribute('data-annot-critic');
-      const on = !!readerState.annot.all && readerState.annot[cid] !== false;
-      node.hidden = !on;
+      node.hidden = !readerState.annot[cid];
     });
   }
 
@@ -1799,8 +1808,20 @@
     }
   };
   global.appSetAnnot = function(key, on){
-    if(key === 'all') readerState.annot.all = !!on;
-    else if(Object.prototype.hasOwnProperty.call(readerState.annot, key)) readerState.annot[key] = !!on;
+    on = !!on;
+    if(key === 'all'){
+      // 总开关 = 全选/全清：同步四家状态与对应勾选框 DOM，不重渲染整页
+      ANNOT_CRITICS.forEach(c => {
+        readerState.annot[c.id] = on;
+        const cb = document.querySelector('input[data-annot-toggle="' + c.id + '"]');
+        if(cb) cb.checked = on;
+      });
+    } else if(Object.prototype.hasOwnProperty.call(readerState.annot, key)){
+      readerState.annot[key] = on;
+      // 个体变化后回写总开关勾选状态：四家全选 → 总开关勾上
+      const allCb = document.getElementById('annot-toggle-all');
+      if(allCb) allCb.checked = ANNOT_CRITICS.every(c => readerState.annot[c.id]);
+    }
     applyAnnotVisibility();
     syncReaderUrl();
   };
