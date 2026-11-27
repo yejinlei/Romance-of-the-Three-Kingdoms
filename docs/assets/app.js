@@ -270,6 +270,9 @@
       case 'statistics':    renderStatistics(content); break;
       case 'ontology':      renderOntology(content); break;
       case 'about':         renderAbout(content); break;
+      case 'topic-doctrines':  renderTopicDoctrines(content); break;
+      case 'topic-battles':    renderTopicBattles(content); break;
+      case 'topic-prophecies': renderTopicProphecies(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -2337,6 +2340,266 @@
       const yearData = Object.entries(battleYears).sort((a,b)=>a[0]-b[0]);
       echarts.init(document.getElementById('chart3')).setOption({title:{text:'重大战役时间分布（公元年）',left:'center'},xAxis:{type:'category',data:yearData.map(d=>d[0])},yAxis:{type:'value',name:'战役数'},series:[{type:'line',data:yearData.map(d=>d[1]),smooth:true,itemStyle:{color:'#8b4513'},areaStyle:{color:'#f0e6d2'}}]});
     },100);
+  }
+
+  /* ======== T1 义理五维（DoctrineConcept × 12） ======== */
+  function renderTopicDoctrines(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    const doctrines = topics.doctrines || [];
+    if(!doctrines.length){ el.innerHTML = '<p class="p3 text-gray-500">义理数据未加载。</p>'; return; }
+    const events = topics.events || [];
+    const comments = TOP.commentsExtra || [];
+    const prophecies = topics.prophecies || [];
+    const eventsByCh = {}; events.forEach(e=>{ (eventsByCh[e.chapter]=eventsByCh[e.chapter]||[]).push(e); });
+    const commentsByCh = {}; comments.forEach(c=>{ (commentsByCh[c.chapter]=commentsByCh[c.chapter]||[]).push(c); });
+
+    const outer = doctrines.filter(d=>d.ring==='outer');
+    const inner = doctrines.filter(d=>d.ring==='inner');
+
+    // SVG 五瓣放射图（手写，不引新库）
+    const W=360, H=360, CX=W/2, CY=H/2;
+    const R_OUT=155, R_IN=85;
+    function polar(cx,cy,r,deg){ const a=(deg-90)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; }
+    function sector(cx,cy,r1,r2,deg1,deg2){
+      const [x1,y1]=polar(cx,cy,r2,deg1), [x2,y2]=polar(cx,cy,r2,deg2), [x3,y3]=polar(cx,cy,r1,deg2), [x4,y4]=polar(cx,cy,r1,deg1);
+      const large = (deg2-deg1>180)?1:0;
+      return `M ${x4.toFixed(1)} ${y4.toFixed(1)} A ${r1} ${r1} 0 ${large} 1 ${x3.toFixed(1)} ${y3.toFixed(1)} L ${x2.toFixed(1)} ${y2.toFixed(1)} A ${r2} ${r2} 0 ${large} 0 ${x1.toFixed(1)} ${y1.toFixed(1)} Z`;
+    }
+    // 5 outer 扇形（72° 等分）
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="360" height="360" class="mx-auto">`;
+    outer.forEach((d,i)=>{
+      const d1=i*72-36, d2=(i+1)*72-36;
+      svg += `<path data-id="${d.id}" d="${sector(CX,CY,R_IN,R_OUT,d1,d2)}" fill="${d.color}" fill-opacity="0.75" stroke="#fff" stroke-width="2" class="doctrine-sector cursor-pointer hover:opacity-100 transition-opacity"/>`;
+      const [tx,ty]=polar(CX,CY,(R_IN+R_OUT)/2, (d1+d2)/2);
+      svg += `<text data-id="${d.id}" x="${tx.toFixed(0)}" y="${ty.toFixed(0)}" font-size="14" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="middle" class="doctrine-label pointer-events-none select-none">${d.label}</text>`;
+    });
+    // 7 inner 小圆（散布）
+    inner.forEach((d,i)=>{
+      const deg=360/inner.length*i-90;
+      const [x,y]=polar(CX,CY,R_IN*0.62, deg);
+      svg += `<circle data-id="${d.id}" cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="22" fill="${d.color}" fill-opacity="0.8" stroke="#fff" stroke-width="1.5" class="doctrine-sector cursor-pointer hover:opacity-100 transition-opacity"/>`;
+      svg += `<text data-id="${d.id}" x="${x.toFixed(0)}" y="${y.toFixed(0)}" font-size="11" font-weight="500" fill="#fff" text-anchor="middle" dominant-baseline="middle" class="pointer-events-none select-none">${d.label}</text>`;
+    });
+    // 中心圆
+    svg += `<circle cx="${CX}" cy="${CY}" r="50" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>`;
+    svg += `<text x="${CX}" y="${CY-4}" font-size="14" font-weight="700" fill="#1e293b" text-anchor="middle" dominant-baseline="middle">义理</text>`;
+    svg += `<text x="${CX}" y="${CY+14}" font-size="10" fill="#64748b" text-anchor="middle">DoctrineConcept · 12</text>`;
+    svg += `</svg>`;
+
+    // 默认选中第一个 outer
+    const initial = outer[0] || doctrines[0];
+
+    el.innerHTML = `
+      <div class="flex flex-col md:flex-row gap-6 items-start">
+        <div class="flex-1 min-w-0">
+          <h3 class="sub-h mb-2">義理五維 · DoctrineConcept</h3>
+          <p class="text-sm text-gray-600 mb-4">
+            天命、正統、忠義、智謀、勇烈——全書最深層的歷史觀、道德觀、審美觀皆從此五維輻射。
+            外圈五瓣為核心義理，內圈七點為輔助維度。點擊圖形可讀該義理的落點事件、評點引述與相關讖緯。
+          </p>
+          <div class="doctrines-svg-wrap">${svg}</div>
+          <div class="flex flex-wrap gap-2 mt-4 px-2">
+            ${doctrines.map(d=>`<button data-btn="${d.id}" class="doctrine-btn px-3 py-1 rounded-full text-xs border border-gray-300 hover:border-gray-500 transition-colors" style="--dot:${d.color}">${d.label}</button>`).join('')}
+          </div>
+        </div>
+        <div class="w-full md:w-[420px] shrink-0">
+          <div id="doctrine-detail" class="border border-gray-200 rounded-lg p-5 bg-white shadow-sm min-h-[480px]">
+            <!-- 动态填充 -->
+          </div>
+        </div>
+      </div>
+    `;
+
+    function renderDetail(d){
+      const $ = sel => document.querySelector(sel);
+      const box = el.querySelector('#doctrine-detail');
+      const evs = (d.events||[]).map(n => eventsByCh[n]).filter(Boolean).flat();
+      const cmts = (d.comments||[]).map(n => commentsByCh[n]).filter(Boolean).flat();
+      const prs = (d.prophecies||[]).map(c => prophecies.find(p => p.content.includes(c) || (c && p.content && c.length>0 && p.content.indexOf(c)>=0))).filter(Boolean);
+      box.innerHTML = `
+        <div class="flex items-center gap-3 mb-3">
+          <span class="inline-block w-3 h-3 rounded-full" style="background:${d.color}"></span>
+          <h4 class="text-xl font-bold">${d.label}</h4>
+          <span class="text-sm text-gray-500">${d.ring==='outer'?'主軸':'輔助'}</span>
+        </div>
+        <p class="text-sm italic text-gray-600 mb-3">「${d.tagline}」</p>
+        <p class="text-sm leading-relaxed mb-5 text-gray-700">${d.desc}</p>
+
+        <div class="mb-4">
+          <h5 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">落點事件（${evs.length}）</h5>
+          ${evs.length?`<div class="flex flex-col gap-1.5 max-h-48 overflow-y-auto pr-2">${evs.map(e=>`<a href="read.html?edition=mao&unit=${e.chapter}" class="event-item flex items-center gap-2 text-sm hover:bg-gray-50 rounded px-2 py-1">
+            <span class="text-xs bg-gray-200 text-gray-700 rounded px-1.5 py-0.5 font-mono">第${e.chapter}回</span>
+            <span class="font-medium">${e.name||e.plot}</span>
+            <span class="text-xs text-gray-400 ml-auto">${e.type||''}${e.virtual?' · 虛構':''}</span>
+          </a>`).join('')}</div>`:'<p class="text-sm text-gray-400">暂无落点事件</p>'}
+        </div>
+
+        <div class="mb-4">
+          <h5 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">評點引述（${cmts.length}）</h5>
+          ${cmts.length?`<div class="space-y-2">${cmts.map(c=>`<div class="comment-quote border-l-4 pl-3 py-1" style="border-color:${d.color}">
+            <p class="text-sm leading-relaxed text-gray-700">"${c.text}"</p>
+            <p class="text-xs text-gray-500 mt-1">—— ${c.commenter}（第${c.chapter}回）</p>
+          </div>`).join('')}</div>`:'<p class="text-sm text-gray-400">暂无相关评点</p>'}
+        </div>
+
+        ${prs.length?`<div>
+          <h5 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">相關讖緯（${prs.length}）</h5>
+          <div class="space-y-1">${prs.map(p=>`<p class="text-sm italic text-gray-600">"${p.content}"</p>`).join('')}</div>
+        </div>`:''}
+      `;
+    }
+
+    // 事件绑定
+    el.querySelectorAll('.doctrine-sector, .doctrine-label').forEach(n=>{
+      n.addEventListener('click', e=>{ const id=e.currentTarget.dataset.id; const d=doctrines.find(x=>x.id===id); if(d){ renderDetail(d); highlight(id); } });
+    });
+    el.querySelectorAll('.doctrine-btn').forEach(n=>{
+      n.addEventListener('click', e=>{ const id=e.currentTarget.dataset.btn; const d=doctrines.find(x=>x.id===id); if(d){ renderDetail(d); highlight(id); } });
+    });
+    function highlight(id){
+      el.querySelectorAll('.doctrine-btn').forEach(b=>{ b.classList.toggle('ring-2', b.dataset.btn===id); b.classList.toggle('ring-offset-1', b.dataset.btn===id); });
+    }
+    // 默认选中
+    renderDetail(initial);
+    highlight(initial.id);
+  }
+
+  /* ======== T2 36 战役时空（Battles Timeline） ======== */
+  function renderTopicBattles(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    const events = topics.events || [];
+    const factions = topics.factions || [];
+    // 识别战役：events 里 type ∈ {决战, 攻城, 戰鬥, 水戰, 圍殲}
+    const battleTypes = new Set(['決戰','攻城','戰鬥','水戰','圍殲','伏击','突袭','火攻']);
+    const battles = events.filter(e=> battleTypes.has(e.type) || (e.place && /關|城|戰|陣|寨/.test(e.place)));
+
+    // 年度聚合
+    const byYear = {};
+    battles.forEach(b=>{ const y=b.year||0; if(y<150||y>300) return; (byYear[y]=byYear[y]||[]).push(b); });
+    const years = Object.keys(byYear).sort((a,b)=>a-b);
+
+    // 势力颜色映射（取参战人物匹配 factions.members）
+    const factionColorMap = {};
+    factions.forEach(f=>{ f.members.forEach(m=>factionColorMap[m]=f.color); });
+    function battleColor(b){
+      const pers = (b.persons||[]).map(p=>factionColorMap[p]).filter(Boolean);
+      if(pers.length===0) return '#999';
+      // 取首个颜色
+      return pers[0];
+    }
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">三十六役 · 時間地理</h3>
+      <p class="text-sm text-gray-600 mb-4">
+        從黃巾起義（184）到三分歸晉（280），百年之間主要戰役的年度分布。
+        柱圖按參戰主力勢力著色（魏=紅、蜀=綠、吳=藍、董/袁/呂=灰褐）。
+        點擊柱體可跳轉閱讀器對應回目。
+      </p>
+      <div class="flex flex-wrap gap-2 mb-4 text-xs">
+        ${factions.slice(0,8).map(f=>`<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded-full"><span class="w-2 h-2 rounded-full" style="background:${f.color}"></span>${f.name}</span>`).join('')}
+      </div>
+      <div id="battles-chart" style="height:360px"></div>
+      <div class="mt-4">
+        <h4 class="text-sm font-bold mb-2">全部戰役列表</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[360px] overflow-y-auto pr-2">
+          ${battles.sort((a,b)=>(a.year||0)-(b.year||0)).map(b=>`
+            <a href="read.html?edition=mao&unit=${b.chapter}" class="battle-item flex items-center gap-2 text-sm hover:bg-gray-50 rounded px-2 py-1.5 border border-gray-100">
+              <span class="text-xs font-mono bg-gray-100 px-1.5 py-0.5 rounded w-10 text-center">${b.year||'?'}</span>
+              <span class="w-3 h-3 rounded-full shrink-0" style="background:${battleColor(b)}"></span>
+              <span class="font-medium">${b.name}</span>
+              <span class="text-xs text-gray-400 ml-auto">${b.place||''}</span>
+              <span class="text-xs bg-gray-200 text-gray-600 rounded px-1.5 py-0.5">第${b.chapter}回</span>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    // ECharts 柱图（年度聚合，按势力色分段太复杂，简化为单柱 + tooltip 详情）
+    const yearData = years.map(y=> byYear[y].length);
+    const battleColorByYear = years.map(y=>{
+      const arr = byYear[y];
+      const first = arr[0];
+      return battleColor(first);
+    });
+    setTimeout(()=>{
+      const el2 = document.getElementById('battles-chart');
+      if(!el2) return;
+      const chart = echarts.init(el2);
+      chart.setOption({
+        title:{ text:'主要戰役年度分布（184–280）', left:'center', textStyle:{fontSize:14, fontWeight:'normal', color:'#475569'} },
+        tooltip:{ trigger:'axis', axisPointer:{type:'shadow'}, formatter: p=>{
+          const y = p[0].name;
+          const arr = byYear[y];
+          return `<b>${y} 年（${arr.length} 役）</b><br/>`+arr.map(b=>`${b.name} · 第${b.chapter}回`).join('<br/>');
+        } },
+        grid:{ left:60, right:30, top:50, bottom:40 },
+        xAxis:{ type:'category', data: years, name:'年', nameLocation:'end', nameGap:10 },
+        yAxis:{ type:'value', name:'役數' },
+        series:[{
+          type:'bar',
+          data: years.map((y,i)=>({ value: byYear[y].length, itemStyle:{ color: battleColorByYear[i] } })),
+          barMaxWidth:28
+        }]
+      });
+      chart.on('click', params=>{
+        const y = params.name;
+        const arr = byYear[y];
+        if(arr && arr[0]){ window.open('read.html?edition=mao&unit='+arr[0].chapter, '_blank'); }
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
+
+  /* ======== T3 谶纬应验链（Prophecy Chain） ======== */
+  function renderTopicProphecies(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    const prophecies = topics.prophecies || [];
+
+    function classify(p){
+      const pr = (p.prophet||'').toString();
+      if(/童謠|童谣/.test(pr)) return { cat:'童謠', cls:'bg-amber-50 border-amber-300', dot:'#d97706' };
+      if(/夢|梦/.test(pr)) return { cat:'夢兆', cls:'bg-indigo-50 border-indigo-300', dot:'#4f46e5' };
+      if(/讖|谶|緯/.test(pr)) return { cat:'讖語', cls:'bg-purple-50 border-purple-300', dot:'#7c3aed' };
+      if(/詩|卷首語|卷首/.test(pr)) return { cat:'詩語', cls:'bg-emerald-50 border-emerald-300', dot:'#059669' };
+      if(/卷首語/.test(pr)) return { cat:'詩語', cls:'bg-emerald-50 border-emerald-300', dot:'#059669' };
+      return { cat:'人物語', cls:'bg-gray-50 border-gray-300', dot:'#6b7280' };
+    }
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">讖緯應驗鏈 · Prophecy Chain</h3>
+      <p class="text-sm text-gray-600 mb-4">
+        《三國》開篇即以「歲在甲子」為口號，預示漢室衰微；其後童謠、夢兆、讖語層出不窮。
+        毛宗崗評點尤重「應驗」——每條讖緯皆有對應事件或人物結局，形成一條條命運鏈。
+        點擊卡片可跳轉閱讀器對應回目。
+      </p>
+      <div class="flex gap-3 text-xs mb-4">
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 border border-amber-300 rounded-full"><span class="w-2 h-2 rounded-full bg-amber-600"></span>童謠</span>
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-50 border border-indigo-300 rounded-full"><span class="w-2 h-2 rounded-full bg-indigo-600"></span>夢兆</span>
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-50 border border-purple-300 rounded-full"><span class="w-2 h-2 rounded-full bg-purple-600"></span>讖語</span>
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 border border-emerald-300 rounded-full"><span class="w-2 h-2 rounded-full bg-emerald-600"></span>詩語</span>
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-50 border border-gray-300 rounded-full"><span class="w-2 h-2 rounded-full bg-gray-600"></span>人物語</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        ${prophecies.map(p=>{
+          const cl = classify(p);
+          const ch = p.chapter||0;
+          return `<a href="${ch>0?('read.html?edition=mao&unit='+ch):'#'}" class="prophecy-card block border rounded-lg p-4 ${cl.cls} hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-2 h-2 rounded-full" style="background:${cl.dot}"></span>
+              <span class="text-xs font-bold uppercase tracking-wide" style="color:${cl.dot}">${cl.cat}</span>
+              <span class="ml-auto text-xs text-gray-500">${ch>0?('第'+ch+'回'):'—'}</span>
+            </div>
+            <p class="text-base font-medium italic leading-snug mb-2">"${p.content}"</p>
+            <p class="text-xs text-gray-500 mb-2">—— ${p.prophet}</p>
+            <div class="border-t border-gray-200/50 pt-2 mt-2">
+              <p class="text-xs text-gray-700"><b>應驗：</b>${p.fulfilled||'（未明言）'}</p>
+              ${p.note?`<p class="text-xs text-gray-500 mt-1">${p.note}</p>`:''}
+            </div>
+          </a>`;
+        }).join('')}
+      </div>
+    `;
   }
 
   /* ---- 增强版本体规范 ---- */

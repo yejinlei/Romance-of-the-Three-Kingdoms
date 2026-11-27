@@ -323,6 +323,35 @@ const SANGUO_TOPICS = {
     { name:'七家匯評本', era:'明清舊輯', system:'匯評', units:'120回', status:'已入庫', file:'texts/七家汇评本.txt', note:'匯輯毛宗崗、李贄、鍾惺、李漁等批語，正文夾批完整。' },
     { name:'笠翁評閱本', era:'清康熙', system:'評本', units:'120回', status:'缺口·僅影印', file:'', note:'李漁評閱本，承毛評而多有新見；僅見影印與書目。' },
     { name:'毛宗崗評本', era:'清康熙十八年（1679）', system:'評本', units:'120回', status:'已入庫', file:'texts/毛宗岗评本.txt', note:'通行定本，整頓回目、修正文辭，附完整評點。' }
+  ],
+
+  // ========== 義理概念 DoctrineConcept × 12 ==========
+  // T1 义理五维主题使用；五瓣放射图取前 5 条为主轴，后 7 条为辅助辐射
+  doctrines: [
+    { id:'tiānmìng',  label:'天命', tagline:'大漢四百年，運移漢祚終難復', desc:'全書最深層的歷史觀——天命有常、氣數有盡。黃巾起義以「歲在甲子」為口號，諸葛亮嘆「不得其時」，司馬氏終代曹魏，皆非人力所能逆轉。', color:'#b45309', ring:'outer', weight:5,
+      events:[1,37,78,104,120], comments:[37,104,120], prophecies:['天下大勢分久必合','臥龍雖得其主'] },
+    { id:'zhèngtǒng', label:'正統', tagline:'挾天子以令諸侯，興復漢室為旗號', desc:'曹魏「挾天子」雖有權無名，蜀漢「興復漢室」有名無實；東吳踞江東觀望。三國鼎立之際，正統觀成為評點家最激烈的議論焦點。', color:'#1d4ed8', ring:'outer', weight:5,
+      events:[14,20,60,61,120], comments:[21,85], prophecies:['代漢者當塗高'] },
+    { id:'zhōngyì',  label:'忠義', tagline:'千里走單騎，義釋曹操走華容', desc:'關羽「忠義千秋」的形象是小說最成功的塑造：辭曹歸劉為忠，華容釋曹為義；然忠義之中又有愚忠（呂蒙襲荊州前關羽仍以大義待之）。', color:'#dc2626', ring:'outer', weight:5,
+      events:[25,27,50,74,75,77], comments:[50,74], prophecies:['侯非侯王非王'] },
+    { id:'zhìmóu',   label:'智謀', tagline:'隆中對定三分，空城計退司馬懿', desc:'諸葛亮的智谋是全書的靈魂——隆中對、草船借箭、借東風、空城計、木牛流馬。然智谋終不能超越天命，五丈原將星墜落，孔明嘆曰「天意難違」。', color:'#047857', ring:'outer', weight:5,
+      events:[37,46,49,55,73,95,103], comments:[37,46,49,95,104], prophecies:['伏龍鳳雛二人得一'] },
+    { id:'yǒngliè',  label:'勇烈', tagline:'溫酒斬華雄，長坂坡七進七出', desc:'三英戰呂布、趙雲救阿斗、張飛斷橋、馬超殺得曹操割須棄袍——勇烈之士是小說最具畫面感的段落；然勇烈若無智謀輔佐，如呂布、關羽，終致失敗。', color:'#7c3aed', ring:'outer', weight:5,
+      events:[5,9,41,64,74], comments:[5,41], prophecies:[] },
+    { id:'wángdào',  label:'王道', tagline:'劉備弘毅，以人心取天下', desc:'劉備的「王道」是全書道德高點——不忍棄新野百姓、三顧茅廬、白帝城託孤。然王道在亂世顯得無力，夷陵之敗後國力大損，終為魏所滅。', color:'#ca8a04', ring:'inner', weight:3,
+      events:[37,41,60,61,85], comments:[85], prophecies:['漢室不可復興'] },
+    { id:'bàdào',    label:'霸道', tagline:'曹操挾天子，唯才是舉屯田養兵', desc:'曹操是「霸道」的典範——挾天子以令諸侯、殺呂伯奢全家、寧教我負天下人。然霸道是亂世最有效的道路，他統一北方，為晉室統一奠定基礎。', color:'#4b5563', ring:'inner', weight:3,
+      events:[4,14,21,30,33], comments:[21], prophecies:['寧可我負天下人'] },
+    { id:'xūshí',    label:'虛實', tagline:'草船借箭移花接木，溫酒斬華雄虛構', desc:'小說擅長「虛實相生」：溫酒斬華雄（移花接木）、貂蟬連環計（純虛構）、草船借箭（原型改編）。毛宗崗評點家明辨虛實，讀者當有正史對照。', color:'#0e7490', ring:'inner', weight:3,
+      events:[5,8,46,50,95], comments:[46], prophecies:[] },
+    { id:'fēnhé',    label:'分合', tagline:'分久必合合久必分，三分終歸晉', desc:'「天下大勢，分久必合，合久必分」是全書總綱。黃巾→群雄割據→三國鼎立→三分歸晉。分合循環觀是中國歷史觀的核心。', color:'#be185d', ring:'inner', weight:3,
+      events:[1,5,20,49,84,120], comments:[1,120], prophecies:['天下大勢分久必合'] },
+    { id:'zhìluàn',  label:'治亂', tagline:'蒼天已死黃天當立，群雄並起逐鹿中原', desc:'治亂循環的具體表現——桓靈失政→黃巾起義→董卓亂政→群雄割據→三國鼎立→西晉統一。亂世出英雄，治世重賢良。', color:'#ea580c', ring:'inner', weight:3,
+      events:[1,3,7,14,30,120], comments:[1], prophecies:['蒼天已死黃天當立','千里草何青青'] },
+    { id:'jùsàn',    label:'聚散', tagline:'桃園結義聚首，五丈原將星墜落散', desc:'人物命運的聚散——劉關張桃園聚首，後走散古城重會，張飛關羽劉備相繼而亡；諸葛亮與劉備「君臣魚水」，後五丈原將星墜落。聚散皆與大勢相關。', color:'#6366f1', ring:'inner', weight:3,
+      events:[1,18,27,61,77,81,104], comments:[104], prophecies:[] },
+    { id:'yīnguǒ',   label:'因果', tagline:'曹操殺呂伯奢種因，司馬氏篡魏收果', desc:'小說雖未明言因果報應，但許多對應讓讀者自然聯想——曹操毒殺漢獻帝伏后→曹丕代漢；呂蒙白衣渡江殺關羽→呂蒙暴卒；司馬氏專魏政→篡魏。', color:'#52525b', ring:'inner', weight:3,
+      events:[4,20,25,75,77,78,85,104,118], comments:[50], prophecies:['三馬同槽'] }
   ]
 };
 if (typeof window !== 'undefined') window.SANGUO_TOPICS = SANGUO_TOPICS;
