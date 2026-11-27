@@ -106,7 +106,7 @@ function render(){
   const list=gaps.filter(g=>(!filter.system||g.system===filter.system)&&(!filter.tier||g.tier===filter.tier));
   $('list').innerHTML=list.length?list.map(g=>{
     const cls=tierCls(g.tier);
-    const stTag=(g.status&&g.status!=='未獲文本')?`<span class="tag ${g.status.includes('OCR')?'ocr':g.status.includes('部分')?'part':'none'}">${esc(g.status)}</span>`:'';
+    const stTag=(g.status&&g.status!=='未獲文本')?`<span class="tag ${g.status.includes('OCR')?'ocr':g.status.includes('部分')?'part':'none'}">${esc(g.status.replace(/OCR/g,'未校勘'))}</span>`:'';
     const url=g.url?`<div class="url"><b>在線地址：</b><a href="${esc(g.url)}" target="_blank" rel="noopener">${esc(g.url)}</a></div>`:'';
     return `<div class="card gap ${cls}">
       <div class="top"><h3>${esc(g.edition)}</h3><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag ${cls}">${esc(g.tier)}</span>${stTag}</span></div>

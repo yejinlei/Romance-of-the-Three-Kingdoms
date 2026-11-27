@@ -373,8 +373,8 @@
   const TEXT_STATUS_LABEL = {
     full:'全文入库', partial:'部分入库', absent:'未获',
     readable:'全文入库',            // 非毛本整理本：texts 目录已按单元接入阅读
-    ocr:'仅OCR（未整理）',         // 未接入阅读、仅检索
-    ocrReadable:'OCR可读（未校勘）',  // OCR 本：已接入阅读，未校勘
+    ocr:'仅检索（未整理）',       // 未接入阅读、仅检索
+    ocrReadable:'可读（未校勘）',    // 本：已接入阅读，未校勘
     catalog:'仅存目次',            // 目录本：仅存卷目次，无正文
     facsimile:'仅影印'
   };
@@ -402,20 +402,10 @@
     if(/不收錄|不收录|拿不到|無可抓取|无可抓取/.test(s + (g.tier || ''))) return 'absent';
     return 'facsimile';                     // 未獲文本而有影印 → 仅影印
   }
-  // 下拉标签后缀：版本名已含「（OCR）」「（OCR，殘本）」等括号者，不再追加重复前缀，避免双重括号
-  // 下拉/对照选项的完整显示文本。
-  // OCR 本标题已自带「（OCR）」括号，状态后缀合并进该括号，避免「（OCR）（可读·未校勘）」双重括号
+  // 下拉/对照选项的完整显示文本。title 已不含 OCR 括号，直接拼状态后缀。
   function versionLabel(v){
     const st = TEXT_STATUS_LABEL[v.status] || v.status;
     const t = String(v.title || '');
-    if(v.status === 'ocrReadable'){
-      const m = t.match(/[（(]OCR([^）)]*)[）)]/);
-      if(m){
-        const extra = String(m[1] || '').replace(/^[，,、\s]+/, '');
-        const merged = ['OCR', extra, '可读 · 未校勘'].filter(Boolean).join(' · ');
-        return t.replace(m[0], '（' + merged + '）');
-      }
-    }
     return t + '（' + st + '）';
   }
 
@@ -796,9 +786,9 @@
         bodyHTML = renderVernacularGuide(chapterNum)
           + `<div class="guide-body-sep mt-4 pt-3 border-t border-[#c9b896]"></div>`
           + `<div class="guide-backlink mb-3"><button class="btn btn-sm" onclick="appSetReaderMode('traditional')">↑ 只看原文（繁体）</button></div>`
-          + `<div class="ocr-ze-wrap" id="ocr-ze-body"><div class="text-sm text-[#8b6914]">正在载入该则 OCR 正文…</div></div>`;
+          + `<div class="ocr-ze-wrap" id="ocr-ze-body"><div class="text-sm text-[#8b6914]">正在载入该则正文…</div></div>`;
         viewLabel = '白话导读 + 原文（按单元）';
-        viewDesc = '编者所撰导读在上，该版本文本（' + (edMeta && edMeta.ocr ? 'OCR·未校勘' : '整理本') + '）在下；仅作浏览。';
+        viewDesc = '编者所撰导读在上，该版本文本（' + (edMeta && edMeta.ocr ? '未校勘文本' : '整理本') + '）在下；仅作浏览。';
         sourceLayer = '编者导读层 + 原文层 · ' + esc(vrow.title) + '（按版本单元取章）';
       } else {
         // 非 OCR 白话：导读层 +（可读 ? 简化正文 : 版本说明），不再被上支覆盖
@@ -820,7 +810,7 @@
       // 非毛本版本传统/简体：按版本单元取正文显示（繁体原样 / t2s 转简体）
       bodyHTML = `<div class="ocr-ze-wrap" id="ocr-ze-body"><div class="text-sm text-[#8b6914]">正在载入该版本单元正文…</div></div>`;
       viewLabel = (mode === 'simplified') ? '简体（版本原文）' : '繁体原文（版本原文）';
-      viewDesc = '该版本文本（' + (edMeta && edMeta.ocr ? 'OCR·未校勘' : '整理本') + '）按版本单元显示；仅作浏览。';
+      viewDesc = '该版本文本（' + (edMeta && edMeta.ocr ? '未校勘文本' : '整理本') + '）按版本单元显示；仅作浏览。';
       sourceLayer = '原文层 · ' + esc(vrow.title) + '（按版本单元取章' + (mode === 'simplified' ? '，t2s.js 繁转简' : '，繁体原样') + '）';
     } else if(!readable){
       const st = vrow ? vrow.status : 'absent';
@@ -979,7 +969,7 @@
       }
       const parts = picked.map(ze => {
         const raw = (ze.paras || []).map(p => `<p>${esc(mode === 'simplified' ? simpleT2S(p) : p)}</p>`).join('');
-        const head = `<div class="text-sm text-[#8b6914] mb-2">${esc(ze.volume ? ze.volume + ' · ' : '')}${esc(ze.title)}${meta && meta.ocr ? '（OCR · 未校勘 · 仅作浏览）' : ''}</div>`;
+        const head = `<div class="text-sm text-[#8b6914] mb-2">${esc(ze.volume ? ze.volume + ' · ' : '')}${esc(ze.title)}${meta && meta.ocr ? '（未校勘 · 仅作浏览）' : ''}</div>`;
         return head + raw;
       });
       bodyEl.innerHTML = parts.join('<div class="border-t border-[#c9b896] my-3"></div>');
@@ -2006,9 +1996,9 @@
         + (range ? '（jiajingId：嘉靖本第 ' + range.s + '–' + range.e + ' 则）' : '');
       const warn = [];
       if(rows[selA.value] && rows[selA.value].status === 'ocrReadable')
-        warn.push('甲本「' + esc(rows[selA.value].title) + '」为 OCR 可读文本：逐行录入、未经校勘，未达 97% 验收线，不作对勘底本，仅作参照。');
+        warn.push('甲本「' + esc(rows[selA.value].title) + '」为未校勘可读文本：逐行录入、未经校勘，未达 97% 验收线，不作对勘底本，仅作参照。');
       if(rows[selB.value] && rows[selB.value].status === 'ocrReadable')
-        warn.push('乙本「' + esc(rows[selB.value].title) + '」为 OCR 可读文本：逐行录入、未经校勘，未达 97% 验收线，不作对勘底本，仅作参照。');
+        warn.push('乙本「' + esc(rows[selB.value].title) + '」为未校勘可读文本：逐行录入、未经校勘，未达 97% 验收线，不作对勘底本，仅作参照。');
 
       function colHtml(side, id, res){
         const row = rows[id] || { title: id, status: '' };

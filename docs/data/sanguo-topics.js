@@ -316,7 +316,7 @@ const SANGUO_TOPICS = {
     { name:'三國志平話', era:'元至治（1321–1323）', system:'平話', units:'3卷', status:'已入庫', file:'texts/三国志平话.txt', note:'建安虞氏刊《全相平話五種》之一，文字粗樸，含大量民間傳說，是演義的重要源頭。' },
     { name:'嘉靖壬午本', era:'明嘉靖元年（1522）', system:'演義', units:'24卷240则', status:'已入庫', file:'texts/嘉靖壬午本.txt', note:'現存最早完整刊本，分則不分回，文字古樸，含夾注。' },
     { name:'周曰校刊本', era:'明萬曆十九年（1591）', system:'演義', units:'12卷240则', status:'缺口·僅影印', file:'', note:'金陵周曰校刻本，插圖精美；目前僅見影印本，未獲純文本。' },
-    { name:'余象斗刊本', era:'明萬曆二十年（1592）', system:'志傳', units:'180则', status:'已入庫', file:'texts/余象斗刊本_OCR.txt', note:'建陽余象斗雙峰堂刊《批評三國志傳》；識典古籍 OCR 180 则已按則分卷入庫，可在語料庫與版本阅读頁瀏覽；未校勘，不作异文对勘底本。' },
+    { name:'余象斗刊本', era:'明萬曆二十年（1592）', system:'志傳', units:'180则', status:'已入庫', file:'texts/余象斗刊本_OCR.txt', note:'建陽余象斗雙峰堂刊《批評三國志傳》；识典古籍识读 180 则已按則分卷入庫，可在語料庫與版本阅读頁瀏覽；未校勘，不作异文对勘底本。' },
     { name:'黃正甫本', era:'明崇禎間', system:'志傳', units:'180则', status:'已入庫', file:'texts/黃正甫本.txt', note:'志傳系統代表，保留關索等早期故事。' },
     { name:'李卓吾评本', era:'明末', system:'评本', units:'120回', status:'部分', file:'texts/李卓吾评语辑录.txt', note:'李贄（託名）評點，批語潑辣；全本正文未獲純文本，已輯錄批語。' },
     { name:'钟伯敬评本', era:'明末', system:'评本', units:'120回', status:'部分', file:'texts/钟伯敬评语辑录.txt', note:'鍾惺評點，多從文章法度著眼；已輯錄批語。' },

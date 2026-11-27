@@ -1,16 +1,16 @@
 /**
- * 余象斗刊本（OCR）A1 版本形制轴实例
+ * 余象斗刊本 A1 版本形制轴实例
  * 供本体页（ontology.html）与版本阅读页（read.html）共享
  * 顶层 const 不挂 window；页面内用裸标识符 YXD_ONTOLOGY 读取
  */
 const YXD_ONTOLOGY = {
   edition: {
     id: 'yuxiangdou',
-    label: '余象斗刊本（OCR）',
+    label: '余象斗刊本',
     unitKind: 'ze',
     unitCount: 180,
     unitSource: { file: 'texts/余象斗刊本_OCR.txt', split: 'ze' },
-    note: '明万历余象斗双峰堂刊《新刻按鉴全像批评三国志传》系统；识典古籍 OCR，180 则。未校勘，不作异文对勘底本。'
+    note: '明万历余象斗双峰堂刊《新刻按鉴全像批评三国志传》系统；识典古籍识读，180 则。未校勘，不作异文对勘底本。'
   },
   // 则 → 毛本回 近似对齐（按则目题名关键词匹配；对不齐的如实标注）
   unitMappings: [

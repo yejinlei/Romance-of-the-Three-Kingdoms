@@ -379,7 +379,7 @@ function renderEdition(it){
       </aside>
       <div class="units-body">
         <div class="titlebar">
-          <div><h2>${esc(it.title)}</h2>${it.ocr?`<span class="badge">OCR · 已接閱讀（未校勘）</span>`:''}<div class="meta">${esc(it.note)}</div></div>
+          <div><h2>${esc(it.title)}</h2>${it.ocr?`<span class="badge">未校勘 · 已接閱讀</span>`:''}<div class="meta">${esc(it.note)}</div></div>
           <div class="meta">${pdfEd?`<a href="pdf-viewer.html#ed=${encodeURIComponent(pdfEd)}&f=1" style="color:var(--cinnabar);font-weight:600">影印本 →</a> · `:''}${esc(it.source)}</div>
         </div>
         <div class="toolbar">

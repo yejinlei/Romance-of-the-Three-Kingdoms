@@ -68,8 +68,8 @@ const SANGUO_ONTOLOGY = {
         { id: 'full', label: '全文入库', desc: '校勘文本已入库，可全文检索与对读。' },
         { id: 'partial', label: '部分入库', desc: '存残卷或部分单元。' },
         { id: 'readable', label: '全文入库', desc: '非毛本整理本：texts 目录已按单元（回/则/卷）接入站内阅读。' },
-        { id: 'ocr', label: '仅OCR（未整理）', desc: 'OCR 文本未接入阅读，只作检索。' },
-        { id: 'ocrReadable', label: 'OCR可读（未校勘）', desc: 'OCR 文本已接入站内阅读，但未校勘、正确率未达 97% 验收线，不作对勘底本。' },
+        { id: 'ocr', label: '仅检索（未整理）', desc: '未校勘文本未接入阅读，只作检索。' },
+        { id: 'ocrReadable', label: '可读（未校勘）', desc: '未校勘文本已接入站内阅读，但未校勘、正确率未达 97% 验收线，不作对勘底本。' },
         { id: 'catalog', label: '仅存目次', desc: '仅存卷目次而无可读正文（如钱氏藏书本），不作阅读底本。' },
         { id: 'facsimile', label: '仅影印', desc: '有公开影印（PDF/JPG）而无文本。' },
         { id: 'absent', label: '未获', desc: '仅书目著录，未见公开影像。' }
@@ -81,7 +81,7 @@ const SANGUO_ONTOLOGY = {
         { id: 'consensus', label: '公版结论', desc: '学界公论，出自公版（PD）学术文献：鲁迅《中国小说史略》、胡适《三国志演义序》、郑振铎《三国志演义的演化》、孙楷第书目、谢肇淛《五杂俎》、章学诚《丙辰札记》等。' },
         { id: 'critic', label: '名家结论', desc: '具名评点家/学者的论断：毛宗岗、李卓吾（李贽）、钟伯敬（钟惺）、李渔（笠翁）、金圣叹、陈寿、裴松之等。' },
         { id: 'commentary', label: '评注', desc: '逐回逐段批点文字，依附于具体单元（回/则）与文本位置。' },
-        { id: 'editor', label: '编者按', desc: '本站编者校勘记、对齐说明、OCR 校情等。' }
+        { id: 'editor', label: '编者按', desc: '本站编者校勘记、对齐说明、校勘情况等。' }
       ]
     },
     unitKind: {
@@ -186,9 +186,9 @@ const SANGUO_ONTOLOGY = {
       def: '同一叙事单元在不同版本中的文字/情节差异。按差异性质分：字词异文、情节增删（如关索故事）、分回差异。',
       props: ['occursIn', 'variantKind', 'variantText', 'annotatedBy'] },
     { id: 'EditionGap', label: '版本缺口', axis: 'A1', layer: 'L6', estCount: 13,
-      def: '已著录而文本未获/不全的版本及其获取状态（影印、OCR 验收结论）。',
+      def: '已著录而文本未获/不全的版本及其获取状态（影印、识读验收结论）。',
       props: ['forEdition', 'tier', 'holder', 'ocrVerdict'],
-      examples: ['杨美生本（确实拿不到）', '周曰校本 OCR 试点（0.48，未达 97% 验收线）'] },
+      examples: ['杨美生本（确实拿不到）', '周曰校本识读试点（0.48，未达 97% 验收线）'] },
     { id: 'PrintingWork', label: '刊刻出版', axis: 'A1', layer: 'L6', estCount: 19,
       def: '刊刻行为本身：书坊、刻工、藏地、版刻年代，供版本流传史与出版史研究。',
       props: ['printer', 'holder', 'year', 'colophon'] },
@@ -405,7 +405,7 @@ const SANGUO_ONTOLOGY = {
     { id: 'modernName', label: '今地名', type: 'data', range: 'string' },
     { id: 'style', label: '表字', type: 'data', range: 'string' },
     { id: 'mentionCount', label: '提及次数', type: 'data', range: 'integer' },
-    { id: 'confidence', label: '置信度', type: 'data', range: 'float', def: '公版结论的置信标注（0-1），OCR 结论另附验收线说明。' },
+    { id: 'confidence', label: '置信度', type: 'data', range: 'float', def: '公版结论的置信标注（0-1），识读结论另附验收线说明。' },
     { id: 'tags', label: '标签', type: 'data', range: 'string[]' },
     { id: 'variantKind', label: '异文种类', type: 'data', range: 'variantKind', def: '取值：char / unit / plot / system。' },
     { id: 'variantText', label: '异文文本', type: 'data', range: 'string' },
@@ -432,7 +432,7 @@ const SANGUO_ONTOLOGY = {
     { id: 'sentimentPolarity', label: '情感极性', type: 'data', range: 'float' },
     { id: 'sentimentDomain', label: '情感域', type: 'data', range: 'sentimentDomain', def: '取值：loyalty / grief / heroism / restraint / cunning / lament。' },
     { id: 'cooccurrenceScene', label: '共现场景', type: 'data', range: 'string' },
-    { id: 'ocrVerdict', label: 'OCR 验收', type: 'data', range: 'string' },
+    { id: 'ocrVerdict', label: '识读验收', type: 'data', range: 'string' },
     { id: 'tier', label: '分级', type: 'data', range: 'string' },
     { id: 'printer', label: '刊刻者', type: 'data', range: 'string' },
     { id: 'holder', label: '藏地', type: 'data', range: 'string' },
@@ -702,7 +702,7 @@ const SANGUO_ONTOLOGY = {
       layer: 'L4',
       class: 'Unit',
       label: '余象斗刊本第 1 则 · 宴桃园豪杰三结义',
-      desc: '余象斗刊本（OCR）第一则，承载桃园结义开端；本刊为 180 则制（志传系统），文本按则分卷入库，未校勘、不作异文对勘底本。'
+      desc: '余象斗刊本第一则，承载桃园结义开端；本刊为 180 则制（志传系统），文本按则分卷入库，未校勘、不作异文对勘底本。'
     },
     {
       id: 'map-yxd-ze1-mao-ch1',
@@ -833,7 +833,7 @@ const SANGUO_ONTOLOGY = {
       { id: 'historical-plots', label: '情节虚实断语', target: 'Event',
         desc: '逐情节对照《三国志》裴注判虚实（温酒斩华雄=移花接木，草船借箭=虚构）。' },
       { id: 'consensus-texts', label: '文本校情按语', target: 'Unit|Edition',
-        desc: 'OCR 验收结论、异文对齐说明（编者按）。' }
+        desc: '识读验收结论、异文对齐说明（编者按）。' }
     ]
   },
 

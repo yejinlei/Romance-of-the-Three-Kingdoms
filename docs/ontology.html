@@ -263,7 +263,7 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     <div id="gran-ladder"></div>
     <h3 class="sub-h">实例栈下钻示例（点击逐级展开）</h3>
     <div id="drill-wrap"></div>
-    <h3 class="sub-h">A1 轴实例 · 余象斗刊本（OCR）<span class="sub">来自 ocr-ontology.js · 180 則</span></h3>
+    <h3 class="sub-h">A1 轴实例 · 余象斗刊本<span class="sub">来自 ocr-ontology.js · 180 則</span></h3>
     <div id="ocr-inst-wrap"></div>
     <h3 class="sub-h">A1 轴 · 全部版本单元对齐<span class="sub">来自 version-ontology.js · L3 层 UnitMapping · 下钻止于 G4</span></h3>
     <div id="allver-align-wrap"></div>
@@ -728,7 +728,7 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     if(!wrap) return;
     const Y = (typeof YXD_ONTOLOGY !== 'undefined') ? YXD_ONTOLOGY : window.YXD_ONTOLOGY;
     if(!Y || !Y.edition){
-      wrap.innerHTML = '<p class="layer-desc">（ocr-ontology.js 未載入，無 A1 軸 OCR 實例）</p>';
+      wrap.innerHTML = '<p class="layer-desc">（ocr-ontology.js 未載入，無 A1 軸实例）</p>';
       return;
     }
     const ed = Y.edition;
@@ -784,7 +784,7 @@ code { background:#f5f0e6; padding:1px 6px; border-radius:3px; font-size:13px; }
     };
     const rows = Object.entries(V.editions).map(([id, m])=>{
       const stat = m.catalogOnly ? '<span class="chip" title="僅存目次無正文">目錄本</span>'
-        : (m.ocr ? '<span class="chip" title="未校勘，僅作瀏覽">OCR</span>' : '');
+        : (m.ocr ? '<span class="chip" title="未校勘，僅作瀏覽">未校勘</span>' : '');
       return `<tr>
         <td style="padding:4px 8px;border:1px solid #c9b896"><code>${esc(id)}</code></td>
         <td style="padding:4px 8px;border:1px solid #c9b896">${esc(m.label||'')}</td>

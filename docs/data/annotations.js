@@ -75,7 +75,7 @@
         ],
         criticViews: [],
         commentary: { available: false, criticIds: [], chars: 0, note: "" },
-        variantNotes: ["存 OCR 文本，未达 97% 验收线", "多精美插图"]
+        variantNotes: ["存未校勘文本，未达 97% 验收线", "多精美插图"]
       },
       { edition: "yuXiangdou", name: "余象斗刊本（三国志传）", system: "志传系统",
         consensus: [

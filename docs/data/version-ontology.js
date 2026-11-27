@@ -27,19 +27,19 @@ const VERSION_ONTOLOGY = {
       hasAnno: true, annoStyle: 'inline-bracket', note: '汇辑毛宗岗、李贽、钟惺、李渔批语，120回；正文内联【】批语。'
     },
     lizhuowu: {
-      id: 'lizhuowu', label: '李卓吾评本（OCR）', kind: 'hui', splitKind: 'chapter',
+      id: 'lizhuowu', label: '李卓吾评本', kind: 'hui', splitKind: 'chapter',
       splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 120, file: '李卓吾评本_OCR.txt',
-      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '明萬曆建陽刊《李卓吾先生批評三國志》，120回（缺第105回）；OCR。'
+      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '明萬曆建陽刊《李卓吾先生批評三國志》，120回（缺第105回）；识读。'
     },
     zhongbojing: {
-      id: 'zhongbojing', label: '钟伯敬评本（OCR）', kind: 'hui', splitKind: 'chapter',
+      id: 'zhongbojing', label: '钟伯敬评本', kind: 'hui', splitKind: 'chapter',
       splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 120, file: '钟伯敬评本_OCR.txt',
-      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '明末鍾惺批评本，120回（缺第105回）；OCR。'
+      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '明末鍾惺批评本，120回（缺第105回）；识读。'
     },
     liyu: {
-      id: 'liyu', label: '笠翁评阅本（OCR）', kind: 'hui', splitKind: 'chapter',
+      id: 'liyu', label: '笠翁评阅本', kind: 'hui', splitKind: 'chapter',
       splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 120, file: '笠翁评阅本_OCR.txt',
-      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '清初李漁评阅本，120回（缺第105回）；OCR。'
+      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '清初李漁评阅本，120回（缺第105回）；识读。'
     },
 
     /* ---- jiajing 系：24卷×10则 → 毛本回（则号近似） ----
@@ -62,7 +62,7 @@ const VERSION_ONTOLOGY = {
 
     /* ---- ze 系：第N則 → 毛本回（按比例近似） ---- */
     yuxiangdou: {
-      id: 'yuxiangdou', label: '余象斗刊本（OCR）', kind: 'ze', splitKind: 'ze',
+      id: 'yuxiangdou', label: '余象斗刊本', kind: 'ze', splitKind: 'ze',
       splitOpts: { prefix: '###' }, unitKind: '則', unitCount: 180, file: '余象斗刊本_OCR.txt',
       ocr: true, hasAnno: true, annoStyle: 'inline-bracket',
       explicitMapping: 'YXD_ONTOLOGY', // 优先用 ocr-ontology.js 显式映射
@@ -75,32 +75,32 @@ const VERSION_ONTOLOGY = {
       note: '明黄正甫刊志传系统，180则（●标记）；参校崇祯间黄正甫刊本。'
     },
     zhouyue: {
-      id: 'zhouyue', label: '周曰校刊本（OCR）', kind: 'ze', splitKind: 'ze',
+      id: 'zhouyue', label: '周曰校刊本', kind: 'ze', splitKind: 'ze',
       splitOpts: { prefix: '===' }, unitKind: '則', unitCount: 237, file: '周曰校刊本_OCR.txt',
       ocr: true, gapUnits: [88, 98, 99], // 残本缺则（题署240则，实存237则，缺88/98/99；另2/33-39为目录污染重复已去重）
       note: '明万历十九年周曰校刊，题署240则，实存237则（缺88/98/99）；多模态高精图文对照识读。'
     },
     xiongqingbo: {
-      id: 'xiongqingbo', label: '熊清波藜光堂本（OCR）', kind: 'ze', splitKind: 'ze',
+      id: 'xiongqingbo', label: '熊清波藜光堂本', kind: 'ze', splitKind: 'ze',
       splitOpts: { prefix: '###' }, unitKind: '則', unitCount: 180, file: '熊清波藜光堂本_OCR.txt',
-      ocr: true, note: '明萬曆間熊清波刊《三國全傳》，180则；OCR。'
+      ocr: true, note: '明萬曆間熊清波刊《三國全傳》，180则；识读。'
     },
     zhengshaoyuan: {
-      id: 'zhengshaoyuan', label: '鄭少垣刊本（OCR）', kind: 'ze', splitKind: 'ze',
+      id: 'zhengshaoyuan', label: '鄭少垣刊本', kind: 'ze', splitKind: 'ze',
       splitOpts: { prefix: '###' }, unitKind: '則', unitCount: 180, file: '鄭少垣刊本_OCR.txt',
-      ocr: true, note: '明萬曆間鄭少垣聯輝堂刊《三國志傳》，180则；OCR。'
+      ocr: true, note: '明萬曆間鄭少垣聯輝堂刊《三國志傳》，180则；识读。'
     },
     zhudingchen: {
-      id: 'zhudingchen', label: '朱鼎臣刊本（OCR）', kind: 'ze', splitKind: 'ze',
+      id: 'zhudingchen', label: '朱鼎臣刊本', kind: 'ze', splitKind: 'ze',
       splitOpts: { prefix: '###' }, unitKind: '則', unitCount: 180, file: '朱鼎臣刊本_OCR.txt',
-      ocr: true, note: '明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，存180则（题署240则，卷十六至二十补全部分并入）；OCR。'
+      ocr: true, note: '明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，存180则（题署240则，卷十六至二十补全部分并入）；识读。'
     },
     xiazhenyu: {
-      id: 'xiazhenyu', label: '夏振宇刊本（OCR，殘本）', kind: 'ze', splitKind: 'ze',
+      id: 'xiazhenyu', label: '夏振宇刊本（殘本）', kind: 'ze', splitKind: 'ze',
       splitOpts: { prefix: '###' }, unitKind: '則', unitCount: 40, file: '夏振宇刊本_OCR.txt',
       ocr: true, unordered: true, // 块状存40-59与1-20两块；去重后唯一则号40个（1-20与40-59）
       gapUnits: [21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39], // 缺则21-39（残本中间整段无存）
-      note: '明萬曆間夏振宇刊《三國志傳通俗演義》，殘存1-20与40-59则两块（去重后40则，缺21-39）；OCR，僅檢索用。'
+      note: '明萬曆間夏振宇刊《三國志傳通俗演義》，殘存1-20与40-59则两块（去重后40则，缺21-39）；识读，仅检索用。'
     },
 
     /* ---- juan 系：卷/篇，无则回，整卷展示 ---- */
