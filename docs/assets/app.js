@@ -863,6 +863,34 @@
       bodyHTML = annotateReaderBody(bodyHTML, readerState.inline, chapterNum);
     }
 
+    // 批注内联注入（从 SANGUO_COMM_INLINE 离线语料库按回号取，整包追加到正文末尾）
+    let commInlineHTML = '';
+    if(readerState.inline.commInline){
+      const CCI = (typeof SANGUO_COMM_INLINE !== 'undefined') ? SANGUO_COMM_INLINE : null;
+      if(CCI){
+        const items = CCI[chapterNum] || [];
+        if(items.length > 0){
+          const ciMap = {
+            maozigang: { name: '毛宗岗', color: '#b91c1c' },
+            lizhi:     { name: '李卓吾', color: '#7c3aed' },
+            zhongxing: { name: '钟伯敬', color: '#1d4ed8' },
+            liyuweng:  { name: '李渔',   color: '#047857' }
+          };
+          const MAX_SHOW = 80;
+          const show = items.slice(0, MAX_SHOW);
+          commInlineHTML = `<div class="comm-inline-block mt-6 pt-4 border-t border-dashed border-[#c9b896]">
+            <h3 class="text-sm font-bold text-[#8b0000] mb-3">汇评夹批（七家汇评本 · 本回 ${items.length} 条批注${items.length>MAX_SHOW?`，显示前 ${MAX_SHOW} 条`:''}）</h3>
+            <div class="flex flex-col gap-1 text-sm leading-relaxed">
+              ${show.map(it => {
+                const meta = ciMap[it.critic] || { name: it.critic, color: '#6b7280' };
+                return `<span class="an-comm inline-block my-0.5 pr-2" style="color:${meta.color};background:${meta.color}14;border-bottom:1px dashed ${meta.color};cursor:help" title="${esc(it.text)}">【${esc(meta.name)}】${esc(it.text)}</span>`;
+              }).join('')}
+            </div>
+          </div>`;
+        }
+      }
+    }
+
     const prevChapter = chapterNum - 1;
     const nextChapter = chapterNum + 1;
     // 工具栏「第 N 则/卷/篇 · 共 M」：点选侧栏单元时按其号显示，否则按毛本回正向映射；
@@ -969,6 +997,7 @@
                 ${chapterText.preComment}
               </div>` : ''}
             <div class="ancient-text" id="reader-text-body">${bodyHTML}</div>
+            ${commInlineHTML}
             ${annotBlocksHTML ? `
             <div class="mt-6 pt-4 border-t border-[#c9b896]" id="annot-section">
               <h3 class="font-bold text-[#8b0000] mb-2">评点批注（按评点家分栏）</h3>
@@ -4498,6 +4527,37 @@
     if(!raw) return;
     if(readerState.lang === 'simplified') raw = simpleT2S(raw);
     bodyEl.innerHTML = annotateReaderBody(raw, readerState.inline, chapterNum);
+
+    // 批注内联块：根据开关重建或移除（SANGUO_COMM_INLINE 离线语料库）
+    const oldBlock = document.querySelector('.comm-inline-block');
+    if(readerState.inline.commInline){
+      const CCI = (typeof SANGUO_COMM_INLINE !== 'undefined') ? SANGUO_COMM_INLINE : null;
+      const items = CCI ? (CCI[chapterNum] || []) : [];
+      if(items.length > 0){
+        const ciMap = { maozigang:{name:'毛宗岗',color:'#b91c1c'}, lizhi:{name:'李卓吾',color:'#7c3aed'}, zhongxing:{name:'钟伯敬',color:'#1d4ed8'}, liyuweng:{name:'李渔',color:'#047857'} };
+        const MAX_SHOW = 80;
+        const show = items.slice(0, MAX_SHOW);
+        const escInner = s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const html = `<div class="comm-inline-block mt-6 pt-4 border-t border-dashed border-[#c9b896]">
+          <h3 class="text-sm font-bold text-[#8b0000] mb-3">汇评夹批（七家汇评本 · 本回 ${items.length} 条批注${items.length>MAX_SHOW?`，显示前 ${MAX_SHOW} 条`:''}）</h3>
+          <div class="flex flex-col gap-1 text-sm leading-relaxed">
+            ${show.map(it=>{
+              const meta = ciMap[it.critic] || {name: it.critic, color: '#6b7280'};
+              return `<span class="an-comm inline-block my-0.5 pr-2" style="color:${meta.color};background:${meta.color}14;border-bottom:1px dashed ${meta.color};cursor:help" title="${escInner(it.text)}">【${escInner(meta.name)}】${escInner(it.text)}</span>`;
+            }).join('')}
+          </div>
+        </div>`;
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html.trim();
+        const newBlock = wrapper.firstElementChild;
+        if(oldBlock) oldBlock.replaceWith(newBlock);
+        else bodyEl.after(newBlock);
+      } else if(oldBlock) {
+        oldBlock.remove();
+      }
+    } else if(oldBlock) {
+      oldBlock.remove();
+    }
   };
   global.appLcsDiff = function(){
     const a = document.getElementById('textA').value;
