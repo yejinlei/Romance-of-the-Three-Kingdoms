@@ -14,6 +14,7 @@
 <script src="./data/sanguo-data.js?v=20261127d"></script>
 <script src="./data/sanguo-topics.js?v=20261127d"></script>
 <script src="./data/edition-heads.js?v=20261127d"></script>
+<script src="./data/edition-bodies.js?v=20261127d"></script>
 <script src="./data/corpus-manifest.js?v=20261127d"></script>
 <script src="./data/stats.js?v=20261127d"></script>
 <script src="./assets/app.js?v=20261127d"></script>
@@ -37,7 +38,8 @@
 
 <div class="main-container">
   <div class="subtabs" id="subtabs">
-    <div class="subtab active" onclick="SANGUO_APP.showView('topic-autorev'); switchSub('topic-autorev')">改筆自動提取</div>
+    <div class="subtab active" onclick="SANGUO_APP.showView('topic-bodyrev'); switchSub('topic-bodyrev')">正文改筆</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-autorev'); switchSub('topic-autorev')">回目改筆</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-density'); switchSub('topic-density')">密度熱圖</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-compare'); switchSub('topic-compare')">回目比對</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-drift'); switchSub('topic-drift')">義理漂移</div>
@@ -59,11 +61,11 @@
 </footer>
 
 <script>
-  const _subMap = { 'topic-autorev':0, 'topic-density':1, 'topic-compare':2, 'topic-drift':3, 'topic-doctrines':4, 'topic-battles':5, 'topic-prophecies':6, 'topic-factions':7, 'topic-imagery':8, 'topic-techniques':9, 'heros':10, 'adaptations':11 };
+  const _subMap = { 'topic-bodyrev':0, 'topic-autorev':1, 'topic-density':2, 'topic-compare':3, 'topic-drift':4, 'topic-doctrines':5, 'topic-battles':6, 'topic-prophecies':7, 'topic-factions':8, 'topic-imagery':9, 'topic-techniques':10, 'heros':11, 'adaptations':12 };
   function switchSub(name){
     document.querySelectorAll('#subtabs .subtab').forEach((el,i)=>{ el.classList.toggle('active', _subMap[name]===i); });
   }
-  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('topic-autorev'); });
+  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('topic-bodyrev'); });
 </script>
 </body>
 </html>

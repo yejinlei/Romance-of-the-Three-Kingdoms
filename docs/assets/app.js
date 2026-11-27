@@ -280,6 +280,7 @@
       case 'topic-compare':    renderTopicComparison(content); break;
       case 'topic-density':    renderTopicDensityHeatmap(content); break;
       case 'topic-autorev':    renderTopicAutoRevisions(content); break;
+      case 'topic-bodyrev':    renderTopicBodyRevisions(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -3661,6 +3662,213 @@
     el.querySelector('#ar-only-diff').addEventListener('change', redraw);
 
     setTimeout(()=>{ drawBar(); el.querySelector('#ar-cards').innerHTML = renderTopCards(parseInt(el.querySelector('#ar-top').value,10)); }, 150);
+  }
+
+  /* ======== T14 正文段落级改笔提取 Body-level Revisions ======== */
+  function renderTopicBodyRevisions(el){
+    const EB = (typeof window !== 'undefined') ? window.EDITION_BODIES : null;
+    if(!EB){ el.innerHTML = '<p class="p3 text-gray-500">edition-bodies.js 未加载。</p>'; return; }
+
+    // --- inline LCS helper（T11/T13 同构，独立副本，不跨 render 函数共享）---
+    function normBody(s){ return String(s||'').replace(/\s+/g,'').replace(/\u3000/g,''); }
+    function lcsBody(aRaw, bRaw){
+      const a = normBody(aRaw), b = normBody(bRaw);
+      if(!a && !b) return [];
+      if(!a) return [...b].map(ch=>({op:'+',ch}));
+      if(!b) return [...a].map(ch=>({op:'-',ch}));
+      const m=a.length, n=b.length;
+      const dp = new Array(m+1); for(let i=0;i<=m;i++) dp[i] = new Array(n+1).fill(0);
+      for(let i=1;i<=m;i++) for(let j=1;j<=n;j++){
+        if(a[i-1]===b[j-1]) dp[i][j] = dp[i-1][j-1]+1;
+        else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+      }
+      const ops = []; let i=m, j=n;
+      while(i>0||j>0){
+        if(i>0&&j>0&&a[i-1]===b[j-1]){ ops.unshift({op:'=',ch:a[i-1]}); i--; j--; }
+        else if(j>0&&(i===0||dp[i][j-1]>=dp[i-1][j])){ ops.unshift({op:'+',ch:b[j-1]}); j--; }
+        else { ops.unshift({op:'-',ch:a[i-1]}); i--; }
+      }
+      return ops;
+    }
+    function scoreOps(ops){
+      let del=0, add=0;
+      for(const o of ops){ if(o.op==='-') del++; else if(o.op==='+') add++; }
+      return { del, add, total: del+add };
+    }
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function renderDiffHtml(baseRaw, targetRaw, color='#0f172a'){
+      const ops = lcsBody(baseRaw, targetRaw);
+      let html = `<span style="color:${color}" class="font-medium">`;
+      for(const op of ops){
+        if(op.op==='=') html += escapeHtml(op.ch);
+        else if(op.op==='+') html += `<span class="diff-add">${escapeHtml(op.ch)}</span>`;
+        else if(op.op==='-') html += `<span class="diff-del">${escapeHtml(op.ch)}</span>`;
+      }
+      html += `</span>`;
+      return html;
+    }
+
+    const edMeta = {
+      mao:{name:'毛宗崗評本',color:'#dc2626'}, jiajing:{name:'嘉靖壬午本',color:'#2563eb'},
+      huiping:{name:'七家匯評本',color:'#9333ea'}, lizhuowu:{name:'李卓吾評本',color:'#ea580c'},
+      zhongbojing:{name:'鍾伯敬評本',color:'#64748b'}, liyu:{name:'笠翁評閱本',color:'#0891b2'},
+      yuxiangdou:{name:'余象斗評林',color:'#059669'}, zhouyue:{name:'周曰校刊本',color:'#14b8a6'}
+    };
+    let baseEd = 'jiajing'; let targetEd = 'mao';
+
+    // --- 构建所有段落 diff ---
+    function buildAllRows(){
+      const rows = [];
+      const baseEB = EB[baseEd] || {};
+      const tgtEB = EB[targetEd] || {};
+      for(let N=1; N<=120; N++){
+        const baseParas = baseEB[String(N)] || [];
+        const tgtParas  = tgtEB[String(N)] || [];
+        if(baseParas.length===0 || tgtParas.length===0) continue;
+        const pairCount = Math.min(baseParas.length, tgtParas.length);
+        for(let pi=0; pi<pairCount; pi++){
+          const ops = lcsBody(baseParas[pi], tgtParas[pi]);
+          const sc = scoreOps(ops);
+          if(sc.total === 0) continue;  // 无差异跳过
+          rows.push({
+            N, pi: pi+1,
+            basePara: baseParas[pi], tgtPara: tgtParas[pi],
+            ops, ...sc, scTotal: sc.total
+          });
+        }
+      }
+      return rows;
+    }
+    let rows = buildAllRows();
+    rows.sort((a,b)=> b.scTotal - a.scTotal);
+
+    // --- autoImpact 模板 ---
+    function autoImpact(r){
+      const sc = scoreOps(r.ops);
+      const addSnippet = r.ops.filter(o=>o.op==='+').map(o=>o.ch).join('').slice(0, 16);
+      const delSnippet = r.ops.filter(o=>o.op==='-').map(o=>o.ch).join('').slice(0, 16);
+      const baseKind = ['mao','huiping','lizhuowu','zhongbojing','liyu'].includes(baseEd) ? '回' : '則';
+      if(sc.del===0 && sc.add>0){
+        return `${edMeta[targetEd].name} 在第${r.N}回第${r.pi}段，**增寫**了 ${sc.add} 字：「${addSnippet}」。`;
+      } else if(sc.add===0 && sc.del>0){
+        return `${edMeta[targetEd].name} 從第${r.N}回第${r.pi}段，**刪去**了 ${sc.del} 字：「${delSnippet}」。`;
+      } else {
+        return `${edMeta[targetEd].name} 在第${r.N}回第${r.pi}段，**重寫**——删 ${sc.del} 字、增 ${sc.add} 字（共動 ${sc.total} 字）。`;
+      }
+    }
+
+    // --- 渲染卡片 ---
+    function renderTopCards(topN){
+      const top = rows.slice(0, topN);
+      return top.map(r=>{
+        const baseColor = edMeta[baseEd].color, tgtColor = edMeta[targetEd].color;
+        return `
+          <div class="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-sm transition-shadow">
+            <div class="flex items-center gap-2 mb-2 flex-wrap">
+              <a href="read.html?edition=${targetEd}&unit=${r.N}" class="text-xs font-mono bg-red-50 text-red-700 px-1.5 py-0.5 rounded hover:bg-red-100">第${r.N}回</a>
+              <span class="text-[10px] text-gray-400">第 ${r.pi} 段</span>
+              <span class="text-xs font-bold" style="color:${tgtColor}">${edMeta[targetEd].name}</span>
+              <span class="text-xs text-gray-400">vs</span>
+              <span class="text-xs font-bold" style="color:${baseColor}">${edMeta[baseEd].name}</span>
+              <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                共動 ${r.scTotal} 字 · 删 ${r.del} / 增 ${r.add}
+              </span>
+            </div>
+            <div class="space-y-2 text-xs mb-2">
+              <div class="flex gap-2">
+                <span class="shrink-0 w-20 text-gray-500">${edMeta[baseEd].name}：</span>
+                <span class="italic text-gray-600 leading-relaxed">${escapeHtml(normBody(r.basePara))}</span>
+              </div>
+              <div class="flex gap-2">
+                <span class="shrink-0 w-20 font-bold text-gray-700">${edMeta[targetEd].name}：</span>
+                <div class="leading-relaxed">${renderDiffHtml(r.basePara, r.tgtPara, tgtColor)}</div>
+              </div>
+            </div>
+            <p class="text-sm text-gray-700 leading-relaxed border-l-4 border-amber-400 pl-3 py-1 bg-amber-50">${autoImpact(r)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    el.innerHTML = `
+      <div class="mb-4">
+        <h3 class="sub-h mb-2">正文段落級改筆提取 · Body-level Revision Extractor</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          對比兩版本 120 回 × 每回 8 個正文錨點段落（首4+中4+尾0？實際取首4+中8+尾4），
+          逐段做 LCS 差異分析。下面是 **${edMeta[baseEd].name} vs ${edMeta[targetEd].name}**
+          改動量最大的前 N 段——毛宗崗改筆不只是回目文字，正文細節更見功力。
+        </p>
+        <div class="flex flex-wrap items-center gap-3 mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs">
+          <span class="font-bold text-gray-700">對比版本：</span>
+          <label>基準：
+            <select id="bb-base" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
+              ${Object.entries(edMeta).map(([id,m])=>`<option value="${id}" ${id===baseEd?'selected':''}>${m.name}</option>`).join('')}
+            </select>
+          </label>
+          <span class="text-gray-400">→</span>
+          <label>目標：
+            <select id="bb-target" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
+              ${Object.entries(edMeta).map(([id,m])=>`<option value="${id}" ${id===targetEd?'selected':''}>${m.name}</option>`).join('')}
+            </select>
+          </label>
+          <label class="ml-2">Top：
+            <select id="bb-top" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
+              <option value="20">前 20 段</option>
+              <option value="50" selected>前 50 段</option>
+              <option value="100">前 100 段</option>
+              <option value="200">前 200 段</option>
+            </select>
+          </label>
+          <span class="ml-auto text-[10px] text-gray-500 count-span">共 ${rows.length} 段有改動</span>
+        </div>
+        <div id="bb-bar" style="height:140px"></div>
+      </div>
+      <div id="bb-cards" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+    `;
+
+    function redraw(){
+      const bs = el.querySelector('#bb-base');
+      const ts = el.querySelector('#bb-target');
+      const topsel = el.querySelector('#bb-top');
+      baseEd = bs.value; targetEd = ts.value;
+      rows = buildAllRows();
+      rows.sort((a,b)=> b.scTotal - a.scTotal);
+      const topN = parseInt(topsel.value, 10);
+      el.querySelector('#bb-cards').innerHTML = renderTopCards(topN);
+      const cs = el.querySelector('.count-span'); if(cs) cs.textContent = `共 ${rows.length} 段有改動`;
+      setTimeout(drawBar, 50);
+    }
+    function drawBar(){
+      const br = document.getElementById('bb-bar'); if(!br) return;
+      const chart = echarts.init(br);
+      const hist = rows.slice(0, 80);
+      chart.setOption({
+        tooltip:{ formatter:p=> `第${p.data[0]+1}回 · 第${p.data[1]}段 · 改動 ${p.data[2]} 字` },
+        grid:{ left:50, right:20, top:20, bottom:30 },
+        xAxis:{ type:'category', data:hist.map(r=> r.N+'·'+r.pi), axisLabel:{ interval:8, fontSize:9 } },
+        yAxis:{ type:'value', name:'改動字數', nameTextStyle:{ fontSize:10 } },
+        series:[{
+          type:'bar',
+          data:hist.map(r=> [r.N-1, r.pi, r.scTotal]),
+          itemStyle:{ color: p=> {
+            const v = p.data[2];
+            if(v >= 30) return '#dc2626';
+            if(v >= 15) return '#f59e0b';
+            return '#22c55e';
+          }},
+          barMaxWidth: 10
+        }]
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }
+
+    el.querySelector('#bb-base').addEventListener('change', redraw);
+    el.querySelector('#bb-target').addEventListener('change', redraw);
+    el.querySelector('#bb-top').addEventListener('change', redraw);
+    setTimeout(()=>{
+      el.querySelector('#bb-cards').innerHTML = renderTopCards(parseInt(el.querySelector('#bb-top').value,10));
+      drawBar();
+    }, 150);
   }
 
   /* ---- 增强版本体规范 ---- */
