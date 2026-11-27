@@ -27,19 +27,19 @@ const VERSION_ONTOLOGY = {
       hasAnno: true, annoStyle: 'inline-bracket', note: '汇辑毛宗岗、李贽、钟惺、李渔批语，120回；正文内联【】批语。'
     },
     lizhuowu: {
-      id: 'lizhuowu', label: '李卓吾評本（OCR）', kind: 'hui', splitKind: 'chapter',
-      splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 120, file: '李卓吾評本_OCR.txt',
+      id: 'lizhuowu', label: '李卓吾评本（OCR）', kind: 'hui', splitKind: 'chapter',
+      splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 120, file: '李卓吾评本_OCR.txt',
       ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '明萬曆建陽刊《李卓吾先生批評三國志》，120回（缺第105回）；OCR。'
     },
     zhongbojing: {
-      id: 'zhongbojing', label: '鍾伯敬評本（OCR）', kind: 'hui', splitKind: 'chapter',
-      splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 120, file: '鍾伯敬評本_OCR.txt',
-      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '明末鍾惺批評本，120回（缺第105回）；OCR。'
+      id: 'zhongbojing', label: '钟伯敬评本（OCR）', kind: 'hui', splitKind: 'chapter',
+      splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 120, file: '钟伯敬评本_OCR.txt',
+      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '明末鍾惺批评本，120回（缺第105回）；OCR。'
     },
     liyu: {
-      id: 'liyu', label: '笠翁評閱本（OCR）', kind: 'hui', splitKind: 'chapter',
-      splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 120, file: '笠翁評閱本_OCR.txt',
-      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '清初李漁評閱本，120回（缺第105回）；OCR。'
+      id: 'liyu', label: '笠翁评阅本（OCR）', kind: 'hui', splitKind: 'chapter',
+      splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 120, file: '笠翁评阅本_OCR.txt',
+      ocr: true, hasAnno: true, annoStyle: 'inline-bracket', note: '清初李漁评阅本，120回（缺第105回）；OCR。'
     },
 
     /* ---- jiajing 系：24卷×10则 → 毛本回（则号近似） ----

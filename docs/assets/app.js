@@ -1780,9 +1780,9 @@
     '嘉靖壬午本.txt':              { kind:'jiajing', ocr:false },
     '嘉靖壬午本_维基文库转录.txt':  { kind:'jiajingWs', ocr:false, headRe:/^### 第([一二三四五六七八九十百零]+)回[　 ]*(.*)$/gm },
     '七家汇评本.txt':              { kind:'hui120', ocr:false, headRe:/^第([一二三四五六七八九十百零]+)回[　 ]+(.*)$/gm, stripComment:/【[^】]*】/g },
-    '李卓吾評本_OCR.txt':          { kind:'hui120', ocr:true, headRe:/^### 第([0-9０-９一二三四五六七八九十百零]+)回[　 ]*(.*)$/gm },
-    '鍾伯敬評本_OCR.txt':          { kind:'hui120', ocr:true, headRe:/^### 第([0-9０-９一二三四五六七八九十百零]+)回[　 ]*(.*)$/gm },
-    '笠翁評閱本_OCR.txt':          { kind:'hui120', ocr:true, headRe:/^### 第([0-9０-９一二三四五六七八九十百零]+)回[　 ]*(.*)$/gm },
+    '李卓吾评本_OCR.txt':          { kind:'hui120', ocr:true, headRe:/^### 第([0-9０-９一二三四五六七八九十百零]+)回[　 ]*(.*)$/gm },
+    '钟伯敬评本_OCR.txt':          { kind:'hui120', ocr:true, headRe:/^### 第([0-9０-９一二三四五六七八九十百零]+)回[　 ]*(.*)$/gm },
+    '笠翁评阅本_OCR.txt':          { kind:'hui120', ocr:true, headRe:/^### 第([0-9０-９一二三四五六七八九十百零]+)回[　 ]*(.*)$/gm },
     '黄正甫本.txt':                { kind:'zeTitle', ocr:false, parse:'huang' },
     '朱鼎臣刊本_OCR.txt':          { kind:'zeTitle', ocr:true, headRe:/^### 第([0-9０-９一二三四五六七八九十百零]+)則[　 ]*(.*)$/gm },
     '鄭少垣刊本_OCR.txt':          { kind:'zeTitle', ocr:true, headRe:/^### 第([一二三四五六七八九十百零]+)則[　 ]*(.*)$/gm },
@@ -2400,10 +2400,10 @@
     el.innerHTML = `
       <div class="flex flex-col md:flex-row gap-6 items-start">
         <div class="flex-1 min-w-0">
-          <h3 class="sub-h mb-2">義理五維 · DoctrineConcept</h3>
+          <h3 class="sub-h mb-2">义理五维 · DoctrineConcept</h3>
           <p class="text-sm text-gray-600 mb-4">
             天命、正統、忠義、智謀、勇烈——全書最深層的歷史觀、道德觀、審美觀皆從此五維輻射。
-            外圈五瓣為核心義理，內圈七點為輔助維度。點擊圖形可讀該義理的落點事件、評點引述與相關讖緯。
+            外圈五瓣為核心義理，內圈七點為輔助維度。點擊圖形可讀該義理的落點事件、評點引述與相关谶纬。
           </p>
           <div class="doctrines-svg-wrap">${svg}</div>
           <div class="flex flex-wrap gap-2 mt-4 px-2">
@@ -2451,7 +2451,7 @@
         </div>
 
         ${prs.length?`<div>
-          <h5 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">相關讖緯（${prs.length}）</h5>
+          <h5 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">相关谶纬（${prs.length}）</h5>
           <div class="space-y-1">${prs.map(p=>`<p class="text-sm italic text-gray-600">"${p.content}"</p>`).join('')}</div>
         </div>`:''}
       `;
@@ -2500,8 +2500,8 @@
       <h3 class="sub-h mb-2">三十六役 · 時間地理</h3>
       <p class="text-sm text-gray-600 mb-4">
         從黃巾起義（184）到三分歸晉（280），百年之間主要戰役的年度分布。
-        柱圖按參戰主力勢力著色（魏=紅、蜀=綠、吳=藍、董/袁/呂=灰褐）。
-        點擊柱體可跳轉閱讀器對應回目。
+        柱圖按參戰主力势力着色（魏=紅、蜀=綠、吳=藍、董/袁/呂=灰褐）。
+        點擊柱體可跳轉阅读器對應回目。
       </p>
       <div class="flex flex-wrap gap-2 mb-4 text-xs">
         ${factions.slice(0,8).map(f=>`<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded-full"><span class="w-2 h-2 rounded-full" style="background:${f.color}"></span>${f.name}</span>`).join('')}
@@ -2575,11 +2575,11 @@
     }
 
     el.innerHTML = `
-      <h3 class="sub-h mb-2">讖緯應驗鏈 · Prophecy Chain</h3>
+      <h3 class="sub-h mb-2">谶纬应验链 · Prophecy Chain</h3>
       <p class="text-sm text-gray-600 mb-4">
         《三國》開篇即以「歲在甲子」為口號，預示漢室衰微；其後童謠、夢兆、讖語層出不窮。
         毛宗崗評點尤重「應驗」——每條讖緯皆有對應事件或人物結局，形成一條條命運鏈。
-        點擊卡片可跳轉閱讀器對應回目。
+        點擊卡片可跳轉阅读器對應回目。
       </p>
       <div class="flex gap-3 text-xs mb-4">
         <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 border border-amber-300 rounded-full"><span class="w-2 h-2 rounded-full bg-amber-600"></span>童謠</span>
@@ -2651,10 +2651,10 @@
     });
 
     el.innerHTML = `
-      <h3 class="sub-h mb-2">勢力網絡 · Faction Network</h3>
+      <h3 class="sub-h mb-2">势力网络 · Faction Network</h3>
       <p class="text-sm text-gray-600 mb-3">
-        十二家勢力與核心人物的隸屬關係 + 勢力間的敵對·同盟·篡奪·滅亡。
-        點擊勢力節點可見其人物；拖動節點可視化調整佈局。
+        十二家势力與核心人物的隸屬關係 + 势力间的敵對·同盟·篡奪·滅亡。
+        點擊势力节点可見其人物；拖動節點可視化調整佈局。
       </p>
       <div class="flex flex-wrap gap-2 mb-3 text-xs">
         <span class="text-gray-500 mr-1">邊色：</span>
@@ -2737,17 +2737,17 @@
 
     // 右侧详情卡
     el.innerHTML = `
-      <h3 class="sub-h mb-2">意象圖譜 · Imagery Matrix</h3>
+      <h3 class="sub-h mb-2">意象图谱 · Imagery Matrix</h3>
       <p class="text-sm text-gray-600 mb-3">
-        十五種意象（桃/馬/劍/玉璽/火/風/龍/鳳/山/水…）在一百二十回的分布熱圖。
-        點擊格子可跳轉閱讀器對應回目；點擊意象名稱看全部落點。
+        十五種意象（桃/馬/劍/玉璽/火/風/龍/鳳/山/水…）在一百二十回的分布热图。
+        點擊格子可跳轉阅读器對應回目；點擊意象名稱看全部落點。
       </p>
       <div class="flex flex-wrap gap-2 mb-3 text-xs">
         ${imgs.map(i=>`<button data-img="${i.label}" class="img-btn px-2 py-0.5 rounded-full border text-xs hover:border-gray-500 transition-colors" style="--ic:${i.color};border-color:${i.color}40;color:${i.color}">${i.symbol}${i.label}(${i.chapters.length})</button>`).join('')}
       </div>
       <div class="overflow-x-auto">${svg}</div>
       <div id="img-detail" class="mt-4 border border-gray-200 rounded-lg p-4 bg-white min-h-[120px] text-sm text-gray-500">
-        點擊上方意象或熱圖格子查看詳情。
+        點擊上方意象或热图格子查看詳情。
       </div>
     `;
 
@@ -2811,14 +2811,14 @@
     svg += `</svg>`;
 
     el.innerHTML = `
-      <h3 class="sub-h mb-2">敘事技法 · Narrative Technique × 120 回</h3>
+      <h3 class="sub-h mb-2">叙事技法 · Narrative Technique × 120 回</h3>
       <p class="text-sm text-gray-600 mb-3">
-        十種敘事技法在一百二十回的落點熱圖（毛宗崗評點體系）。
-        深色格 = 該回明顯使用此技法。點擊查看該技法說明 + 跳轉閱讀器。
+        十種叙事技法在一百二十回的落點热图（毛宗崗評點体系）。
+        深色格 = 該回明顯使用此技法。點擊查看該技法說明 + 跳轉阅读器。
       </p>
       <div class="overflow-x-auto">${svg}</div>
       <div id="tech-detail" class="mt-4 border border-gray-200 rounded-lg p-4 bg-white min-h-[120px] text-sm text-gray-500">
-        點擊上方熱圖格子查看技法說明與落點回目。
+        點擊上方热图格子查看技法說明與落點回目。
       </div>
     `;
 
@@ -2856,14 +2856,14 @@
     const narratives = drift.narratives || [];
     const revisions = drift.revisions || [];
     const editionMeta = {
-      mao:{name:'毛宗崗評本', color:'#dc2626', era:'1679', system:'評本'},
+      mao:{name:'毛宗崗评本', color:'#dc2626', era:'1679', system:'评本'},
       jiajing:{name:'嘉靖壬午本', color:'#2563eb', era:'1522', system:'志傳'},
       jiajingWs:{name:'嘉靖维基轉錄', color:'#60a5fa', era:'1522', system:'志傳'},
-      huiping:{name:'七家匯評本', color:'#9333ea', era:'清', system:'匯評'},
+      huiping:{name:'七家汇评本', color:'#9333ea', era:'清', system:'汇评'},
       yuxiangdou:{name:'余象斗評林', color:'#059669', era:'1598', system:'志傳'},
       zhouyue:{name:'周曰校本', color:'#14b8a6', era:'1591', system:'志傳'},
-      lizhuowu:{name:'李卓吾評本', color:'#ea580c', era:'萬曆', system:'評本'},
-      zhongbojing:{name:'鍾伯敬評本', color:'#64748b', era:'明末', system:'評本'}
+      lizhuowu:{name:'李卓吾评本', color:'#ea580c', era:'萬曆', system:'评本'},
+      zhongbojing:{name:'钟伯敬评本', color:'#64748b', era:'明末', system:'评本'}
     };
     const edIds = Object.keys(density).filter(id=> density[id] && density[id].length===12);
     if(!edIds.length || !doctrines.length){ el.innerHTML = '<p class="p3 text-gray-500">义理漂移数据未加载。</p>'; return; }
@@ -2873,18 +2873,18 @@
 
     el.innerHTML = `
       <div class="mb-6">
-        <h3 class="sub-h mb-2">義理漂移 · Doctrine Drift</h3>
+        <h3 class="sub-h mb-2">义理漂移 · Doctrine Drift</h3>
         <p class="text-sm text-gray-600 mb-4">
-          同一部《三國演義》，八種版本對十二種義理概念的強度分佈完全不同。
-          毛宗崗把「正統」提升為綱領，嘉靖本把「勇烈」放在首位，志傳評林重情節輕義理，
+          同一部《三國演義》，八種版本對十二種义理概念的強度分佈完全不同。
+          毛宗崗把「正統」提升為纲领，嘉靖本把「勇烈」放在首位，志傳評林重情節輕義理，
           評點家則在嘉靖與毛本之間找到了屬於自己的道德坐標。
-          這不是誰改誰的問題——這是一部小說如何隨著閱讀史被不斷重寫的故事。
+          這不是誰改誰的問題——這是一部小說如何隨著阅读史被不斷重寫的故事。
         </p>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- 雷达图 -->
           <div class="border border-gray-200 rounded-lg p-4 bg-white">
-            <h4 class="text-sm font-bold mb-2">多版本義理密度雷達圖</h4>
+            <h4 class="text-sm font-bold mb-2">多版本义理密度雷達圖</h4>
             <div id="drift-radar" style="height:320px"></div>
             <div class="flex flex-wrap gap-1.5 mt-2 text-[11px]">
               ${edIds.map(id=>{ const m=editionMeta[id]; return `<span data-ed="${id}" class="ed-legend inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-gray-200 cursor-pointer hover:border-gray-500" style="border-left-color:${m.color};border-left-width:3px">${m.name}</span>`; }).join('')}
@@ -2892,7 +2892,7 @@
           </div>
           <!-- 堆叠条形图 -->
           <div class="border border-gray-200 rounded-lg p-4 bg-white">
-            <h4 class="text-sm font-bold mb-2">各版本義理分佈堆疊</h4>
+            <h4 class="text-sm font-bold mb-2">各版本义理分布堆疊</h4>
             <div id="drift-bar" style="height:320px"></div>
           </div>
         </div>
@@ -3031,12 +3031,12 @@
     const mao2jj  = (drift && EH.mao2jj)  ? EH.mao2jj  : null;
 
     const edMeta = {
-      mao:         { name:'毛宗崗評本',       color:'#dc2626', kind:'回制' },
+      mao:         { name:'毛宗崗评本',       color:'#dc2626', kind:'回制' },
       jiajing:     { name:'嘉靖壬午本',       color:'#2563eb', kind:'則制' },
-      huiping:     { name:'七家匯評本',       color:'#9333ea', kind:'回制' },
-      lizhuowu:    { name:'李卓吾評本',       color:'#ea580c', kind:'回制' },
-      zhongbojing: { name:'鍾伯敬評本',       color:'#64748b', kind:'回制' },
-      liyu:        { name:'笠翁評閱本',       color:'#0891b2', kind:'回制' },
+      huiping:     { name:'七家汇评本',       color:'#9333ea', kind:'回制' },
+      lizhuowu:    { name:'李卓吾评本',       color:'#ea580c', kind:'回制' },
+      zhongbojing: { name:'钟伯敬评本',       color:'#64748b', kind:'回制' },
+      liyu:        { name:'笠翁评阅本',       color:'#0891b2', kind:'回制' },
       yuxiangdou:  { name:'余象斗評林',       color:'#059669', kind:'則制' },
       zhouyue:     { name:'周曰校刊本',       color:'#14b8a6', kind:'則制' }
     };
@@ -3074,12 +3074,12 @@
 
     el.innerHTML = `
       <div class="mb-4">
-        <h3 class="sub-h mb-2">多版本回目比對 · Edition Head-to-Head</h3>
+        <h3 class="sub-h mb-2">多版本回目比对 · Edition Head-to-Head</h3>
         <p class="text-sm text-gray-600 mb-3">
-          以毛宗崗評本一百二十回為錨，橫向對比嘉靖壬午本（244 則）、志傳評林（180 則）、
-          匯評本與三家評本（各 120 回）的回目文字差異。
-          則制版本按 UnitMapping 錨點插值對齊（近似對齊，非精確）。
-          點擊任一條目可跳轉對應版本閱讀器。
+          以毛宗崗评本一百二十回為錨，横向对比嘉靖壬午本（244 则）、志傳評林（180 则）、
+          汇评本與三家评本（各 120 回）的回目文字差異。
+          則制版本按 UnitMapping 锚点插值對齊（近似對齊，非精確）。
+          點擊任一條目可跳轉對應版本阅读器。
         </p>
         <div class="flex flex-wrap gap-2 mb-2">
           <span class="text-xs text-gray-500 py-1">選定版本：</span>
@@ -3334,9 +3334,9 @@
     // 选择密度 = 该版本在毛本第 N 回对应的单元数量（则制版本：则数 / 回：1）
     // 先复用 renderTopicComparison 的 mapMao2 思路：内联简化
     const edOrder = ['mao','jiajing','huiping','lizhuowu','zhongbojing','liyu','yuxiangdou','zhouyue'];
-    const edLabel = { mao:'毛宗崗120回', jiajing:'嘉靖壬午244則', huiping:'七家匯評120回',
-      lizhuowu:'李卓吾120回', zhongbojing:'鍾伯敬120回', liyu:'笠翁120回',
-      yuxiangdou:'余象斗180則', zhouyue:'周曰校245則' };
+    const edLabel = { mao:'毛宗岗120回', jiajing:'嘉靖壬午244则', huiping:'七家汇评120回',
+      lizhuowu:'李卓吾120回', zhongbojing:'钟伯敬120回', liyu:'笠翁120回',
+      yuxiangdou:'余象斗180则', zhouyue:'周曰校245则' };
     const edColor = { mao:'#dc2626', jiajing:'#2563eb', huiping:'#9333ea', lizhuowu:'#ea580c',
       zhongbojing:'#64748b', liyu:'#0891b2', yuxiangdou:'#059669', zhouyue:'#14b8a6' };
     const edKind = { mao:'回制', jiajing:'則制', huiping:'回制', lizhuowu:'回制',
@@ -3370,10 +3370,10 @@
     for(let N=1; N<=120; N++){ heatData[(N-1)*edOrder.length][2] = null; }
 
     el.innerHTML = `
-      <h3 class="sub-h mb-2">版本密度熱圖 · Edition Density Heatmap</h3>
+      <h3 class="sub-h mb-2">版本密度热图 · Edition Density Heatmap</h3>
       <p class="text-sm text-gray-600 mb-3">
-        以毛宗崗評本 120 回為毛細管橫軸，8 版本為縱軸。
-        格子顏色越深 = 該版本在毛本對應回的單元越多（則制版本按 UnitMapping 錨點插值對齊，近似）。
+        以毛宗崗评本 120 回為毛細管横轴，8 版本為纵轴。
+        格子顏色越深 = 該版本在毛本對應回的單元越多（則制版本按 UnitMapping 锚点插值對齊，近似）。
         毛本自身為基準（每回 1 單元，色值 1）。
       </p>
       <div id="density-chart" style="height:360px"></div>
@@ -3492,9 +3492,9 @@
 
     // --- 元数据 ---
     const edMeta = {
-      mao:{name:'毛宗崗評本',color:'#dc2626'}, jiajing:{name:'嘉靖壬午本',color:'#2563eb'},
-      huiping:{name:'七家匯評本',color:'#9333ea'}, lizhuowu:{name:'李卓吾評本',color:'#ea580c'},
-      zhongbojing:{name:'鍾伯敬評本',color:'#64748b'}, liyu:{name:'笠翁評閱本',color:'#0891b2'},
+      mao:{name:'毛宗崗评本',color:'#dc2626'}, jiajing:{name:'嘉靖壬午本',color:'#2563eb'},
+      huiping:{name:'七家汇评本',color:'#9333ea'}, lizhuowu:{name:'李卓吾评本',color:'#ea580c'},
+      zhongbojing:{name:'钟伯敬评本',color:'#64748b'}, liyu:{name:'笠翁评阅本',color:'#0891b2'},
       yuxiangdou:{name:'余象斗評林',color:'#059669'}, zhouyue:{name:'周曰校刊本',color:'#14b8a6'}
     };
     // 对比对：base（毛本）vs target（嘉靖）自动生成改笔
@@ -3578,11 +3578,11 @@
 
     el.innerHTML = `
       <div class="mb-4">
-        <h3 class="sub-h mb-2">自動提取毛宗崗改筆 · Auto Revision Extractor</h3>
+        <h3 class="sub-h mb-2">自动提取毛宗崗改筆 · Auto Revision Extractor</h3>
         <p class="text-sm text-gray-600 mb-3">
           對比兩版本 120 回回目，逐回做 LCS 差異分析，按改動量排序。
           下面是 **${edMeta[baseEd].name} vs ${edMeta[targetEd].name}** 差異最大的前 20 回。
-          切换「對比版本」可重跑全量分析——所有改筆案例均由此頁自動生成，模板化輸出。
+          切换「對比版本」可重跑全量分析——所有改笔案例均由此頁自動生成，模板化输出。
         </p>
         <div class="flex flex-wrap items-center gap-3 mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs">
           <span class="font-bold text-gray-700">對比版本：</span>
@@ -3709,9 +3709,9 @@
     }
 
     const edMeta = {
-      mao:{name:'毛宗崗評本',color:'#dc2626'}, jiajing:{name:'嘉靖壬午本',color:'#2563eb'},
-      huiping:{name:'七家匯評本',color:'#9333ea'}, lizhuowu:{name:'李卓吾評本',color:'#ea580c'},
-      zhongbojing:{name:'鍾伯敬評本',color:'#64748b'}, liyu:{name:'笠翁評閱本',color:'#0891b2'},
+      mao:{name:'毛宗崗评本',color:'#dc2626'}, jiajing:{name:'嘉靖壬午本',color:'#2563eb'},
+      huiping:{name:'七家汇评本',color:'#9333ea'}, lizhuowu:{name:'李卓吾评本',color:'#ea580c'},
+      zhongbojing:{name:'钟伯敬评本',color:'#64748b'}, liyu:{name:'笠翁评阅本',color:'#0891b2'},
       yuxiangdou:{name:'余象斗評林',color:'#059669'}, zhouyue:{name:'周曰校刊本',color:'#14b8a6'}
     };
     let baseEd = 'jiajing'; let targetEd = 'mao';
@@ -3792,11 +3792,11 @@
 
     el.innerHTML = `
       <div class="mb-4">
-        <h3 class="sub-h mb-2">正文段落級改筆提取 · Body-level Revision Extractor</h3>
+        <h3 class="sub-h mb-2">正文段落级改筆提取 · Body-level Revision Extractor</h3>
         <p class="text-sm text-gray-600 mb-3">
-          對比兩版本 120 回 × 每回 8 個正文錨點段落（首4+中4+尾0？實際取首4+中8+尾4），
+          對比兩版本 120 回 × 每回 8 個正文锚点段落（首4+中4+尾0？實際取首4+中8+尾4），
           逐段做 LCS 差異分析。下面是 **${edMeta[baseEd].name} vs ${edMeta[targetEd].name}**
-          改動量最大的前 N 段——毛宗崗改筆不只是回目文字，正文細節更見功力。
+          改動量最大的前 N 段——毛宗崗改筆不只是回目文字，正文细节更見功力。
         </p>
         <div class="flex flex-wrap items-center gap-3 mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs">
           <span class="font-bold text-gray-700">對比版本：</span>
