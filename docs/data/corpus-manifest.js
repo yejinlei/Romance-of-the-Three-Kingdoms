@@ -84,7 +84,7 @@ const SANGUO_CORPUS = {
     {
       "id": "liyu",
       "file": "笠翁評閱本_OCR.txt",
-      "title": "笠翁評閱本（OCR）",
+      "title": "笠翁评阅本（OCR）",
       "note": "清初李漁（笠翁）評閱本，卷首+二十六冊；識典古籍 OCR，僅檢索用",
       "source": "識典古籍（https://www.shidianguji.com/）",
       "units": 26,
@@ -488,7 +488,7 @@ const SANGUO_CORPUS = {
       "path": "維基共享資源 IOC.UTokyo-009701（10 冊）；東洋文化研究所漢籍善本全文影像資料庫。"
     },
     {
-      "edition": "笠翁評閱本",
+      "edition": "笠翁评阅本",
       "system": "評本",
       "tier": "可獲影印",
       "status": "已獲文本（OCR，已接閱讀、未校勘）",

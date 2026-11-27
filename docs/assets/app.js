@@ -3373,7 +3373,7 @@
       <h3 class="sub-h mb-2">版本密度热图 · Edition Density Heatmap</h3>
       <p class="text-sm text-gray-600 mb-3">
         以毛宗崗评本 120 回為毛細管横轴，8 版本為纵轴。
-        格子顏色越深 = 該版本在毛本對應回的單元越多（則制版本按 UnitMapping 锚点插值對齊，近似）。
+        格子顏色越深 = 該版本在毛本对應回的單元越多（則制版本按 UnitMapping 锚点插值對齊，近似）。
         毛本自身為基準（每回 1 單元，色值 1）。
       </p>
       <div id="density-chart" style="height:360px"></div>
@@ -3538,9 +3538,9 @@
       if(sc.del===0 && sc.add>0){
         return `毛本在${edMeta[baseEd].name}${baseKind}第${r.N}回基礎上**增飾**了 ${sc.add} 字（增字率 ${pct}%）：「${addSnippet}」。`;
       } else if(sc.add===0 && sc.del>0){
-        return `毛本從${edMeta[baseEd].name}${baseKind}第${r.N}回**刪去**了 ${sc.del} 字（刪字率 ${pct}%）：「${delSnippet}」。`;
+        return `毛本从${edMeta[baseEd].name}${baseKind}第${r.N}回**刪去**了 ${sc.del} 字（刪字率 ${pct}%）：「${delSnippet}」。`;
       } else {
-        return `毛本對${edMeta[baseEd].name}${baseKind}第${r.N}回進行了**重寫**——刪 ${sc.del} 字、增 ${sc.add} 字（總改動率 ${pct}%）。`;
+        return `毛本对${edMeta[baseEd].name}${baseKind}第${r.N}回进行了**重寫**——刪 ${sc.del} 字、增 ${sc.add} 字（总改动率 ${pct}%）。`;
       }
     }
 
@@ -3557,7 +3557,7 @@
               <span class="text-xs text-gray-400">vs</span>
               <span class="text-xs font-bold" style="color:${baseColor}">${edMeta[baseEd].name}</span>
               <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
-                改動 ${r.scTotal} 字 · 刪 ${r.del} / 增 ${r.add}
+                改动 ${r.scTotal} 字 · 刪 ${r.del} / 增 ${r.add}
               </span>
             </div>
             <div class="space-y-1.5 text-xs mb-2">
@@ -3578,21 +3578,21 @@
 
     el.innerHTML = `
       <div class="mb-4">
-        <h3 class="sub-h mb-2">自动提取毛宗崗改筆 · Auto Revision Extractor</h3>
+        <h3 class="sub-h mb-2">自动提取毛宗岗改笔 · Auto Revision Extractor</h3>
         <p class="text-sm text-gray-600 mb-3">
-          對比兩版本 120 回回目，逐回做 LCS 差異分析，按改動量排序。
+          对比两版本 120 回回目，逐回做 LCS 差异分析，按改动量排序。
           下面是 **${edMeta[baseEd].name} vs ${edMeta[targetEd].name}** 差異最大的前 20 回。
-          切换「對比版本」可重跑全量分析——所有改笔案例均由此頁自動生成，模板化输出。
+          切换「对比版本」可重跑全量分析——所有改笔案例均由此页自动生成，模板化输出。
         </p>
         <div class="flex flex-wrap items-center gap-3 mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs">
-          <span class="font-bold text-gray-700">對比版本：</span>
-          <label>基準：
+          <span class="font-bold text-gray-700">对比版本：</span>
+          <label>基准：
             <select id="ar-base" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
               ${Object.entries(edMeta).map(([id,m])=>`<option value="${id}" ${id===baseEd?'selected':''}>${m.name}</option>`).join('')}
             </select>
           </label>
           <span class="text-gray-400">→</span>
-          <label>目標：
+          <label>目标：
             <select id="ar-target" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
               ${Object.entries(edMeta).map(([id,m])=>`<option value="${id}" ${id===targetEd?'selected':''}>${m.name}</option>`).join('')}
             </select>
@@ -3606,7 +3606,7 @@
             </select>
           </label>
           <label class="ml-2">
-            <input type="checkbox" id="ar-only-diff" checked class="rounded"> 只顯示有改動的章回
+            <input type="checkbox" id="ar-only-diff" checked class="rounded"> 只显示有改动的章回
           </label>
         </div>
         <div id="ar-bar" style="height:140px"></div>
@@ -3637,10 +3637,10 @@
       // 取 Top 50 做柱状（120 太多太密）
       const hist = rows.slice(0, 50);
       chart.setOption({
-        tooltip:{ formatter:p=> `第${p.data[0]+1}回 · 改動 ${p.data[2]} 字` },
+        tooltip:{ formatter:p=> `第${p.data[0]+1}回 · 改动 ${p.data[2]} 字` },
         grid:{ left:50, right:20, top:20, bottom:30 },
         xAxis:{ type:'category', data:hist.map(r=> r.N), axisLabel:{ interval:4, fontSize:10 } },
-        yAxis:{ type:'value', name:'改動字數', nameTextStyle:{ fontSize:10 } },
+        yAxis:{ type:'value', name:'改动字数', nameTextStyle:{ fontSize:10 } },
         series:[{
           type:'bar',
           data:hist.map(r=> [r.N-1, r.scTotal, r.N]),
@@ -3792,21 +3792,21 @@
 
     el.innerHTML = `
       <div class="mb-4">
-        <h3 class="sub-h mb-2">正文段落级改筆提取 · Body-level Revision Extractor</h3>
+        <h3 class="sub-h mb-2">正文段落级改笔提取 · Body-level Revision Extractor</h3>
         <p class="text-sm text-gray-600 mb-3">
-          對比兩版本 120 回 × 每回 8 個正文锚点段落（首4+中4+尾0？實際取首4+中8+尾4），
-          逐段做 LCS 差異分析。下面是 **${edMeta[baseEd].name} vs ${edMeta[targetEd].name}**
-          改動量最大的前 N 段——毛宗崗改筆不只是回目文字，正文细节更見功力。
+          对比两版本 120 回 × 每回 8 个正文锚点段落（首4+中4+尾0？实际取首4+中8+尾4），
+          逐段做 LCS 差异分析。下面是 **${edMeta[baseEd].name} vs ${edMeta[targetEd].name}**
+          改动量最大的前 N 段——毛宗岗改笔不只是回目文字，正文细节更见功力。
         </p>
         <div class="flex flex-wrap items-center gap-3 mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs">
-          <span class="font-bold text-gray-700">對比版本：</span>
-          <label>基準：
+          <span class="font-bold text-gray-700">对比版本：</span>
+          <label>基准：
             <select id="bb-base" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
               ${Object.entries(edMeta).map(([id,m])=>`<option value="${id}" ${id===baseEd?'selected':''}>${m.name}</option>`).join('')}
             </select>
           </label>
           <span class="text-gray-400">→</span>
-          <label>目標：
+          <label>目标：
             <select id="bb-target" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
               ${Object.entries(edMeta).map(([id,m])=>`<option value="${id}" ${id===targetEd?'selected':''}>${m.name}</option>`).join('')}
             </select>
@@ -3819,7 +3819,7 @@
               <option value="200">前 200 段</option>
             </select>
           </label>
-          <span class="ml-auto text-[10px] text-gray-500 count-span">共 ${rows.length} 段有改動</span>
+          <span class="ml-auto text-[10px] text-gray-500 count-span">共 ${rows.length} 段有改动</span>
         </div>
         <div id="bb-bar" style="height:140px"></div>
       </div>
@@ -3835,7 +3835,7 @@
       rows.sort((a,b)=> b.scTotal - a.scTotal);
       const topN = parseInt(topsel.value, 10);
       el.querySelector('#bb-cards').innerHTML = renderTopCards(topN);
-      const cs = el.querySelector('.count-span'); if(cs) cs.textContent = `共 ${rows.length} 段有改動`;
+      const cs = el.querySelector('.count-span'); if(cs) cs.textContent = `共 ${rows.length} 段有改动`;
       setTimeout(drawBar, 50);
     }
     function drawBar(){
@@ -3843,10 +3843,10 @@
       const chart = echarts.init(br);
       const hist = rows.slice(0, 80);
       chart.setOption({
-        tooltip:{ formatter:p=> `第${p.data[0]+1}回 · 第${p.data[1]}段 · 改動 ${p.data[2]} 字` },
+        tooltip:{ formatter:p=> `第${p.data[0]+1}回 · 第${p.data[1]}段 · 改动 ${p.data[2]} 字` },
         grid:{ left:50, right:20, top:20, bottom:30 },
         xAxis:{ type:'category', data:hist.map(r=> r.N+'·'+r.pi), axisLabel:{ interval:8, fontSize:9 } },
-        yAxis:{ type:'value', name:'改動字數', nameTextStyle:{ fontSize:10 } },
+        yAxis:{ type:'value', name:'改动字数', nameTextStyle:{ fontSize:10 } },
         series:[{
           type:'bar',
           data:hist.map(r=> [r.N-1, r.pi, r.scTotal]),
