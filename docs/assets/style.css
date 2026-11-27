@@ -187,3 +187,34 @@ pre {
   width: 5.5em; flex-shrink: 0; text-align: right; font-size: 12px; color: #3a1c00;
   font-variant-numeric: tabular-nums;
 }
+
+/* ======== 批注锚点嵌入（ci-anchor） ======== */
+.ci-anchor {
+  display: inline-block;
+  font-size: 0.7em;
+  line-height: 1;
+  vertical-align: super;
+  margin: 0 2px;
+  padding: 0 2px;
+  border-radius: 3px;
+  background: currentColor;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: transform .12s ease;
+}
+.ci-anchor:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 2px rgba(139, 0, 0, .25);
+}
+/* 点击锚点后批注块对应条目闪烁高亮 */
+.ci-flash {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+  border-radius: 3px;
+  animation: ci-flash-pulse 0.9s ease-in-out 2;
+}
+@keyframes ci-flash-pulse {
+  0%, 100% { background-color: rgba(245, 158, 11, .15); }
+  50% { background-color: rgba(245, 158, 11, .45); }
+}
