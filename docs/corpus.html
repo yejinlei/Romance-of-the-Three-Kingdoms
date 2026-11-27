@@ -326,8 +326,10 @@ function renderSide(){
   document.querySelectorAll('.ed').forEach(b=>b.onclick=()=>selectEdition(b.dataset.ed));
 }
 
-async function loadEdition(id){
+async function loadEdition(id, opts){
+  opts=opts||{};
   const it=SANGUO_CORPUS.items.find(x=>x.id===id)||SANGUO_CORPUS.items[0];
+  const sameEd=(state.ed===it.id);
   state.ed=it.id;
   $('main').innerHTML=`<div class="empty">正在載入《${esc(it.title)}》…</div>`;
   try{
@@ -344,7 +346,8 @@ async function loadEdition(id){
     if(it.id==='sanguozhi') units=mergeSubheads(units,t=>/^(魏書|蜀書|吳書)/.test(t));
     if(it.id==='jiajing-front') units=mergeSubheads(units,t=>/^(序|引|三國志宗僚|三国志宗僚)$/.test(t));
     state.units=units;
-    state.idx=0;
+    // 若目标版本未變，保留當前 idx（避免 hashchange 重載時跳回首篇）；否則重置
+    state.idx=(opts.idx!=null)?opts.idx:(sameEd?state.idx:0);
     renderSide();
     renderEdition(it);
   }catch(e){
@@ -352,7 +355,8 @@ async function loadEdition(id){
   }
 }
 
-function renderEdition(it){
+function renderEdition(it, opts){
+  opts=opts||{};
   const n=state.units.length;
   const cur=state.units[state.idx]||{title:'',paras:[]};
   const criticOpts=SANGUO_CORPUS.commentaries.map(c=>`<option value="${c.id}" ${state.critic===c.id?'selected':''}>${esc(c.name)}批語</option>`).join('');
@@ -407,7 +411,13 @@ function renderEdition(it){
   const ot=$('onlyText'); if(ot) ot.onchange=e=>{ state.onlyText=e.target.checked; $('content').classList.toggle('hide-anno',state.onlyText); };
   const cs=$('critic'); if(cs) cs.onchange=e=>{ state.critic=e.target.value; renderCritic(it); };
   renderCritic(it);
-  location.hash=`ed=${it.id}&c=${state.idx+1}`;
+  if(!opts||!opts.noHash){
+    const nh=`ed=${it.id}&c=${state.idx+1}`;
+    if(location.hash.replace(/^#/,'')!==nh){
+      _selfWrite=true;
+      location.hash=nh;
+    }
+  }
   lsSave();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -446,16 +456,32 @@ async function renderCritic(it){
 function selectEdition(id){
   state.critic=''; state.onlyText=false;
   loadEdition(id);
-}function bootFromHash(){
+}let _lastHash=''; let _selfWrite=false;
+function hashKey(){ return location.hash.replace(/^#/,''); }
+function bootFromHash(){
   const h=location.hash.replace(/^#/,'');
+  // 自身寫入觸發的 hashchange：目標已渲染，直接跳過
+  if(_selfWrite){ _selfWrite=false; _lastHash=h; return; }
   const p=new URLSearchParams(h.replace(/&/g,'&'));
   const ed=p.get('ed'); const c=+(p.get('c')||0);
   const saved=lsLoad();
   const startEd = (ed && SANGUO_CORPUS.items.some(x=>x.id===ed)) ? ed : (saved && saved.ed) || 'mao';
   const startIdx = (ed ? c-1 : (saved && saved.idx)) || 0;
-  loadEdition(startEd).then(()=>{
-    if(startIdx>=0 && startIdx<state.units.length){ state.idx=startIdx; }
-    renderEdition(SANGUO_CORPUS.items.find(x=>x.id===startEd));
+  _lastHash=h;
+  const it=SANGUO_CORPUS.items.find(x=>x.id===startEd);
+  // 版本未變：僅跳轉章節，不重新拉取全文（避免閃爍/清空）
+  if(state.ed===startEd && state.units.length>0){
+    const idx=Math.max(0,Math.min(startIdx,state.units.length-1));
+    state.idx=idx;
+    renderEdition(it,{noHash:true});
+    lsSave();
+    window.scrollTo({top:0,behavior:'smooth'});
+    return;
+  }
+  loadEdition(startEd,{idx:startIdx}).then(()=>{
+    const idx=Math.max(0,Math.min((startIdx||0),state.units.length-1));
+    state.idx=idx;
+    renderEdition(it,{noHash:true});
   });
 }
 
