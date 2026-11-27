@@ -17,7 +17,7 @@
 <script src="./data/edition-bodies.js?v=20261127d"></script>
 <script src="./data/corpus-manifest.js?v=20261127d"></script>
 <script src="./data/stats.js?v=20261127d"></script>
-<script src="./assets/app.js?v=20261127d"></script>
+<script src="./assets/app.js?v=20261127e"></script>
 </head>
 <body>
 
@@ -42,7 +42,8 @@
     <div class="subtab" onclick="SANGUO_APP.showView('topic-autorev'); switchSub('topic-autorev')">回目改笔</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-headsim'); switchSub('topic-headsim')">回目相似度</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-density'); switchSub('topic-density')">单元密度</div>
-    <div class="subtab" onclick="SANGUO_APP.showView('topic-bodydensity'); switchSub('topic-bodydensity')">叙事密度</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-bodydensity'); switchSub('topic-bodydensity')">版本密度</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-narrative'); switchSub('topic-narrative')">人物密度</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-compare'); switchSub('topic-compare')">回目比对</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-drift'); switchSub('topic-drift')">义理漂移</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-doctrines'); switchSub('topic-doctrines')">义理五维</div>
@@ -63,7 +64,12 @@
 </footer>
 
 <script>
-  const _subMap = { 'topic-bodyrev':0, 'topic-autorev':1, 'topic-density':2, 'topic-compare':3, 'topic-drift':4, 'topic-doctrines':5, 'topic-battles':6, 'topic-prophecies':7, 'topic-factions':8, 'topic-imagery':9, 'topic-techniques':10, 'heros':11, 'adaptations':12 };
+  const _subMap = {
+    'topic-bodyrev':0, 'topic-autorev':1, 'topic-headsim':2, 'topic-density':3,
+    'topic-bodydensity':4, 'topic-narrative':5, 'topic-compare':6, 'topic-drift':7,
+    'topic-doctrines':8, 'topic-battles':9, 'topic-prophecies':10, 'topic-factions':11,
+    'topic-imagery':12, 'topic-techniques':13, 'heros':14, 'adaptations':15
+  };
   function switchSub(name){
     document.querySelectorAll('#subtabs .subtab').forEach((el,i)=>{ el.classList.toggle('active', _subMap[name]===i); });
   }

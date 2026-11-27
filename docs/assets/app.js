@@ -283,6 +283,7 @@
       case 'topic-bodyrev':    renderTopicBodyRevisions(content); break;
       case 'topic-headsim':    renderTopicHeadSimilarity(content); break;
       case 'topic-bodydensity': renderTopicBodyDensity(content); break;
+      case 'topic-narrative':   renderTopicNarrativeDensity(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -4022,6 +4023,168 @@
       });
       chart.resize();
     }, 80);
+  }
+
+  /* ======== T17 叙事密度热力图 Narrative Density Heatmap ======== */
+  function renderTopicNarrativeDensity(el){
+    const SD = (typeof window !== 'undefined') ? window.SANGUO_DATA : null;
+    if(!SD){ el.innerHTML = '<p class="p3 text-gray-500">sanguo-data.js 未加载。</p>'; return; }
+
+    const chapters = SD.chapters || [];
+    const persons  = SD.persons  || [];
+
+    // ---- Top-30 高频人物 ----
+    const TOP_N = 30;
+    const topP = persons.slice().sort((a,b)=>b.mentionCount - a.mentionCount).slice(0, TOP_N);
+    const pName2Idx = new Map();
+    topP.forEach((p,i)=> pName2Idx.set(p.name, i));
+
+    // ---- 势力配色 ----
+    const factionColor = {
+      '蜀汉':'#22c55e', '曹魏':'#ef4444', '东吴':'#3b82f6',
+      '群雄':'#f59e0b', '汉室':'#a855f7', '东晋':'#14b8a6', '其他':'#64748b'
+    };
+    function factionOf(pname){
+      const p = persons.find(x=>x.name===pname);
+      return (p && p.faction) || '其他';
+    }
+
+    // ---- 构建 120 × TOP_N 权重矩阵 ----
+    // 权重：2 = 该回 keyPersons[0]（主角），1 = keyPersons 里但非首位，0 = 未出场
+    const heat = []; // [chapterIdx, personIdx, weight]
+    const chDensity = new Array(chapters.length).fill(0); // 每回 keyPersons 数
+    const pCrossCnt = new Array(TOP_N).fill(0);  // 每个人物跨回出场数
+    chapters.forEach((ch, ci)=>{
+      const kps = ch.keyPersons || [];
+      chDensity[ci] = kps.length;
+      kps.forEach((name, ki)=>{
+        const pi = pName2Idx.get(name);
+        if(pi === undefined) return;
+        const weight = (ki===0) ? 2 : 1; // 首位=主角，其余=配角
+        heat.push([ci, pi, weight]);
+        pCrossCnt[pi]++;
+      });
+    });
+
+    // ---- 势力分组边界（用于 yAxis 分隔线） ----
+    const factionBands = []; // [{name, startIdx, endIdx, color}]
+    let curFaction = null, curStart = 0;
+    topP.forEach((p,i)=>{
+      const f = factionOf(p.name);
+      if(f !== curFaction){
+        if(curFaction!==null) factionBands.push({name:curFaction, start:curStart, end:i-1, color:factionColor[curFaction]});
+        curFaction = f; curStart = i;
+      }
+      if(i === topP.length-1) factionBands.push({name:curFaction, start:curStart, end:i, color:factionColor[curFaction]});
+    });
+
+    // ---- 回密度统计 ----
+    const maxDensity = Math.max(...chDensity, 1);
+    const avgDensity = chDensity.reduce((a,b)=>a+b,0) / chDensity.length;
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">叙事密度热力图 · Narrative Density</h3>
+      <p class="text-sm text-gray-600 mb-2">
+        120 回（横） × Top-${TOP_N} 高频人物（纵）：每格颜色 = 该人物在该回的角色权重
+        <b class="mx-1">■</b>未出场 <b class="mx-1" style="color:#94a3b8">■</b>配角（keyPersons 非首位）
+        <b class="mx-1" style="color:#334155">■</b>主角（keyPersons 首位）。按人物所属势力分组上色。
+      </p>
+      <div class="mb-2 text-xs text-gray-500">
+        每回关键人物 <b>${avgDensity.toFixed(1)}</b> 人 / 最多 <b>${maxDensity}</b> 人；
+        曹操跨 <b>${pCrossCnt[0]}</b> 回 · 诸葛亮跨 <b>${pCrossCnt[1]}</b> 回 · 刘备跨 <b>${pCrossCnt[2]}</b> 回。
+      </div>
+      <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs mb-2">
+        ${factionBands.map(b=>`<span><span style="display:inline-block;width:10px;height:10px;background:${b.color};margin-right:4px;border-radius:2px"></span>${b.name}（${b.end-b.start+1} 人）</span>`).join('')}
+      </div>
+      <div id="narrative-heat" style="height:420px"></div>
+      <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div id="narrative-ch-density" style="height:160px"></div>
+        <div id="narrative-p-density" style="height:160px"></div>
+      </div>
+    `;
+
+    setTimeout(()=>{
+      // ---- 主热力图 ----
+      const elHeat = document.getElementById('narrative-heat');
+      if(!elHeat) return;
+      const chart = echarts.init(elHeat);
+      const xLabels = new Array(chapters.length).fill(0).map((_,i)=> (i+1)%20===0 || i===0 ? (i+1) : '');
+      const yLabels = topP.map(p=> p.name + ' (' + p.faction + ')');
+
+      chart.setOption({
+        tooltip:{
+          formatter: p=>{
+            const chIdx = p.data[0];
+            const pIdx  = p.data[1];
+            const ch = chapters[chIdx];
+            const pname = topP[pIdx].name;
+            const w = p.data[2];
+            const role = w===2 ? '主角' : (w===1 ? '配角' : '未出场');
+            const evts = (ch.events||[]).slice(0,4).join('、');
+            return `<b>第 ${ch.id} 回</b> · ${ch.title}<br/>
+                    <b>${pname}</b>（${topP[pIdx].faction}）：<b>${role}</b><br/>
+                    ${evts ? '事件：'+evts : ''}`;
+          }
+        },
+        grid:{ left:130, right:40, top:10, bottom:40 },
+        xAxis:{ type:'category', data:xLabels, splitArea:{ show:false }, axisLabel:{ interval:0, fontSize:9 } },
+        yAxis:{ type:'category', data:yLabels, splitArea:{ show:true, interval:0 }, axisLabel:{ fontSize:10 } },
+        visualMap:{ min:0, max:2, calculable:true, orient:'horizontal', left:'center', bottom:0, show:false,
+          inRange:{ color:['#f8fafc', '#cbd5e1', '#1e293b'] } },
+        series:[{
+          type:'heatmap', data:heat,
+          label:{ show:true, fontSize:7, color:'#fff', formatter:p=> p.data[2]===2?'★':(p.data[2]===1?'·':'') },
+          emphasis:{ itemStyle:{ shadowBlur:8, shadowColor:'rgba(0,0,0,.4)' } }
+        }]
+      });
+
+      // 势力分组分隔：在 yAxis 的 splitLine 上画竖线（通过 axisPointer 不方便，改用 markLine）
+      const markLines = factionBands.slice(0,-1).map(b=> ({
+        yAxis: b.end + 0.5, lineStyle:{ color: b.color, width:2, type:'solid' }, label:{ show:true, position:'end', formatter:b.name, color:b.color, fontSize:11 }
+      }));
+      chart.setOption({ series:[{ markLine:{ symbol:'none', silent:true, lineStyle:{ type:'dashed' }, data: markLines } }] });
+
+      // ---- 子图 1：每回密度折线 ----
+      const elCh = document.getElementById('narrative-ch-density');
+      if(elCh){
+        const c2 = echarts.init(elCh);
+        c2.setOption({
+          title:{ text:'每回关键人物数', textStyle:{ fontSize:12 } },
+          tooltip:{ trigger:'axis' },
+          grid:{ left:40, right:20, top:30, bottom:30 },
+          xAxis:{ type:'category', data: chapters.map(c=>c.id), axisLabel:{ interval:19 } },
+          yAxis:{ type:'value', min:0, max:Math.ceil(maxDensity*1.2) },
+          series:[{ type:'line', data:chDensity, smooth:true, symbol:'none',
+            areaStyle:{ color:'rgba(59,130,246,.15)' }, lineStyle:{ color:'#3b82f6' },
+            markLine:{ silent:true, symbol:'none', lineStyle:{ color:'#94a3b8', type:'dashed' },
+              data:[{ yAxis: avgDensity, label:{ formatter:'均值 '+avgDensity.toFixed(1), fontSize:10 } }] }
+          }]
+        });
+        c2.resize();
+      }
+
+      // ---- 子图 2：Top-15 人物跨回出场数柱图 ----
+      const elP = document.getElementById('narrative-p-density');
+      if(elP){
+        const c3 = echarts.init(elP);
+        const top15Idx = pCrossCnt.map((v,i)=>[i,v]).sort((a,b)=>b[1]-a[1]).slice(0,15).map(x=>x[0]);
+        const names = top15Idx.map(i=>topP[i].name);
+        const vals  = top15Idx.map(i=>pCrossCnt[i]);
+        const cols  = top15Idx.map(i=> factionColor[factionOf(topP[i].name)] || '#64748b');
+        c3.setOption({
+          title:{ text:'人物跨回出场 Top-15', textStyle:{ fontSize:12 } },
+          tooltip:{ trigger:'axis' },
+          grid:{ left:50, right:20, top:30, bottom:30 },
+          xAxis:{ type:'category', data:names, axisLabel:{ interval:0, fontSize:10, rotate:30 } },
+          yAxis:{ type:'value' },
+          series:[{ type:'bar', data: vals.map((v,i)=>({ value:v, itemStyle:{ color: cols[i] } })),
+            label:{ show:true, position:'top', fontSize:9 } }]
+        });
+        c3.resize();
+      }
+
+      chart.resize();
+    }, 100);
   }
 
   /* ---- 增强版本体规范 ---- */
