@@ -276,6 +276,7 @@
       case 'topic-factions':   renderTopicFactions(content); break;
       case 'topic-imagery':   renderTopicImagery(content); break;
       case 'topic-techniques': renderTopicTechniques(content); break;
+      case 'topic-drift':      renderTopicDoctrineDrift(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -2838,6 +2839,181 @@
         const label = cell.dataset.tech;
         const t = techs.find(x=>x.label===label);
         if(t){ showTech(t); window.open('read.html?edition=mao&unit='+ch, '_blank'); }
+      });
+    });
+  }
+
+  /* ======== T7 义理漂移 Doctrine Drift ======== */
+  function renderTopicDoctrineDrift(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    const drift = topics.doctrineDrifts || {};
+    const doctrines = topics.doctrines || [];
+    const density = drift.density || {};
+    const narratives = drift.narratives || [];
+    const revisions = drift.revisions || [];
+    const editionMeta = {
+      mao:{name:'毛宗崗評本', color:'#dc2626', era:'1679', system:'評本'},
+      jiajing:{name:'嘉靖壬午本', color:'#2563eb', era:'1522', system:'志傳'},
+      jiajingWs:{name:'嘉靖维基轉錄', color:'#60a5fa', era:'1522', system:'志傳'},
+      huiping:{name:'七家匯評本', color:'#9333ea', era:'清', system:'匯評'},
+      yuxiangdou:{name:'余象斗評林', color:'#059669', era:'1598', system:'志傳'},
+      zhouyue:{name:'周曰校本', color:'#14b8a6', era:'1591', system:'志傳'},
+      lizhuowu:{name:'李卓吾評本', color:'#ea580c', era:'萬曆', system:'評本'},
+      zhongbojing:{name:'鍾伯敬評本', color:'#64748b', era:'明末', system:'評本'}
+    };
+    const edIds = Object.keys(density).filter(id=> density[id] && density[id].length===12);
+    if(!edIds.length || !doctrines.length){ el.innerHTML = '<p class="p3 text-gray-500">义理漂移数据未加载。</p>'; return; }
+
+    const doctLabels = doctrines.map(d=>d.label);
+    const doctColors = doctrines.map(d=>d.color);
+
+    el.innerHTML = `
+      <div class="mb-6">
+        <h3 class="sub-h mb-2">義理漂移 · Doctrine Drift</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          同一部《三國演義》，八種版本對十二種義理概念的強度分佈完全不同。
+          毛宗崗把「正統」提升為綱領，嘉靖本把「勇烈」放在首位，志傳評林重情節輕義理，
+          評點家則在嘉靖與毛本之間找到了屬於自己的道德坐標。
+          這不是誰改誰的問題——這是一部小說如何隨著閱讀史被不斷重寫的故事。
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- 雷达图 -->
+          <div class="border border-gray-200 rounded-lg p-4 bg-white">
+            <h4 class="text-sm font-bold mb-2">多版本義理密度雷達圖</h4>
+            <div id="drift-radar" style="height:320px"></div>
+            <div class="flex flex-wrap gap-1.5 mt-2 text-[11px]">
+              ${edIds.map(id=>{ const m=editionMeta[id]; return `<span data-ed="${id}" class="ed-legend inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-gray-200 cursor-pointer hover:border-gray-500" style="border-left-color:${m.color};border-left-width:3px">${m.name}</span>`; }).join('')}
+            </div>
+          </div>
+          <!-- 堆叠条形图 -->
+          <div class="border border-gray-200 rounded-lg p-4 bg-white">
+            <h4 class="text-sm font-bold mb-2">各版本義理分佈堆疊</h4>
+            <div id="drift-bar" style="height:320px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 漂移叙事切换 -->
+      <div class="border border-gray-200 rounded-lg p-5 bg-white mb-6">
+        <h4 class="text-sm font-bold mb-3">三段漂移敘事</h4>
+        <div class="flex gap-2 flex-wrap mb-4">
+          ${narratives.map((n,i)=>`<button data-nid="${n.id}" class="narr-btn px-3 py-1.5 rounded text-sm border hover:bg-gray-50 transition-colors ${i===0?'border-gray-700 bg-gray-100 font-bold':'border-gray-300'}">${n.title.split('：')[0]}</button>`).join('')}
+        </div>
+        <div id="narr-detail" class="min-h-[180px]">${renderNarr(narratives[0])}</div>
+      </div>
+
+      <!-- 改笔案例 -->
+      <div>
+        <h4 class="text-sm font-bold mb-3">毛宗崗改筆四案</h4>
+        <p class="text-xs text-gray-500 mb-3">嘉靖壬午本原文 vs 毛宗崗改後 · 一字之差重塑義理</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          ${revisions.map(r=>`
+            <div class="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-sm transition-shadow">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs font-mono bg-gray-100 px-1.5 py-0.5 rounded">第${r.chapter}回</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700 border border-red-200">${r.doctrine}</span>
+              </div>
+              <div class="space-y-1.5 text-xs">
+                <div class="flex gap-2">
+                  <span class="shrink-0 text-gray-400 w-14">嘉靖本：</span>
+                  <span class="italic text-gray-600">"${r.jiajing}"</span>
+                </div>
+                <div class="flex gap-2">
+                  <span class="shrink-0 text-red-500 w-14">毛宗崗：</span>
+                  <span class="italic font-bold text-gray-800">"${r.mao}"</span>
+                </div>
+              </div>
+              <p class="mt-2 text-sm text-gray-700 leading-relaxed">${r.impact}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    function renderNarr(n){
+      const vers = (n.versions||[]).map(id=> editionMeta[id]?.name || id);
+      return `
+        <div class="mb-2">
+          <h5 class="text-lg font-bold mb-1">${n.title}</h5>
+          <p class="text-xs text-gray-500">涉及版本：${vers.join(' · ')}</p>
+        </div>
+        <div class="space-y-2">
+          ${(n.text||[]).map((p,i)=>`<p class="text-sm leading-relaxed text-gray-700">
+            <span class="inline-block w-6 h-6 rounded-full bg-gray-200 text-gray-700 text-xs font-bold leading-6 text-center mr-2">${i+1}</span>
+            ${p}
+          </p>`).join('')}
+        </div>
+        <p class="mt-3 text-sm font-bold border-l-4 border-amber-400 pl-3 py-1 bg-amber-50 text-amber-900">結語：${n.verdict}</p>
+      `;
+    }
+
+    // 雷达图
+    setTimeout(()=>{
+      const r = document.getElementById('drift-radar'); if(!r) return;
+      const chart = echarts.init(r);
+      const series = edIds.map(id=>{
+        const m = editionMeta[id];
+        return {
+          name:m.name,
+          type:'radar',
+          data:[{ value:density[id], name:m.name, areaStyle:{ opacity:0.15, color:m.color }, lineStyle:{ color:m.color }, itemStyle:{ color:m.color } }]
+        };
+      });
+      chart.setOption({
+        tooltip:{},
+        legend:{ show:false },
+        radar:{
+          indicator: doctLabels.map((l,i)=>({ name:l, max:5 })),
+          shape:'polygon',
+          splitNumber:5,
+          axisName:{ color:'#475569', fontSize:11 },
+          splitArea:{ areaStyle:{ color:['#f8fafc','#f1f5f9'] } }
+        },
+        series
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 100);
+
+    // 堆叠条形图
+    setTimeout(()=>{
+      const b = document.getElementById('drift-bar'); if(!b) return;
+      const chart = echarts.init(b);
+      // 只取前 5 核心概念（outer ring）用于堆叠，更可读
+      const outerDoctIdx = doctrines.filter(d=>d.ring==='outer').map(d=> doctrines.indexOf(d));
+      const stackedSeries = outerDoctIdx.map((di,si)=>({
+        name: doctLabels[di],
+        type:'bar',
+        stack:'total',
+        emphasis:{ focus:'series' },
+        itemStyle:{ color: doctColors[di] },
+        data: edIds.map(id=> density[id][di])
+      }));
+      chart.setOption({
+        tooltip:{ trigger:'axis', axisPointer:{ type:'shadow' } },
+        legend:{ top:26, textStyle:{ fontSize:11 } },
+        grid:{ left:80, right:20, top:70, bottom:20 },
+        xAxis:{ type:'value', max:25 },
+        yAxis:{ type:'category', data: edIds.map(id=> editionMeta[id].name), axisLabel:{ fontSize:11 } },
+        series: stackedSeries
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 200);
+
+    // 叙事切换
+    el.querySelectorAll('.narr-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.dataset.nid;
+        const n = narratives.find(x=>x.id===id);
+        if(n){
+          document.querySelectorAll('.narr-btn').forEach(b=>{
+            b.classList.remove('border-gray-700','bg-gray-100','font-bold');
+            b.classList.add('border-gray-300');
+          });
+          btn.classList.add('border-gray-700','bg-gray-100','font-bold');
+          btn.classList.remove('border-gray-300');
+          el.querySelector('#narr-detail').innerHTML = renderNarr(n);
+        }
       });
     });
   }

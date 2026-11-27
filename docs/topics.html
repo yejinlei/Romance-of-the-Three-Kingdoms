@@ -7,11 +7,11 @@
 <link rel="stylesheet" href="./assets/style.css">
 <script src="./assets/tailwind.js"></script>
 <script src="./assets/echarts.min.js"></script>
-<script src="./data/sanguo-data.js?v=20261127g"></script>
-<script src="./data/sanguo-topics.js?v=20261127g"></script>
-<script src="./data/corpus-manifest.js?v=20261127g"></script>
-<script src="./data/stats.js?v=20261127g"></script>
-<script src="./assets/app.js?v=20261127g"></script>
+<script src="./data/sanguo-data.js?v=20261127d"></script>
+<script src="./data/sanguo-topics.js?v=20261127d"></script>
+<script src="./data/corpus-manifest.js?v=20261127d"></script>
+<script src="./data/stats.js?v=20261127d"></script>
+<script src="./assets/app.js?v=20261127d"></script>
 </head>
 <body>
 
@@ -32,7 +32,8 @@
 
 <div class="main-container">
   <div class="subtabs" id="subtabs">
-    <div class="subtab active" onclick="SANGUO_APP.showView('topic-doctrines'); switchSub('topic-doctrines')">義理五維</div>
+    <div class="subtab active" onclick="SANGUO_APP.showView('topic-drift'); switchSub('topic-drift')">義理漂移</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-doctrines'); switchSub('topic-doctrines')">義理五維</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-battles'); switchSub('topic-battles')">三十六役</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-prophecies'); switchSub('topic-prophecies')">讖緯應驗</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-factions'); switchSub('topic-factions')">勢力網絡</div>
@@ -50,11 +51,11 @@
 </footer>
 
 <script>
-  const _subMap = { 'topic-doctrines':0, 'topic-battles':1, 'topic-prophecies':2, 'topic-factions':3, 'topic-imagery':4, 'topic-techniques':5, 'heros':6, 'adaptations':7 };
+  const _subMap = { 'topic-drift':0, 'topic-doctrines':1, 'topic-battles':2, 'topic-prophecies':3, 'topic-factions':4, 'topic-imagery':5, 'topic-techniques':6, 'heros':7, 'adaptations':8 };
   function switchSub(name){
     document.querySelectorAll('#subtabs .subtab').forEach((el,i)=>{ el.classList.toggle('active', _subMap[name]===i); });
   }
-  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('topic-doctrines'); });
+  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('topic-drift'); });
 </script>
 </body>
 </html>
