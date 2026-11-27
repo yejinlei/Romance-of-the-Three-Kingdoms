@@ -278,6 +278,7 @@
       case 'topic-techniques': renderTopicTechniques(content); break;
       case 'topic-drift':      renderTopicDoctrineDrift(content); break;
       case 'topic-compare':    renderTopicComparison(content); break;
+      case 'topic-density':    renderTopicDensityHeatmap(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -3322,6 +3323,112 @@
         renderTable(curSel);
       });
     });
+  }
+
+  /* ======== T12 版本密度热图 Edition Density Heatmap ======== */
+  function renderTopicDensityHeatmap(el){
+    const EH = (typeof window !== 'undefined') ? window.EDITION_HEADS : null;
+    if(!EH){ el.innerHTML = '<p class="p3 text-gray-500">edition-heads.js 未加载。</p>'; return; }
+    // 选择密度 = 该版本在毛本第 N 回对应的单元数量（则制版本：则数 / 回：1）
+    // 先复用 renderTopicComparison 的 mapMao2 思路：内联简化
+    const edOrder = ['mao','jiajing','huiping','lizhuowu','zhongbojing','liyu','yuxiangdou','zhouyue'];
+    const edLabel = { mao:'毛宗崗120回', jiajing:'嘉靖壬午244則', huiping:'七家匯評120回',
+      lizhuowu:'李卓吾120回', zhongbojing:'鍾伯敬120回', liyu:'笠翁120回',
+      yuxiangdou:'余象斗180則', zhouyue:'周曰校245則' };
+    const edColor = { mao:'#dc2626', jiajing:'#2563eb', huiping:'#9333ea', lizhuowu:'#ea580c',
+      zhongbojing:'#64748b', liyu:'#0891b2', yuxiangdou:'#059669', zhouyue:'#14b8a6' };
+    const edKind = { mao:'回制', jiajing:'則制', huiping:'回制', lizhuowu:'回制',
+      zhongbojing:'回制', liyu:'回制', yuxiangdou:'則制', zhouyue:'則制' };
+
+    // 构建密度矩阵：density[N-1][ei] = 该版本在毛本第 N 回的单元数
+    const mao2yxd = EH.mao2yxd;
+    const mao2jj  = EH.mao2jj;
+    function mapTo(N, ed){
+      const eh = EH[ed]; if(!eh || eh.unitCount===0) return null;
+      if(edKind[ed]==='回制') return {s:N, e:N};
+      // 则制：用预计算
+      if(ed==='yuxiangdou' && mao2yxd){ const m=mao2yxd[N-1]; return m?{s:m.start,e:m.end}:null; }
+      if(ed==='jiajing' && mao2jj){ const m=mao2jj[N-1]; return m?{s:m.start,e:m.end}:null; }
+      const tot = eh.unitCount;
+      return { s: Math.max(1, Math.round((N-1)/120*tot)+1), e: Math.min(tot, Math.round(N/120*tot)) };
+    }
+
+    // ECharts heatmap data
+    const heatData = []; // [col(回), row(版本idx), density/单元数]
+    for(let ei=0; ei<edOrder.length; ei++){
+      const ed = edOrder[ei];
+      for(let N=1; N<=120; N++){
+        const m = mapTo(N, ed);
+        if(!m){ heatData.push([N-1, ei, 0]); continue; }
+        const units = EH[ed].units.filter(u=> u.n>=m.s && u.n<=m.e);
+        heatData.push([N-1, ei, units.length || 0]);
+      }
+    }
+    // 毛本自身密度恒 1（每回 1 单元），设为 null 让图上显示为纯色参考列
+    for(let N=1; N<=120; N++){ heatData[(N-1)*edOrder.length][2] = null; }
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">版本密度熱圖 · Edition Density Heatmap</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        以毛宗崗評本 120 回為毛細管橫軸，8 版本為縱軸。
+        格子顏色越深 = 該版本在毛本對應回的單元越多（則制版本按 UnitMapping 錨點插值對齊，近似）。
+        毛本自身為基準（每回 1 單元，色值 1）。
+      </p>
+      <div id="density-chart" style="height:360px"></div>
+      <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+        ${edOrder.map(ed=>{
+          const eh = EH[ed];
+          return `<div class="border border-gray-200 rounded p-2 bg-white">
+            <div class="font-bold" style="color:${edColor[ed]}">${edLabel[ed]}</div>
+            <div class="text-gray-500">${edKind[ed]} · 總 ${eh.unitCount} 單元</div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+
+    setTimeout(()=>{
+      const el2 = document.getElementById('density-chart'); if(!el2) return;
+      const chart = echarts.init(el2);
+      // 回号轴（每 20 回一个刻度）
+      const xLabels = new Array(120).fill(0).map((_,i)=> (i+1)%20===0 || i===0 ? (i+1)+'回' : '');
+      // 版本轴
+      const yLabels = edOrder.map(id=> edLabel[id]);
+      // 数值：为了让毛本显示为浅绿（值 1），则制版本（2-6 单元）显示为更深的渐变色
+      chart.setOption({
+        title:{ text:'八版本 · 毛本 120 回對應單元數', left:'center', textStyle:{ fontSize:13, fontWeight:'normal', color:'#475569' } },
+        tooltip:{
+          formatter: p=>{
+            const ed = edOrder[p.data[1]];
+            const eh = EH[ed];
+            const m = mapTo(p.data[0]+1, ed);
+            let txt = `<b>${edLabel[ed]} · 毛本第${p.data[0]+1}回</b><br/>單元數：<b>${p.data[2]}</b>`;
+            if(m){
+              txt += `<br/>範圍：${m.s} – ${m.e}；共 ${m.e-m.s+1} 個單元`;
+              const units = eh.units.filter(u=> u.n>=m.s && u.n<=m.e);
+              txt += '<br/>'+units.slice(0,3).map(u=> `${u.n}. ${(u.title||'').replace(/^第[0-9零一二三四五六七八九十百]+[回則]\s*/,'').slice(0,14)}`).join('<br/>');
+              if(units.length>3) txt += `<br/>…另有 ${units.length-3} 個`;
+            }
+            return txt;
+          }
+        },
+        grid:{ left:140, right:20, top:40, bottom:30 },
+        xAxis:{
+          type:'category', data:xLabels, name:'毛本回', nameLocation:'end', nameGap:10,
+          axisLabel:{ interval:0, fontSize:10 }, splitArea:{ show:false }
+        },
+        yAxis:{ type:'category', data:yLabels, axisLabel:{ fontSize:11 } },
+        visualMap:{
+          min:0, max:6, calculable:true, orient:'horizontal', left:'center', bottom:0,
+          inRange:{ color:['#ffffff','#ecfdf5','#86efac','#22c55e','#15803d','#064e3b'] },
+          textStyle:{ fontSize:10 }
+        },
+        series:[{
+          type:'heatmap', data:heatData,
+          emphasis:{ itemStyle:{ shadowBlur:10, shadowColor:'rgba(0,0,0,0.4)' } }
+        }]
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
   }
 
   /* ---- 增强版本体规范 ---- */
