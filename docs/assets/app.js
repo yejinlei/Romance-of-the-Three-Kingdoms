@@ -876,7 +876,7 @@
             zhongxing: { name: '钟伯敬', color: '#1d4ed8' },
             liyuweng:  { name: '李渔',   color: '#047857' }
           };
-          const MAX_SHOW = 80;
+          const MAX_SHOW = 200;
           const show = items.slice(0, MAX_SHOW);
           commInlineHTML = `<div class="comm-inline-block mt-6 pt-4 border-t border-dashed border-[#c9b896]">
             <h3 class="text-sm font-bold text-[#8b0000] mb-3">汇评夹批（七家汇评本 · 本回 ${items.length} 条批注${items.length>MAX_SHOW?`，显示前 ${MAX_SHOW} 条`:''}）</h3>
@@ -4535,7 +4535,7 @@
       const items = CCI ? (CCI[chapterNum] || []) : [];
       if(items.length > 0){
         const ciMap = { maozigang:{name:'毛宗岗',color:'#b91c1c'}, lizhi:{name:'李卓吾',color:'#7c3aed'}, zhongxing:{name:'钟伯敬',color:'#1d4ed8'}, liyuweng:{name:'李渔',color:'#047857'} };
-        const MAX_SHOW = 80;
+        const MAX_SHOW = 200;
         const show = items.slice(0, MAX_SHOW);
         const escInner = s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         const html = `<div class="comm-inline-block mt-6 pt-4 border-t border-dashed border-[#c9b896]">
