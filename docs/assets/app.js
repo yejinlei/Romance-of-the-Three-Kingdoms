@@ -366,6 +366,8 @@
     lang: 'traditional',
     // 批注分栏显隐（四家）
     annot: { maozigang:true, lizhi:true, zhongxing:true, liyuweng:true },
+    // 批注内联 filter 显隐（四家，与侧栏 annot 双向联动）
+    inlineCritic: { maozigang:true, lizhi:true, zhongxing:true, liyuweng:true },
     // 正文内联显隐（5 项）
     inline: { phonetic:false, entity:true, commInline:true, gloss:false, crossRef:false }
   };
@@ -712,6 +714,18 @@
         if(Object.prototype.hasOwnProperty.call(readerState.inline, k)) readerState.inline[k] = true;
       });
     }
+    // 批注内联 filter（四家）：qs key=ci，默认全 true；none=全清；逗号分隔=保留的家
+    const ci = qs.get('ci');
+    if(ci != null){
+      ANNOT_CRITICS.forEach(c => { readerState.inlineCritic[c.id] = false; });
+      if(ci === 'all'){
+        ANNOT_CRITICS.forEach(c => { readerState.inlineCritic[c.id] = true; });
+      } else if(ci !== 'none'){
+        ci.split(',').map(s=>s.trim()).filter(Boolean).forEach(id=>{
+          if(Object.prototype.hasOwnProperty.call(readerState.inlineCritic, id)) readerState.inlineCritic[id] = true;
+        });
+      }
+    }
   }
 
   // 阅读状态写回 URL（replaceState，避免历史栈膨胀）
@@ -737,6 +751,13 @@
     } else {
       qs.delete('inline');
     }
+    // 批注内联 filter（四家）：编码可见集合
+    const ciIds = ANNOT_CRITICS.filter(c => readerState.inlineCritic[c.id]).map(c => c.id);
+    let ciVal;
+    if(ciIds.length === ANNOT_CRITICS.length) ciVal = 'all';
+    else if(ciIds.length === 0) ciVal = 'none';
+    else ciVal = ciIds.join(',');
+    qs.set('ci', ciVal);
     history.replaceState(null, '', location.pathname + '?' + qs.toString() + location.hash);
   }
 
@@ -866,8 +887,8 @@
     // 批注内联注入（从 SANGUO_COMM_INLINE 离线语料库按回号取，整包追加到正文末尾）
     let commInlineHTML = '';
     if(readerState.inline.commInline){
-      // 初始渲染默认全显四个 critic（activeCritics = null → 不过滤）
-      commInlineHTML = buildCommInlineBlockHTML(chapterNum, null);
+      // 初始渲染按 inlineCritic 状态过滤（与侧栏 annot 双向联动）
+      commInlineHTML = buildCommInlineBlockHTML(chapterNum, readerState.inlineCritic);
     }
 
     const prevChapter = chapterNum - 1;
@@ -4390,7 +4411,15 @@
     const MAX_SHOW_PER_TYPE = { preface: 3, inline: 200, summary: 5 };
     const order = ['maozigang','lizhi','zhongxing','liyuweng'];
     const escC = s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const active = activeCritics ? new Set(activeCritics) : null;
+    // activeCritics 兼容两种形态：数组/Set（criticId 列表）或对象 {criticId:bool}
+    let active = null;
+    if(activeCritics){
+      if(Array.isArray(activeCritics) || (typeof Set !== 'undefined' && activeCritics instanceof Set)){
+        active = new Set(activeCritics);
+      } else if(typeof activeCritics === 'object'){
+        active = new Set(Object.entries(activeCritics).filter(([,v])=>v).map(([k])=>k));
+      }
+    }
 
     // 计算 toolbar（从全量 items 算 count，让用户知道各 critic 总共有多少条）
     const criticCounts = {};
@@ -4574,8 +4603,18 @@
         const cb = document.querySelector('input[data-annot-toggle="' + c.id + '"]');
         if(cb) cb.checked = on;
       });
+      // 双向联动：批注内联四家 filter + group 同步
+      ANNOT_CRITICS.forEach(c => {
+        if(readerState.inlineCritic) readerState.inlineCritic[c.id] = on;
+        document.querySelectorAll('.ci-filter-item input[data-critic="'+c.id+'"]').forEach(ci => { ci.checked = on; });
+        document.querySelectorAll('.ci-group[data-ci-critic="'+c.id+'"]').forEach(g => { g.classList.toggle('hidden', !on); });
+      });
     } else if(Object.prototype.hasOwnProperty.call(readerState.annot, key)){
       readerState.annot[key] = on;
+      // 双向联动：批注内联对应 critic 同步
+      if(readerState.inlineCritic) readerState.inlineCritic[key] = on;
+      document.querySelectorAll('.ci-filter-item input[data-critic="'+key+'"]').forEach(ci => { ci.checked = on; });
+      document.querySelectorAll('.ci-group[data-ci-critic="'+key+'"]').forEach(g => { g.classList.toggle('hidden', !on); });
       // 个体变化后回写总开关勾选状态：四家全选 → 总开关勾上
       const allCb = document.getElementById('annot-toggle-all');
       if(allCb) allCb.checked = ANNOT_CRITICS.every(c => readerState.annot[c.id]);
@@ -4601,7 +4640,7 @@
     // 批注内联块：根据开关重建或移除（复用 renderReader 的 buildCommInlineBlockHTML）
     const oldBlock = document.querySelector('.comm-inline-block');
     if(readerState.inline.commInline){
-      const newHTML = buildCommInlineBlockHTML(chapterNum, null);
+      const newHTML = buildCommInlineBlockHTML(chapterNum, readerState.inlineCritic);
       if(newHTML){
         const wrapper = document.createElement('div');
         wrapper.innerHTML = newHTML.trim();
@@ -4615,14 +4654,37 @@
       oldBlock.remove();
     }
   };
+  // 批注内联 filter ↔ 侧栏 critic 开关 双向联动
+  // 单一真相源：readerState.annot（分栏）与 readerState.inlineCritic（内联）保持同步
+  function syncCriticBidir(criticId, on){
+    on = !!on;
+    // 1) 内联状态
+    if(readerState.inlineCritic && Object.prototype.hasOwnProperty.call(readerState.inlineCritic, criticId)){
+      readerState.inlineCritic[criticId] = on;
+    }
+    // 2) 内联 filter checkbox（可能在页面上存在多个，都同步）
+    document.querySelectorAll('.ci-filter-item input[data-critic="'+criticId+'"]').forEach(cb => { cb.checked = on; });
+    // 3) 内联 group 显隐（跨所有 ci-type-section）
+    document.querySelectorAll('.ci-group[data-ci-critic="'+criticId+'"]').forEach(g => {
+      g.classList.toggle('hidden', !on);
+    });
+    // 4) 侧栏分栏状态
+    if(readerState.annot && Object.prototype.hasOwnProperty.call(readerState.annot, criticId)){
+      readerState.annot[criticId] = on;
+    }
+    // 5) 侧栏 checkbox + 总开关回写
+    const cb = document.querySelector('input[data-annot-toggle="'+criticId+'"]');
+    if(cb) cb.checked = on;
+    const allCb = document.getElementById('annot-toggle-all');
+    if(allCb) allCb.checked = ANNOT_CRITICS.every(c => readerState.annot[c.id]);
+    // 6) 分栏批注显隐
+    applyAnnotVisibility();
+    syncReaderUrl();
+  }
   global.appToggleCriticCommInline = function(box){
     const critic = box.dataset.critic;
     if(!critic) return;
-    const block = box.closest('.comm-inline-block');
-    if(!block) return;
-    block.querySelectorAll('.ci-group[data-ci-critic="'+critic+'"]').forEach(g=>{
-      g.classList.toggle('hidden', !box.checked);
-    });
+    syncCriticBidir(critic, box.checked);
   };
   global.appLcsDiff = function(){
     const a = document.getElementById('textA').value;
