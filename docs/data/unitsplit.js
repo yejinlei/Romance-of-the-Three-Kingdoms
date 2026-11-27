@@ -63,8 +63,11 @@ const UNITSplit = (function(){
       let pre = (prefix===null) ? ((kind==='chapter')?'':(kind==='ze'?'###\\s*':'\\s*')) : (prefix==='none'?'':prefix+'\\s*');
       const re=new RegExp('^'+pre+'第('+reN+')'+unitWord+'[\\s　]*(.*)$');
       const m=line.match(re);
-      if(m) return {n:cmpCnNum(m[1]), title:line.trim()};
-      return null;
+      if(!m) return null;
+      // title 剥掉前缀（如 '### '）与尾缀（如 ' ==='），只留「第N則 题名」
+      const titleRaw=('第'+m[1]+unitWord+(m[2]?' '+m[2].trim():'')).trim();
+      const title=titleRaw.replace(/[=#*]{2,}\s*$/,'').trim();
+      return {n:cmpCnNum(m[1]), title:title};
     }
     for(const line of lines){
       let m=null;

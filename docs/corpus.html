@@ -263,7 +263,7 @@ function splitZe(text){
     const vm=line.match(/^===\s*(.+?)\s*===\s*$/);
     if(vm){ volume=vm[1]; continue; }
     const m=line.match(/^###\s*第([一二三四五六七八九十百零〇0-9]{1,6})則[\s　]*(.*)$/);
-    if(m){ cur={n:cn2num(m[1]),title:line.trim(),volume,lines:[]}; units.push(cur); }
+    if(m){ cur={n:cn2num(m[1]),title:('第'+m[1]+'則'+(m[2]?' '+m[2].trim():'')).trim().replace(/[=#*]{2,}\s*$/,'').trim(),volume,lines:[]}; units.push(cur); }
     else if(cur) cur.lines.push(line);
   }
   return units.map(u=>({title:u.title,n:u.n,volume:u.volume,paras:cleanLines(u.lines)}));
