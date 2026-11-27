@@ -364,8 +364,10 @@
   const readerState = {
     edition: 'mao',
     lang: 'traditional',
-    // 批注单一真相源：四家标志即真相；可见性与 URL 编解码均从此派生
-    annot: { maozigang:true, lizhi:true, zhongxing:true, liyuweng:true }
+    // 批注分栏显隐（四家）
+    annot: { maozigang:true, lizhi:true, zhongxing:true, liyuweng:true },
+    // 正文内联显隐（5 项）
+    inline: { phonetic:false, entity:true, commInline:true, gloss:false, crossRef:false }
   };
   // 用户点选侧栏的「版本单元号」（单元制版本）。非空时侧栏高亮该单元、工具栏按其显示，
   // 保证 侧栏条目 ↔ 工具栏计数 ↔ 正文 三者口径一致；翻页/切版本后清空回退到回→单元映射
@@ -694,8 +696,6 @@
     }
     const annot = qs.get('annot');
     if(annot != null){
-      // URL 只编码「实际可见的评点家集合」，与 applyAnnotVisibility 同源：
-      // all=四家全开 / none=全关 / 列表=仅列表内可见。兼容旧 off: 前缀（取其后可见集）。
       ANNOT_CRITICS.forEach(c => { readerState.annot[c.id] = false; });
       if(annot === 'all'){
         ANNOT_CRITICS.forEach(c => { readerState.annot[c.id] = true; });
@@ -703,6 +703,14 @@
         const ids = annot.replace(/^off:/, '').split(',').map(s => s.trim()).filter(Boolean);
         ids.forEach(id => { if(Object.prototype.hasOwnProperty.call(readerState.annot, id)) readerState.annot[id] = true; });
       }
+    }
+    // 正文内联显隐（5 项）：qs key=inline，值为逗号分隔的 flag 名；缺省默认值保持初始态
+    const inline = qs.get('inline');
+    if(inline != null){
+      ['phonetic','entity','commInline','gloss','crossRef'].forEach(k=>{ readerState.inline[k] = false; });
+      inline.split(',').map(s=>s.trim()).filter(Boolean).forEach(k=>{
+        if(Object.prototype.hasOwnProperty.call(readerState.inline, k)) readerState.inline[k] = true;
+      });
     }
   }
 
@@ -721,6 +729,14 @@
     else if(visibleIds.length === 0) annotVal = 'none';
     else annotVal = visibleIds.join(',');
     qs.set('annot', annotVal);
+    // 正文内联显隐：仅编码「非默认」项（默认 entity=true, commInline=true, 其余 false）
+    const inlineDefaults = { phonetic:false, entity:true, commInline:true, gloss:false, crossRef:false };
+    const inlineIds = Object.keys(readerState.inline).filter(k=> readerState.inline[k] !== inlineDefaults[k]);
+    if(inlineIds.length > 0){
+      qs.set('inline', inlineIds.join(','));
+    } else {
+      qs.delete('inline');
+    }
     history.replaceState(null, '', location.pathname + '?' + qs.toString() + location.hash);
   }
 
@@ -840,6 +856,13 @@
       sourceLayer = '原文层 · 毛宗岗本正文（t2s.js 繁转简）';
     }
 
+    // 正文内联标注管线（仅对纯文本正文分支 + OCR 单元分支生效）
+    const inlineAnyFlag = readerState.inline && Object.values(readerState.inline).some(x=>x);
+    const annotPure = (mode==='traditional' || mode==='simplified') && bodyHTML && !bodyHTML.includes('<div');
+    if(inlineAnyFlag && annotPure){
+      bodyHTML = annotateReaderBody(bodyHTML, readerState.inline, chapterNum);
+    }
+
     const prevChapter = chapterNum - 1;
     const nextChapter = chapterNum + 1;
     // 工具栏「第 N 则/卷/篇 · 共 M」：点选侧栏单元时按其号显示，否则按毛本回正向映射；
@@ -923,6 +946,17 @@
               return `
               <label class="flex items-center gap-1" title="${n?'本回 '+c.name+' 批注 '+n+' 条':'本回无 '+c.name+' 批注'}"><input type="checkbox" data-annot-toggle="${c.id}" ${readerState.annot[c.id]?'checked':''} onchange="appSetAnnot('${c.id}', this.checked)"> ${c.name}<span class="text-xs ${n?'text-[#8b6914]':'text-[#aaa]'} ml-0.5">（${n?n+'条':'本回无'}）</span></label>`;
             }).join('')}
+          </div>
+
+          <!-- 正文内联标注：5 类视觉增强 -->
+          <div class="inline-toolbar text-sm flex flex-wrap gap-3 items-center border-b border-[#c9b896] pb-2 mb-3">
+            <span class="font-bold">正文标注：</span>
+            <label class="flex items-center gap-1" title="人物名（蓝）/地名（绿）/事件（橙）三色高亮，悬停看类别"><input type="checkbox" ${readerState.inline.entity?'checked':''} onchange="appSetInline('entity', this.checked)"> 本体标注</label>
+            <label class="flex items-center gap-1" title="汇评本正文中的【毛夹批】【贽眉批】等批注标记彩色显示"><input type="checkbox" ${readerState.inline.commInline?'checked':''} onchange="appSetInline('commInline', this.checked)"> 批注内联</label>
+            <label class="flex items-center gap-1" title="异体字后附简体对照（ruby 格式）"><input type="checkbox" ${readerState.inline.phonetic?'checked':''} onchange="appSetInline('phonetic', this.checked)"> 异体字注音</label>
+            <label class="flex items-center gap-1" title="隆中对/赤壁之战/三顾茅庐等典故悬停显示注释"><input type="checkbox" ${readerState.inline.gloss?'checked':''} onchange="appSetInline('gloss', this.checked)"> 典故注解</label>
+            <label class="flex items-center gap-1" title="人物首次出现加 🔗 图标，点击跳转本体实体页"><input type="checkbox" ${readerState.inline.crossRef?'checked':''} onchange="appSetInline('crossRef', this.checked)"> 前后文引用</label>
+            <span class="text-xs text-[#8b6914] ml-auto">点击勾选项即时切换，URL 深链可复现</span>
           </div>
 
           <div class="reader-content">
@@ -4187,7 +4221,139 @@
     }, 100);
   }
 
-  /* ---- 增强版本体规范 ---- */
+  /* ======== annotateReaderBody：正文内联标注管线 ========
+   *  纯文本 + flags → 已替换好的 HTML
+   *  核心策略：每轮 regex 替换前先保护所有 HTML 标签（包括前一轮刚产生的），替换后再保护一次
+   *  多轮顺序：commInline → gloss(长短语优先) → entity → phonetic → crossRef
+   */
+  function annotateReaderBody(text, flags, chapterNum){
+    if(!text) return '';
+    const tagBuf = [];
+    function protectTags(s){ return s.replace(/<[^>]+>/g, m=>{ tagBuf.push(m); return '\u0001T'+(tagBuf.length-1)+'\u0001'; }); }
+    function restoreTags(s){ return s.replace(/\u0001T(\d+)\u0001/g, (_,i)=> tagBuf[+i]); }
+
+    let s = protectTags(String(text));
+
+    // 简体副本匹配 → 原文区间替换：正文默认繁体，而词典（人物/地点/事件/典故）为简体。
+    // t2s 严格等长（已用脚本验证 0 不等长映射）且不破坏占位符（词条纯汉字，不会跨占位符匹配），
+    // 故在简体副本上找区间，取原文同区间片段（等长）包标签即可，无需逐字回溯。
+    function annotateOnSimplified(kws, makeTag, firstOnly){
+      if(!kws || kws.length===0) return;
+      s = protectTags(s);
+      const simp = simpleT2S(s);
+      const sorted = kws.slice().sort((a,b)=> b.length - a.length);
+      const esc = x=> x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      const re = new RegExp(sorted.map(esc).join('|'), 'g');
+      const ranges = [];
+      const seen = new Set();
+      let m;
+      while((m = re.exec(simp)) !== null){
+        if(m[0].length===0){ re.lastIndex++; continue; }
+        const kw = m[0];
+        if(firstOnly && seen.has(kw)) continue;
+        seen.add(kw);
+        ranges.push([m.index, m.index + m[0].length, kw]);
+      }
+      for(let i=ranges.length-1; i>=0; i--){
+        const st = ranges[i][0], en = ranges[i][1], kw = ranges[i][2];
+        const orig = s.slice(st, en);
+        s = s.slice(0, st) + makeTag(orig, kw) + s.slice(en);
+      }
+      s = protectTags(s);
+    }
+
+    // --- 词典：从 SANGUO_DATA 派生 ---
+    // 注意：sanguo-data.js 用顶层 const 声明，不挂 window，须用词法引用（同本文件顶部 data 的写法）
+    const SD = (typeof SANGUO_DATA !== 'undefined') ? SANGUO_DATA : null;
+    const personNames = new Set();
+    const placeNames  = new Set();
+    const eventNames  = new Set();
+    if(SD){
+      (SD.persons || []).forEach(p=>{ if(p.name && p.name.length<=4) personNames.add(p.name); });
+      (SD.places  || []).forEach(p=>{ if(p.name && p.name.length<=4) placeNames.add(p.name); });
+      (SD.chapters|| []).forEach(c=>{
+        (c.keyPersons||[]).forEach(n=> personNames.add(n));
+        (c.keyPlaces ||[]).forEach(n=> placeNames.add(n));
+        (c.events    ||[]).forEach(n=> eventNames.add(n));
+      });
+    }
+
+    // --- 1. 批注内联（汇评本【毛夹批】等）---
+    if(flags.commInline){
+      const cc = { '毛':'#b91c1c','毛宗岗':'#b91c1c','贽':'#7c3aed','李贽':'#7c3aed','李卓吾':'#7c3aed',
+        '钟':'#1d4ed8','钟惺':'#1d4ed8','钟伯敬':'#1d4ed8','渔':'#047857','李渔':'#047857','笠翁':'#047857',
+        '夹批':'#b91c1c','眉批':'#7c3aed','总评':'#1d4ed8','凡例':'#6b7280','序':'#6b7280','读法':'#6b7280' };
+      s = s.replace(/【([^】]{2,40})】/g, (m, inner)=>{
+        const c = cc[inner.slice(0,2)] || cc[inner.slice(0,1)] || '#6b7280';
+        return `<span class="an-comm" style="color:${c};background:${c}14;border-bottom:1px dashed ${c};cursor:help" title="${inner}">${inner}</span>`;
+      });
+      s = protectTags(s);
+    }
+
+    // --- 2. 典故注解（长短语，必须在 entity 之前）---
+    if(flags.gloss){
+      const glosses = [
+        ['隆中对','东汉建安十二年诸葛亮于隆中为刘备规划战略，提出"跨有荆益、联吴抗曹"'],
+        ['赤壁之战','建安十三年孙刘联军与曹操决战，三国鼎立格局由此确立'],
+        ['官渡之战','建安五年曹操击袁绍，统一北方之奠基战'],
+        ['三顾茅庐','刘备三次亲赴隆中请诸葛亮出山，建安十二年'],
+        ['煮酒论英雄','建安四年曹操刘备在许都青梅煮酒，曹操说"天下英雄唯使君与操耳"'],
+        ['桃园结义','刘备关羽张飞于桃园祭天地结为兄弟'],
+        ['草船借箭','周瑜嫉妒诸葛亮，令其十日造十万箭，诸葛亮以草船借曹操之箭'],
+        ['空城计','诸葛亮用空城吓退司马懿大军'],
+        ['借荆州','刘备借荆州有借无还，东吴多次索要'],
+        ['白帝城托孤','刘备伐吴败归，临终托孤于诸葛亮'],
+        ['司马昭之心','司马昭专曹魏朝政，人皆知其欲篡位'],
+        ['乐不思蜀','刘禅降魏后说"此间乐不思蜀"'],
+        ['挟天子以令诸侯','曹操迎汉献帝都许，以天子名义号令天下'],
+      ];
+      annotateOnSimplified(glosses.map(g=>g[0]), (orig, kw)=>{
+        const g = glosses.find(x=> x[0]===kw);
+        const tip = g ? g[1] : '';
+        return `<span class="an-gloss" style="border-bottom:1px dotted #7c3aed;cursor:help" title="${tip}">${orig}</span>`;
+      });
+    }
+
+    // --- 3. 实体标注 ---
+    if(flags.entity && SD){
+      annotateOnSimplified([...personNames], (orig)=> `<span class="ent-person" style="background:#1d4ed830;color:#1d4ed8;border-radius:2px;padding:0 1px" title="人物">${orig}</span>`);
+      annotateOnSimplified([...placeNames],  (orig)=> `<span class="ent-place" style="background:#05966930;color:#059669;border-radius:2px;padding:0 1px" title="地点">${orig}</span>`);
+      annotateOnSimplified([...eventNames],  (orig)=> `<span class="ent-event" style="background:#b4530930;color:#b45309;border-radius:2px;padding:0 1px" title="事件">${orig}</span>`);
+    }
+
+    // --- 4. 异体字注音（精简版）---
+    if(flags.phonetic){
+      const variants = [
+        ['並','并'],['併','并'],['迴','回'],['逰','游'],['遊','游'],['葉','叶'],
+        ['著','着'],['為','为'],['與','与'],['個','个'],['這','这'],['當','当'],
+        ['後','后'],['時','时'],['萬','万'],['問','问'],['開','开'],['動','动'],
+        ['點','点'],['體','体'],['圖','图'],['場','场'],['邊','边'],['權','权'],
+        ['種','种'],['裏','里'],['裡','里'],['啓','启'],['啟','启'],['達','达'],
+        ['劉','刘'],['關','关'],['張','张'],['諸','诸'],['諸葛','诸葛'],
+        ['閱','阅'],['評','评'],['匯','汇'],['總','总'],['準','准'],['確','确'],
+        ['漢','汉'],['號','号'],['餘','余'],['鍾','钟'],['濁','浊'],['獲','获'],
+        ['處','处'],['說','说'],['產','产'],['對','对'],['實','实'],['從','从'],
+        ['進','进'],['鄭','郑'],['蘭','兰'],['關羽','关羽'],['張飛','张飞'],
+        ['諸葛亮','诸葛亮'],['劉備','刘备'],['馬超','马超'],['趙雲','赵云'],
+        ['孫權','孙权'],['呂布','吕布'],['楊','杨'],['揚','扬'],
+      ];
+      variants.forEach(([trad, simp])=>{
+        const re = new RegExp(trad.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'g');
+        s = s.replace(re, `<ruby><rb>${trad}</rb><rt>${simp}</rt></ruby>`);
+      });
+      s = protectTags(s);
+    }
+
+    // --- 5. 前后文引用（人物首次出现）---
+    if(flags.crossRef && SD){
+      const personArr = [...personNames].filter(n=>n.length<=3);
+      annotateOnSimplified(personArr, (orig, kw)=>{
+        return `<a href="ontology.html#person:${encodeURIComponent(kw)}" class="an-ref" style="color:#6366f1;text-decoration:none;border-bottom:1px dotted #6366f1" title="点击查看本体实体">${orig}<span style="font-size:0.7em;vertical-align:super">🔗</span></a>`;
+      }, true);
+    }
+
+    return restoreTags(s);
+  }
   function renderOntology(el){
     const o = ONT || {};
     const layers = o.layers || [];
@@ -4317,6 +4483,21 @@
     }
     applyAnnotVisibility();
     syncReaderUrl();
+  };
+  // 正文内联显隐切换：重渲染正文块即可（不必重建整页）
+  global.appSetInline = function(key, on){
+    if(!Object.prototype.hasOwnProperty.call(readerState.inline, key)) return;
+    readerState.inline[key] = !!on;
+    syncReaderUrl();
+    // 找到 #reader-text-body，从 bodyHTML 源重 annotate 一遍
+    const bodyEl = document.getElementById('reader-text-body');
+    if(!bodyEl) return;
+    const chapterNum = currentChapter;
+    const chapter = (data.chapters||[]).find(c=>c.id===chapterNum) || {title:''};
+    let raw = (typeof CHAPTER_TEXT !== 'undefined' && CHAPTER_TEXT[chapterNum]) ? CHAPTER_TEXT[chapterNum].text : '';
+    if(!raw) return;
+    if(readerState.lang === 'simplified') raw = simpleT2S(raw);
+    bodyEl.innerHTML = annotateReaderBody(raw, readerState.inline, chapterNum);
   };
   global.appLcsDiff = function(){
     const a = document.getElementById('textA').value;
