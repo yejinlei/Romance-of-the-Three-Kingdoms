@@ -17,6 +17,7 @@
 <script src="./data/edition-bodies.js?v=20261127d"></script>
 <script src="./data/corpus-manifest.js?v=20261127d"></script>
 <script src="./data/stats.js?v=20261127d"></script>
+<script src="./data/comm-inline.js?v=20261127d"></script>
 <script src="./assets/app.js?v=20261127e"></script>
 </head>
 <body>
@@ -54,6 +55,18 @@
     <div class="subtab" onclick="SANGUO_APP.showView('topic-techniques'); switchSub('topic-techniques')">叙事技法</div>
     <div class="subtab" onclick="SANGUO_APP.showView('heros'); switchSub('heros')">英雄谱</div>
     <div class="subtab" onclick="SANGUO_APP.showView('adaptations'); switchSub('adaptations')">演义外</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-geomap'); switchSub('topic-geomap')">地理行军图</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-relnet'); switchSub('topic-relnet')">人物关系网络</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-poemtime'); switchSub('topic-poemtime')">诗词编年史</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-stratheat'); switchSub('topic-stratheat')">计谋图谱</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-prophecytimeline'); switchSub('topic-prophecytimeline')">谶纬时间轴</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-factfiction'); switchSub('topic-factfiction')">虚实对照卷轴</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-lifespan'); switchSub('topic-lifespan')">人物生死谱</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-officerank'); switchSub('topic-officerank')">官职演变图</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-couplet'); switchSub('topic-couplet')">回目对仗美学</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-fingerprint'); switchSub('topic-fingerprint')">版本指纹</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-criticnet'); switchSub('topic-criticnet')">批注家思想地图</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-pacespeed'); switchSub('topic-pacespeed')">叙事速度曲线</div>
   </div>
 
   <div id="main-content"></div>
@@ -68,7 +81,10 @@
     'topic-bodyrev':0, 'topic-autorev':1, 'topic-headsim':2, 'topic-density':3,
     'topic-bodydensity':4, 'topic-narrative':5, 'topic-compare':6, 'topic-drift':7,
     'topic-doctrines':8, 'topic-battles':9, 'topic-prophecies':10, 'topic-factions':11,
-    'topic-imagery':12, 'topic-techniques':13, 'heros':14, 'adaptations':15
+    'topic-imagery':12, 'topic-techniques':13, 'heros':14, 'adaptations':15,
+    'topic-geomap':16, 'topic-relnet':17, 'topic-poemtime':18, 'topic-stratheat':19, 'topic-prophecytimeline':20,
+    'topic-factfiction':21, 'topic-lifespan':22, 'topic-officerank':23,
+    'topic-couplet':24, 'topic-fingerprint':25, 'topic-criticnet':26, 'topic-pacespeed':27
   };
   function switchSub(name){
     document.querySelectorAll('#subtabs .subtab').forEach((el,i)=>{ el.classList.toggle('active', _subMap[name]===i); });

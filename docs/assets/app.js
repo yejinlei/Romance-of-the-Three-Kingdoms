@@ -284,6 +284,18 @@
       case 'topic-headsim':    renderTopicHeadSimilarity(content); break;
       case 'topic-bodydensity': renderTopicBodyDensity(content); break;
       case 'topic-narrative':   renderTopicNarrativeDensity(content); break;
+      case 'topic-geomap':      renderTopicGeomap(content); break;
+      case 'topic-relnet':      renderTopicRelNet(content); break;
+      case 'topic-poemtime':    renderTopicPoemTime(content); break;
+      case 'topic-stratheat':   renderTopicStratHeat(content); break;
+      case 'topic-prophecytimeline': renderTopicProphecyTimeline(content); break;
+      case 'topic-factfiction':   renderTopicFactFiction(content); break;
+      case 'topic-lifespan':      renderTopicLifespan(content); break;
+      case 'topic-officerank':    renderTopicOfficerank(content); break;
+      case 'topic-couplet':       renderTopicCouplet(content); break;
+      case 'topic-fingerprint':   renderTopicFingerprint(content); break;
+      case 'topic-criticnet':     renderTopicCriticNet(content); break;
+      case 'topic-pacespeed':     renderTopicPaceSpeed(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -4855,6 +4867,1180 @@
     document.getElementById('diff-result').classList.remove('hidden');
     document.getElementById('diff-result').innerHTML = '<div class="mb-2"><span class="text-[#8b0000]">【A 独有】</span><br>'+esc(r.onlyA)+'</div><div><span class="text-[#006400]">【B 独有】</span><br>'+esc(r.onlyB)+'</div>';
   };
+
+  /* ======================== A 档 5 主题（深研页） ======================== */
+
+  /* ======== A1 地理行军图 · 行军地理（自绘 SVG 示意地图） ======== */
+  function renderTopicGeomap(el){
+    const chapters = (data.chapters || []);
+    // 地标坐标（x 西→东 0-100，y 北→南 0-80，归一化）
+    const LANDMARKS = {
+      '涿郡':[15,8],'洛阳':[52,30],'长安':[38,28],'许都':[58,38],'徐州':[68,45],'荆州':[55,58],
+      '襄阳':[54,56],'樊城':[53,55],'赤壁':[62,64],'合肥':[68,52],'汉中':[35,48],'成都':[28,58],
+      '建业':[72,60],'柴桑':[64,58],'隆中':[52,54],'官渡':[60,36],'白马':[62,33],'延津':[61,34],
+      '当阳':[56,62],'长坂坡':[56,63],'华容道':[60,63],'麦城':[57,60],'白帝城':[50,66],'南郡':[56,59],
+      '江夏':[60,57],'新野':[53,52],'博望坡':[53,51],'宛城':[55,42],'下邳':[69,44],'邺城':[58,30],
+      '濮阳':[63,40],'潼关':[45,40],'定军山':[38,47],'五丈原':[40,50],'街亭':[42,46],'陈仓':[43,45],
+      '祁山':[44,48],'绵竹':[30,60],'江油':[33,62],'雒城':[31,59],'涪关':[30,57],'葭萌关':[32,52],
+      '巴郡':[40,62],'阆中':[38,58],'夷陵':[52,68],'猇亭':[51,67],'彝陵':[52,68],'京口':[74,58],
+      '甘露寺':[74,58],'桂阳':[58,70],'长沙':[57,66],'武陵':[56,68],'零陵':[57,71],'江东':[70,55],
+      '曲阿':[73,53],'吴郡':[75,52],'会稽':[76,55],'寿春':[66,48],'汝南':[62,44],'冀州':[58,28],
+      '仓亭':[60,34],'黎阳':[61,31],'乌巢':[61,35],'濮阳2':[63,40]
+    };
+    // 事件类型配色（战役/迁都/会盟/刺杀）
+    const TYPE_COLOR = { '戰役':'#b91c1c','戰斗':'#b91c1c','戰鬥':'#b91c1c','迁都':'#d97706','會盟':'#16a34a','会盟':'#16a34a','刺殺':'#7c3aed','刺杀':'#7c3aed' };
+    // 每个地标出现回数统计
+    const placeCount = {};
+    chapters.forEach(ch=>{ (ch.keyPlaces||[]).forEach(p=>{ const k=normName(p); if(LANDMARKS[k]) placeCount[k]=(placeCount[k]||0)+1; }); });
+    // 路线：对每回 keyPlaces 相邻两点连线（只取已注册地标），记录出现回
+    const routeByChapter = {};
+    chapters.forEach(ch=>{
+      const pts = (ch.keyPlaces||[]).map(p=>normName(p)).filter(p=>LANDMARKS[p]);
+      if(pts.length>=2){
+        for(let i=0;i<pts.length-1;i++){
+          const a=pts[i], b=pts[i+1];
+          const key=[a,b].sort().join('|');
+          (routeByChapter[ch.id]=routeByChapter[ch.id]||[]).push(key);
+        }
+      }
+    });
+    // 每个地标关联的回目（点击跳转）
+    const placeChapters = {};
+    chapters.forEach(ch=>{ (ch.keyPlaces||[]).forEach(p=>{ const k=normName(p); if(LANDMARKS[k]) (placeChapters[k]=placeChapters[k]||[]).push(ch.id); }); });
+
+    // ---- 顶部回目滑块状态 ----
+    let curChapter = 120;
+    function buildSVG(){
+      const W=100, H=80;
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="background:#f8f7f2">`;
+      // 网格
+      for(let gx=10;gx<100;gx+=10) svg+=`<line x1="${gx}" y1="0" x2="${gx}" y2="${H}" stroke="#e5e1d8" stroke-width="0.2"/>`;
+      for(let gy=10;gy<80;gy+=10) svg+=`<line x1="0" y1="${gy}" x2="${W}" y2="${gy}" stroke="#e5e1d8" stroke-width="0.2"/>`;
+      // 路线（只画 <= 当前回的路线段）
+      const seen = new Set();
+      Object.keys(routeByChapter).forEach(chId=>{
+        if(chId>curChapter) return;
+        routeByChapter[chId].forEach(key=>{
+          const [a,b]=key.split('|');
+          if(seen.has(key)) return; seen.add(key);
+          const pa=LANDMARKS[a], pb=LANDMARKS[b];
+          if(!pa||!pb) return;
+          svg+=`<line x1="${pa[0]}" y1="${pa[1]}" x2="${pb[0]}" y2="${pb[1]}" stroke="#94a3b8" stroke-width="0.25" opacity="0.4"/>`;
+        });
+      });
+      // 地标节点
+      Object.keys(LANDMARKS).forEach(k=>{
+        const [x,y]=LANDMARKS[k];
+        const cnt=placeCount[k]||0;
+        const r = 0.9 + Math.min(1.6, cnt*0.12);
+        const chaptersAt = placeChapters[k]||[];
+        const hasCur = chaptersAt.includes(curChapter);
+        svg+=`<g class="landmark" style="cursor:pointer" onclick="window.open('read.html?edition=mao&unit=${chaptersAt[0]||1}','_blank')" data-name="${k}">
+          <circle cx="${x}" cy="${y}" r="${r}" fill="${hasCur?'#b91c1c':'#1e293b'}" fill-opacity="${hasCur?0.95:0.75}" stroke="#fff" stroke-width="0.25"/>
+          <text x="${x}" y="${y-r-0.7}" font-size="2.2" fill="#334155" text-anchor="middle">${k}</text>
+          <title>${k} · 出现 ${cnt} 回${chaptersAt.length?' · 第'+chaptersAt[0]+'回':''}</title>
+        </g>`;
+      });
+      svg+='</svg>';
+      return svg;
+    }
+    function buildList(){
+      const chaptersAt = Object.keys(placeChapters).filter(k=>LANDMARKS[k]);
+      const sorted = chaptersAt.sort((a,b)=>(placeChapters[a][0]||99)-(placeChapters[b][0]||99));
+      return sorted.map(k=>{
+        const chs=placeChapters[k]||[];
+        return `<a href="read.html?edition=mao&unit=${chs[0]||1}" class="flex items-center gap-2 text-xs py-1 px-2 rounded hover:bg-gray-100 border border-gray-100">
+          <span class="w-2 h-2 rounded-full shrink-0" style="background:#1e293b"></span>
+          <span class="font-medium">${k}</span>
+          <span class="text-gray-400 ml-auto">第${chs[0]||'—'}回</span>
+        </a>`;
+      }).join('');
+    }
+    function chapterLegend(){
+      return Object.entries(TYPE_COLOR).map(([k,v])=>`<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded-full text-xs"><span class="w-3 h-1 rounded-full" style="background:${v}"></span>${k}</span>`).join('');
+    }
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">地理行军图 · 行军地理</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        全书 <b>120 回</b> 行军地理示意图（自绘 SVG，按真实地理相对方位归一化）。连线为该回 keyPlaces 相邻地标路线，
+        拖动顶部滑块可回放至某一回，只显示 <b>≤ 当前回</b> 的已行军路线。点击地标或右侧条目跳转对应回。
+      </p>
+      <div class="flex flex-wrap gap-3 items-center mb-3 text-xs">
+        <span class="text-gray-500">回目：<b id="geomap-cur">120</b></span>
+        <input type="range" id="geomap-range" min="1" max="120" value="120" class="flex-1 max-w-md">
+        <div class="flex flex-wrap gap-2">${chapterLegend()}</div>
+      </div>
+      <div class="flex flex-col md:flex-row gap-4">
+        <div id="geomap-svg" class="flex-1 border border-gray-200 rounded-lg overflow-hidden" style="height:560px;min-width:0"></div>
+        <div class="w-full md:w-72">
+          <h4 class="text-sm font-bold mb-2">地标回目索引</h4>
+          <div id="geomap-list" class="max-h-[520px] overflow-y-auto pr-1 space-y-1">${buildList()}</div>
+        </div>
+      </div>
+    `;
+    const svgBox = document.getElementById('geomap-svg');
+    if(svgBox) svgBox.innerHTML = buildSVG();
+    document.getElementById('geomap-range').addEventListener('input', e=>{
+      curChapter = parseInt(e.target.value,10);
+      document.getElementById('geomap-cur').textContent = curChapter;
+      const sb = document.getElementById('geomap-svg');
+      if(sb) sb.innerHTML = buildSVG();
+    });
+  }
+
+  /* ======== A2 人物关系动态网络 · Relation Dynamic Network ======== */
+  function renderTopicRelNet(el){
+    const chapters = (data.chapters || []);
+    const persons = (data.persons || []);
+    const allRelations = (typeof relations!=='undefined') ? relations : [];
+    // Top-40 高频人物
+    const topP = persons.slice().sort((a,b)=>(b.mentionCount||0)-(a.mentionCount||0)).slice(0,40);
+    const topIds = new Set(topP.map(p=>p.id));
+    // faction 颜色
+    const factionColor = { '蜀漢':'#2f6b4f','蜀汉':'#2f6b4f','曹魏':'#8c2f2f','東吳':'#2f4f7a','東吴':'#2f4f7a','董卓':'#5b4636','袁紹':'#6b5a2f','袁绍':'#6b5a2f','袁術':'#7a5a3a','袁术':'#7a5a3a','呂布':'#4a4a4a','吕布':'#4a4a4a','劉表':'#3f5a3f','刘表':'#3f5a3f','劉璋':'#5a4a6b','刘璋':'#5a4a6b','西涼':'#7a5a2a','西凉':'#7a5a2a','黃巾':'#8a7a1f','黄巾':'#8a7a1f','司馬':'#3a3a5a','司马':'#3a3a5a' };
+    function pColor(f){ return factionColor[f] || '#64748b'; }
+    // 人物出场回（用 keyPersons 名称匹配，name 是简体）
+    const personChapters = {};
+    topP.forEach(p=>{ personChapters[p.id]=[]; });
+    const nameNorm = {};
+    persons.forEach(p=>{ nameNorm[normName(p.name)]=p.id; });
+    chapters.forEach(ch=>{
+      (ch.keyPersons||[]).forEach(nm=>{
+        const id=nameNorm[normName(nm)];
+        if(id && personChapters[id]) personChapters[id].push(ch.id);
+      });
+    });
+    // relation：最早共同出场回（两端人物出场回交集最小值）
+    const relFirst = [];
+    const seenRel = new Set();
+    allRelations.forEach(r=>{
+      const s=r.subject, o=r.object;
+      if(!topIds.has(s)||!topIds.has(o)) return;
+      const key=[s,o].sort().join('|');
+      if(seenRel.has(key)) return; seenRel.add(key);
+      const ca=personChapters[s]||[], cb=personChapters[o]||[];
+      let first=120;
+      for(const a of ca){ if(cb.includes(a)){ first=Math.min(first,a); } }
+      // 若两人从未同回，用两端各自首回较大值近似
+      if(first===120) first=Math.min((ca[0]||120),(cb[0]||120));
+      relFirst.push({ s, o, first, pred:r.predicate });
+    });
+    // predicate 中文 + 配色
+    const PRED = {
+      swornBrotherOf:{label:'结义', color:'#b91c1c'}, lordOf:{label:'君臣', color:'#1d4ed8'},
+      vassalOf:{label:'下属', color:'#0891b2'}, sonOf:{label:'父子', color:'#7c3aed'},
+      fatherOf:{label:'父子', color:'#7c3aed'}, adoptedSonOf:{label:'养子', color:'#a855f7'},
+      marriedTo:{label:'夫妻', color:'#db2777'}, motherOf:{label:'母子', color:'#db2777'},
+      elderBrotherOf:{label:'兄弟', color:'#ea580c'}, sisterOf:{label:'兄妹', color:'#ea580c'},
+      opponentOf:{label:'敌对', color:'#64748b'}, usedBy:{label:'所用', color:'#64748b'},
+      grandsonOf:{label:'祖孙', color:'#7c3aed'}
+    };
+    function predColor(p){ return (PRED[p]||{}).color || '#64748b'; }
+
+    let curChapter = 120;
+    let playing = false, timer = null;
+    function buildGraphData(){
+      const nodes = [];
+      const nodeSet = new Set();
+      relFirst.forEach(r=>{ if(r.first<=curChapter){ nodeSet.add(r.s); nodeSet.add(r.o); } });
+      // 补充：即使无边，也显示已出场的高频人物
+      topP.forEach(p=>{
+        if((personChapters[p.id]||[]).some(c=>c<=curChapter)) nodeSet.add(p.id);
+      });
+      nodeSet.forEach(id=>{
+        const p=persons.find(x=>x.id===id); if(!p) return;
+        nodes.push({ id:id, name:p.name, symbolSize: Math.max(12, Math.min(40, 8+(p.mentionCount||0)/60)), itemStyle:{ color:pColor(p.faction), opacity:0.9, borderColor:'#fff', borderWidth:1.5 }, label:{ show:true, fontSize:9 }, faction:p.faction, mention:p.mentionCount });
+      });
+      const links = [];
+      relFirst.forEach(r=>{
+        if(r.first>curChapter) return;
+        links.push({ source:r.s, target:r.o, first:r.first, pred:r.pred, lineStyle:{ color:predColor(r.pred), opacity:0.6, width:1.5 } });
+      });
+      return { nodes, links };
+    }
+    function renderGraph(){
+      const c = document.getElementById('relnet-chart'); if(!c) return;
+      const chart = echarts.getInstanceByDom(c) || echarts.init(c);
+      const {nodes, links} = buildGraphData();
+      chart.setOption({
+        tooltip:{ formatter: p=>{
+          if(p.dataType==='node') return `<b>${p.data.name}</b><br/>${p.data.faction||''} · 提及 ${p.data.mention||0}`;
+          const a=p.data.source, b=p.data.target;
+          const nm=id=>{ const pp=persons.find(x=>x.id===id); return pp?pp.name:id; };
+          return `<b>${nm(a)}</b> ↔ <b>${nm(b)}</b><br/>关系首现于第 ${p.data.first} 回`;
+        } },
+        legend:{ show:false },
+        series:[{
+          type:'graph', layout:'force', roam:true, draggable:true,
+          data:nodes, links:links,
+          force:{ repulsion:120, edgeLength:[30,120], gravity:0.1, friction:0.2 },
+          emphasis:{ focus:'adjacency', lineStyle:{ width:3 } },
+          lineStyle:{ opacity:0.6, curveness:0.05 },
+          edgeSymbol:['none','arrow'], edgeSymbolSize:5,
+          label:{ show:true, position:'right', fontSize:9 },
+          animationDuration:500
+        }]
+      }, true);
+      chart.resize();
+    }
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">人物关系动态网络 · Relation Network</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        Top-40 高频人物的关系网络（力导向图），按回目进度回放。节点大小 = 全书提及次数，颜色 = 所属势力。
+        拖动滑块或点播放，只显示 <b>首现 ≤ 当前回</b> 的关系边与关联人物。
+      </p>
+      <div class="flex flex-wrap items-center gap-3 mb-3 text-xs">
+        <span class="text-gray-500">回目：<b id="relnet-cur">120</b></span>
+        <input type="range" id="relnet-range" min="1" max="120" value="120" class="flex-1 max-w-md">
+        <button id="relnet-play" class="px-3 py-1 bg-[#8b0000] text-white rounded hover:opacity-90">播放</button>
+        <div class="flex flex-wrap gap-2">
+          ${Object.entries(factionColor).slice(0,6).map(([k,v])=>`<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded-full"><span class="w-2 h-2 rounded-full" style="background:${v}"></span>${k}</span>`).join('')}
+        </div>
+      </div>
+      <div id="relnet-chart" style="height:560px"></div>
+    `;
+    setTimeout(()=>{
+      renderGraph();
+      const range=document.getElementById('relnet-range');
+      range.addEventListener('input', e=>{ curChapter=parseInt(e.target.value,10); document.getElementById('relnet-cur').textContent=curChapter; renderGraph(); });
+      document.getElementById('relnet-play').addEventListener('click', ()=>{
+        if(playing){ playing=false; clearInterval(timer); document.getElementById('relnet-play').textContent='播放'; return; }
+        playing=true; document.getElementById('relnet-play').textContent='暂停';
+        if(curChapter>=120) curChapter=0;
+        timer=setInterval(()=>{
+          curChapter=Math.min(120, curChapter+2);
+          range.value=curChapter; document.getElementById('relnet-cur').textContent=curChapter;
+          renderGraph();
+          if(curChapter>=120){ playing=false; clearInterval(timer); document.getElementById('relnet-play').textContent='播放'; }
+        }, 300);
+      });
+    }, 120);
+  }
+
+  /* ======== A3 诗词编年史 · Poem Chronicle ======== */
+  function renderTopicPoemTime(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    const poems = (topics.poems && topics.poems.length) ? topics.poems : (data.poems || []);
+    if(!poems.length){ el.innerHTML = '<p class="p3 text-gray-500">诗词数据未加载。</p>'; return; }
+    // 作者筛选选项
+    const authors = [...new Set(poems.map(p=>p.author||'佚名'))];
+    const types = [...new Set(poems.map(p=>p.type||'诗文'))];
+    // 按 chapter 分组（chapter 0 = 卷首/无回目）
+    const byChapter = {};
+    poems.forEach(p=>{ const ch=p.chapter||0; (byChapter[ch]=byChapter[ch]||[]).push(p); });
+    const chapters = Object.keys(byChapter).map(Number).sort((a,b)=>a-b);
+
+    let curAuthor = '';
+    let curType = '';
+    function filterPoems(){ return poems.filter(p=> (!curAuthor || p.author===curAuthor) && (!curType || p.type===curType) ); }
+
+    function buildCards(){
+      const list = filterPoems();
+      if(!list.length) return '<p class="text-gray-400 text-sm p-3">无匹配诗词。</p>';
+      return list.map(p=>{
+        const ch=p.chapter||0;
+        return `<a href="${ch>0?('read.html?edition=mao&unit='+ch):'#'}" class="poem-card block border rounded-lg p-3 hover:shadow-md transition-shadow bg-white">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-mono bg-gray-100 px-1.5 py-0.5 rounded">${ch>0?('第'+ch+'回'):'卷首'}</span>
+            <span class="text-xs text-[#8b0000] font-bold">${p.type||'诗文'}</span>
+            <span class="ml-auto text-xs text-gray-400">${p.author||''}</span>
+          </div>
+          <p class="text-sm font-medium mb-1">${p.title}</p>
+          <p class="text-xs text-gray-600 whitespace-pre-line max-h-20 overflow-hidden">${(p.content||'').slice(0,80)}${(p.content||'').length>80?'…':''}</p>
+          ${p.note?`<p class="text-xs text-gray-400 mt-1">${p.note}</p>`:''}
+        </a>`;
+      }).join('');
+    }
+    function buildTimeline(){
+      // 时间轴条：1-120 回 + 卷首(0)
+      const bars = [];
+      // 卷首
+      const head = byChapter[0]||[];
+      bars.push(`<div class="flex flex-col items-center" style="min-width:64px">
+        <span class="text-[10px] text-gray-500 mb-1">卷首</span>
+        <div class="w-1 h-8 ${head.length?'bg-[#8b0000]':'bg-gray-200'} rounded"></div>
+        <span class="text-[10px] mt-1 text-gray-500">${head.length}首</span>
+      </div>`);
+      for(let c=1;c<=120;c++){
+        const arr = byChapter[c]||[];
+        const h = arr.length ? Math.max(10, arr.length*10) : 0;
+        bars.push(`<div class="flex flex-col items-center" style="min-width:10px">
+          <span class="text-[10px] text-gray-400 mb-1">${c%20===0?c:''}</span>
+          <div class="w-2 rounded-t" style="height:${h}px;${arr.length?'background:#8b0000':'background:#e5e7eb'}"></div>
+          <span class="text-[9px] mt-1 text-gray-400">${arr.length||''}</span>
+        </div>`);
+      }
+      return `<div class="flex items-end gap-0.5 overflow-x-auto pb-2 px-1 border-b border-gray-100">${bars.join('')}</div>`;
+    }
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">诗词编年史 · Poem Chronicle</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        全书诗词、赋、檄文、乐府按回目编年排列。上方柱图 = 每回诗词数量；下方卡片按作者/类型筛选，悬停查看全诗，点击跳转对应回。
+      </p>
+      <div class="flex flex-wrap items-center gap-3 mb-3 text-xs">
+        <label class="text-gray-500">作者：
+          <select id="poem-author" class="border border-gray-200 rounded px-2 py-1 bg-white">
+            <option value="">全部</option>
+            ${authors.map(a=>`<option value="${a}">${a}</option>`).join('')}
+          </select>
+        </label>
+        <label class="text-gray-500">类型：
+          <select id="poem-type" class="border border-gray-200 rounded px-2 py-1 bg-white">
+            <option value="">全部</option>
+            ${types.map(t=>`<option value="${t}">${t}</option>`).join('')}
+          </select>
+        </label>
+        <span class="text-gray-400">共 ${poems.length} 首</span>
+      </div>
+      <div id="poem-timeline" class="mb-3"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="poem-grid">${buildCards()}</div>
+    `;
+    document.getElementById('poem-timeline').innerHTML = buildTimeline();
+    document.getElementById('poem-author').addEventListener('change', e=>{ curAuthor=e.target.value; document.getElementById('poem-grid').innerHTML=buildCards(); });
+    document.getElementById('poem-type').addEventListener('change', e=>{ curType=e.target.value; document.getElementById('poem-grid').innerHTML=buildCards(); });
+  }
+
+  /* ======== A4 计谋图谱 · Stratagem Heatmap ======== */
+  function renderTopicStratHeat(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    // 优先用 sanguo-topics.js 的 36 计（有 chapter/type 字段），否则用 sanguo-data.js 的 stratagems（有 usedIn）
+    const topStrat = (topics.stratagems && topics.stratagems.length) ? topics.stratagems : [];
+    const dataStrat = (data.stratagems && data.stratagems.length) ? data.stratagems : [];
+    // 优先用 36 计（topics.stratagems，每计含 chapter/type），不足则用 data.stratagems（含 usedIn）
+    const strat = (topStrat.length>=dataStrat.length) ? topStrat : dataStrat;
+    if(!strat.length){ el.innerHTML = '<p class="p3 text-gray-500">计谋数据未加载。</p>'; return; }
+
+    // 计 → 回映射
+    const stratUsedIn = {}; // {stratIdx: Set<chapter>}
+    strat.forEach((s,i)=>{
+      const set = new Set();
+      if(s.usedIn && Array.isArray(s.usedIn)){
+        s.usedIn.forEach(id=>{ const m=String(id).match(/(\d+)/); if(m) set.add(parseInt(m[1],10)); });
+      }
+      if(s.chapter) set.add(s.chapter);
+      stratUsedIn[i]=set;
+    });
+    // type 配色
+    const TYPE_COLORS = { '離間':'#7c3aed','离间':'#7c3aed','詐降':'#db2777','诈降':'#db2777','疑兵':'#0891b2','火攻':'#dc2626','借勢':'#d97706','借势':'#d97706','撤退':'#64748b','權謀':'#1d4ed8','权谋':'#1d4ed8','戰略':'#15803d','战略':'#15803d','戰術':'#b45309','战术':'#b45309','奇襲':'#0e7490','奇袭':'#0e7490','心理':'#9333ea','情報':'#0f766e','情报':'#0f766e','攻心':'#c2410c','後勤':'#475569','后勤':'#475569','外交':'#2563eb','圍殲':'#7f1d1d','围歼':'#7f1d1d','馭下':'#4d7c0f','驭下':'#4d7c0f','韜晦':'#a16207','韬晦':'#a16207','誘敵':'#be185d','诱敌':'#be185d','攻略':'#166534' };
+    function typeColor(t){ return TYPE_COLORS[t] || '#64748b'; }
+
+    // 热力图数据：[x(回-1), y(计索引), 1]
+    const heat = [];
+    const chCount = new Array(120).fill(0);
+    const stratCount = new Array(strat.length).fill(0);
+    strat.forEach((s,i)=>{
+      stratUsedIn[i].forEach(ch=>{
+        if(ch>=1 && ch<=120){
+          heat.push([ch-1, i, 1]);
+          chCount[ch-1]++;
+          stratCount[i]++;
+        }
+      });
+    });
+    const xLabels = new Array(120).fill(0).map((_,i)=> (i+1)%10===0 || i===0 ? (i+1) : '');
+    const yLabels = strat.map(s=>s.name+' ('+(s.user||'')+')');
+    const maxCh = Math.max(...chCount, 1);
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">计谋图谱 · Stratagem Heatmap</h3>
+      <p class="text-sm text-gray-600 mb-2">
+        ${strat.length} 计（行） × 120 回（列）：格值 = 该计在该回被使用。颜色按计谋类型分组，点击格子跳转对应回。
+      </p>
+      <div class="flex flex-wrap gap-2 mb-2 text-xs">
+        ${[...new Set(strat.map(s=>s.type||'其他'))].slice(0,10).map(t=>`<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded-full"><span class="w-2 h-2 rounded-full" style="background:${typeColor(t)}"></span>${t}</span>`).join('')}
+      </div>
+      <div class="mb-2 text-xs text-gray-500">每计最多 <b>${Math.max(...stratCount,1)}</b> 回使用 · 每回最多 <b>${maxCh}</b> 计</div>
+      <div id="stratheat-chart" style="height:520px"></div>
+    `;
+
+    setTimeout(()=>{
+      const c = document.getElementById('stratheat-chart'); if(!c) return;
+      const chart = echarts.init(c);
+      // 为每个格子按 type 着色
+      const data = heat.map(d=>{
+        const s = strat[d[1]];
+        return { value:[d[0],d[1],1], itemStyle:{ color: typeColor(s.type||'') } };
+      });
+      chart.setOption({
+        tooltip:{ formatter: p=>{
+          const ch = p.data.value[0]+1;
+          const si = p.data.value[1];
+          const s = strat[si];
+          return `<b>第 ${ch} 回</b><br/><b>${s.name}</b>（${s.user||''}）<br/>类型：${s.type||'—'}<br/>${s.description||''}`;
+        } },
+        grid:{ left:150, right:40, top:10, bottom:40 },
+        xAxis:{ type:'category', data:xLabels, splitArea:{ show:false }, axisLabel:{ interval:0, fontSize:9 } },
+        yAxis:{ type:'category', data:yLabels, splitArea:{ show:false, interval:0 }, axisLabel:{ fontSize:9, width:110, overflow:'truncate' } },
+        visualMap:{ show:false, min:0, max:1, inRange:{ color:['#ffffff','#b91c1c'] } },
+        series:[{
+          type:'heatmap', data:data,
+          label:{ show:true, fontSize:8, color:'#fff', formatter:p=> p.data.value[2] ? '●' : '' },
+          emphasis:{ itemStyle:{ shadowBlur:8, shadowColor:'rgba(0,0,0,.4)' } }
+        }]
+      });
+      chart.on('click', p=>{
+        const ch = p.data && p.data.value ? p.data.value[0]+1 : null;
+        if(ch) window.open('read.html?edition=mao&unit='+ch, '_blank');
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
+
+  /* ======== A5 谶纬应验时间轴 · Prophecy Timeline ======== */
+  function renderTopicProphecyTimeline(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    const props = (topics.prophecies && topics.prophecies.length) ? topics.prophecies : (data.prophecies || []);
+    if(!props.length){ el.innerHTML = '<p class="p3 text-gray-500">谶纬数据未加载。</p>'; return; }
+
+    // 分类（参考 renderTopicProphecies classify）
+    const CATS = ['童謠','夢兆','讖語','詩語','人物語'];
+    const CAT_COLORS = { '童謠':'#d97706','夢兆':'#4f46e5','讖語':'#7c3aed','詩語':'#059669','人物語':'#6b7280' };
+    function classify(p){
+      const pr=(p.prophet||'').toString();
+      if(/童謠|童谣/.test(pr)) return '童謠';
+      if(/夢|梦/.test(pr)) return '夢兆';
+      if(/讖|谶|緯/.test(pr)) return '讖語';
+      if(/詩|卷首語|卷首/.test(pr)) return '詩語';
+      return '人物語';
+    }
+    // 从 fulfilled 文本中解析应验回目（找 "第X回" 或数字）
+    function parseTarget(p){
+      const fu = Array.isArray(p.fulfilled) ? p.fulfilled.join(' ') : (p.fulfilled||'');
+      let m = fu.match(/第\s*(\d+)\s*回/);
+      if(m) return parseInt(m[1],10);
+      m = fu.match(/(\d+)/);
+      if(m && p.chapter && parseInt(m[1],10)>=1 && parseInt(m[1],10)<=120) return parseInt(m[1],10);
+      return null;
+    }
+
+    // 数据点 + 连线
+    const points = []; // {cat, ch, name, target}
+    const lines = [];
+    const catIdx = {}; CATS.forEach((c,i)=>catIdx[c]=i);
+    props.forEach((p,i)=>{
+      const ch = p.chapter||0;
+      if(ch<1 || ch>120) return; // 无回目（卷首0）的不上时间轴，但仍可统计
+      const cat = classify(p);
+      const target = parseTarget(p);
+      points.push({ cat, ch, name:p.content, prophet:p.prophet, target, idx:i });
+      if(target && target>=1 && target<=120 && target!==ch){
+        lines.push([ [ch, catIdx[cat]], [target, catIdx[cat]] ]);
+      }
+    });
+    const maxX = 120;
+    const seriesData = points.map(pt=> ({
+      value:[pt.ch, catIdx[pt.cat]],
+      name: pt.name, prophet: pt.prophet, target: pt.target,
+      itemStyle:{ color:CAT_COLORS[pt.cat], borderColor:'#fff', borderWidth:1 },
+      symbolSize: 13
+    }));
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">谶纬应验时间轴 · Prophecy Timeline</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        ${props.length} 条谶纬按预言出现回目（横轴 1–120）分布，纵轴按预言类型分组。
+        虚线连接「预言回 → 应验回」（能解析出回目者）。点击节点跳转预言对应回。
+      </p>
+      <div class="flex flex-wrap gap-2 mb-3 text-xs">
+        ${CATS.map(c=>`<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded-full"><span class="w-2 h-2 rounded-full" style="background:${CAT_COLORS[c]}"></span>${c}</span>`).join('')}
+        <span class="text-gray-400 ml-auto">可解析应验回：${lines.length} / ${points.length}</span>
+      </div>
+      <div id="prophecy-timeline" style="height:360px"></div>
+      <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[320px] overflow-y-auto pr-2">
+        ${points.sort((a,b)=>a.ch-b.ch).map(pt=>`
+          <a href="read.html?edition=mao&unit=${pt.ch}" class="flex items-start gap-2 text-xs p-2 border border-gray-100 rounded hover:bg-gray-50">
+            <span class="w-2 h-2 rounded-full shrink-0 mt-1" style="background:${CAT_COLORS[pt.cat]}"></span>
+            <span class="flex-1">
+              <span class="text-gray-500 mr-2">第${pt.ch}回</span><b>${pt.prophet}</b>
+              <span class="text-gray-700 block">"${pt.name}"</span>
+              ${pt.target?`<span class="text-gray-400 block">→ 应验于第 ${pt.target} 回</span>`:''}
+            </span>
+          </a>`).join('')}
+      </div>
+    `;
+
+    setTimeout(()=>{
+      const c = document.getElementById('prophecy-timeline'); if(!c) return;
+      const chart = echarts.init(c);
+      chart.setOption({
+        tooltip:{ formatter: p=>{
+          if(p.seriesType==='line') return '应验连线';
+          return `<b>第 ${p.data.value[0]} 回</b> · ${p.data.prophet}<br/>"${p.data.name}"<br/>${p.data.target?('应验：第 '+p.data.target+' 回'):'（未明言应验回）'}`;
+        } },
+        legend:{ show:false },
+        grid:{ left:70, right:30, top:20, bottom:40 },
+        xAxis:{ type:'value', min:0, max:maxX, name:'回目', nameLocation:'end', nameGap:10, splitLine:{ show:true, lineStyle:{ color:'#f1f5f9' } }, axisLabel:{ fontSize:10 } },
+        yAxis:{ type:'category', data:CATS, name:'类型', nameLocation:'end', nameGap:15, axisLabel:{ fontSize:11 }, splitLine:{ show:true, lineStyle:{ color:'#f1f5f9' } } },
+        series:[
+          { type:'lines', coordinateSystem:'cartesian2d', data:lines.map(c=> ({ coords:c, lineStyle:{ type:'dashed', color:'#94a3b8', width:1.2, opacity:0.7 }, effect:{ show:true, period:6, trailLength:0, symbol:'circle', symbolSize:3, color:'#94a3b8' } }) ), zlevel:1 },
+          { type:'scatter', data:seriesData, symbol:'circle', zlevel:2 }
+        ]
+      });
+      chart.on('click', p=>{
+        const v = p.data && p.data.value;
+        if(v && v[0]) window.open('read.html?edition=mao&unit='+v[0], '_blank');
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
+
+  /* ======================== B 档 3 主题（深研页） ======================== */
+
+  /* ======== B6 虚实对照卷轴 Fact / Fiction Scroll ======== */
+  function renderTopicFactFiction(el){
+    // 合并「虚实对照」与「版本异文」两条模块级数据，按回目排序，编年卷轴
+    const list = [];
+    (historicalContrast||[]).forEach(h=>{
+      list.push({ chapter:h.chapter, plot:h.plot, status:h.status||'embellished', level:h.level||'史实加工', history:h.history, kind:'contrast' });
+    });
+    (variants||[]).forEach(v=>{
+      list.push({ chapter:v.chapter, plot:v.item||v.plot, status:'embellished', level:'版本异文', mao:v.mao, jiajing:v.jiajing, note:v.note, kind:'variant' });
+    });
+    list.sort((a,b)=> (a.chapter-b.chapter) || a.plot.localeCompare(b.plot,'zh'));
+
+    const FILTERS = [
+      { key:'all', label:'全部' },
+      { key:'embellished', label:'史实加工' },
+      { key:'transposed', label:'移花接木' },
+      { key:'fictional', label:'虚构' }
+    ];
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">虚实对照卷轴 · Fact vs Fiction Scroll</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        将「虚实对照」（${(historicalContrast||[]).length} 条）与「版本异文」（${(variants||[]).length} 条）按回目编年串联成卷轴。
+        每张卡片上沿徽章标记虚实程度：<b class="text-[#8b6914]">史实加工</b>（有史实为底、细节文学化）·
+        <b class="text-[#e65100]">移花接木</b>（原型属他人）· <b class="text-[#8b0000]">虚构</b>（纯文学创造）。
+        点击卡片跳转对应毛本回目。
+      </p>
+      <div class="flex flex-wrap gap-2 mb-4">
+        ${FILTERS.map(f=>`<button class="ff-filter px-3 py-1 text-xs rounded-full border border-gray-300 bg-white hover:bg-gray-100" data-status="${f.key}">${f.label}</button>`).join('')}
+      </div>
+      <div class="ff-scroll relative pl-8 space-y-4 max-h-[70vh] overflow-y-auto pr-2" id="ff-scroll">
+        ${list.map((it,idx)=>`
+          <div class="ff-item relative" data-status="${it.status}" data-idx="${idx}">
+            <!-- 左侧回目圆点 + 竖线 -->
+            <span class="absolute -left-8 top-1 flex flex-col items-center">
+              <span class="w-3 h-3 rounded-full border-2 bg-white ${'border-'+it.status}" style="border-color:${STATUS_META[it.status]?STATUS_META[it.status].color:'#8b6914'}; background:${STATUS_META[it.status]?STATUS_META[it.status].color:'#8b6914'}"></span>
+              <span class="text-[10px] text-gray-400 mt-1">第${it.chapter}回</span>
+            </span>
+            <a href="read.html?edition=mao&unit=${it.chapter}&unit2=${it.chapter}-1&lang=traditional"
+               class="block border border-gray-200 rounded-lg p-3 bg-white hover:shadow-md hover:border-gray-300 transition-shadow">
+              <div class="flex items-center gap-2 flex-wrap mb-1">
+                ${virtualBadge(it.status)}
+                <span class="text-[10px] text-gray-400">${it.level}</span>
+                <span class="text-[10px] text-gray-400 ml-auto">第${it.chapter}回</span>
+              </div>
+              <div class="font-bold text-[#5a3a1a] mb-1">${it.plot}</div>
+              <div class="text-xs text-gray-600 mb-2">${it.kind==='variant' ? ('演义：'+(it.mao||'')) : ('演义文本：'+ (it.plot||''))}</div>
+              <details class="ff-detail text-xs">
+                <summary class="cursor-pointer text-gray-400 hover:text-[#8b6914] select-none">▸ 史书对照 / 异文考</summary>
+                <div class="mt-1 p-2 bg-gray-50 rounded text-gray-700 leading-relaxed">
+                  ${it.kind==='variant'
+                    ? `<div class="mb-1"><b class="text-[#8b0000]">【毛本】</b>${it.mao||''}</div>
+                       <div class="mb-1"><b class="text-[#006400]">【嘉靖本】</b>${it.jiajing||''}</div>
+                       ${it.note?`<div class="text-gray-500">按：${it.note}</div>`:''}`
+                    : `<b class="text-[#8b6914]">【史书】</b>${it.history||''}`}
+                </div>
+              </details>
+            </a>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    // 筛选按钮逻辑
+    const btns = el.querySelectorAll('.ff-filter');
+    const items = el.querySelectorAll('.ff-item');
+    btns.forEach(b=>{
+      b.addEventListener('click', ()=>{
+        btns.forEach(x=>x.classList.remove('bg-gray-200','font-semibold'));
+        b.classList.add('bg-gray-200','font-semibold');
+        const st = b.getAttribute('data-status');
+        items.forEach(it=>{
+          it.style.display = (st==='all' || it.getAttribute('data-status')===st) ? '' : 'none';
+        });
+      });
+    });
+    if(btns[0]) btns[0].classList.add('bg-gray-200','font-semibold');
+  }
+
+  /* ======== B7 人物登场退场生死谱 Life Span Spectrum ======== */
+  function renderTopicLifespan(el){
+    const SD = data;
+    if(!SD || !SD.chapters){ el.innerHTML = '<p class="p3 text-gray-500">sanguo-data.js 未加载。</p>'; return; }
+    const chapters = SD.chapters || [];
+    const persons  = SD.persons  || [];
+
+    // Top-30 高频人物
+    const TOP_N = 30;
+    const topP = persons.slice().sort((a,b)=>b.mentionCount - a.mentionCount).slice(0, TOP_N - 0);
+    const pName2Idx = new Map();
+    topP.forEach((p,i)=> pName2Idx.set(p.name, i));
+
+    // 势力配色（双覆盖繁体/简体）
+    const factionColor = {
+      '蜀汉':'#22c55e', '蜀漢':'#22c55e', '曹魏':'#ef4444', '东吴':'#3b82f6', '東吳':'#3b82f6',
+      '群雄':'#f59e0b', '汉室':'#a855f7', '漢室':'#a855f7', '其他':'#64748b'
+    };
+    function factionOf(pname){
+      const p = persons.find(x=>x.name===pname);
+      return (p && p.faction) || '其他';
+    }
+
+    // 历史节点年份 → 回目 近似映射（线性插值）
+    const YEAR_NODES = [
+      [184,1],[189,3],[190,5],[192,8],[194,12],[196,14],[198,16],[199,19],[200,30],
+      [206,33],[207,35],[208,44],[209,50],[210,56],[212,60],[214,66],[217,68],[219,73],
+      [220,76],[221,77],[222,78],[223,80],[226,84],[228,90],[229,91],[231,95],[234,104],
+      [238,106],[239,107],[245,110],[246,111],[249,113],[251,114],[253,115],[255,116],
+      [258,117],[263,118],[264,119],[265,120],[271,120],[280,120]
+    ];
+    function yearToChapter(year){
+      const y = parseInt(year,10);
+      if(isNaN(y)) return null;
+      if(y <= YEAR_NODES[0][0]) return YEAR_NODES[0][1];
+      if(y >= YEAR_NODES[YEAR_NODES.length-1][0]) return YEAR_NODES[YEAR_NODES.length-1][1];
+      for(let i=0;i<YEAR_NODES.length-1;i++){
+        const [y1,c1]=YEAR_NODES[i], [y2,c2]=YEAR_NODES[i+1];
+        if(y>=y1 && y<=y2){
+          return Math.round(c1 + (c2-c1)*(y-y1)/(y2-y1));
+        }
+      }
+      return null;
+    }
+
+    // 每人物的登场回 / 退场回（死亡回）
+    const rows = topP.map((p,i)=>{
+      const firstAppear = []; const lastAppear = [];
+      chapters.forEach((ch,ci)=>{
+        if((ch.keyPersons||[]).includes(p.name)){ firstAppear.push(ci); lastAppear.push(ci); }
+      });
+      const debutCh = firstAppear.length ? firstAppear[0] : null;   // 0-based
+      const lastCh  = lastAppear.length ? lastAppear[lastAppear.length-1] : null;
+      const deathCh = yearToChapter(p.death);
+      let exitCh;
+      if(deathCh){ exitCh = deathCh-1; }                 // 死亡年映射回目
+      else if(lastCh!==null){ exitCh = lastCh; }          // 最后出现
+      else if(debutCh!==null){ exitCh = Math.min(119, debutCh+40); } // 近似活跃期
+      else exitCh = null;
+      return { p, debutCh, exitCh, deathCh };
+    });
+
+    // 热力矩阵：人物 × 回，值=1 若该回 keyPersons 含该人物
+    const heat = [];
+    chapters.forEach((ch,ci)=>{
+      const kps = ch.keyPersons || [];
+      kps.forEach(name=>{
+        const pi = pName2Idx.get(name);
+        if(pi!==undefined) heat.push([ci, pi, 1]);
+      });
+    });
+
+    // 统计
+    const withDebut = rows.filter(r=>r.debutCh!==null);
+    const avgDebut = withDebut.length ? withDebut.reduce((a,r)=>a+r.debutCh,0)/withDebut.length + 1 : 0; // +1 转 1-based
+    const active = rows.filter(r=>r.debutCh!==null && r.exitCh!==null)
+                        .map(r=>({r, span:r.exitCh-r.debutCh}))
+                        .sort((a,b)=>b.span-a.span).slice(0,3);
+
+    const yLabels = topP.map(p=> p.name + ' (' + factionOf(p.name) + ')');
+    const xLabels = new Array(chapters.length).fill(0).map((_,i)=> (i+1)%20===0 || i===0 ? (i+1) : '');
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">人物登场退场生死谱 · Life Span Spectrum</h3>
+      <p class="text-sm text-gray-600 mb-2">
+        Top-${TOP_N} 高频人物（纵） × 120 回（横）：每格 = 该人物在该回为关键人物（<b>1</b>）/ 否（<b>0</b>）。
+        竖虚线 = 据史载卒年映射的「死亡回」。
+      </p>
+      <div class="mb-2 text-xs text-gray-500">
+        Top-${TOP_N} 人物平均登场回 <b>${avgDebut.toFixed(1)}</b>；
+        最长活跃：
+        ${active.map(a=>`<b>${a.r.p.name}</b>（第${a.r.debutCh+1}–${a.r.exitCh+1}回，${a.span}回）`).join(' · ')}
+      </div>
+      <div class="flex flex-wrap gap-x-3 gap-y-1 text-xs mb-2">
+        ${Object.entries(factionColor).filter(([k])=>['蜀汉','曹魏','东吴','群雄','汉室','其他'].includes(k)).map(([k,v])=>`<span><span style="display:inline-block;width:10px;height:10px;background:${v};margin-right:4px;border-radius:2px"></span>${k}</span>`).join('')}
+      </div>
+      <div id="lifespan-heat" style="height:${Math.max(360, TOP_N*16)}px"></div>
+    `;
+
+    setTimeout(()=>{
+      const c = document.getElementById('lifespan-heat'); if(!c) return;
+      const chart = echarts.init(c);
+      chart.setOption({
+        tooltip:{ formatter: p=>{
+          if(p.data && p.data[0]!==undefined){
+            const chIdx=p.data[0], pIdx=p.data[1];
+            const ch=chapters[chIdx]; const pp=topP[pIdx];
+            return `<b>第 ${ch.id} 回</b> · ${ch.title}<br/><b>${pp.name}</b>（${factionOf(pp.name)}）：${p.data[2]?'关键人物':'未出现'}`;
+          }
+          return '';
+        } },
+        grid:{ left:150, right:40, top:10, bottom:40 },
+        xAxis:{ type:'category', data:xLabels, splitArea:{ show:false }, axisLabel:{ interval:0, fontSize:9 } },
+        yAxis:{ type:'category', data:yLabels, splitArea:{ show:true, interval:0 }, axisLabel:{ fontSize:10 } },
+        visualMap:{ min:0, max:1, calculable:true, orient:'horizontal', left:'center', bottom:0, show:false,
+          inRange:{ color:['#f8fafc', '#334155'] } },
+        series:[{
+          type:'heatmap', data:heat,
+          emphasis:{ itemStyle:{ shadowBlur:8, shadowColor:'rgba(0,0,0,.4)' } },
+          markLine:{ silent:true, symbol:'none', lineStyle:{ color:'#dc2626', type:'dashed', width:1.2 },
+            data: rows.filter(r=>r.deathCh!==null).map(r=> ({
+              xAxis: r.deathCh-1,
+              label:{ show:false },
+              lineStyle:{ color:'#dc2626', width:1.2 }
+            })) }
+        }]
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
+
+  /* ======== B8 三国官职演变图 Officer Rank Evolution Sankey ======== */
+  function renderTopicOfficerank(el){
+    // 静态官职映射表：源官职 → 演变去向官职（带势力前缀） → 势力
+    const OFFICE_FLOW = [
+      ['汉丞相','魏丞相',2],['汉丞相','蜀丞相',3],['汉丞相','蜀尚书令',2],
+      ['汉大将军','魏大将军',2],['汉大将军','吴大都督',4],['汉大将军','蜀大将军',1],
+      ['汉太尉','魏太尉',1],['汉太尉','蜀太尉',1],
+      ['汉司徒','魏司徒',1],
+      ['汉司空','魏司空',1],
+      ['汉司隶校尉','魏司隶校尉',1],
+      ['汉尚书令','魏尚书令',2],['汉尚书令','蜀尚书令',2],['汉尚书令','吴尚书令',1],
+      ['汉侍中','蜀侍中',1],['汉侍中','魏侍中',1],
+      ['汉骠骑将军','蜀骠骑将军',1],['汉骠骑将军','吴骠骑将军',1],
+      ['汉车骑将军','蜀车骑将军',2],['汉车骑将军','魏车骑将军',2],['汉车骑将军','吴车骑将军',1],
+      ['汉卫将军','蜀卫将军',1],
+      ['汉军师','蜀军师',2],['汉军师','魏军师',1],
+      ['汉大都督','吴大都督',4],['汉大都督','魏大司马',1],
+      ['汉太守','魏太守',2],['汉太守','蜀太守',2],['汉太守','吴太守',2],
+      ['汉大司马','魏大司马',1],['汉大司马','蜀大司马',1],
+      ['汉中书令','魏中书令',1],
+      ['汉护军','魏护军',1],
+      ['汉州牧','蜀益州牧',2],['汉州牧','魏冀州牧',2],['汉州牧','吴荆州牧',2],
+      ['汉刺史','魏刺史',1],['汉刺史','蜀刺史',1],['汉刺史','吴刺史',1]
+    ];
+    const FACTION_OF = {
+      '魏':'曹魏','蜀':'蜀汉','吴':'东吴'
+    };
+    const NODE_COLOR = {
+      '汉室':'#94a3b8', '曹魏':'#ef4444', '蜀汉':'#22c55e', '东吴':'#3b82f6'
+    };
+    function colorOfNode(name){
+      if(NODE_COLOR[name]) return NODE_COLOR[name];      // 势力节点本身
+      if(name[0]==='汉') return NODE_COLOR['汉室'];       // 汉室源官职
+      const pre = name[0];
+      if(FACTION_OF[pre]) return NODE_COLOR[FACTION_OF[pre]];
+      return '#64748b';
+    }
+
+    // 收集节点 & 边
+    const nodeSet = new Set();
+    const links = [];
+    OFFICE_FLOW.forEach(([src,dst,w])=>{
+      nodeSet.add(src);
+      // 目标官职节点的势力
+      const pre = dst[0];
+      const faction = FACTION_OF[pre] || '汉室';
+      nodeSet.add(dst);
+      nodeSet.add(faction); // 第三层势力节点
+      links.push({ source:src, target:dst, value:w });
+    });
+    // 去向官职 → 势力 边
+    OFFICE_FLOW.forEach(([src,dst,w])=>{
+      const pre = dst[0];
+      const faction = FACTION_OF[pre] || '汉室';
+      links.push({ source:dst, target:faction, value:w });
+    });
+    const nodes = Array.from(nodeSet).map(n=> ({
+      name:n, itemStyle:{ color: colorOfNode(n), borderColor:'#fff', borderWidth:1 }
+    }));
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">三国官职演变图 · Officer Rank Evolution</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        桑基图展示东汉官职（左）如何在魏·蜀·吴三国分化为各自官制（中），并汇入三大势力（右）。
+        节点色：<span class="inline-flex items-center gap-1 mr-2"><span class="w-2 h-2 rounded-full" style="background:${NODE_COLOR['汉室']}"></span>汉室</span>
+        <span class="inline-flex items-center gap-1 mr-2"><span class="w-2 h-2 rounded-full" style="background:${NODE_COLOR['曹魏']}"></span>曹魏</span>
+        <span class="inline-flex items-center gap-1 mr-2"><span class="w-2 h-2 rounded-full" style="background:${NODE_COLOR['蜀汉']}"></span>蜀汉</span>
+        <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full" style="background:${NODE_COLOR['东吴']}"></span>东吴</span>
+        边宽 = 任职人数 / 重要性权重。
+      </p>
+      <div id="officerank-chart" style="height:620px"></div>
+    `;
+
+    setTimeout(()=>{
+      const c = document.getElementById('officerank-chart'); if(!c) return;
+      const chart = echarts.init(c);
+      chart.setOption({
+        tooltip:{ trigger:'item', triggerOn:'mousemove',
+          formatter: p=>{
+            if(p.dataType==='edge'){
+              return `<b>${p.data.source}</b> → <b>${p.data.target}</b><br/>权重：${p.data.value}`;
+            }
+            return `<b>${p.name}</b>`;
+          } },
+        series:[{
+          type:'sankey',
+          left:40, right:40, top:20, bottom:20,
+          layoutIterations:32,
+          nodeWidth:16, nodeGap:8,
+          emphasis:{ focus:'adjacency' },
+          label:{ show:true, fontSize:10, color:'#334155' },
+          lineStyle:{ color:'gradient', curveness:0.5, opacity:0.4 },
+          data:nodes,
+          links:links
+        }]
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
+
+  /* ======================== T-B9 回目对仗美学 · Couplet Aesthetics ======== */
+  const COUPLET_VIRTUAL = new Set(['之','而','以','于','其','乃','为','与','则','矣','也','乎','哉','所','焉','兮']);
+  let _coupletNameCharSet = null;
+  function coupletNameCharSet(){
+    if(_coupletNameCharSet) return _coupletNameCharSet;
+    const set = new Set();
+    (data.persons||[]).forEach(p=>{ (p.name||'').split('').forEach(c=>set.add(c)); (p.style||'').split('').forEach(c=>set.add(c)); });
+    (data.chapters||[]).forEach(ch=>{
+      (ch.keyPersons||[]).forEach(n=>n.split('').forEach(c=>set.add(c)));
+      (ch.keyPlaces||[]).forEach(n=>n.split('').forEach(c=>set.add(c)));
+    });
+    _coupletNameCharSet = set;
+    return set;
+  }
+  function coupletScore(title){
+    const parts = (title||'').trim().split(/\s+/).filter(Boolean);
+    if(parts.length < 2) return {score:0, a:(parts[0]||''), b:'', lenEq:0, charMatch:0, nounAlign:0};
+    const a = parts[0], b = parts[parts.length-1];
+    const maxLen = Math.max(a.length, b.length), minLen = Math.min(a.length, b.length);
+    const lenEq = maxLen>0 ? minLen/maxLen : 0;
+    const nameSet = coupletNameCharSet();
+    let comp=0, match=0, nounComp=0, nounMatch=0;
+    for(let i=0;i<maxLen;i++){
+      const ca=a[i], cb=b[i];
+      if(ca===undefined||cb===undefined) continue;
+      if(COUPLET_VIRTUAL.has(ca)||COUPLET_VIRTUAL.has(cb)) continue;
+      comp++;
+      if(ca===cb) match++;
+      const na=nameSet.has(ca), nb=nameSet.has(cb);
+      if(na||nb){ nounComp++; if(na&&nb) nounMatch++; }
+    }
+    const charMatch = comp>0 ? match/comp : 0;
+    const nounAlign = nounComp>0 ? nounMatch/nounComp : 0;
+    const score = Math.round((lenEq*0.35 + charMatch*0.40 + nounAlign*0.25)*100);
+    return {score, a, b, lenEq, charMatch, nounAlign};
+  }
+  function coupletColor(s){
+    if(s>=80) return '#b91c1c'; if(s>=60) return '#f59e0b'; if(s>=40) return '#fbbf24'; return '#9ca3af';
+  }
+  function renderTopicCouplet(el){
+    const SD = data;
+    if(!SD || !SD.chapters){ el.innerHTML = '<p class="p3 text-gray-500">sanguo-data.js 未加载。</p>'; return; }
+    const chapters = SD.chapters||[];
+    const scores = chapters.map(ch=> Object.assign({id:ch.id, title:ch.title}, coupletScore(ch.title)));
+    const top = scores.slice().sort((x,y)=> y.score - x.score).slice(0,10);
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">回目对仗美学 · Couplet Aesthetics</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        120 回回目对联的对仗质量评分（0-100）。评分合成：<b>字数相等度 35%</b> + <b>同位置字面重复度 40%</b>（忽略「之/而/以/于」等虚词）+
+        <b>名词对齐率 25%</b>（以人物/地点名单近似名词位置）。
+        颜色梯度：<span style="color:#b91c1c">■</span>≥80 高对仗 · <span style="color:#f59e0b">■</span>60-79 · <span style="color:#fbbf24">■</span>40-59 · <span style="color:#9ca3af">■</span>&lt;40。
+        点击柱子可跳转对应回阅读。
+      </p>
+      <div id="couplet-chart" style="height:420px"></div>
+      <h4 class="font-bold text-[#8b0000] mt-5 mb-2">Top-10 名对赏析</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        ${top.map(s=>`
+          <a href="read.html?edition=mao&unit=${s.id}" class="block border rounded-lg p-3 hover:shadow-md transition-shadow bg-white">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-mono bg-gray-100 px-1.5 py-0.5 rounded">第${s.id}回</span>
+              <span class="text-xs font-bold px-2 py-0.5 rounded text-white" style="background:${coupletColor(s.score)}">${s.score} 分</span>
+              <span class="ml-auto text-[10px] text-gray-400">字数${s.lenEq.toFixed(2)}·字面${s.charMatch.toFixed(2)}·名词${s.nounAlign.toFixed(2)}</span>
+            </div>
+            <p class="text-sm font-medium text-[#8b0000]">${s.a}</p>
+            <p class="text-sm font-medium text-[#8b0000]">${s.b}</p>
+          </a>`).join('')}
+      </div>
+    `;
+
+    setTimeout(()=>{
+      const c = document.getElementById('couplet-chart'); if(!c) return;
+      const chart = echarts.init(c);
+      const dataArr = scores.map(s=> ({value:s.score, id:s.id, itemStyle:{color:coupletColor(s.score)}}));
+      chart.setOption({
+        tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
+          formatter: ps=>{ const p=ps[0]; const s=scores[p.dataIndex];
+            return `<b>第${s.id}回</b> ${s.title}<br/>对仗分：<b>${s.score}</b><br/>${s.a} ／ ${s.b}`; } },
+        grid:{ left:40, right:20, top:30, bottom:40 },
+        xAxis:{ type:'category', data: scores.map(s=> (s.id%20===0||s.id===1)? s.id : ''), axisLabel:{fontSize:9} },
+        yAxis:{ type:'value', name:'对仗分', min:0, max:100 },
+        dataZoom:[{ type:'slider', start:0, end:100, bottom:6, height:16 }],
+        series:[{ type:'bar', data:dataArr, barMaxWidth:14,
+          emphasis:{ itemStyle:{ shadowBlur:8, shadowColor:'rgba(0,0,0,.3)' } } }]
+      });
+      chart.on('click', p=>{ const id=scores[p.dataIndex].id; if(id) location.href='read.html?edition=mao&unit='+id; });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
+
+  /* ======================== T-C10 版本谱系指纹 · Edition Fingerprint ======== */
+  function _bigrams(s){
+    const set = new Set();
+    const t = (s||'').replace(/[^\u4e00-\u9fff]/g,'');
+    for(let i=0;i<t.length-1;i++) set.add(t[i]+t[i+1]);
+    return set;
+  }
+  function _jaccard(setA, setB){
+    if(!setA.size && !setB.size) return 1;
+    let inter=0; setA.forEach(x=>{ if(setB.has(x)) inter++; });
+    const union = setA.size + setB.size - inter;
+    return union>0 ? inter/union : 0;
+  }
+  function renderTopicFingerprint(el){
+    const EH = (typeof window!=='undefined') ? window.EDITION_HEADS : null;
+    const SD = data;
+    if(!EH){ el.innerHTML = '<p class="p3 text-gray-500">edition-heads.js 未加载。</p>'; return; }
+    const edOrder = ['mao','jiajing','huiping','lizhuowu','zhongbojing','liyu','yuxiangdou','zhouyue'];
+    const edLabel = { mao:'毛宗岗', jiajing:'嘉靖壬午', huiping:'七家汇评', lizhuowu:'李卓吾',
+      zhongbojing:'钟伯敬', liyu:'笠翁', yuxiangdou:'余象斗', zhouyue:'周曰校' };
+    const edKind = { mao:'回制', jiajing:'則制', huiping:'回制', lizhuowu:'回制', zhongbojing:'回制', liyu:'回制', yuxiangdou:'則制', zhouyue:'則制' };
+    const mao2yxd = EH.mao2yxd, mao2jj = EH.mao2jj;
+    function headOf(ed, N){
+      const eh = EH[ed]; if(!eh) return '';
+      if(edKind[ed]==='回制'){ const u=eh.units[N-1]; return u?(u.title||'').replace(/^第[0-9零一二三四五六七八九十百]+[回]\s*/,'').trim():''; }
+      let m=null;
+      if(ed==='yuxiangdou'&&mao2yxd) m=mao2yxd[N-1];
+      else if(ed==='jiajing'&&mao2jj) m=mao2jj[N-1];
+      else { const tot=eh.unitCount; m={s:Math.max(1,Math.round((N-1)/120*tot)+1), e:Math.min(tot,Math.round(N/120*tot))}; }
+      if(!m) return '';
+      const u = eh.units.find(x=> x.n===m.s);
+      return u?(u.title||'').replace(/^第[0-9零一二三四五六七八九十百]+[則]\s*/,'').trim():'';
+    }
+    // 每版本每回 bigram 集
+    const edGrams = edOrder.map(ed=>{
+      const arr=[];
+      for(let N=1;N<=120;N++) arr.push(_bigrams(headOf(ed,N)));
+      return arr;
+    });
+    // 版本×版本 平均 Jaccard
+    const sim = edOrder.map(()=> new Array(edOrder.length).fill(0));
+    for(let i=0;i<edOrder.length;i++) for(let j=i;j<edOrder.length;j++){
+      let tot=0,cnt=0;
+      for(let N=0;N<120;N++){ if(!edGrams[i][N].size && !edGrams[j][N].size) continue; tot+=_jaccard(edGrams[i][N],edGrams[j][N]); cnt++; }
+      const v = cnt>0? tot/cnt : 0; sim[i][j]=v; sim[j][i]=v;
+    }
+    for(let i=0;i<edOrder.length;i++) sim[i][i]=1;
+
+    // 贪心 nearest-neighbor 排序：使相近版本相邻，热力图呈聚类块
+    const avgSim = sim.map((row,i)=> row.reduce((a,b)=>a+b,0));
+    let start = avgSim.indexOf(Math.max(...avgSim));
+    const used = new Set([start]); const order=[start];
+    while(order.length < edOrder.length){
+      let best=-1, bestV=-1;
+      for(let j=0;j<edOrder.length;j++){ if(used.has(j)) continue; if(sim[order[order.length-1]][j]>bestV){bestV=sim[order[order.length-1]][j]; best=j;} }
+      used.add(best); order.push(best);
+    }
+    const oLabels = order.map(i=>edLabel[edOrder[i]]);
+    const oData=[];
+    order.forEach((i,r)=>{ order.forEach((j,c)=>{ oData.push([c,r,+sim[i][j].toFixed(3)]); }); });
+
+    // 差异点列表：毛本 vs 嘉靖本 最低相似度 8 回
+    const diffs=[];
+    if(SD && SD.chapters){
+      for(let N=0;N<120;N++){
+        const j = edOrder.indexOf('jiajing');
+        const s = _jaccard(edGrams[0][N], edGrams[j][N]);
+        diffs.push({N:N+1, s, title:(SD.chapters[N]?SD.chapters[N].title:'')});
+      }
+      diffs.sort((a,b)=>a.s-b.s);
+    }
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">版本谱系指纹 · Edition Fingerprint</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        以各版本 120 回回目文本的<b>字符 bigram 集合 Jaccard 相似度</b>构建 8×8 版本谱系矩阵。
+        每格 = 两版本全部回目平均 bigram 重合率（0=全异 1=全同）。版本按贪心最近邻重排，使相近版本相邻——
+        对角线附近的高亮聚类块即版本谱系分支（回制 vs 則制、评本 vs 志传系统自然分群）。
+      </p>
+      <div id="fingerprint-chart" style="height:480px"></div>
+      <div class="mt-3 text-xs text-gray-500">
+        色阶：蓝（低相似）→ 绿 → 黄 → 红（高相似）。对角恒为 1。
+      </div>
+      <h4 class="font-bold text-[#8b0000] mt-5 mb-2">毛本 vs 嘉靖本 差异最大的 8 回</h4>
+      <div class="text-xs text-gray-600 space-y-1">
+        ${diffs.slice(0,8).map(d=> `<div class="flex items-center gap-2"><span class="font-mono bg-gray-100 px-1.5 py-0.5 rounded">第${d.N}回</span><span class="text-gray-700">${d.title}</span><span class="ml-auto font-mono" style="color:${d.s<0.2?'#b91c1c':(d.s<0.4?'#f59e0b':'#16a34a')}">${(d.s*100).toFixed(0)}%</span></div>`).join('')}
+      </div>
+    `;
+
+    setTimeout(()=>{
+      const c = document.getElementById('fingerprint-chart'); if(!c) return;
+      const chart = echarts.init(c);
+      chart.setOption({
+        tooltip:{ formatter: p=> `<b>${oLabels[p.data[1]]}</b> vs <b>${oLabels[p.data[0]]}</b><br/>指纹相似度：<b>${(p.data[2]*100).toFixed(1)}%</b>` },
+        grid:{ left:90, right:40, top:20, bottom:60 },
+        xAxis:{ type:'category', data:oLabels, splitArea:{show:true}, axisLabel:{fontSize:10} },
+        yAxis:{ type:'category', data:oLabels, splitArea:{show:true}, axisLabel:{fontSize:10} },
+        visualMap:{ min:0, max:1, calculable:true, orient:'horizontal', left:'center', bottom:0,
+          inRange:{ color:['#3b82f6','#22c55e','#facc15','#f97316','#dc2626'] } },
+        series:[{ type:'heatmap', data:oData,
+          label:{ show:true, formatter:p=> p.data[1]===p.data[0]?'1':(p.data[2]*100).toFixed(0)+'%', fontSize:10, color:'#333' },
+          emphasis:{ itemStyle:{ shadowBlur:10, shadowColor:'rgba(0,0,0,.5)' } } }]
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
+
+  /* ======================== T-C11 批注家思想地图 · Critic Concept Map ======== */
+  const CRITIC_CONCEPTS = ['忠','义','奸','智','勇','仁','孝','诈','谋','才','气','命','天','势','情','理','正','奇','虚','实',
+    '用兵','用人','君臣','父子','兄弟','朋友','天下','民心','成败','兴亡','才略','胆识','机变','权术','仁义','兵法','地理','时势','天命','人心'];
+  const CRITIC_META = {
+    maozigang:{ name:'毛宗岗', note:'重「章法/文法」，评点侧重结构、笔法与正统观' },
+    lizhi:{ name:'李贽', note:'重「性情/真情」，评点直抒胸臆、尚真率' },
+    zhongxing:{ name:'钟惺', note:'重「事理/物理」，评点冷静析事、辨机微' },
+    liyuweng:{ name:'李渔', note:'重「文章/才情」，评点论文章法度、赏才情' }
+  };
+  function renderTopicCriticNet(el){
+    const CCI = (typeof SANGUO_COMM_INLINE!=='undefined') ? SANGUO_COMM_INLINE : null;
+    if(!CCI){ el.innerHTML = '<p class="p3 text-gray-500">comm-inline.js 未加载。</p>'; return; }
+    const critics = Object.keys(CRITIC_META);
+    // 统计
+    const total = critics.map(()=>0);
+    const freq = CRITIC_CONCEPTS.map(()=> critics.map(()=>0));
+    let totalAll = 0;
+    Object.keys(CCI).forEach(ch=>{
+      const arr = CCI[ch]||[];
+      arr.forEach(cm=>{
+        const ci = critics.indexOf(cm.critic); if(ci<0) return;
+        total[ci]++; totalAll++;
+        const txt = cm.text||'';
+        CRITIC_CONCEPTS.forEach((kw,ki)=>{ if(txt.indexOf(kw)>=0) freq[ki][ci]++; });
+      });
+    });
+    // 归一化（每家词频 / 该家批注总数）
+    const norm = freq.map((row,ki)=> row.map((v,ci)=> total[ci]>0? v/total[ci] : 0));
+    const heatData=[];
+    CRITIC_CONCEPTS.forEach((kw,ki)=>{ critics.forEach((_,ci)=>{ heatData.push([ci, ki, +norm[ki][ci].toFixed(4)]); }); });
+
+    // 各家 Top-10 高频概念
+    const criticTop = critics.map((c,ci)=>{
+      const list = CRITIC_CONCEPTS.map((kw,ki)=>({kw, n:freq[ki][ci], r:norm[ki][ci]}))
+        .sort((a,b)=> b.n-a.n).slice(0,10);
+      return {critic:c, meta:CRITIC_META[c], total:total[ci], list};
+    });
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">批注家思想地图 · Critic Concept Map</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        四家评点（毛宗岗/李贽/钟惺/李渔）共 <b>${totalAll}</b> 条批注的概念词频热力图。
+        每格 = 某家批注中该概念出现次数 / 该家批注总数（归一化），突出各家评点范式差异。
+        颜色越深 = 该家越偏重此概念。
+      </p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3 text-xs">
+        ${criticTop.map(t=>`
+          <div class="border rounded-lg p-2 bg-white">
+            <div class="font-bold text-[#8b0000] mb-1">${t.meta.name} <span class="text-gray-400 font-normal">${t.total} 条</span></div>
+            <div class="text-[11px] text-gray-500 mb-1">${t.meta.note}</div>
+            <div class="space-y-0.5">
+              ${t.list.slice(0,5).map((x,i)=>`<div class="flex items-center gap-1"><span class="w-3 text-gray-400 text-right">${i+1}</span><span>${x.kw}</span><span class="ml-auto font-mono text-gray-500">${x.n}</span></div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+      <div id="criticnet-chart" style="height:560px"></div>
+    `;
+
+    setTimeout(()=>{
+      const c = document.getElementById('criticnet-chart'); if(!c) return;
+      const chart = echarts.init(c);
+      chart.setOption({
+        tooltip:{ formatter: p=> `<b>${CRITIC_CONCEPTS[p.data[1]]}</b> × <b>${CRITIC_META[critics[p.data[0]]].name}</b><br/>归一化词频：<b>${(p.data[2]*100).toFixed(2)}%</b><br/>原始次数：${freq[p.data[1]][p.data[0]]}` },
+        grid:{ left:60, right:60, top:10, bottom:70 },
+        xAxis:{ type:'category', data: critics.map(c=>CRITIC_META[c].name), splitArea:{show:true}, axisLabel:{fontSize:11} },
+        yAxis:{ type:'category', data: CRITIC_CONCEPTS, splitArea:{show:true}, axisLabel:{fontSize:10} },
+        visualMap:{ min:0, max:1, calculable:true, orient:'horizontal', left:'center', bottom:0,
+          inRange:{ color:['#f1f5f9','#bfdbfe','#3b82f6','#1e3a8a'] } },
+        series:[{ type:'heatmap', data:heatData, label:{show:false},
+          emphasis:{ itemStyle:{ shadowBlur:8, shadowColor:'rgba(0,0,0,.4)' } } }]
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
+
+  /* ======================== T-C12 叙事速度曲线 · Narrative Pace Speed ======== */
+  function renderTopicPaceSpeed(el){
+    const SD = data;
+    if(!SD || !SD.chapters){ el.innerHTML = '<p class="p3 text-gray-500">sanguo-data.js 未加载。</p>'; return; }
+    const chapters = SD.chapters||[];
+    const CCI = (typeof SANGUO_COMM_INLINE!=='undefined') ? SANGUO_COMM_INLINE : {};
+    // 三项原始密度
+    const raw = chapters.map(ch=>{
+      const comm = (CCI[String(ch.id)]||[]).length;
+      const evt = (ch.events||[]).length;
+      const per = (ch.keyPersons||[]).length;
+      return {id:ch.id, comm, evt, per};
+    });
+    const maxOf = key => Math.max(...raw.map(r=>r[key]), 1);
+    const mComm=maxOf('comm'), mEvt=maxOf('evt'), mPer=maxOf('per');
+    const series = raw.map(r=> ({
+      id:r.id,
+      comm: r.comm/mComm,
+      evt:  r.evt/mEvt,
+      per:  r.per/mPer,
+      pace: 0.4*(r.comm/mComm) + 0.3*(r.evt/mEvt) + 0.3*(r.per/mPer)
+    }));
+    // 节奏峰值（top5 + 关键情节回）
+    const peak = series.slice().sort((a,b)=> b.pace-a.pace).slice(0,5).map(s=>({id:s.id, pace:s.pace}));
+    const peakIds = new Set(peak.map(p=>p.id));
+    [49,50,84,104].forEach(n=>peakIds.add(n));
+    const markPts = Array.from(peakIds).map(n=>{
+      const s = series[n-1]; return { coord:[n, s.pace], value:'第'+n+'回' };
+    });
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">叙事速度曲线 · Narrative Pace Speed</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        120 回叙事节奏三元指标（各归一化 0-1）：<b>批注密度</b>（该回批注条数）、<b>事件密度</b>（该回事件数）、<b>人物密度</b>（该回关键人物数）。
+        <b>主叙事节奏</b> = 批注 0.4 + 事件 0.3 + 人物 0.3。峰值标记：赤壁（49-50）、夷陵（84）、五丈原（104）等关键情节。
+      </p>
+      <div id="pacespeed-chart" style="height:440px"></div>
+      <div class="mt-3 text-xs text-gray-500">
+        节奏峰值 Top-5：${peak.map(p=>`第${p.id}回(${(p.pace*100).toFixed(0)})`).join(' · ')}
+      </div>
+    `;
+
+    setTimeout(()=>{
+      const c = document.getElementById('pacespeed-chart'); if(!c) return;
+      const chart = echarts.init(c);
+      const xs = series.map(s=>s.id);
+      chart.setOption({
+        tooltip:{ trigger:'axis', axisPointer:{type:'cross'},
+          formatter: ps=>{
+            const p=ps[0]; const s=series[p.dataIndex];
+            return `<b>第${s.id}回</b><br/>批注密度：${s.comm.toFixed(2)}<br/>事件密度：${s.evt.toFixed(2)}<br/>人物密度：${s.per.toFixed(2)}<br/>主节奏：<b>${s.pace.toFixed(2)}</b>`;
+          } },
+        legend:{ data:['主叙事节奏','批注密度','事件密度','人物密度'], top:0 },
+        grid:{ left:40, right:30, top:30, bottom:40 },
+        xAxis:{ type:'category', data: xs.map(x=> (x%20===0||x===1)? x : ''), axisLabel:{fontSize:9} },
+        yAxis:{ type:'value', min:0, max:1, name:'归一化' },
+        dataZoom:[{ type:'slider', start:0, end:100, bottom:6, height:16 }],
+        series:[
+          { name:'主叙事节奏', type:'line', data:series.map(s=>s.pace), smooth:true, lineStyle:{width:3,color:'#b91c1c'},
+            itemStyle:{color:'#b91c1c'},
+            markPoint:{ symbolSize:34, label:{fontSize:8, formatter:p=>p.value}, data:markPts,
+              itemStyle:{color:'#f59e0b'} } },
+          { name:'批注密度', type:'line', data:series.map(s=>s.comm), smooth:true, lineStyle:{width:1.5,color:'#3b82f6'}, itemStyle:{color:'#3b82f6'} },
+          { name:'事件密度', type:'line', data:series.map(s=>s.evt), smooth:true, lineStyle:{width:1.5,color:'#22c55e'}, itemStyle:{color:'#22c55e'} },
+          { name:'人物密度', type:'line', data:series.map(s=>s.per), smooth:true, lineStyle:{width:1.5,color:'#a855f7'}, itemStyle:{color:'#a855f7'} }
+        ]
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
 
   /* ======================== 本体 JSON 导出 ======================== */
   function ontologyJSONString(){
