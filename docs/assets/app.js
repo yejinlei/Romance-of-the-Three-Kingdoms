@@ -4097,8 +4097,8 @@
 
   /* ======== T17 叙事密度热力图 Narrative Density Heatmap ======== */
   function renderTopicNarrativeDensity(el){
-    const SD = (typeof window !== 'undefined') ? window.SANGUO_DATA : null;
-    if(!SD){ el.innerHTML = '<p class="p3 text-gray-500">sanguo-data.js 未加载。</p>'; return; }
+    const SD = data; // 模块级 data 已从 sanguo-data.js 的 const SANGUO_DATA 取到（词法作用域），勿用 window.SANGUO_DATA（顶层 const 不挂 window）
+    if(!SD || !SD.chapters){ el.innerHTML = '<p class="p3 text-gray-500">sanguo-data.js 未加载。</p>'; return; }
 
     const chapters = SD.chapters || [];
     const persons  = SD.persons  || [];
