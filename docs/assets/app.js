@@ -3147,6 +3147,156 @@
     }
 
     let curSel = [...defaultSel];
+    let diffOn = true;       // 默认开
+    let diffBase = 'mao';    // 基准版本（毛本）
+
+    // --- Diff helper（inline LCS，O(n*m)，单元题名均 <40 字）---
+    // 归一化：去掉「第N回/則」前缀 + 全角空格/换行
+    function normalizeTitle(s){
+      return String(s||'')
+        .replace(/^第[0-9零一二三四五六七八九十百]+[回則]\s*/,'')
+        .replace(/\s+/g,'')
+        .replace(/\u3000/g,'');
+    }
+    function lcsDiff(aRaw, bRaw){
+      const a = normalizeTitle(aRaw);
+      const b = normalizeTitle(bRaw);
+      if(!a && !b) return [];
+      if(!a) return [...b].map(ch=>({op:'+',ch}));
+      if(!b) return [...a].map(ch=>({op:'-',ch}));
+      const m = a.length, n = b.length;
+      // DP 表
+      const dp = new Array(m+1);
+      for(let i=0;i<=m;i++) dp[i] = new Array(n+1).fill(0);
+      for(let i=1;i<=m;i++) for(let j=1;j<=n;j++){
+        if(a[i-1]===b[j-1]) dp[i][j] = dp[i-1][j-1]+1;
+        else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+      }
+      // 回溯产生编辑脚本
+      const ops = [];
+      let i=m, j=n;
+      while(i>0 || j>0){
+        if(i>0 && j>0 && a[i-1]===b[j-1]){ ops.unshift({op:'=',ch:a[i-1]}); i--; j--; }
+        else if(j>0 && (i===0 || dp[i][j-1] >= dp[i-1][j])){ ops.unshift({op:'+',ch:b[j-1]}); j--; }
+        else { ops.unshift({op:'-',ch:a[i-1]}); i--; }
+      }
+      return ops;
+    }
+    // 渲染 diff 到 HTML；只高亮 target 版本里「不同于 base」的部分
+    // 规则：删除（base 有 target 无）= 红底灰字删除线；新增（target 有 base 无）= 绿底
+    function renderDiffCell(baseRaw, targetRaw, color){
+      const ops = lcsDiff(baseRaw, targetRaw);
+      if(ops.length===0) return `<span style="color:${color}" class="font-medium">${normalizeTitle(targetRaw)}</span>`;
+      // 如果全相同（无 + - ops），直接返回
+      const hasDiff = ops.some(o=>o.op!=='=');
+      if(!hasDiff) return `<span style="color:${color}" class="font-medium">${normalizeTitle(targetRaw)}</span>`;
+      let html = `<span style="color:${color}" class="font-medium">`;
+      for(const op of ops){
+        if(op.op==='=') html += escapeHtml(op.ch);
+        else if(op.op==='+') html += `<span class="diff-add" title="新增">${escapeHtml(op.ch)}</span>`;
+        else if(op.op==='-') html += `<span class="diff-del" title="毛本有此字，本版删">${escapeHtml(op.ch)}</span>`;
+      }
+      html += `</span>`;
+      return html;
+    }
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    // 表头加 Diff 控件
+    function renderHeader(){
+      return `
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-xs text-gray-500 font-bold">文字 Diff：</span>
+          <label class="inline-flex items-center gap-1 text-xs cursor-pointer">
+            <input type="checkbox" id="diff-toggle" ${diffOn?'checked':''} class="rounded"> 开启
+          </label>
+          <span class="text-xs text-gray-400 ml-1">基准：</span>
+          <select id="diff-base" class="text-xs border border-gray-300 rounded px-1.5 py-0.5 bg-white">
+            ${Object.entries(edMeta).map(([id,m])=>`<option value="${id}" ${id===diffBase?'selected':''}>${m.name}</option>`).join('')}
+          </select>
+          <span class="flex items-center gap-2 text-xs ml-2">
+            <span class="inline-flex items-center gap-1"><span class="w-2 h-4 bg-red-100 border border-red-300 rounded-sm"></span><span class="text-gray-500">本版删字</span></span>
+            <span class="inline-flex items-center gap-1"><span class="w-2 h-4 bg-green-100 border border-green-300 rounded-sm"></span><span class="text-gray-500">本版增字</span></span>
+          </span>
+        </div>
+      `;
+    }
+
+    function renderTable(selectedIds){
+      const wrap = el.querySelector('#cmp-table-wrap');
+      const heads = selectedIds.map(id=> edMeta[id]);
+      const baseEh = EH[diffBase] || EH.mao;
+      let html = renderHeader();
+      html += `<div class="overflow-x-auto max-h-[640px]">`;
+      html += `<table class="w-full text-sm border-collapse"><thead class="sticky top-0 z-10 bg-gray-50"><tr>
+        <th class="w-16 px-2 py-2 text-left border-b border-gray-200 bg-white">毛本回</th>
+        ${heads.map(h=>`<th class="px-3 py-2 text-left border-b border-gray-200 min-w-[200px] bg-white" style="border-top:3px solid ${h.color}">
+          <div class="font-bold text-gray-800">${h.name}</div>
+          <div class="text-xs text-gray-500">${h.kind} · ${EH[Object.keys(edMeta).find(k=>edMeta[k]===h)]?.unitCount||'?'}</div>
+          ${Object.keys(edMeta).find(k=>edMeta[k]===h)===diffBase ? `<span class="text-[10px] text-amber-700 bg-amber-50 px-1 rounded border border-amber-200 ml-1">基準</span>` : ''}
+        </th>`).join('')}
+      </tr></thead><tbody>`;
+
+      const maoEh = EH.mao;
+      for(let N=1; N<=120; N++){
+        const maoUnit = maoEh.units.find(u=>u.n===N);
+        // 基准版本的 title（用于 diff 其他列）
+        const baseEhRow = EH[diffBase];
+        let baseUnitTitle = '';
+        const baseMap = mapMao2(N, diffBase);
+        if(baseMap){
+          const baseUnits = getUnitsRange(diffBase, baseMap.s, baseMap.e);
+          // 取第一个单元做基准（回制），或取整个拼接（则制）
+          baseUnitTitle = baseUnits.map(u=>u.title).join(' · ');
+        }
+        html += `<tr class="${N%2?'bg-white':'bg-gray-50/50'} hover:bg-amber-50/50">`;
+        html += `<td class="px-2 py-2 align-top border-b border-gray-100"><a href="read.html?edition=mao&unit=${N}" class="text-xs font-mono bg-red-50 text-red-700 px-1.5 py-0.5 rounded hover:bg-red-100">${N}</a></td>`;
+        for(const eid of selectedIds){
+          const eh = EH[eid];
+          const m = mapMao2(N, eid);
+          if(!m){ html += `<td class="px-3 py-2 align-top border-b border-gray-100 text-xs text-gray-400">—</td>`; continue; }
+          const units = getUnitsRange(eid, m.s, m.e);
+          const color = edMeta[eid].color;
+          if(units.length===0){ html += `<td class="px-3 py-2 align-top border-b border-gray-100 text-xs text-gray-400">—</td>`; continue; }
+
+          if(edMeta[eid].kind === '回制'){
+            const u = units[0];
+            const displayTitle = normalizeTitle(u.title);
+            const diffHt = diffOn ? renderDiffCell(baseUnitTitle, u.title, color) :
+              `<span style="color:${color}" class="font-medium">${displayTitle}</span>`;
+            html += `<td class="px-3 py-2 align-top border-b border-gray-100 text-xs">
+              <a href="read.html?edition=${eid}&unit=${u.n}" class="block hover:underline">
+                <span class="font-mono text-[10px] text-gray-400">${u.n}</span>
+                ${diffHt}
+              </a>
+            </td>`;
+          } else {
+            // 则制：取前 3 则做拼接比较
+            const slice = units.slice(0, 3);
+            const targetTitleJoin = slice.map(u=>u.title).join(' · ');
+            const diffHt = diffOn ? renderDiffCell(baseUnitTitle, targetTitleJoin, color) :
+              slice.map(u=>`<div>${u.n} ${normalizeTitle(u.title).slice(0,18)}</div>`).join('');
+            html += `<td class="px-3 py-2 align-top border-b border-gray-100 text-xs">
+              <div class="flex flex-col gap-0.5">
+                ${slice.map(u=>`<a href="read.html?edition=${eid}&unit=${u.n}" class="block hover:underline">
+                  <span class="font-mono text-[10px] text-gray-400">${u.n}</span>
+                  ${diffOn ? '' : `<span class="text-gray-700">${normalizeTitle(u.title).slice(0,18)}</span>`}
+                </a>`).join('')}
+                ${diffOn ? `<div style="color:${color}">${diffHt}</div>` : ''}
+                ${units.length>3?`<span class="text-[10px] text-gray-400">…另有 ${units.length-3} 則</span>`:''}
+              </div>
+            </td>`;
+          }
+        }
+        html += `</tr>`;
+      }
+      html += `</tbody></table></div>`;
+      wrap.innerHTML = html;
+      // 重新绑定 diff 控件
+      const tog = el.querySelector('#diff-toggle');
+      if(tog){ tog.addEventListener('change', ()=>{ diffOn = tog.checked; renderTable(curSel); }); }
+      const baseSel = el.querySelector('#diff-base');
+      if(baseSel){ baseSel.addEventListener('change', ()=>{ diffBase = baseSel.value; renderTable(curSel); }); }
+    }
     renderTable(curSel);
 
     el.querySelectorAll('.cmp-ed').forEach(btn=>{
