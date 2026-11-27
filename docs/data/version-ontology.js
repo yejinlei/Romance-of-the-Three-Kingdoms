@@ -47,14 +47,15 @@ const VERSION_ONTOLOGY = {
        jiajing_ws（维基文库转录本）= 同版异录，含完整 240 则正文，承担嘉靖阅读。 */
     jiajing: {
       id: 'jiajing', label: '嘉靖壬午本', kind: 'jiajing', splitKind: 'marker',
-      splitOpts: {}, unitKind: '卷', unitCount: 240, file: '嘉靖壬午本.txt',
+      splitOpts: {}, unitKind: '卷', unitCount: 24, file: '嘉靖壬午本.txt',
       catalogOnly: true, // 仅存目次，无正文
       hasAnno: true, annoStyle: 'inline-bracket',
       note: '明嘉靖壬午刊《三国志通俗演义》24卷240则。本文件为钱氏藏书电子本，仅存卷目次（24卷×10则题名），正文见「嘉靖壬午本（维基文库转录本）」。'
     },
     'jiajing-ws': {
       id: 'jiajing-ws', label: '嘉靖壬午本（维基文库转录本）', kind: 'jiajing', splitKind: 'chapter',
-      splitOpts: { prefix: '###' }, unitKind: '回', unitCount: 240, file: '嘉靖壬午本_维基文库转录.txt',
+      splitOpts: { prefix: '###' }, unitKind: '則', unitCount: 240, file: '嘉靖壬午本_维基文库转录.txt',
+      filterTitle: /第/, // 仅取「第N回」标记，排除序/引/宗僚等卷首件
       perVolume: 10, zePerHui: 2,
       note: '维基文库独立转录，繁体原貌，240则，每则含正文；与嘉靖壬午本.txt同版异录，可对勘。'
     },

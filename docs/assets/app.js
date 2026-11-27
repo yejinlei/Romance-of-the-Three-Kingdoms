@@ -353,6 +353,9 @@
     // 批注单一真相源：四家标志即真相；可见性与 URL 编解码均从此派生
     annot: { maozigang:true, lizhi:true, zhongxing:true, liyuweng:true }
   };
+  // 用户点选侧栏的「版本单元号」（单元制版本）。非空时侧栏高亮该单元、工具栏按其显示，
+  // 保证 侧栏条目 ↔ 工具栏计数 ↔ 正文 三者口径一致；翻页/切版本后清空回退到回→单元映射
+  let clickedUnitN = null;
   let readerUrlParsed = false;
 
   // textStatus 受控词表标签（与 ontology-schema.js Vocab_textStatus 一致）
@@ -488,7 +491,15 @@
       for(let k = prev; k <= c; k++) ns.push(k);
       return ns.length ? ns : [c];
     }
-    return null; // juan 系无则回
+    if(meta.kind === 'juan'){                                   // 卷·篇制：按叙事进度比例映射
+      const total = meta.unitCount || 1;
+      const c = Math.max(1, Math.min(total, Math.round(chapterNum * total / 120)));
+      const prev = Math.max(1, Math.min(total, Math.round((chapterNum-1) * total / 120)));
+      const ns = [];
+      for(let k = prev; k <= c; k++) ns.push(k);
+      return ns.length ? ns : [c];
+    }
+    return null;
   }
 
   // 按「第N則」切分 OCR 志传系文本（委托 unitsplit.js，保留兼容导出）
@@ -554,15 +565,21 @@
   /* ---- 左侧「回目列表」随所选版本联动 ---- */
   // 版本侧栏数据：毛本/回制版本=120 回题名；非回制（則/卷/篇）=该版本切分出的真实单元
   let readerToc = null; // { id, kind: 'chapter'|'unit', items: [{n, title}] }
-  // 侧栏条目 HTML：非回制版本高亮「当前毛本回映射到的该版本单元」（ze 系按比例近似为一小区间）
+  // 侧栏条目 HTML：回制高亮当前回；单元制（則/卷/篇）优先高亮用户点选的单元号，
+  // 未点选时回退到「当前毛本回 → 该版本单元」的映射区间（ze 系按比例近似为一小区间）
   function tocItemsHTML(){
     const t = readerToc;
     if(!t || !Array.isArray(t.items) || !t.items.length) return '';
     let hitSet = null;
     if(t.kind === 'unit'){
-      const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
-      const meta = (VONT && VONT.editions) ? VONT.editions[t.id] : null;
-      const ns = computeUnitNsForChapter(meta, currentChapter);
+      let ns = null;
+      if(clickedUnitN != null){
+        ns = [clickedUnitN];
+      } else {
+        const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
+        const meta = (VONT && VONT.editions) ? VONT.editions[t.id] : null;
+        ns = computeUnitNsForChapter(meta, currentChapter);
+      }
       hitSet = new Set(ns || []);
     }
     return t.items.map(it => `
@@ -574,7 +591,30 @@
   function buildReaderToc(editionId){
     const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
     const meta = (VONT && VONT.editions) ? VONT.editions[editionId] : null;
-    if(!meta || meta.unitKind === '回' || !meta.file){
+    const isChapterMode = !meta || meta.unitKind === '回' || !meta.file;
+    // 目录本（catalogOnly，仅存目次无正文）：用本体 unitCount 生成「卷之N」条目，
+    // 不依赖切分结果（文件只有目次，切分只得 1 条「全文」）
+    if(meta && meta.catalogOnly && meta.unitCount){
+      const n = meta.unitCount;
+      readerToc = { id: editionId, kind: 'unit', items: Array.from({length:n}, (_,i) => ({ n: i+1, title: (meta.unitKind === '卷' ? '卷之' : '') + cnNum(i+1) })) };
+      const el = document.getElementById('edition-toc');
+      if(el) el.innerHTML = tocItemsHTML();
+      return;
+    }
+    // 回制：用毛本 120 回题名；若该版本回号缺失（如 sankuo-en 114 回），
+    // 按该版本真实单元切分出真实回号序列，使侧栏条数/回号与工具栏「共 N 回」口径一致
+    if(isChapterMode){
+      if(meta && meta.file && meta.unitCount && meta.unitCount < 120){
+        const cachedKey = Object.keys(edUnitCacheAll).find(k => k.indexOf(meta.file) === 0 && k.indexOf('|' + editionId + '|') > 0);
+        if(cachedKey){
+          applyChapterToc(editionId, meta, edUnitCacheAll[cachedKey]);
+          return;
+        }
+        if(typeof UNITSplit !== 'undefined'){
+          getEditionUnits(meta.file, meta).then(units => applyChapterToc(editionId, meta, units)).catch(() => {});
+        }
+        return;
+      }
       readerToc = { id: editionId, kind: 'chapter', items: (data.chapters || []).map(c => ({ n: c.id, title: c.title })) };
       const el = document.getElementById('edition-toc');
       if(el) el.innerHTML = tocItemsHTML();
@@ -597,19 +637,30 @@
     const el = document.getElementById('edition-toc');
     if(el) el.innerHTML = tocItemsHTML();
   }
-  // 点击侧栏条目：回制按回号直达；单元制（則/卷/篇）反算最近的毛本回，
-  // 使正文按同一映射规则命中该单元，侧栏高亮与正文始终一致。
+  // 回制但回号缺失的版本（如 sankuo-en 114 回）：用该版本真实单元回号序列构建侧栏
+  function applyChapterToc(editionId, meta, units){
+    const arr = (units || []).filter(u => u.title);
+    if(!arr.length) return;
+    readerToc = { id: editionId, kind: 'chapter', items: arr.slice(0, 500).map(u => ({ n: u.n, title: u.title })) };
+    const el = document.getElementById('edition-toc');
+    if(el) el.innerHTML = tocItemsHTML();
+  }
+  // 单元制版本（則/卷/篇）：单元号 → 毛本回（比例反算，与正向 computeUnitNsForChapter 对称）
+  function chapterFromUnit(meta, unitN){
+    if(!meta || !unitN) return 1;
+    const total = meta.unitCount || 120;
+    return Math.max(1, Math.min(120, Math.round(unitN * 120 / total)));
+  }
+  // 点击侧栏条目：记录点选单元号（回制即回号），单元制再反算毛本回；
+  // 侧栏高亮、工具栏计数、正文单元三者口径由此保持统一。
   global.appGoEditionUnit = function(editionId, unitN){
     if(editionId) readerState.edition = editionId;
     const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
     const meta = (VONT && VONT.editions) ? VONT.editions[editionId] : null;
-    if(!meta || meta.unitKind === '回'){
-      currentChapter = Math.max(1, Math.min(120, unitN || 1));
-    } else {
-      const total = meta.unitCount || 1000;
-      const ch = Math.max(1, Math.min(120, Math.round((unitN || 1) * 120 / total)));
-      currentChapter = ch;
-    }
+    clickedUnitN = unitN != null ? unitN : null;
+    currentChapter = meta && meta.unitKind !== '回'
+      ? chapterFromUnit(meta, unitN)
+      : Math.max(1, unitN || 1);
     if(typeof showView === 'function') showView('reader');
   };
 
@@ -787,6 +838,17 @@
 
     const prevChapter = chapterNum - 1;
     const nextChapter = chapterNum + 1;
+    // 工具栏「第 N 则/卷/篇 · 共 M」：点选侧栏单元时按其号显示，否则按毛本回正向映射；
+    // 回制版本按本体 unitCount 显示总量（sankuo-en 114 回、jiajing-ws 240 则等），
+    // 使 侧栏条目数 ↔ 工具栏计数 ↔ 正文单元 三者口径一致
+    const displayUnitN = (function(){
+      if(!edMeta || !edMeta.unitKind) return chapterNum;
+      if(edMeta.unitKind === '回') return chapterNum;
+      if(clickedUnitN != null) return clickedUnitN;
+      const ns = computeUnitNsForChapter(edMeta, chapterNum);
+      return ns && ns.length ? ns[0] : chapterNum;
+    })();
+    const displayTotal = edMeta ? (edMeta.unitCount || 120) : 120;
 
     // 批注块（annotations.js commentaryIndex 评注 + text.js 回前评归毛宗岗栏），按评点家分栏
     const critName = id => {
@@ -841,8 +903,8 @@
             </div>
             <div class="text-sm text-[#8b6914]">
               ${edMeta && edMeta.unitKind && edMeta.unitKind !== '回'
-                ? ('第 ' + chapterNum + ' ' + edMeta.unitKind + ' / 共 ' + (edMeta.unitCount || edMeta.unitCount) + ' ' + edMeta.unitKind)
-                : ('第 ' + chapterNum + ' 回 / 共 120 回')}
+                ? ('第 ' + displayUnitN + ' ' + edMeta.unitKind + ' / 共 ' + displayTotal + ' ' + edMeta.unitKind)
+                : ('第 ' + chapterNum + ' 回 / 共 ' + displayTotal + ' 回')}
               ${vrow ? ` · ${esc(versionLabel(vrow))}` : ''}
             </div>
             <a class="text-sm text-[#8b0000] underline ml-auto" href="corpus.html#ed=${encodeURIComponent(readerState.edition)}&c=${chapterNum}">多版本对读 →</a>
@@ -2371,6 +2433,7 @@
   /* ======================== 阅读器状态 API ======================== */
   global.appGoChapter = function(n){
     currentChapter = Math.max(1, Math.min(120, n));
+    clickedUnitN = null; // 翻页/跳回：清空点选单元，侧栏回到「回→单元」映射高亮
     if(typeof showView==='function') showView('reader');
   };
   global.appShowReader = function(){ showView('reader'); };
@@ -2385,6 +2448,7 @@
     if(id){
       readerState.edition = id;
       currentEdition = id;
+      clickedUnitN = null; // 切版本：清空点选单元，侧栏按新版本重建
       showView('reader');
     }
   };
