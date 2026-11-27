@@ -277,6 +277,7 @@
       case 'topic-imagery':   renderTopicImagery(content); break;
       case 'topic-techniques': renderTopicTechniques(content); break;
       case 'topic-drift':      renderTopicDoctrineDrift(content); break;
+      case 'topic-compare':    renderTopicComparison(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -3014,6 +3015,161 @@
           btn.classList.remove('border-gray-300');
           el.querySelector('#narr-detail').innerHTML = renderNarr(n);
         }
+      });
+    });
+  }
+
+  /* ======== T10 多版本回目比对 Edition Head Comparison ======== */
+  function renderTopicComparison(el){
+    const EH = (typeof window !== 'undefined') ? window.EDITION_HEADS : null;
+    if(!EH){ el.innerHTML = '<p class="p3 text-gray-500">edition-heads.js 未加载。</p>'; return; }
+    const drift = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS.doctrineDrifts : null;
+    const mao2yxd = (drift && EH.mao2yxd) ? EH.mao2yxd : null;
+    const mao2jj  = (drift && EH.mao2jj)  ? EH.mao2jj  : null;
+
+    const edMeta = {
+      mao:         { name:'毛宗崗評本',       color:'#dc2626', kind:'回制' },
+      jiajing:     { name:'嘉靖壬午本',       color:'#2563eb', kind:'則制' },
+      huiping:     { name:'七家匯評本',       color:'#9333ea', kind:'回制' },
+      lizhuowu:    { name:'李卓吾評本',       color:'#ea580c', kind:'回制' },
+      zhongbojing: { name:'鍾伯敬評本',       color:'#64748b', kind:'回制' },
+      liyu:        { name:'笠翁評閱本',       color:'#0891b2', kind:'回制' },
+      yuxiangdou:  { name:'余象斗評林',       color:'#059669', kind:'則制' },
+      zhouyue:     { name:'周曰校刊本',       color:'#14b8a6', kind:'則制' }
+    };
+    const allIds = Object.keys(edMeta);
+    const defaultSel = ['mao','jiajing','yuxiangdou','huiping','lizhuowu'];
+
+    // 映射：毛本回 N → 版本 ed 的单元区间 [s,e] 或 单元号（回制）
+    function mapMao2(N, ed){
+      const eh = EH[ed];
+      if(!eh) return null;
+      if(eh.unitCount === 0) return null;
+      const mk = edMeta[ed].kind;
+      if(mk === '回制'){
+        if(N <= eh.unitCount) return { s:N, e:N };
+        return null;
+      }
+      if(mk === '則制'){
+        // 用预计算映射
+        if(ed === 'yuxiangdou' && mao2yxd){ const m=mao2yxd[N-1]; return m?{s:m.start,e:m.end}:null; }
+        if(ed === 'jiajing' && mao2jj){ const m=mao2jj[N-1]; return m?{s:m.start,e:m.end}:null; }
+        // 其他则制：等比换算
+        const tot = eh.unitCount;
+        const s = Math.max(1, Math.round((N-1)/120*tot)+1);
+        const e = Math.min(tot, Math.round(N/120*tot));
+        return { s, e };
+      }
+      return null;
+    }
+
+    function getUnitsRange(ed, s, e){
+      const eh = EH[ed];
+      if(!eh) return [];
+      return eh.units.filter(u => u.n >= s && u.n <= e);
+    }
+
+    el.innerHTML = `
+      <div class="mb-4">
+        <h3 class="sub-h mb-2">多版本回目比對 · Edition Head-to-Head</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          以毛宗崗評本一百二十回為錨，橫向對比嘉靖壬午本（244 則）、志傳評林（180 則）、
+          匯評本與三家評本（各 120 回）的回目文字差異。
+          則制版本按 UnitMapping 錨點插值對齊（近似對齊，非精確）。
+          點擊任一條目可跳轉對應版本閱讀器。
+        </p>
+        <div class="flex flex-wrap gap-2 mb-2">
+          <span class="text-xs text-gray-500 py-1">選定版本：</span>
+          ${allIds.map(id=>{
+            const m = edMeta[id];
+            const isDef = defaultSel.includes(id);
+            return `<button data-ed="${id}" class="cmp-ed px-3 py-1 rounded-full border text-xs transition-colors ${isDef?'font-bold':'bg-white'}" style="border-color:${m.color};${isDef?'background:'+m.color+'15':'background:white'};color:${isDef?m.color:'#64748b'}">${m.name}</button>`;
+          }).join('')}
+          <button data-ed="__all" class="cmp-ed px-3 py-1 rounded-full border border-gray-400 text-xs hover:bg-gray-100">全選</button>
+          <button data-ed="__core" class="cmp-ed px-3 py-1 rounded-full border border-gray-400 text-xs hover:bg-gray-100">核心 5 版</button>
+        </div>
+        <div id="cmp-table-wrap" class="border border-gray-200 rounded-lg overflow-hidden">
+          <!-- 动态填充 -->
+        </div>
+      </div>
+    `;
+
+    function renderTable(selectedIds){
+      const wrap = el.querySelector('#cmp-table-wrap');
+      const heads = selectedIds.map(id=> edMeta[id]);
+      // 表头
+      let html = `<div class="overflow-x-auto max-h-[640px]">`;
+      html += `<table class="w-full text-sm border-collapse"><thead class="sticky top-0 z-10 bg-gray-50"><tr>
+        <th class="w-16 px-2 py-2 text-left border-b border-gray-200 bg-white">毛本回</th>
+        ${heads.map(h=>`<th class="px-3 py-2 text-left border-b border-gray-200 min-w-[200px] bg-white" style="border-top:3px solid ${h.color}">
+          <div class="font-bold text-gray-800">${h.name}</div>
+          <div class="text-xs text-gray-500">${h.kind} · ${EH[Object.keys(edMeta).find(k=>edMeta[k]===h)]?.unitCount||'?'}</div>
+        </th>`).join('')}
+      </tr></thead><tbody>`;
+
+      const maoEh = EH.mao;
+      for(let N=1; N<=120; N++){
+        const maoUnit = maoEh.units.find(u=>u.n===N);
+        html += `<tr class="${N%2?'bg-white':'bg-gray-50/50'} hover:bg-amber-50/50">`;
+        html += `<td class="px-2 py-2 align-top border-b border-gray-100"><a href="read.html?edition=mao&unit=${N}" class="text-xs font-mono bg-red-50 text-red-700 px-1.5 py-0.5 rounded hover:bg-red-100">${N}</a></td>`;
+        for(const eid of selectedIds){
+          const eh = EH[eid];
+          const m = mapMao2(N, eid);
+          if(!m){ html += `<td class="px-3 py-2 align-top border-b border-gray-100 text-xs text-gray-400">—</td>`; continue; }
+          const units = getUnitsRange(eid, m.s, m.e);
+          const color = edMeta[eid].color;
+          if(edMeta[eid].kind === '回制'){
+            const u = units[0];
+            if(!u){ html += `<td class="px-3 py-2 align-top border-b border-gray-100 text-xs text-gray-400">—</td>`; continue; }
+            html += `<td class="px-3 py-2 align-top border-b border-gray-100 text-xs">
+              <a href="read.html?edition=${eid}&unit=${u.n}" class="block hover:underline">
+                <span class="font-mono text-[10px] text-gray-400">${u.n}</span>
+                <span style="color:${color}" class="font-medium">${(u.title||'').replace(/^第[0-9零一二三四五六七八九十百]+[回則]\s*/,'')}</span>
+              </a>
+            </td>`;
+          } else {
+            if(units.length===0){ html += `<td class="px-3 py-2 align-top border-b border-gray-100 text-xs text-gray-400">—</td>`; continue; }
+            html += `<td class="px-3 py-2 align-top border-b border-gray-100 text-xs">
+              <div class="flex flex-col gap-0.5">
+                ${units.slice(0,4).map(u=>`<a href="read.html?edition=${eid}&unit=${u.n}" class="block hover:underline">
+                  <span class="font-mono text-[10px] text-gray-400">${u.n}</span>
+                  <span class="text-gray-700">${(u.title||'').replace(/^第[0-9零一二三四五六七八九十百]+則\s*/,'').slice(0,18)}</span>
+                </a>`).join('')}
+                ${units.length>4?`<span class="text-[10px] text-gray-400">…另有 ${units.length-4} 則</span>`:''}
+              </div>
+            </td>`;
+          }
+        }
+        html += `</tr>`;
+      }
+      html += `</tbody></table></div>`;
+      wrap.innerHTML = html;
+    }
+
+    let curSel = [...defaultSel];
+    renderTable(curSel);
+
+    el.querySelectorAll('.cmp-ed').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.dataset.ed;
+        if(id==='__all'){ curSel=[...allIds]; }
+        else if(id==='__core'){ curSel=[...defaultSel]; }
+        else {
+          if(curSel.includes(id)){
+            if(curSel.length>1) curSel = curSel.filter(x=>x!==id);
+          } else { curSel.push(id); }
+        }
+        // 更新按钮视觉
+        el.querySelectorAll('.cmp-ed').forEach(b=>{
+          const bid = b.dataset.ed;
+          if(bid==='__all'||bid==='__core') return;
+          const m = edMeta[bid];
+          const on = curSel.includes(bid);
+          b.classList.toggle('font-bold', on);
+          b.style.background = on ? m.color+'15' : 'white';
+          b.style.color = on ? m.color : '#64748b';
+        });
+        renderTable(curSel);
       });
     });
   }

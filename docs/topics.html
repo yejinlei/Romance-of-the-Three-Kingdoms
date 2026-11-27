@@ -9,6 +9,7 @@
 <script src="./assets/echarts.min.js"></script>
 <script src="./data/sanguo-data.js?v=20261127d"></script>
 <script src="./data/sanguo-topics.js?v=20261127d"></script>
+<script src="./data/edition-heads.js?v=20261127d"></script>
 <script src="./data/corpus-manifest.js?v=20261127d"></script>
 <script src="./data/stats.js?v=20261127d"></script>
 <script src="./assets/app.js?v=20261127d"></script>
@@ -32,7 +33,8 @@
 
 <div class="main-container">
   <div class="subtabs" id="subtabs">
-    <div class="subtab active" onclick="SANGUO_APP.showView('topic-drift'); switchSub('topic-drift')">義理漂移</div>
+    <div class="subtab active" onclick="SANGUO_APP.showView('topic-compare'); switchSub('topic-compare')">回目比對</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-drift'); switchSub('topic-drift')">義理漂移</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-doctrines'); switchSub('topic-doctrines')">義理五維</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-battles'); switchSub('topic-battles')">三十六役</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-prophecies'); switchSub('topic-prophecies')">讖緯應驗</div>
@@ -51,11 +53,11 @@
 </footer>
 
 <script>
-  const _subMap = { 'topic-drift':0, 'topic-doctrines':1, 'topic-battles':2, 'topic-prophecies':3, 'topic-factions':4, 'topic-imagery':5, 'topic-techniques':6, 'heros':7, 'adaptations':8 };
+  const _subMap = { 'topic-compare':0, 'topic-drift':1, 'topic-doctrines':2, 'topic-battles':3, 'topic-prophecies':4, 'topic-factions':5, 'topic-imagery':6, 'topic-techniques':7, 'heros':8, 'adaptations':9 };
   function switchSub(name){
     document.querySelectorAll('#subtabs .subtab').forEach((el,i)=>{ el.classList.toggle('active', _subMap[name]===i); });
   }
-  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('topic-drift'); });
+  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('topic-compare'); });
 </script>
 </body>
 </html>
