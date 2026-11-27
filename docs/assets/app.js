@@ -4364,7 +4364,9 @@
   }
 
   /* ======== 批注内联块：从 SANGUO_COMM_INLINE 生成 HTML ========
-   * 按 critic 分组，附 critic filter 复选条 + native <details> 折叠
+   * 两层结构：先按 type（preface 回前评 / inline 夹评 / summary 总评）分大类
+   *            每大类内再按 critic 分组 + critic filter 复选条
+   * 显示顺序：preface (展开) → inline (展开) → summary (默认折叠)
    * activeCritics: Set/array of criticIds 要显示；null/undefined = 全显
    * 返回空串表示本回无批注或被全部过滤
    */
@@ -4379,38 +4381,76 @@
       zhongxing: { name: '钟伯敬', color: '#1d4ed8' },
       liyuweng:  { name: '李渔',   color: '#047857' }
     };
-    const MAX_SHOW = 200;
-    const show = items.slice(0, MAX_SHOW);
-    const byCritic = {};
-    show.forEach(it=>{ const c=it.critic||'maozigang'; (byCritic[c]=byCritic[c]||[]).push(it); });
+    // 先按 type 分桶
+    const byType = { preface:[], inline:[], summary:[] };
+    items.forEach(it=>{ const t = it.type==='summary' ? 'summary' : it.type==='preface' ? 'preface' : 'inline'; byType[t].push(it); });
+    const totalByType = { preface: byType.preface.length, inline: byType.inline.length, summary: byType.summary.length };
+
+    // critic filter 的统计（基于全部可见 items，供 toolbar 显示 count）
+    const MAX_SHOW_PER_TYPE = { preface: 3, inline: 200, summary: 5 };
     const order = ['maozigang','lizhi','zhongxing','liyuweng'];
-    const groupIds = [...order.filter(c=>byCritic[c]), ...Object.keys(byCritic).filter(c=>!order.includes(c))];
-    const active = activeCritics ? new Set(activeCritics) : null;
-    const visibleGroupIds = groupIds.filter(c=>!active || active.has(c));
-    if(visibleGroupIds.length === 0) return '';
-
     const escC = s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const active = activeCritics ? new Set(activeCritics) : null;
 
-    const toolbarHTML = groupIds.map(c=>{
-      const meta = ciMap[c] || { name: c, color: '#6b7280' };
-      const cnt = byCritic[c].length;
-      const checked = !active || active.has(c);
-      return `<label class="ci-filter-item inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded mr-1 mb-1 cursor-pointer select-none" style="color:${meta.color};background:${meta.color}14;border:1px solid ${meta.color}40" data-ci-filter="${c}"><input type="checkbox" ${checked?'checked':''} onchange="appToggleCriticCommInline(this)" data-critic="${c}">${meta.name}(${cnt})</label>`;
-    }).join('');
+    // 计算 toolbar（从全量 items 算 count，让用户知道各 critic 总共有多少条）
+    const criticCounts = {};
+    items.forEach(it=>{ const c=it.critic||'maozigang'; criticCounts[c]=(criticCounts[c]||0)+1; });
+    const allCriticIds = [...order.filter(c=>criticCounts[c]), ...Object.keys(criticCounts).filter(c=>!order.includes(c))];
 
-    const groupsHTML = visibleGroupIds.map(c=>{
-      const meta = ciMap[c] || { name: c, color: '#6b7280' };
-      const cnt = byCritic[c].length;
-      const itemsHTML = byCritic[c].map(it=>
+    const toolbarHTML = `<div class="ci-filter-bar mb-3">
+      <span class="text-xs text-[#8b0000] mr-2 font-semibold">评点家筛选：</span>
+      ${allCriticIds.map(c=>{
+        const meta = ciMap[c] || { name: c, color: '#6b7280' };
+        const cnt = criticCounts[c];
+        const checked = !active || active.has(c);
+        return `<label class="ci-filter-item inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded mr-1 mb-1 cursor-pointer select-none" style="color:${meta.color};background:${meta.color}14;border:1px solid ${meta.color}40" data-ci-filter="${c}"><input type="checkbox" ${checked?'checked':''} onchange="appToggleCriticCommInline(this)" data-critic="${c}">${meta.name}(${cnt})</label>`;
+      }).join('')}
+    </div>`;
+
+    // 生成单个 critic group HTML
+    function criticGroupHTML(criticId, itemsToShow, isOpen){
+      if(itemsToShow.length === 0) return '';
+      const meta = ciMap[criticId] || { name: criticId, color: '#6b7280' };
+      const cnt = itemsToShow.length;
+      const inner = itemsToShow.map(it=>
         `<span class="an-comm inline-block my-0.5 pr-2" style="color:${meta.color};background:${meta.color}14;border-bottom:1px dashed ${meta.color};cursor:help" title="${escC(it.text)}">【${escC(meta.name)}】${escC(it.text)}</span>`
       ).join('');
-      return `<details class="ci-group mt-2" data-ci-critic="${c}" open><summary class="cursor-pointer text-sm font-semibold select-none py-1" style="color:${meta.color}">▼ ${meta.name} (${cnt})</summary><div class="flex flex-col gap-0.5 leading-relaxed">${itemsHTML}</div></details>`;
-    }).join('');
+      return `<details class="ci-group mt-2" data-ci-critic="${criticId}" ${isOpen?'open':''}><summary class="cursor-pointer text-sm font-semibold select-none py-1" style="color:${meta.color}">${isOpen?'▼':'▶'} ${meta.name} (${cnt})</summary><div class="flex flex-col gap-0.5 leading-relaxed">${inner}</div></details>`;
+    }
+
+    // 为每种 type 生成 section
+    function typeSection(typeKey, label, desc, defaultOpen){
+      const srcItems = byType[typeKey] || [];
+      if(srcItems.length === 0) return '';
+      // 限长（每类独立限，preface 短 summary 短 inline 长）
+      const limit = MAX_SHOW_PER_TYPE[typeKey] || 200;
+      const limited = srcItems.slice(0, limit);
+      // 按 critic 分组 + filter
+      const byC = {};
+      limited.forEach(it=>{ const c=it.critic||'maozigang'; if(!active||active.has(c)){ (byC[c]=byC[c]||[]).push(it); }});
+      const cIds = [...order.filter(c=>byC[c]), ...Object.keys(byC).filter(c=>!order.includes(c))];
+      if(cIds.length === 0) return '';
+      const sub = cIds.map(c=>criticGroupHTML(c, byC[c], defaultOpen)).join('');
+      const showMoreNote = (srcItems.length > limit) ? `（显示前 ${limit} 条，共 ${srcItems.length} 条）` : '';
+      return `<section class="ci-type-section mb-4" data-ci-type="${typeKey}">
+        <h4 class="ci-type-title text-xs font-bold uppercase tracking-wider text-[#8b0000] mt-2 mb-1 border-b border-dashed border-[#c9b896] pb-1">${label} · ${totalByType[typeKey]} 条${showMoreNote?` <span class="text-[#9a7050] normal-case font-normal">${showMoreNote}</span>`:''}</h4>
+        ${desc ? `<p class="text-[10px] text-[#9a7050] mb-1">${desc}</p>` : ''}
+        ${sub}
+      </section>`;
+    }
+
+    // 按 preface → inline → summary 顺序
+    const sectionsHTML =
+      typeSection('preface', '回前评', '每回开篇的回前长篇评点（毛宗岗独撰）', true) +
+      typeSection('inline',  '夹评',   '正文中穿插的逐句/逐段批注（本回主要评点内容）', true) +
+      typeSection('summary', '总评',   '回末总结性长篇评论（多位评点家分评）', false);
+
+    if(!sectionsHTML.trim()) return '';
 
     return `<div class="comm-inline-block mt-6 pt-4 border-t border-dashed border-[#c9b896]" data-ci-chapter="${chapterNum}">
-      <h3 class="text-sm font-bold text-[#8b0000] mb-2">汇评夹批（七家汇评本 · 本回 ${items.length} 条批注${items.length>MAX_SHOW?`，显示前 ${MAX_SHOW} 条`:''}）</h3>
-      <div class="ci-toolbar flex flex-wrap items-center gap-1 mb-2">${toolbarHTML}</div>
-      <div>${groupsHTML}</div>
+      <h3 class="text-sm font-bold text-[#8b0000] mb-1">汇评夹批（七家汇评本 · 本回 ${items.length} 条批注 · 回前评 ${totalByType.preface} / 夹评 ${totalByType.inline} / 总评 ${totalByType.summary}）</h3>
+      ${toolbarHTML}
+      ${sectionsHTML}
     </div>`;
   }
   function renderOntology(el){
