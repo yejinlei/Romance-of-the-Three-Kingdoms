@@ -34,11 +34,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
             })
-            if (permitted.data.workflow['enabled'] !== true) {
+            if (permitted.data.enabled !== true) {
               core.setFailed('Actions must be enabled to build and deploy GitHub Pages')
-            }
-            if (permitted.data.pages['enabled'] !== true) {
-              core.setFailed('Pages must be enabled to build and deploy GitHub Pages')
             }
 
   build:
