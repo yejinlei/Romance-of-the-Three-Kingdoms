@@ -7,11 +7,11 @@
 <link rel="stylesheet" href="./assets/style.css">
 <script src="./assets/tailwind.js"></script>
 <script src="./assets/echarts.min.js"></script>
-<script src="./data/sanguo-data.js?v=20261127d"></script>
-<script src="./data/sanguo-topics.js?v=20261127d"></script>
-<script src="./data/corpus-manifest.js?v=20261127d"></script>
-<script src="./data/stats.js?v=20261127d"></script>
-<script src="./assets/app.js?v=20261127d"></script>
+<script src="./data/sanguo-data.js?v=20261127g"></script>
+<script src="./data/sanguo-topics.js?v=20261127g"></script>
+<script src="./data/corpus-manifest.js?v=20261127g"></script>
+<script src="./data/stats.js?v=20261127g"></script>
+<script src="./assets/app.js?v=20261127g"></script>
 </head>
 <body>
 
@@ -35,6 +35,9 @@
     <div class="subtab active" onclick="SANGUO_APP.showView('topic-doctrines'); switchSub('topic-doctrines')">義理五維</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-battles'); switchSub('topic-battles')">三十六役</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-prophecies'); switchSub('topic-prophecies')">讖緯應驗</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-factions'); switchSub('topic-factions')">勢力網絡</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-imagery'); switchSub('topic-imagery')">意象圖譜</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-techniques'); switchSub('topic-techniques')">敘事技法</div>
     <div class="subtab" onclick="SANGUO_APP.showView('heros'); switchSub('heros')">英雄譜</div>
     <div class="subtab" onclick="SANGUO_APP.showView('adaptations'); switchSub('adaptations')">演義外</div>
   </div>
@@ -47,7 +50,7 @@
 </footer>
 
 <script>
-  const _subMap = { 'topic-doctrines':0, 'topic-battles':1, 'topic-prophecies':2, 'heros':3, 'adaptations':4 };
+  const _subMap = { 'topic-doctrines':0, 'topic-battles':1, 'topic-prophecies':2, 'topic-factions':3, 'topic-imagery':4, 'topic-techniques':5, 'heros':6, 'adaptations':7 };
   function switchSub(name){
     document.querySelectorAll('#subtabs .subtab').forEach((el,i)=>{ el.classList.toggle('active', _subMap[name]===i); });
   }

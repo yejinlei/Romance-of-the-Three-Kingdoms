@@ -352,6 +352,72 @@ const SANGUO_TOPICS = {
       events:[1,18,27,61,77,81,104], comments:[104], prophecies:[] },
     { id:'yīnguǒ',   label:'因果', tagline:'曹操殺呂伯奢種因，司馬氏篡魏收果', desc:'小說雖未明言因果報應，但許多對應讓讀者自然聯想——曹操毒殺漢獻帝伏后→曹丕代漢；呂蒙白衣渡江殺關羽→呂蒙暴卒；司馬氏專魏政→篡魏。', color:'#52525b', ring:'inner', weight:3,
       events:[4,20,25,75,77,78,85,104,118], comments:[50], prophecies:['三馬同槽'] }
+  ],
+
+  // ========== 意象 Imagery × 15 ==========
+  // T5 意象图谱主题使用；章节落点为毛本回号（chapter）
+  imagery: [
+    { id:'peach',     label:'桃',      symbol:'🍑', color:'#ec4899', chapters:[1,61], note:'桃園結義·劉備伐吳為關張復仇（劉備墓前）', doctrine:'聚散' },
+    { id:'orange',    label:'橘',      symbol:'🍊', color:'#f97316', chapters:[48,100], note:'陸遜預吳之衰（夷陵之戰前）· 諸葛亮嘆蜀漢人才凋零', doctrine:'聚散' },
+    { id:'horse',     label:'馬',      symbol:'🐎', color:'#78350f', chapters:[5,19,27,34,64], note:'赤兔·的盧·爪黃飛電——馬是英雄伴侶', doctrine:'勇烈' },
+    { id:'sword',     label:'劍',      symbol:'⚔️', color:'#64748b', chapters:[4,8,9,30], note:'七星寶刀（曹操刺董卓）· 雙股劍（劉備）· 青釭劍（趙雲奪）', doctrine:'智謀' },
+    { id:'jade',      label:'玉璽',    symbol:'🗿', color:'#92400e', chapters:[6,33,37], note:'傳國玉璽——正統象徵·孫堅得之·袁術僭號', doctrine:'正統' },
+    { id:'star',      label:'星象',    symbol:'★',  color:'#0ea5e9', chapters:[1,78,103,104], note:'歲在甲子· 三馬同槽· 五丈原將星墜落', doctrine:'天命' },
+    { id:'fire',      label:'火',      symbol:'🔥', color:'#dc2626', chapters:[10,16,20,22,28,49,58,64], note:'火攻計最經典：烏巢·赤壁·猇亭·上方谷', doctrine:'智謀' },
+    { id:'wind',      label:'風',      symbol:'💨', color:'#0891b2', chapters:[42,49,50,53], note:'借東風· 南屏山祭風· 赤壁之風', doctrine:'智謀' },
+    { id:'cloud',     label:'雲',      symbol:'☁️', color:'#94a3b8', chapters:[1,5,37,104], note:'青龍白虎雲（關張）· 臥龍（諸葛亮）', doctrine:'天命' },
+    { id:'dragon',    label:'龍',      symbol:'🐉', color:'#0f766e', chapters:[1,6,13,104], note:'青龍偃月刀（關羽）· 臥龍（諸葛亮）· 龍翔淵渟', doctrine:'勇烈' },
+    { id:'phoenix',   label:'鳳',      symbol:'🪶', color:'#a16207', chapters:[35,37,62,63], note:'鳳雛（龐統）· 落鳳坡· 臥龍鳳雛二人得一', doctrine:'聚散' },
+    { id:'mountain',  label:'山',      symbol:'⛰️', color:'#57534e', chapters:[5,24,41,49,65,84,95], note:'虎牢關· 長坂坡· 赤壁· 五丈原· 定軍山', doctrine:'勇烈' },
+    { id:'river',     label:'水',      symbol:'🌊', color:'#0284c7', chapters:[49,50,51,57,63,64,74,84], note:'長江· 漢水（水淹七軍）· 華容道· 八陣圖', doctrine:'智謀' },
+    { id:'plum',      label:'梅',      symbol:'🌸', color:'#be185d', chapters:[105], note:'諸葛亮歃血為盟前折梅枝', doctrine:'聚散' },
+    { id:'moon',      label:'月',      symbol:'🌙', color:'#6366f1', chapters:[42,48,71,95,104], note:'月夜（關羽月下斬貂蟬· 諸葛亮五丈原夜觀星象）', doctrine:'智謀' }
+  ],
+
+  // ========== 叙事技法 NarrativeTechnique × 10 ==========
+  // T6 叙事技法热图使用；章节落点为毛本回号
+  narrativeTechniques: [
+    { id:'ts',    label:'草蛇灰線',  color:'#1e293b', chapters:[1,19,25,46,50,75,77],     desc:'前後呼應的伏筆——桃園結義→關張相繼而亡· 呂伯奢→曹操一代奸雄', note:'毛宗崗評點的核心技法' },
+    { id:'hy',    label:'虛實相生',  color:'#0f766e', chapters:[5,8,14,25,46,49,50,95],   desc:'虛構與史實交織——溫酒斬華雄（移花接木）· 貂蟬連環計（純虛構）', note:'史實加工與虛構層次' },
+    { id:'cx',    label:'烘雲托月',  color:'#7c3aed', chapters:[5,9,41,64],                desc:'以他人之勇襯托主角之勇——華雄連斬數將→關羽出戰· 呂布縱橫→三英戰呂布', note:'側面描寫' },
+    { id:'md',    label:'互影回文',  color:'#4f46e5', chapters:[30,49,50,57,84],           desc:'前後兩戰互對——官渡之戰（曹操火攻）→赤壁之戰（周瑜火攻）', note:'結構對稱' },
+    { id:'di',    label:'倒敘插敘',  color:'#be185d', chapters:[20,30,35,84,104],          desc:'回顧與補敘——司馬氏專魏政前史· 諸葛亮隆中對後回顧', note:'時間操控' },
+    { id:'bb',    label:'賓主相形',  color:'#ea580c', chapters:[46,49,50,57],              desc:'主賓互換——赤壁之戰周郎為主孔明為賓· 華容道關羽為主曹操為賓', note:'視角轉換' },
+    { id:'cl',    label:'層層蓄勢',  color:'#0284c7', chapters:[5,24,41,49],               desc:'逐步昇華——華雄連斬三將→關羽出戰· 赤壁連環計蓄勢三回', note:'節奏控制' },
+    { id:'fs',    label:'反諷對照',  color:'#65a30d', chapters:[4,19,20,21,37,74,77],     desc:'人物前後對照——呂布反覆→下邳就縛· 關羽傲視群雄→敗走麥城', note:'人物弧光' },
+    { id:'mg',    label:'以小見大',  color:'#475569', chapters:[4,14,21,37],               desc:'細節見人物性格——曹操殺呂伯奢· 劉備種菜· 諸葛亮隆中對', note:'微觀鉤宏觀' },
+    { id:'zw',    label:'張弛有度',  color:'#d97706', chapters:[1,5,30,49,74,84,104,120],  desc:'戰鬥與文戲交替——三英戰呂布後接煮酒論英雄· 赤壁大戰後接舌戰群儒', note:'節奏呼吸' }
+  ],
+
+  // ========== 势力关系 Faction Relations ==========
+  // T4 势力网络力导向图使用；敌对/同盟/臣服关系
+  factionRelations: [
+    { from:'f-dong',   to:'f-yuan',  type:'敵對',   note:'討董聯軍' },
+    { from:'f-dong',   to:'f-lv',    type:'主從',   note:'呂布原為董卓義子' },
+    { from:'f-wei',    to:'f-dong',  type:'敵對',   note:'曹操參加討董' },
+    { from:'f-wei',    to:'f-yuan',  type:'敵對',   note:'官渡之戰' },
+    { from:'f-wei',    to:'f-yuan2', type:'敵對',   note:'討伐袁術' },
+    { from:'f-wei',    to:'f-lv',    type:'敵對',   note:'下邳擒呂布' },
+    { from:'f-wei',    to:'f-liu',   type:'敵對',   note:'赤壁前後' },
+    { from:'f-wei',    to:'f-zhang', type:'敵對',   note:'張松獻圖（間諜）' },
+    { from:'f-wei',    to:'f-shu',   type:'敵對',   note:'魏蜀對立' },
+    { from:'f-wei',    to:'f-wu',    type:'敵對',   note:'赤壁之戰· 夷陵之戰' },
+    { from:'f-wei',    to:'f-jin',   type:'篡奪',   note:'司馬氏代魏' },
+    { from:'f-wei',    to:'f-huang', type:'鎮壓',   note:'曹操鎮壓黃巾' },
+    { from:'f-shu',    to:'f-wei',   type:'敵對',   note:'諸葛亮北伐' },
+    { from:'f-shu',    to:'f-wu',    type:'同盟',   note:'聯吳抗曹· 夷陵後重修盟好' },
+    { from:'f-shu',    to:'f-liang', type:'同盟',   note:'馬騰韓遂反曹失敗後，馬超投蜀' },
+    { from:'f-wu',     to:'f-wei',   type:'敵對',   note:'赤壁· 濡須' },
+    { from:'f-wu',     to:'f-shu',   type:'同盟',   note:'聯吳抗曹（前期）' },
+    { from:'f-wu',     to:'f-shu',   type:'破裂',   note:'呂蒙白衣渡江襲荊州' },
+    { from:'f-lv',     to:'f-wei',   type:'敵對',   note:'呂布與曹操徐州爭奪' },
+    { from:'f-liu',    to:'f-wei',   type:'敵對',   note:'劉琮降曹' },
+    { from:'f-liu',    to:'f-shu',   type:'交接',   note:'劉備入蜀繼立' },
+    { from:'f-zhang',  to:'f-shu',   type:'被併',   note:'劉備取益州' },
+    { from:'f-jin',    to:'f-shu',   type:'滅亡',   note:'鄧艾偷渡陰平' },
+    { from:'f-jin',    to:'f-wu',    type:'滅亡',   note:'280 王濬樓船下益州' },
+    { from:'f-yuan2',  to:'f-yuan',  type:'同族',   note:'袁紹袁術兄弟內鬨' },
+    { from:'f-huang',  to:'f-dong',  type:'無關',   note:'黃巾與董卓時間略有交叉' }
   ]
 };
 if (typeof window !== 'undefined') window.SANGUO_TOPICS = SANGUO_TOPICS;

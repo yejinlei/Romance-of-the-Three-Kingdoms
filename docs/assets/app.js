@@ -273,6 +273,9 @@
       case 'topic-doctrines':  renderTopicDoctrines(content); break;
       case 'topic-battles':    renderTopicBattles(content); break;
       case 'topic-prophecies': renderTopicProphecies(content); break;
+      case 'topic-factions':   renderTopicFactions(content); break;
+      case 'topic-imagery':   renderTopicImagery(content); break;
+      case 'topic-techniques': renderTopicTechniques(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -2600,6 +2603,243 @@
         }).join('')}
       </div>
     `;
+  }
+
+  /* ======== T4 势力网络 Faction Network（ECharts 力导向图） ======== */
+  function renderTopicFactions(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    const factions = topics.factions || [];
+    const relations = topics.factionRelations || [];
+    if(!factions.length){ el.innerHTML = '<p class="p3 text-gray-500">势力数据未加载。</p>'; return; }
+
+    // ECharts force graph：势力为中心节点，成员为外围
+    const colorMap = {}; factions.forEach(f=> colorMap[f.id]=f.color );
+    const nodes = [];
+    // 势力节点
+    factions.forEach(f=>{
+      nodes.push({ id:f.id, name:f.name, category:'faction', symbolSize: Math.max(50, Math.min(80, f.members.length*6)), itemStyle:{ color:f.color, borderColor:'#fff', borderWidth:2 }, label:{ show:true, fontSize:11, fontWeight:'bold' } });
+    });
+    // 成员节点（去重，最多 60 个）
+    const seen = new Set();
+    const memberLimit = 60;
+    factions.forEach(f=>{
+      (f.members||[]).slice(0, Math.ceil(memberLimit/factions.length)).forEach(m=>{
+        if(seen.has(m)) return; seen.add(m);
+        nodes.push({ id:'m-'+m, name:m, category:'member', symbolSize:18, itemStyle:{ color:f.color, opacity:0.85 }, label:{ show:true, fontSize:9 } });
+      });
+    });
+    const links = [];
+    // 成员→势力
+    factions.forEach(f=>{
+      f.members.forEach(m=>{
+        if(nodes.find(n=>n.id==='m-'+m)) links.push({ source:'m-'+m, target:f.id, value:'隸屬', lineStyle:{ color:f.color, opacity:0.35, type:'solid' } });
+      });
+    });
+    // 势力间关系（去重）
+    const seenRel = new Set();
+    const edgeTypeColor = {'敵對':'#dc2626','同盟':'#16a34a','破裂':'#f59e0b','篡奪':'#a855f7','滅亡':'#991b1b','交接':'#0891b2','主從':'#78350f','被併':'#be185d','鎮壓':'#475569','同族':'#7c3aed','無關':'#cbd5e1'};
+    relations.forEach(r=>{
+      const key = [r.from, r.to].sort().join('|')+'|'+r.type;
+      if(seenRel.has(key)) return; seenRel.add(key);
+      const c = edgeTypeColor[r.type] || '#94a3b8';
+      links.push({ source:r.from, target:r.to, value:r.type, note:r.note, lineStyle:{ color:c, opacity:0.85, width:2, curveness:0.08 } });
+    });
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">勢力網絡 · Faction Network</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        十二家勢力與核心人物的隸屬關係 + 勢力間的敵對·同盟·篡奪·滅亡。
+        點擊勢力節點可見其人物；拖動節點可視化調整佈局。
+      </p>
+      <div class="flex flex-wrap gap-2 mb-3 text-xs">
+        <span class="text-gray-500 mr-1">邊色：</span>
+        ${Object.entries(edgeTypeColor).slice(0,8).map(([k,v])=>`<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded-full"><span class="w-3 h-0.5 rounded-full" style="background:${v}"></span>${k}</span>`).join('')}
+      </div>
+      <div id="factions-chart" style="height:600px"></div>
+      <div class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 text-xs">
+        ${factions.map(f=>`<a href="read.html?edition=mao&unit=1" class="flex items-center gap-2 border border-gray-100 rounded px-2 py-1 hover:bg-gray-50"><span class="w-2 h-2 rounded-full" style="background:${f.color}"></span>${f.name}<span class="text-gray-400 ml-auto">${f.period}</span></a>`).join('')}
+      </div>
+    `;
+
+    setTimeout(()=>{
+      const c = document.getElementById('factions-chart'); if(!c) return;
+      const chart = echarts.init(c);
+      chart.setOption({
+        tooltip:{
+          formatter: p=>{
+            if(p.dataType==='node'){
+              const f = factions.find(x=>x.id===p.data.id);
+              if(f) return `<b>${f.name}</b><br/>${f.period}<br/>領袖：${f.leader}<br/>規模：${f.army||'—'}`;
+              return `<b>${p.data.name}</b>`;
+            }
+            return `<b>${p.data.source}</b> → <b>${p.data.target}</b><br/>關係：${p.data.value||''}<br/>${p.data.note||''}`;
+          }
+        },
+        legend:{ show:false },
+        series:[{
+          type:'graph',
+          layout:'force',
+          roam:true,
+          draggable:true,
+          data:nodes,
+          links:links,
+          categories:[ {name:'faction'}, {name:'member'} ],
+          force:{ repulsion:300, edgeLength:[40,140], gravity:0.08, friction:0.2 },
+          emphasis:{ focus:'adjacency', lineStyle:{ width:4 } },
+          lineStyle:{ opacity:0.6, curveness:0.08 },
+          edgeSymbol:['none','arrow'],
+          edgeSymbolSize:6,
+          label:{ show:true, position:'right', fontSize:10 },
+          animationDuration:800
+        }]
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }, 120);
+  }
+
+  /* ======== T5 意象图谱 Imagery Heatmap ======== */
+  function renderTopicImagery(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    const imgs = topics.imagery || [];
+    if(!imgs.length){ el.innerHTML = '<p class="p3 text-gray-500">意象数据未加载。</p>'; return; }
+
+    // 120 列 × 15 行 SVG 热力图
+    const COLS=120, ROWS=imgs.length, CELL_W=7, CELL_H=22, PAD_L=80, PAD_T=50, W=PAD_L+COLS*CELL_W+30, H=PAD_T+ROWS*CELL_H+30;
+
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="mx-auto">`;
+    // 顶部章号刻度（每 20 回标一次）
+    for(let c=1;c<=COLS;c++){
+      const x=PAD_L+(c-1)*CELL_W+CELL_W/2;
+      if(c%20===0 || c===1){ svg += `<text x="${x}" y="${PAD_T-6}" font-size="10" fill="#64748b" text-anchor="middle">${c}</text>`; }
+      svg += `<line x1="${x}" y1="${PAD_T}" x2="${x}" y2="${PAD_T+ROWS*CELL_H}" stroke="#f1f5f9" stroke-width="1"/>`;
+    }
+    // 左标签 + 单元格
+    imgs.forEach((img,r)=>{
+      const y=PAD_T+r*CELL_H;
+      svg += `<text x="${PAD_L-8}" y="${y+CELL_H/2+4}" font-size="12" text-anchor="end" dominant-baseline="middle">${img.symbol} ${img.label}</text>`;
+      for(let c=1;c<=COLS;c++){
+        const hit = img.chapters.includes(c);
+        const x=PAD_L+(c-1)*CELL_W;
+        const cls = hit ? `fill="${img.color}" fill-opacity="0.9" stroke="#fff" stroke-width="0.5"` : `fill="#f1f5f9"`;
+        if(hit){
+          svg += `<rect x="${x}" y="${y}" width="${CELL_W}" height="${CELL_H}" ${cls} data-img="${img.label}" data-ch="${c}" class="img-cell cursor-pointer hover:stroke-gray-700"/>`;
+        } else {
+          svg += `<rect x="${x}" y="${y}" width="${CELL_W}" height="${CELL_H}" ${cls}/>`;
+        }
+      }
+    });
+    svg += `</svg>`;
+
+    // 右侧详情卡
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">意象圖譜 · Imagery Matrix</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        十五種意象（桃/馬/劍/玉璽/火/風/龍/鳳/山/水…）在一百二十回的分布熱圖。
+        點擊格子可跳轉閱讀器對應回目；點擊意象名稱看全部落點。
+      </p>
+      <div class="flex flex-wrap gap-2 mb-3 text-xs">
+        ${imgs.map(i=>`<button data-img="${i.label}" class="img-btn px-2 py-0.5 rounded-full border text-xs hover:border-gray-500 transition-colors" style="--ic:${i.color};border-color:${i.color}40;color:${i.color}">${i.symbol}${i.label}(${i.chapters.length})</button>`).join('')}
+      </div>
+      <div class="overflow-x-auto">${svg}</div>
+      <div id="img-detail" class="mt-4 border border-gray-200 rounded-lg p-4 bg-white min-h-[120px] text-sm text-gray-500">
+        點擊上方意象或熱圖格子查看詳情。
+      </div>
+    `;
+
+    const detail = el.querySelector('#img-detail');
+    function showImg(img){
+      const chs = img.chapters.slice().sort((a,b)=>a-b);
+      detail.innerHTML = `
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-2xl">${img.symbol}</span>
+          <h4 class="text-lg font-bold">${img.label}</h4>
+          <span class="text-xs text-gray-500">對應義理：${img.doctrine}</span>
+        </div>
+        <p class="text-sm text-gray-700 mb-2">${img.note}</p>
+        <div class="flex flex-wrap gap-1">
+          ${chs.map(c=>`<a href="read.html?edition=mao&unit=${c}" class="text-xs px-2 py-0.5 bg-gray-100 rounded hover:bg-gray-200">第${c}回</a>`).join('')}
+        </div>
+      `;
+    }
+    // cell 点击
+    el.querySelectorAll('.img-cell').forEach(cell=>{
+      cell.addEventListener('click', ()=>{
+        const ch = +cell.dataset.ch;
+        const imgName = cell.dataset.img;
+        const img = imgs.find(i=>i.label===imgName);
+        if(img){ showImg(img); window.open('read.html?edition=mao&unit='+ch, '_blank'); }
+      });
+    });
+    // btn 点击
+    el.querySelectorAll('.img-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const img = imgs.find(i=>i.label===btn.dataset.img);
+        if(img) showImg(img);
+      });
+    });
+  }
+
+  /* ======== T6 叙事技法 Narrative Technique Heatmap ======== */
+  function renderTopicTechniques(el){
+    const topics = (typeof SANGUO_TOPICS!=='undefined') ? SANGUO_TOPICS : {};
+    const techs = topics.narrativeTechniques || [];
+    if(!techs.length){ el.innerHTML = '<p class="p3 text-gray-500">技法数据未加载。</p>'; return; }
+
+    const COLS=120, ROWS=techs.length, CELL_W=7, CELL_H=26, PAD_L=90, PAD_T=50, W=PAD_L+COLS*CELL_W+30, H=PAD_T+ROWS*CELL_H+30;
+    let svg = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" class="mx-auto">`;
+    for(let c=1;c<=COLS;c++){
+      const x=PAD_L+(c-1)*CELL_W+CELL_W/2;
+      if(c%20===0 || c===1){ svg += `<text x="${x}" y="${PAD_T-6}" font-size="10" fill="#64748b" text-anchor="middle">${c}</text>`; }
+      svg += `<line x1="${x}" y1="${PAD_T}" x2="${x}" y2="${PAD_T+ROWS*CELL_H}" stroke="#f1f5f9" stroke-width="1"/>`;
+    }
+    techs.forEach((t,r)=>{
+      const y=PAD_T+r*CELL_H;
+      svg += `<text x="${PAD_L-8}" y="${y+CELL_H/2+4}" font-size="12" text-anchor="end" dominant-baseline="middle" fill="${t.color}" font-weight="600">${t.label}</text>`;
+      for(let c=1;c<=COLS;c++){
+        const hit = t.chapters.includes(c);
+        const x=PAD_L+(c-1)*CELL_W;
+        const cls = hit ? `fill="${t.color}" fill-opacity="0.85" stroke="#fff" stroke-width="0.5"` : `fill="#f8fafc"`;
+        if(hit){ svg += `<rect x="${x}" y="${y}" width="${CELL_W}" height="${CELL_H}" ${cls} data-tech="${t.label}" data-ch="${c}" class="tech-cell cursor-pointer hover:stroke-gray-700"/>`; }
+        else { svg += `<rect x="${x}" y="${y}" width="${CELL_W}" height="${CELL_H}" ${cls}/>`; }
+      }
+    });
+    svg += `</svg>`;
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">敘事技法 · Narrative Technique × 120 回</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        十種敘事技法在一百二十回的落點熱圖（毛宗崗評點體系）。
+        深色格 = 該回明顯使用此技法。點擊查看該技法說明 + 跳轉閱讀器。
+      </p>
+      <div class="overflow-x-auto">${svg}</div>
+      <div id="tech-detail" class="mt-4 border border-gray-200 rounded-lg p-4 bg-white min-h-[120px] text-sm text-gray-500">
+        點擊上方熱圖格子查看技法說明與落點回目。
+      </div>
+    `;
+
+    const detail = el.querySelector('#tech-detail');
+    function showTech(t){
+      const chs = t.chapters.slice().sort((a,b)=>a-b);
+      detail.innerHTML = `
+        <div class="flex items-center gap-2 mb-2">
+          <span class="inline-block w-3 h-3 rounded-full" style="background:${t.color}"></span>
+          <h4 class="text-lg font-bold">${t.label}</h4>
+          <span class="text-xs text-gray-500">${t.note||''}</span>
+        </div>
+        <p class="text-sm text-gray-700 mb-2">${t.desc}</p>
+        <div class="flex flex-wrap gap-1">
+          ${chs.map(c=>`<a href="read.html?edition=mao&unit=${c}" class="text-xs px-2 py-0.5 rounded" style="background:${t.color}20;color:${t.color}">第${c}回</a>`).join('')}
+        </div>
+      `;
+    }
+    el.querySelectorAll('.tech-cell').forEach(cell=>{
+      cell.addEventListener('click', ()=>{
+        const ch = +cell.dataset.ch;
+        const label = cell.dataset.tech;
+        const t = techs.find(x=>x.label===label);
+        if(t){ showTech(t); window.open('read.html?edition=mao&unit='+ch, '_blank'); }
+      });
+    });
   }
 
   /* ---- 增强版本体规范 ---- */
