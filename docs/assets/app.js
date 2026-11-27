@@ -551,6 +551,68 @@
     return rows;
   }
 
+  /* ---- 左侧「回目列表」随所选版本联动 ---- */
+  // 版本侧栏数据：毛本/回制版本=120 回题名；非回制（則/卷/篇）=该版本切分出的真实单元
+  let readerToc = null; // { id, kind: 'chapter'|'unit', items: [{n, title}] }
+  // 侧栏条目 HTML：非回制版本高亮「当前毛本回映射到的该版本单元」（ze 系按比例近似为一小区间）
+  function tocItemsHTML(){
+    const t = readerToc;
+    if(!t || !Array.isArray(t.items) || !t.items.length) return '';
+    let hitSet = null;
+    if(t.kind === 'unit'){
+      const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
+      const meta = (VONT && VONT.editions) ? VONT.editions[t.id] : null;
+      const ns = computeUnitNsForChapter(meta, currentChapter);
+      hitSet = new Set(ns || []);
+    }
+    return t.items.map(it => `
+      <div class="reader-toc-item ${(t.kind === 'chapter' ? it.n===currentChapter : (hitSet && hitSet.has(it.n)))?'active':''}" onclick="appGoEditionUnit('${t.id}', ${it.n})">
+        ${esc(t.kind === 'chapter' ? ('第' + it.n + '回') : ('' + it.n))}${it.title ? ' ' + esc(it.title) : ''}
+      </div>`).join('');
+  }
+  // 构建侧栏数据：回制版本同步给 120 回题名；非回制需切分该版本文件取真实单元题名
+  function buildReaderToc(editionId){
+    const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
+    const meta = (VONT && VONT.editions) ? VONT.editions[editionId] : null;
+    if(!meta || meta.unitKind === '回' || !meta.file){
+      readerToc = { id: editionId, kind: 'chapter', items: (data.chapters || []).map(c => ({ n: c.id, title: c.title })) };
+      const el = document.getElementById('edition-toc');
+      if(el) el.innerHTML = tocItemsHTML();
+      return;
+    }
+    // 非回制：命中缓存同步更新，否则异步切分后更新
+    const cachedKey = Object.keys(edUnitCacheAll).find(k => k.indexOf(meta.file) === 0 && k.indexOf('|' + editionId + '|') > 0);
+    if(cachedKey){
+      applyUnitToc(editionId, meta, edUnitCacheAll[cachedKey]);
+      return;
+    }
+    if(typeof UNITSplit !== 'undefined'){
+      getEditionUnits(meta.file, meta).then(units => applyUnitToc(editionId, meta, units)).catch(() => {});
+    }
+  }
+  function applyUnitToc(editionId, meta, units){
+    const arr = (units || []).filter(u => u.title && !/^(卷首|目錄|目次|凡例|讀法)/.test(String(u.title)));
+    if(!arr.length) return;
+    readerToc = { id: editionId, kind: 'unit', items: arr.slice(0, 500).map(u => ({ n: u.n, title: u.title })) };
+    const el = document.getElementById('edition-toc');
+    if(el) el.innerHTML = tocItemsHTML();
+  }
+  // 点击侧栏条目：回制按回号直达；单元制（則/卷/篇）反算最近的毛本回，
+  // 使正文按同一映射规则命中该单元，侧栏高亮与正文始终一致。
+  global.appGoEditionUnit = function(editionId, unitN){
+    if(editionId) readerState.edition = editionId;
+    const VONT = (typeof VERSION_ONTOLOGY !== 'undefined' && VERSION_ONTOLOGY) ? VERSION_ONTOLOGY : null;
+    const meta = (VONT && VONT.editions) ? VONT.editions[editionId] : null;
+    if(!meta || meta.unitKind === '回'){
+      currentChapter = Math.max(1, Math.min(120, unitN || 1));
+    } else {
+      const total = meta.unitCount || 1000;
+      const ch = Math.max(1, Math.min(120, Math.round((unitN || 1) * 120 / total)));
+      currentChapter = ch;
+    }
+    if(typeof showView === 'function') showView('reader');
+  };
+
   // URL 深链：解析 ?edition=&unit=&unit2=&lang=&annot=（兼容旧 ?chapter= / ?c=）
   function parseReaderUrl(){
     if(readerUrlParsed) return;
@@ -622,6 +684,8 @@
     const edMeta = (VONT && VONT.editions) ? VONT.editions[readerState.edition] : null;
     // 目录本（仅存目次无正文，如钱氏藏书本）：不进阅读，明确说明
     const catalogOnly = !!(edMeta && edMeta.catalogOnly);
+    // 左侧「回目列表」随所选版本联动（须先于 el.innerHTML 求值，模板内调用 tocItemsHTML）
+    buildReaderToc(readerState.edition);
     // 可读性：full / readable / ocrReadable 均展示正文（full 走 CHAPTER_TEXT，其余按版本单元异步取文）
     const readable = !!(vrow && ['full','readable','ocrReadable'].includes(vrow.status)) && !catalogOnly;
     const ocrReadable = readable; // 兼容：凡可读版本按单元取章
@@ -750,11 +814,7 @@
         <!-- 回目侧栏 -->
         <div class="reader-toc">
           <h3 class="font-bold text-[#8b0000] mb-2 text-center">回目列表</h3>
-          ${(data.chapters||[]).map(c=>`
-            <div class="reader-toc-item ${c.id===chapterNum?'active':''}" onclick="appGoChapter(${c.id})">
-              第${c.id}回 ${c.title}
-            </div>
-          `).join('')}
+          <div id="edition-toc">${tocItemsHTML()}</div>
         </div>
 
         <!-- 正文 -->
@@ -780,7 +840,10 @@
               <button class="btn btn-sm ${mode==='vernacular'?'active':''}" onclick="appSetReaderMode('vernacular')">白话</button>
             </div>
             <div class="text-sm text-[#8b6914]">
-              第 ${chapterNum} 回 / 共 120 回${vrow ? ` · ${esc(versionLabel(vrow))}` : ''}
+              ${edMeta && edMeta.unitKind && edMeta.unitKind !== '回'
+                ? ('第 ' + chapterNum + ' ' + edMeta.unitKind + ' / 共 ' + (edMeta.unitCount || edMeta.unitCount) + ' ' + edMeta.unitKind)
+                : ('第 ' + chapterNum + ' 回 / 共 120 回')}
+              ${vrow ? ` · ${esc(versionLabel(vrow))}` : ''}
             </div>
             <a class="text-sm text-[#8b0000] underline ml-auto" href="corpus.html#ed=${encodeURIComponent(readerState.edition)}&c=${chapterNum}">多版本对读 →</a>
           </div>
@@ -821,7 +884,7 @@
         </div>
       </div>
     </div>`;
-    applyAnnotVisibility();
+  applyAnnotVisibility();
     syncReaderUrl();
     // 非毛本版本：异步取该版本单元正文，填充 #ocr-ze-body（渲染占位后加载）
     if(ocrInfo && ocrZeForChapter){
