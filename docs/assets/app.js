@@ -279,6 +279,7 @@
       case 'topic-drift':      renderTopicDoctrineDrift(content); break;
       case 'topic-compare':    renderTopicComparison(content); break;
       case 'topic-density':    renderTopicDensityHeatmap(content); break;
+      case 'topic-autorev':    renderTopicAutoRevisions(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -3429,6 +3430,237 @@
       });
       window.addEventListener('resize', ()=>chart.resize());
     }, 120);
+  }
+
+  /* ======== T13 自动提取毛宗岗改笔 Auto Revision Extractor ======== */
+  function renderTopicAutoRevisions(el){
+    const EH = (typeof window !== 'undefined') ? window.EDITION_HEADS : null;
+    if(!EH){ el.innerHTML = '<p class="p3 text-gray-500">edition-heads.js 未加载。</p>'; return; }
+    // --- 内联 LCS helper（与 T11 同构）---
+    function norm(s){ return String(s||'').replace(/^第[0-9零一二三四五六七八九十百]+[回則]\s*/,'').replace(/\s+/g,'').replace(/\u3000/g,''); }
+    function lcsDiff(aRaw, bRaw){
+      const a = norm(aRaw), b = norm(bRaw);
+      if(!a && !b) return [];
+      if(!a) return [...b].map(ch=>({op:'+',ch}));
+      if(!b) return [...a].map(ch=>({op:'-',ch}));
+      const m=a.length, n=b.length;
+      const dp = new Array(m+1); for(let i=0;i<=m;i++) dp[i] = new Array(n+1).fill(0);
+      for(let i=1;i<=m;i++) for(let j=1;j<=n;j++){
+        if(a[i-1]===b[j-1]) dp[i][j] = dp[i-1][j-1]+1;
+        else dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
+      }
+      const ops = []; let i=m, j=n;
+      while(i>0||j>0){
+        if(i>0&&j>0&&a[i-1]===b[j-1]){ ops.unshift({op:'=',ch:a[i-1]}); i--; j--; }
+        else if(j>0&&(i===0||dp[i][j-1]>=dp[i-1][j])){ ops.unshift({op:'+',ch:b[j-1]}); j--; }
+        else { ops.unshift({op:'-',ch:a[i-1]}); i--; }
+      }
+      return ops;
+    }
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function scoreOps(ops){
+      let del=0, add=0;
+      for(const o of ops){ if(o.op==='-') del++; else if(o.op==='+') add++; }
+      return { del, add, total: del+add };
+    }
+    function renderDiffHtml(baseRaw, targetRaw, color='#0f172a'){
+      const ops = lcsDiff(baseRaw, targetRaw);
+      let html = `<span style="color:${color}" class="font-medium">`;
+      for(const op of ops){
+        if(op.op==='=') html += escapeHtml(op.ch);
+        else if(op.op==='+') html += `<span class="diff-add">${escapeHtml(op.ch)}</span>`;
+        else html += `<span class="diff-del">${escapeHtml(op.ch)}</span>`;
+      }
+      html += `</span>`;
+      return html;
+    }
+
+    // --- 映射 ---
+    const mao2yxd = EH.mao2yxd, mao2jj = EH.mao2jj;
+    function mapTo(N, ed){
+      const eh = EH[ed]; if(!eh || eh.unitCount===0) return null;
+      if(['mao','huiping','lizhuowu','zhongbojing','liyu'].includes(ed)) return {s:N, e:N};
+      if(ed==='yuxiangdou' && mao2yxd){ const m=mao2yxd[N-1]; return m?{s:m.start,e:m.end}:null; }
+      if(ed==='jiajing' && mao2jj){ const m=mao2jj[N-1]; return m?{s:m.start,e:m.end}:null; }
+      if(ed==='zhouyue'){
+        const tot = eh.unitCount; const s = Math.max(1, Math.round((N-1)/120*tot)+1); const e = Math.min(tot, Math.round(N/120*tot));
+        return {s,e};
+      }
+      const tot = eh.unitCount; return {s:Math.max(1, Math.round((N-1)/120*tot)+1), e:Math.min(tot, Math.round(N/120*tot))};
+    }
+
+    // --- 元数据 ---
+    const edMeta = {
+      mao:{name:'毛宗崗評本',color:'#dc2626'}, jiajing:{name:'嘉靖壬午本',color:'#2563eb'},
+      huiping:{name:'七家匯評本',color:'#9333ea'}, lizhuowu:{name:'李卓吾評本',color:'#ea580c'},
+      zhongbojing:{name:'鍾伯敬評本',color:'#64748b'}, liyu:{name:'笠翁評閱本',color:'#0891b2'},
+      yuxiangdou:{name:'余象斗評林',color:'#059669'}, zhouyue:{name:'周曰校刊本',color:'#14b8a6'}
+    };
+    // 对比对：base（毛本）vs target（嘉靖）自动生成改笔
+    let baseEd = 'jiajing'; let targetEd = 'mao';
+
+    // --- 生成 120 回 diff 数据 ---
+    function buildScores(){
+      const rows = [];
+      for(let N=1; N<=120; N++){
+        const baseM = mapTo(N, baseEd);
+        const tgtM = mapTo(N, targetEd);
+        if(!baseM || !tgtM) continue;
+        const baseEh = EH[baseEd];
+        const tgtEh = EH[targetEd];
+        const baseTitle = baseEh.units.filter(u=> u.n>=baseM.s && u.n<=baseM.e).map(u=>u.title).join(' · ');
+        const tgtTitle  = tgtEh.units.filter(u=> u.n>=tgtM.s && u.n<=tgtM.e).map(u=>u.title).join(' · ');
+        const ops = lcsDiff(baseTitle, tgtTitle);
+        const sc = scoreOps(ops);
+        rows.push({ N, baseTitle, tgtTitle, ops, ...sc, scTotal:sc.total });
+      }
+      return rows;
+    }
+    let rows = buildScores();
+    // 排序：按 scTotal 降序
+    rows.sort((a,b)=> b.scTotal - a.scTotal);
+
+    // --- impact 模板 ---
+    function autoImpact(r){
+      const sc = scoreOps(r.ops);
+      // 取 top 3 / 最小片段
+      const addChs = []; const delChs = [];
+      for(const o of r.ops){
+        if(o.op==='+') addChs.push(o.ch);
+        else if(o.op==='-') delChs.push(o.ch);
+      }
+      const addSnippet = addChs.join('').slice(0, 12);
+      const delSnippet = delChs.join('').slice(0, 12);
+      const maxLen = Math.max(norm(r.baseTitle).length, norm(r.tgtTitle).length) || 1;
+      const pct = (sc.total / maxLen * 100).toFixed(0);
+      const baseKind = ['mao','huiping','lizhuowu','zhongbojing','liyu'].includes(baseEd) ? '回' : '則';
+      if(sc.del===0 && sc.add>0){
+        return `毛本在${edMeta[baseEd].name}${baseKind}第${r.N}回基礎上**增飾**了 ${sc.add} 字（增字率 ${pct}%）：「${addSnippet}」。`;
+      } else if(sc.add===0 && sc.del>0){
+        return `毛本從${edMeta[baseEd].name}${baseKind}第${r.N}回**刪去**了 ${sc.del} 字（刪字率 ${pct}%）：「${delSnippet}」。`;
+      } else {
+        return `毛本對${edMeta[baseEd].name}${baseKind}第${r.N}回進行了**重寫**——刪 ${sc.del} 字、增 ${sc.add} 字（總改動率 ${pct}%）。`;
+      }
+    }
+
+    // --- 渲染 ---
+    function renderTopCards(topN){
+      const top = rows.slice(0, topN);
+      return top.map(r=>{
+        const baseColor = edMeta[baseEd].color, tgtColor = edMeta[targetEd].color;
+        return `
+          <div class="border border-gray-200 rounded-lg p-4 bg-white hover:shadow-sm transition-shadow">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs font-mono bg-red-50 text-red-700 px-1.5 py-0.5 rounded">第${r.N}回</span>
+              <span class="text-xs font-bold" style="color:${tgtColor}">${edMeta[targetEd].name}</span>
+              <span class="text-xs text-gray-400">vs</span>
+              <span class="text-xs font-bold" style="color:${baseColor}">${edMeta[baseEd].name}</span>
+              <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                改動 ${r.scTotal} 字 · 刪 ${r.del} / 增 ${r.add}
+              </span>
+            </div>
+            <div class="space-y-1.5 text-xs mb-2">
+              <div class="flex gap-2">
+                <span class="shrink-0 w-16 text-gray-500">${edMeta[baseEd].name}：</span>
+                <span class="italic" style="color:${baseColor}">${norm(r.baseTitle)||'—'}</span>
+              </div>
+              <div class="flex gap-2">
+                <span class="shrink-0 w-16 font-bold text-gray-700">${edMeta[targetEd].name}：</span>
+                ${renderDiffHtml(r.baseTitle, r.tgtTitle, tgtColor)}
+              </div>
+            </div>
+            <p class="text-sm text-gray-700 leading-relaxed border-l-4 border-amber-400 pl-3 py-1 bg-amber-50">${autoImpact(r)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    el.innerHTML = `
+      <div class="mb-4">
+        <h3 class="sub-h mb-2">自動提取毛宗崗改筆 · Auto Revision Extractor</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          對比兩版本 120 回回目，逐回做 LCS 差異分析，按改動量排序。
+          下面是 **${edMeta[baseEd].name} vs ${edMeta[targetEd].name}** 差異最大的前 20 回。
+          切换「對比版本」可重跑全量分析——所有改筆案例均由此頁自動生成，模板化輸出。
+        </p>
+        <div class="flex flex-wrap items-center gap-3 mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs">
+          <span class="font-bold text-gray-700">對比版本：</span>
+          <label>基準：
+            <select id="ar-base" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
+              ${Object.entries(edMeta).map(([id,m])=>`<option value="${id}" ${id===baseEd?'selected':''}>${m.name}</option>`).join('')}
+            </select>
+          </label>
+          <span class="text-gray-400">→</span>
+          <label>目標：
+            <select id="ar-target" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
+              ${Object.entries(edMeta).map(([id,m])=>`<option value="${id}" ${id===targetEd?'selected':''}>${m.name}</option>`).join('')}
+            </select>
+          </label>
+          <label class="ml-2">Top：
+            <select id="ar-top" class="border border-gray-300 rounded px-1.5 py-0.5 bg-white">
+              <option value="10">前 10 回</option>
+              <option value="20" selected>前 20 回</option>
+              <option value="30">前 30 回</option>
+              <option value="50">前 50 回</option>
+            </select>
+          </label>
+          <label class="ml-2">
+            <input type="checkbox" id="ar-only-diff" checked class="rounded"> 只顯示有改動的章回
+          </label>
+        </div>
+        <div id="ar-bar" style="height:140px"></div>
+      </div>
+      <div id="ar-cards" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+    `;
+
+    function redraw(){
+      // 控件当前值
+      const bs = el.querySelector('#ar-base');
+      const ts = el.querySelector('#ar-target');
+      const topsel = el.querySelector('#ar-top');
+      const only = el.querySelector('#ar-only-diff');
+      baseEd = bs.value; targetEd = ts.value;
+      rows = buildScores();
+      rows.sort((a,b)=> b.scTotal - a.scTotal);
+      let shown = rows;
+      if(only.checked) shown = shown.filter(r=> r.scTotal > 0);
+      const topN = parseInt(topsel.value, 10);
+      el.querySelector('#ar-cards').innerHTML = renderTopCards(topN);
+      // 重绘 ECharts 条形图
+      setTimeout(drawBar, 50);
+    }
+
+    function drawBar(){
+      const br = document.getElementById('ar-bar'); if(!br) return;
+      const chart = echarts.init(br);
+      // 取 Top 50 做柱状（120 太多太密）
+      const hist = rows.slice(0, 50);
+      chart.setOption({
+        tooltip:{ formatter:p=> `第${p.data[0]+1}回 · 改動 ${p.data[2]} 字` },
+        grid:{ left:50, right:20, top:20, bottom:30 },
+        xAxis:{ type:'category', data:hist.map(r=> r.N), axisLabel:{ interval:4, fontSize:10 } },
+        yAxis:{ type:'value', name:'改動字數', nameTextStyle:{ fontSize:10 } },
+        series:[{
+          type:'bar',
+          data:hist.map(r=> [r.N-1, r.scTotal, r.N]),
+          itemStyle:{ color: p=> {
+            const v = p.data[1];
+            if(v >= 10) return '#dc2626';
+            if(v >= 5) return '#f59e0b';
+            return '#22c55e';
+          }},
+          barMaxWidth: 14
+        }]
+      });
+      window.addEventListener('resize', ()=>chart.resize());
+    }
+
+    el.querySelector('#ar-base').addEventListener('change', redraw);
+    el.querySelector('#ar-target').addEventListener('change', redraw);
+    el.querySelector('#ar-top').addEventListener('change', redraw);
+    el.querySelector('#ar-only-diff').addEventListener('change', redraw);
+
+    setTimeout(()=>{ drawBar(); el.querySelector('#ar-cards').innerHTML = renderTopCards(parseInt(el.querySelector('#ar-top').value,10)); }, 150);
   }
 
   /* ---- 增强版本体规范 ---- */

@@ -37,7 +37,8 @@
 
 <div class="main-container">
   <div class="subtabs" id="subtabs">
-    <div class="subtab active" onclick="SANGUO_APP.showView('topic-density'); switchSub('topic-density')">密度熱圖</div>
+    <div class="subtab active" onclick="SANGUO_APP.showView('topic-autorev'); switchSub('topic-autorev')">改筆自動提取</div>
+    <div class="subtab" onclick="SANGUO_APP.showView('topic-density'); switchSub('topic-density')">密度熱圖</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-compare'); switchSub('topic-compare')">回目比對</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-drift'); switchSub('topic-drift')">義理漂移</div>
     <div class="subtab" onclick="SANGUO_APP.showView('topic-doctrines'); switchSub('topic-doctrines')">義理五維</div>
@@ -58,11 +59,11 @@
 </footer>
 
 <script>
-  const _subMap = { 'topic-density':0, 'topic-compare':1, 'topic-drift':2, 'topic-doctrines':3, 'topic-battles':4, 'topic-prophecies':5, 'topic-factions':6, 'topic-imagery':7, 'topic-techniques':8, 'heros':9, 'adaptations':10 };
+  const _subMap = { 'topic-autorev':0, 'topic-density':1, 'topic-compare':2, 'topic-drift':3, 'topic-doctrines':4, 'topic-battles':5, 'topic-prophecies':6, 'topic-factions':7, 'topic-imagery':8, 'topic-techniques':9, 'heros':10, 'adaptations':11 };
   function switchSub(name){
     document.querySelectorAll('#subtabs .subtab').forEach((el,i)=>{ el.classList.toggle('active', _subMap[name]===i); });
   }
-  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('topic-density'); });
+  document.addEventListener('DOMContentLoaded', ()=>{ SANGUO_APP.appInit('topic-autorev'); });
 </script>
 </body>
 </html>
