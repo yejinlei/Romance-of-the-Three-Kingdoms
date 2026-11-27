@@ -281,6 +281,8 @@
       case 'topic-density':    renderTopicDensityHeatmap(content); break;
       case 'topic-autorev':    renderTopicAutoRevisions(content); break;
       case 'topic-bodyrev':    renderTopicBodyRevisions(content); break;
+      case 'topic-headsim':    renderTopicHeadSimilarity(content); break;
+      case 'topic-bodydensity': renderTopicBodyDensity(content); break;
       default: renderHome(content);
     }
     content.scrollTop = 0;
@@ -3859,6 +3861,167 @@
       el.querySelector('#bb-cards').innerHTML = renderTopCards(parseInt(el.querySelector('#bb-top').value,10));
       drawBar();
     }, 150);
+  }
+
+  /* ======== T15 多版本回目相似度矩阵 Head Title Similarity Matrix ======== */
+  function renderTopicHeadSimilarity(el){
+    const EH = (typeof window !== 'undefined') ? window.EDITION_HEADS : null;
+    if(!EH){ el.innerHTML = '<p class="p3 text-gray-500">edition-heads.js 未加载。</p>'; return; }
+    const edOrder = ['mao','jiajing','huiping','lizhuowu','zhongbojing','liyu','yuxiangdou','zhouyue'];
+    const edLabel = { mao:'毛宗岗', jiajing:'嘉靖壬午', huiping:'七家汇评', lizhuowu:'李卓吾',
+      zhongbojing:'钟伯敬', liyu:'笠翁', yuxiangdou:'余象斗', zhouyue:'周曰校' };
+    const edKind = { mao:'回制', jiajing:'則制', huiping:'回制', lizhuowu:'回制',
+      zhongbojing:'回制', liyu:'回制', yuxiangdou:'則制', zhouyue:'則制' };
+
+    // 取某版本对应毛本第 N 回的"锚回目"（则制：取范围首则的 title 当代表）
+    const mao2yxd = EH.mao2yxd; const mao2jj = EH.mao2jj;
+    function headOf(ed, N){
+      const eh = EH[ed]; if(!eh) return '';
+      if(edKind[ed]==='回制'){
+        const u = eh.units[N-1]; return u ? (u.title||'').replace(/^第[0-9零一二三四五六七八九十百]+[回]\s*/,'').trim() : '';
+      }
+      // 则制：找映射
+      let m = null;
+      if(ed==='yuxiangdou' && mao2yxd) m = mao2yxd[N-1];
+      else if(ed==='jiajing' && mao2jj) m = mao2jj[N-1];
+      else {
+        const tot = eh.unitCount;
+        m = { s: Math.max(1, Math.round((N-1)/120*tot)+1), e: Math.min(tot, Math.round(N/120*tot)) };
+      }
+      if(!m) return '';
+      const u = eh.units.find(x=> x.n===m.s);
+      return u ? (u.title||'').replace(/^第[0-9零一二三四五六七八九十百]+[則]\s*/,'').trim() : '';
+    }
+
+    // 每对版本 (i,j)：平均 120 回相似度
+    // 相似度 = 2*LCS(a,b) / (|a|+|b|)，0=全异 1=全同
+    const sim = [];
+    for(let i=0;i<edOrder.length;i++) sim.push(new Array(edOrder.length).fill(0));
+    for(let i=0;i<edOrder.length;i++){
+      for(let j=i;j<edOrder.length;j++){
+        let tot = 0, cnt = 0;
+        for(let N=1; N<=120; N++){
+          const a = headOf(edOrder[i], N);
+          const b = headOf(edOrder[j], N);
+          if(!a || !b) continue;
+          const d = lcsDiffFn(a, b);
+          const common = a.length - d.onlyA.length;
+          const denom = (a.length + b.length) / 2;
+          tot += denom>0 ? common/denom : 1;
+          cnt++;
+        }
+        const v = cnt>0 ? tot/cnt : 0;
+        sim[i][j] = v;
+        sim[j][i] = v;
+      }
+    }
+    // 对角 = 1（自相似）
+    for(let i=0;i<edOrder.length;i++) sim[i][i] = 1;
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">多版本回目相似度矩阵 · Head Title Similarity</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        8×8 对称热力图：每格 = 两版本 120 回回目标题的平均 LCS 相似度（0=全异 1=全同）。
+        回制版本直接取第 N 回；則制版本按 UnitMapping 锚点插值对齐到毛本 120 回，取范围首則回目作代表。
+      </p>
+      <div id="head-sim-chart" style="height:440px"></div>
+      <div class="mt-3 text-xs text-gray-500">
+        色阶越低（蓝绿）= 两版本回目差异越大；色阶越高（橙红）= 回目越接近。
+        对角恒为 1（自身相似）。
+      </div>
+    `;
+
+    setTimeout(()=>{
+      const el2 = document.getElementById('head-sim-chart'); if(!el2) return;
+      const chart = echarts.init(el2);
+      const data = [];
+      for(let i=0;i<edOrder.length;i++) for(let j=0;j<edOrder.length;j++) data.push([j, i, +sim[i][j].toFixed(3)]);
+      chart.setOption({
+        tooltip:{ formatter: p=> `<b>${edLabel[edOrder[p.data[1]]]}</b> vs <b>${edLabel[edOrder[p.data[0]]]}</b><br/>相似度：<b>${(p.data[2]*100).toFixed(1)}%</b>` },
+        grid:{ left:80, right:40, top:30, bottom:60 },
+        xAxis:{ type:'category', data: edOrder.map(id=>edLabel[id]), splitArea:{ show:true } },
+        yAxis:{ type:'category', data: edOrder.map(id=>edLabel[id]), splitArea:{ show:true } },
+        visualMap:{ min:0, max:1, calculable:true, orient:'horizontal', left:'center', bottom:0,
+          inRange:{ color:['#3b82f6','#22c55e','#facc15','#f97316','#dc2626'] } },
+        series:[{ type:'heatmap', data, label:{ show:true, formatter:p=> p.data[1]===p.data[0]?'1':(p.data[2]*100).toFixed(0)+'%', fontSize:11, color:'#333' },
+          emphasis:{ itemStyle:{ shadowBlur:10, shadowColor:'rgba(0,0,0,.5)' } } }]
+      });
+      // 附加：聚类树状简略文本
+      const pairs = [];
+      for(let i=0;i<edOrder.length;i++) for(let j=i+1;j<edOrder.length;j++) pairs.push([edOrder[i], edOrder[j], sim[i][j]]);
+      pairs.sort((a,b)=> a[2]-b[2]);
+      console.log('[T15] 最不相似 5 对:', pairs.slice(0,5).map(p=> `${edLabel[p[0]]}×${edLabel[p[1]]}: ${(p[2]*100).toFixed(1)}%`).join('; '));
+      console.log('[T15] 最相似 5 对:', pairs.slice(-5).reverse().map(p=> `${edLabel[p[0]]}×${edLabel[p[1]]}: ${(p[2]*100).toFixed(1)}%`).join('; '));
+      chart.resize();
+    }, 80);
+  }
+
+  /* ======== T16 叙事密度矩阵 Body Density Heatmap ======== */
+  function renderTopicBodyDensity(el){
+    const EB = (typeof window !== 'undefined') ? window.EDITION_BODIES : null;
+    const EH = (typeof window !== 'undefined') ? window.EDITION_HEADS : null;
+    if(!EB){ el.innerHTML = '<p class="p3 text-gray-500">edition-bodies.js 未加载。</p>'; return; }
+    const edOrder = ['mao','jiajing','huiping','lizhuowu','zhongbojing','liyu','yuxiangdou','zhouyue'];
+    const edLabel = { mao:'毛宗岗', jiajing:'嘉靖壬午', huiping:'七家汇评', lizhuowu:'李卓吾',
+      zhongbojing:'钟伯敬', liyu:'笠翁', yuxiangdou:'余象斗', zhouyue:'周曰校' };
+
+    // 120 回 × 8 版本 → 段落数
+    // edition-bodies.js 里回目字符串是 "1"~"120"，則制版本每回也对应锚段落（gen_bodies.js 已经按毛本 120 回对齐）
+    const heatData = [];
+    for(let ei=0; ei<edOrder.length; ei++){
+      const ed = edOrder[ei];
+      const eb = EB[ed] || {};
+      for(let N=1; N<=120; N++){
+        const paras = eb[String(N)] || [];
+        heatData.push([N-1, ei, paras.length]);
+      }
+    }
+    // 统计：总共多少空格子（段落数=0）
+    const zeroCount = heatData.filter(d=>d[2]===0).length;
+    const nonzero = heatData.filter(d=>d[2]>0);
+    const maxDensity = Math.max(...nonzero.map(d=>d[2]), 1);
+
+    el.innerHTML = `
+      <h3 class="sub-h mb-2">叙事密度矩阵 · Body Density Heatmap</h3>
+      <p class="text-sm text-gray-600 mb-3">
+        120 回（横） × 8 版本（纵）：每格颜色 = 该回该版本的正文锚段落数（每回最多 16 段：首4+中8+尾4）。
+        白格 = 该回无对应文本。预构建源：edition-bodies.js。
+      </p>
+      <div class="mb-2 text-xs text-gray-500">
+        已填充：<b>${nonzero.length}</b> 格 / ${heatData.length}；空：<b>${zeroCount}</b> 格；
+        最大段落密度：<b>${maxDensity}</b> 段 / 回。
+      </div>
+      <div id="body-density-chart" style="height:380px"></div>
+      <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+        ${edOrder.map(ed=>{
+          const edCells = heatData.filter(d=> d[1]===edOrder.indexOf(ed) && d[2]>0);
+          const avg = edCells.length>0 ? (edCells.reduce((s,d)=>s+d[2],0)/edCells.length).toFixed(1) : '—';
+          const pct = (edCells.length/120*100).toFixed(0);
+          return `<div class="border border-gray-200 rounded p-2 bg-white">
+            <div class="font-bold">${edLabel[ed]}</div>
+            <div class="text-gray-500">覆盖 ${pct}% 回 · 均 ${avg} 段/回</div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+
+    setTimeout(()=>{
+      const el2 = document.getElementById('body-density-chart'); if(!el2) return;
+      const chart = echarts.init(el2);
+      const xLabels = new Array(120).fill(0).map((_,i)=> (i+1)%20===0 || i===0 ? (i+1) : '');
+      const yLabels = edOrder.map(id=> edLabel[id]);
+      chart.setOption({
+        tooltip:{ formatter: p=> `<b>${edLabel[edOrder[p.data[1]]]}</b> · 第 ${p.data[0]+1} 回<br/>锚段落数：<b>${p.data[2]}</b>` },
+        grid:{ left:70, right:30, top:20, bottom:50 },
+        xAxis:{ type:'category', data:xLabels, splitArea:{ show:true }, axisLabel:{ interval:0 } },
+        yAxis:{ type:'category', data:yLabels, splitArea:{ show:true } },
+        visualMap:{ min:0, max:maxDensity, calculable:true, orient:'horizontal', left:'center', bottom:0,
+          inRange:{ color:['#f1f5f9','#bae6fd','#38bdf8','#2563eb','#1e3a8a'] } },
+        series:[{ type:'heatmap', data:heatData, label:{ show:false },
+          emphasis:{ itemStyle:{ shadowBlur:10, shadowColor:'rgba(0,0,0,.5)' } } }]
+      });
+      chart.resize();
+    }, 80);
   }
 
   /* ---- 增强版本体规范 ---- */
