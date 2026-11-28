@@ -1025,6 +1025,8 @@
     if(readerState.inline.commInline && annotPure){
       embedCommAnnoBlocks(el, chapterNum, readerState.inlineCritic);
     }
+    // 本体标签悬停卡：鼠标放上去就地弹出详情（不跳转）
+    if(readerState.inline.entity) bindEntityHover(el);
     syncReaderUrl();
     // 非毛本版本：异步取该版本单元正文，填充 #ocr-ze-body（渲染占位后加载）
     if(ocrInfo && ocrZeForChapter){
@@ -4266,6 +4268,120 @@
    *  核心策略：每轮 regex 替换前先保护所有 HTML 标签（包括前一轮刚产生的），替换后再保护一次
    *  多轮顺序：commInline → gloss(长短语优先) → entity → phonetic → crossRef
    */
+  /* ======================== 本体标签悬停卡：鼠标悬停即就地弹出详情，不跳转 ======================== */
+  // 悬停用的本体明细登记表：key = kind + '|' + 显示名 → 结构化明细
+  const ENTITY_HOVER_DB = {};
+
+  const REL_PRED_LABEL = {
+    swornBrotherOf: '结义兄弟', lordOf: '君临', vassalOf: '臣属于',
+    sonOf: '之子', adoptedSonOf: '养子', fatherOf: '之父',
+    motherOf: '之母', elderBrotherOf: '长兄', sisterOf: '姊妹',
+    marriedTo: '妻室', opponentOf: '对手', usedBy: '为…所用'
+  };
+
+  // 人物关系：从 relations 里取与该人物相关的少量关系
+  function collectPersonRelations(pid){
+    const out = [];
+    (relations||[]).forEach(r => {
+      if(r.subject !== pid && r.object !== pid) return;
+      const isSubject = r.subject === pid;
+      const other = isSubject ? r.object : r.subject;
+      const on = ((data.persons||[]).find(p=>p.id===other)) || {};
+      if(!on.name) return;
+      const pred = REL_PRED_LABEL[r.predicate] || r.predicate;
+      out.push((isSubject ? '' : '← ') + pred + ' ' + on.name);
+    });
+    return out.slice(0, 6);
+  }
+
+  function buildEntityCard(kind, name){
+    const row = ENTITY_HOVER_DB[kind + '|' + name];
+    if(!row) return '';
+    const e = v => String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const KIND_LABEL = { person:'人物', place:'地点', event:'事件' };
+    const kindLabel = KIND_LABEL[kind] || kind;
+    let rowsHTML = '';
+    const add = (k, v) => { if(v && v !== '?') rowsHTML += `<div class="ec-row"><span class="ec-k">${e(k)}</span><span class="ec-v">${e(v)}</span></div>`; };
+
+    if(kind === 'person'){
+      add('字', row.style);
+      add('阵营', row.faction);
+      add('生卒', [row.birth, row.death].filter(v=>v && v!=='?').join('—'));
+      add('封号', row.title);
+      add('籍贯', row.nativePlace);
+      add('全书提及', row.mentionCount ? row.mentionCount + ' 次' : '');
+      if(row.rel && row.rel.length) rowsHTML += `<div class="ec-rel"><span class="ec-k">关系</span><span class="ec-v">${e(row.rel.join('；'))}</span></div>`;
+    } else if(kind === 'place'){
+      add('级别', row.level);
+      add('今地', row.modernLocation);
+      if(row.coord && row.coord.length === 2) add('坐标', row.coord[0]+'°E，'+row.coord[1]+'°N');
+    } else if(kind === 'event'){
+      add('年份', row.year);
+      add('地点', row.places);
+      add('相关人物', row.persons);
+      add('结果', row.result);
+      add('登场回目', row.chapters);
+    }
+
+    return `<div class="ec-card" id="entity-card" role="tooltip">
+      <div class="ec-head"><span class="ec-name">${e(name)}</span><span class="ec-kind ec-kind-${kind}">${kindLabel}</span></div>
+      ${rowsHTML ? `<div class="ec-rows">${rowsHTML}</div>` : ''}
+    </div>`;
+  }
+
+  let _ecHideTimer = null;
+  function positionEntityCard(trigger){
+    const root = document.getElementById('entity-card-root');
+    if(!root || !trigger) return;
+    const card = root.firstElementChild; // .ec-card（fixed 容器定位，子元素宽度自适应）
+    const r = trigger.getBoundingClientRect();
+    const cw = card ? (card.offsetWidth || 300) : 300;
+    const ch = card ? (card.offsetHeight || 120) : 120;
+    const vw = window.innerWidth || document.documentElement.clientWidth;
+    const vh = window.innerHeight || 800;
+    let left = r.left + r.width/2 - cw/2;
+    left = Math.max(8, Math.min(left, vw - cw - 8));
+    let top = r.bottom + 8;
+    if(top + ch > vh - 8) top = r.top - ch - 8;   // 空间不足则翻到标签上方
+    if(top < 8) top = 8;
+    root.style.left = left + 'px';
+    root.style.top  = top + 'px';
+  }
+
+  function showEntityCard(kind, name, trigger){
+    let root = document.getElementById('entity-card-root');
+    if(!root){ root = document.createElement('div'); root.id = 'entity-card-root'; document.body.appendChild(root); }
+    const html = buildEntityCard(kind, name);
+    if(!html){ root.innerHTML = ''; root.classList.remove('visible'); return; }
+    root.innerHTML = html;
+    root.classList.add('visible');
+    positionEntityCard(trigger);
+  }
+  function hideEntityCard(){
+    const root = document.getElementById('entity-card-root');
+    if(root){ root.classList.remove('visible'); }
+  }
+
+  // 委托式绑定：正文里任何本体标签悬停都就地弹出（不跳转）
+  function bindEntityHover(root){
+    const body = root.querySelector('#reader-text-body');
+    if(!body || body.getAttribute('data-ent-hover-bound') === '1') return;
+    body.setAttribute('data-ent-hover-bound', '1');
+    body.addEventListener('mouseover', e => {
+      const tag = e.target.closest('.entity-tag');
+      if(!tag) return;
+      if(_ecHideTimer){ clearTimeout(_ecHideTimer); _ecHideTimer = null; }
+      showEntityCard(tag.getAttribute('data-entity-kind'), tag.getAttribute('data-entity-name'), tag);
+    });
+    body.addEventListener('mouseout', e => {
+      const tag = e.target.closest('.entity-tag');
+      if(!tag) return;
+      const to = e.relatedTarget;
+      if(to && to.closest && (to.closest('#entity-card-root') || to.closest('.entity-tag'))) return;
+      _ecHideTimer = setTimeout(hideEntityCard, 160);
+    });
+  }
+
   function annotateReaderBody(text, flags, chapterNum){
     if(!text) return '';
     const tagBuf = [];
@@ -4316,6 +4432,40 @@
         (c.keyPlaces ||[]).forEach(n=> placeNames.add(n));
         (c.events    ||[]).forEach(n=> eventNames.add(n));
       });
+
+      // 悬停明细登记表：人物/地点取本体属性；事件由 chapters 聚合登场回目 + 相关人物/地点
+      (SD.persons||[]).forEach(p=>{
+        if(!p || !p.name) return;
+        ENTITY_HOVER_DB['person|'+p.name] = {
+          id:p.id, name:p.name, style:p.style, faction:p.faction, birth:p.birth, death:p.death,
+          title:p.title, nativePlace:p.nativePlace, mentionCount:p.mentionCount,
+          rel: collectPersonRelations(p.id)
+        };
+      });
+      (SD.places||[]).forEach(p=>{
+        if(!p || !p.name) return;
+        ENTITY_HOVER_DB['place|'+p.name] = { id:p.id, name:p.name, level:p.level, modernLocation:p.modernLocation, coord:p.coord };
+      });
+      (SD.chapters||[]).forEach(c=>{
+        (c.events||[]).forEach(n=>{
+          const row = ENTITY_HOVER_DB['event|'+n] || (ENTITY_HOVER_DB['event|'+n] = { id:n, name:n, chapters:[], persons:[], places:[] });
+          if(c.id) row.chapters.push(c.id);
+          (c.keyPersons||[]).forEach(k=>{ if(!row.persons.includes(k)) row.persons.push(k); });
+          (c.keyPlaces ||[]).forEach(k=>{ if(!row.places.includes(k)) row.places.push(k); });
+        });
+      });
+      // 事件卡里的列表收敛，避免卡片过长
+      Object.keys(ENTITY_HOVER_DB).forEach(k=>{
+        const row = ENTITY_HOVER_DB[k];
+        if(row && row.chapters) row.chapters = row.chapters.slice(0,8);
+        if(row && row.persons)  row.persons  = row.persons.slice(0,6);
+        if(row && row.places)   row.places   = row.places.slice(0,6);
+        if(row){
+          if(row.chapters) row.chapters = row.chapters.join('、');
+          if(row.persons)  row.persons  = row.persons.join('、');
+          if(row.places)   row.places   = row.places.join('、');
+        }
+      });
     }
 
     // --- 1. 批注内联（汇评本【毛夹批】等）---
@@ -4354,11 +4504,11 @@
       });
     }
 
-    // --- 3. 实体标注 ---
+    // --- 3. 实体标注（本体标签：鼠标悬停就地弹出详情卡，不跳转） ---
     if(flags.entity && SD){
-      annotateOnSimplified([...personNames], (orig)=> `<span class="ent-person" style="background:#1d4ed830;color:#1d4ed8;border-radius:2px;padding:0 1px" title="人物">${orig}</span>`);
-      annotateOnSimplified([...placeNames],  (orig)=> `<span class="ent-place" style="background:#05966930;color:#059669;border-radius:2px;padding:0 1px" title="地点">${orig}</span>`);
-      annotateOnSimplified([...eventNames],  (orig)=> `<span class="ent-event" style="background:#b4530930;color:#b45309;border-radius:2px;padding:0 1px" title="事件">${orig}</span>`);
+      annotateOnSimplified([...personNames], (orig, kw)=> `<span class="entity-tag ent-person" data-entity-kind="person" data-entity-name="${kw}">${orig}</span>`);
+      annotateOnSimplified([...placeNames],  (orig, kw)=> `<span class="entity-tag ent-place"  data-entity-kind="place"  data-entity-name="${kw}">${orig}</span>`);
+      annotateOnSimplified([...eventNames],  (orig, kw)=> `<span class="entity-tag ent-event"  data-entity-kind="event"  data-entity-name="${kw}">${orig}</span>`);
     }
 
     // --- 4. 异体字注音（精简版）---

@@ -103,6 +103,36 @@ tr:hover td { background: #faf3e4; }
 /* 评点文字 */
 .comment-text { color: #8b0000; font-size: 0.9em; font-style: italic; }
 
+/* 读者页本体标签：随文浅色下划，悬停即就地弹出详情卡（不跳转） */
+.reader-text-body .entity-tag {
+  background: transparent; padding: 0 1px; margin: 0; font-size: inherit; cursor: help;
+  border-bottom: 1px dotted; border-radius: 0;
+}
+.reader-text-body .ent-person { color: #1d4ed8; border-bottom-color: #1d4ed8; background: rgba(29,78,216,.07); }
+.reader-text-body .ent-place  { color: #059669; border-bottom-color: #059669; background: rgba(5,150,105,.07); }
+.reader-text-body .ent-event  { color: #b45309; border-bottom-color: #b45309; background: rgba(180,83,9,.07); }
+.reader-text-body .entity-tag:hover { color: inherit; }
+
+/* 悬停详情卡（fixed 定位，跟鼠标标签就近，鼠标离开即消失） */
+#entity-card-root { position: fixed; z-index: 9999; pointer-events: none; opacity: 0; transition: opacity .12s ease; }
+#entity-card-root.visible { opacity: 1; }
+.ec-card {
+  width: 300px; max-width: calc(100vw - 20px);
+  background: #fffdf5; border: 1px solid #c9b896; border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(74,38,0,.22);
+  padding: 11px 13px 12px; font-size: 13px; line-height: 1.6; color: #3a2410;
+}
+.ec-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 7px; padding-bottom: 7px; border-bottom: 1px dashed #c9b896; }
+.ec-name { font-size: 16px; font-weight: 700; color: #3a1c00; }
+.ec-kind { font-size: 11px; padding: 1px 7px; border-radius: 9px; border: 1px solid; }
+.ec-kind-person { color: #1d4ed8; border-color: #1d4ed8; background: rgba(29,78,216,.08); }
+.ec-kind-place  { color: #059669; border-color: #059669; background: rgba(5,150,105,.08); }
+.ec-kind-event  { color: #b45309; border-color: #b45309; background: rgba(180,83,9,.08); }
+.ec-rows { display: flex; flex-direction: column; gap: 3px; }
+.ec-row { display: flex; gap: 8px; align-items: baseline; }
+.ec-k { flex: 0 0 66px; color: #9a7050; font-size: 12px; }
+.ec-v { flex: 1; color: #3a2410; font-size: 12.5px; word-break: break-word; }
+
 /* 关系线（SVG） */
 .relation-line { stroke: #8b4513; stroke-opacity: 0.6; }
 
