@@ -1,8 +1,8 @@
 // 三国演义公版语料库清单（自动生成）
 const SANGUO_CORPUS = {
-  "updated": "2026-11-25",
+  "updated": "2026-11-28",
   "note": "《三国演义》公版语料库。正文均来自中文维基文库或公开电子本，许可为 PD-old。",
-  "totalChars": 12675862,
+  "totalChars": 13045645,
   "items": [
     {
       "id": "mao",
@@ -51,7 +51,7 @@ const SANGUO_CORPUS = {
     {
       "id": "yuxiangdou",
       "file": "余象斗刊本_OCR.txt",
-      "title": "余象斗刊本（OCR）",
+      "title": "余象斗刊本",
       "note": "明万历余象斗双峰堂刊《三国志传评林》，存卷首+8卷；识典古籍 OCR",
       "source": "识典古籍 CADAL02015947（https://www.shidianguji.com/book/CADAL02015947）",
       "units": 180,
@@ -62,7 +62,7 @@ const SANGUO_CORPUS = {
     {
       "id": "zhouyue",
       "file": "周曰校刊本_OCR.txt",
-      "title": "周曰校刊本（OCR）",
+      "title": "周曰校刊本",
       "note": "明万历十九年（1591）金陵万卷楼周曰校刊《新刊校正古本大字音釋三國志通俗演義》，日本内阁文库藏，卷首+卷一~卷十二（245则）；多模态高精图文对照识读",
       "source": "日本国立公文书馆内阁文库藏本（附1-8，漢17847）；Wikimedia Commons NAJDA-附001-0008",
       "units": 246,
@@ -73,8 +73,8 @@ const SANGUO_CORPUS = {
     {
       "id": "lizhuowu",
       "file": "李卓吾評本_OCR.txt",
-      "title": "李卓吾評本（OCR）",
-      "note": "明萬曆間建陽刊《李卓吾先生批評三國志》，卷首+二十三冊；識典古籍 OCR，僅檢索用",
+      "title": "李卓吾評本",
+      "note": "明萬曆間建陽刊《李卓吾先生批評三國志》，卷首+二十三冊；识典古籍识读，僅檢索用",
       "source": "識典古籍（https://www.shidianguji.com/）",
       "units": 23,
       "kind": "marker",
@@ -84,8 +84,8 @@ const SANGUO_CORPUS = {
     {
       "id": "liyu",
       "file": "笠翁評閱本_OCR.txt",
-      "title": "笠翁評閱本（OCR）",
-      "note": "清初李漁（笠翁）評閱本，卷首+二十六冊；識典古籍 OCR，僅檢索用",
+      "title": "笠翁评阅本",
+      "note": "清初李漁（笠翁）評閱本，卷首+二十六冊；识典古籍识读，僅檢索用",
       "source": "識典古籍（https://www.shidianguji.com/）",
       "units": 26,
       "kind": "marker",
@@ -95,8 +95,8 @@ const SANGUO_CORPUS = {
     {
       "id": "xiazhenyu",
       "file": "夏振宇刊本_OCR.txt",
-      "title": "夏振宇刊本（OCR，殘本）",
-      "note": "明萬曆間夏振宇刊《三國志傳通俗演義》，十二卷殘存六卷（三、四、五、六、九、十，卷之六含北大藏本補配重出段）；夏振宇舊藏本本身殘缺，卷一、二、七、八、十一、十二源本無存；識典古籍 OCR，僅檢索用",
+      "title": "夏振宇刊本（殘本）",
+      "note": "明萬曆間夏振宇刊《三國志傳通俗演義》，十二卷殘存六卷（三、四、五、六、九、十，卷之六含北大藏本補配重出段）；夏振宇舊藏本本身殘缺，卷一、二、七、八、十一、十二源本無存；识典古籍识读，僅檢索用",
       "source": "識典古籍（https://www.shidianguji.com/）；日本名古屋蓬左文庫藏全本未公開數字化",
       "units": 7,
       "kind": "marker",
@@ -106,8 +106,8 @@ const SANGUO_CORPUS = {
     {
       "id": "xiongqingbo",
       "file": "熊清波藜光堂本_OCR.txt",
-      "title": "熊清波藜光堂本（OCR）",
-      "note": "明萬曆間閩建熊清波刊《三國全傳》，二十卷存十六冊；識典古籍 OCR，僅檢索用",
+      "title": "熊清波藜光堂本",
+      "note": "明萬曆間閩建熊清波刊《三國全傳》，二十卷存十六冊；识典古籍识读，僅檢索用",
       "source": "識典古籍（https://www.shidianguji.com/）",
       "units": 16,
       "kind": "marker",
@@ -117,8 +117,8 @@ const SANGUO_CORPUS = {
     {
       "id": "zhengshaoyuan",
       "file": "鄭少垣刊本_OCR.txt",
-      "title": "鄭少垣刊本（OCR）",
-      "note": "明萬曆間閩建鄭少垣聯輝堂刊《三國志傳》，八冊；識典古籍 OCR，僅檢索用",
+      "title": "鄭少垣刊本",
+      "note": "明萬曆間閩建鄭少垣聯輝堂刊《三國志傳》，八冊；识典古籍识读，僅檢索用",
       "source": "識典古籍（https://www.shidianguji.com/）",
       "units": 8,
       "kind": "marker",
@@ -128,8 +128,8 @@ const SANGUO_CORPUS = {
     {
       "id": "zhongbojing",
       "file": "鍾伯敬評本_OCR.txt",
-      "title": "鍾伯敬評本（OCR）",
-      "note": "明末鍾惺（伯敬）批評本，卷首+卷一至卷十六（卷十七至二十缺）；識典古籍 OCR，僅檢索用",
+      "title": "鍾伯敬評本",
+      "note": "明末鍾惺（伯敬）批評本，卷首+卷一至卷十六（卷十七至二十缺）；识典古籍识读，僅檢索用",
       "source": "識典古籍（https://www.shidianguji.com/）",
       "units": 17,
       "kind": "marker",
@@ -139,13 +139,24 @@ const SANGUO_CORPUS = {
     {
       "id": "zhudingchen",
       "file": "朱鼎臣刊本_OCR.txt",
-      "title": "朱鼎臣刊本（OCR）",
-      "note": "明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，二十卷二百四十則全；識典古籍 OCR，卷十六至二十（第181-240則）已以多模态大模型 VLM 逐页补全，僅檢索用",
+      "title": "朱鼎臣刊本",
+      "note": "明萬曆間朱鼎臣刊《新刻按鑑全像三國志傳》，二十卷二百四十則全；识典古籍识读，卷十六至二十（第181-240則）已以多模态大模型 VLM 逐页补全，僅檢索用",
       "source": "識典古籍（https://www.shidianguji.com/）",
       "units": 240,
       "kind": "marker",
       "ocr": true,
       "chars": 414723
+    },
+    {
+      "id": "yefengchun",
+      "file": "叶逢春刊本_OCR.txt",
+      "title": "叶逢春刊本",
+      "note": "明嘉靖二十七年（1548）葉逢春刊《三國志史傳》，志傳系統最早可繫年刻本，十卷每卷二十四則（全書240則）；孤本原缺卷三、卷十，實存192則（第1-48、73-216則）；含元峰子序、關索故事。VLM 視覺識別 OCR，僅檢索用",
+      "source": "西班牙埃斯科里亞爾皇家圖書館藏孤本；BabelStone 微縮膠片掃描 710 幅（https://babelstone.co.uk/SanguoYanyi/YeFengchun/）；多模態大模型 VLM 逐頁識讀",
+      "units": 192,
+      "kind": "ze",
+      "ocr": true,
+      "chars": 369783
     },
     {
       "id": "pinghua",
@@ -368,17 +379,16 @@ const SANGUO_CORPUS = {
       "edition": "葉逢春刊本",
       "system": "志傳系統",
       "tier": "可獲影印",
-      "status": "未獲文本（無可抓取源）",
-      "reason": "BabelStone 僅存微縮膠片掃描影像（1351×1093 雙葉、710 幅），無文本層；缺卷三、卷十；無公開 OCR 文本可抓。",
-      "form": "殘本影像（JPG，公開下載）",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
+      "form": "殘本影像（JPG，公開下載）＋VLM OCR 文本",
       "holder": "西班牙埃斯科里亞爾皇家圖書館藏孤本",
-      "volumes": "十卷存八卷（缺卷三、卷十），710 影幅",
+      "volumes": "十卷存八卷（缺卷三、卷十），710 影幅；實存 192 則（第 1-48、73-216 則）",
       "url": "https://babelstone.co.uk/SanguoYanyi/YeFengchun/",
-      "download": "可下載",
+      "download": "已下載",
       "resolution": "1351×1093（雙葉，微縮膠片掃描），偏低",
-      "missing": "缺卷三、卷十",
-      "detail": "明嘉靖二十七年（1548）葉逢春刊《三國志史傳》，現存孤本，是志傳系統最早可繫年的刻本，含關索故事。BabelStone 將顯微膠片掃成 710 幅影像免費公開，可逐幅下載；雙葉僅 1351×1093，直接 OCR 精度有限，需放大與預處理。",
-      "path": "BabelStone 在線影像；上海古籍出版社《三國志演義古版叢刊續輯》影印本（十卷存八卷）。"
+      "missing": "缺卷三、卷十（則 49-72、217-240 無存）",
+      "detail": "明嘉靖二十七年（1548）葉逢春刊《三國志史傳》，現存孤本，是志傳系統最早可繫年的刻本，含元峰子序、關索故事。BabelStone 將顯微膠片掃成 710 幅影像免費公開，已全部下載（409.42 MB）；影像僅 1351×1093，以多模態大模型 VLM 逐頁識讀整理為 192 則（全局編號 1-240，每回 2 則），約 37 萬字，未經校勘，僅供檢索。",
+      "path": "已落盤 docs/texts/叶逢春刊本_OCR.txt（192 則）與 texts/ocr/叶逢春刊本/（9 卷分卷）；BabelStone 在線影像；上海古籍出版社《三國志演義古版叢刊續輯》影印本（十卷存八卷）。"
     },
     {
       "edition": "夏振宇刊本",
@@ -488,7 +498,7 @@ const SANGUO_CORPUS = {
       "path": "維基共享資源 IOC.UTokyo-009701（10 冊）；東洋文化研究所漢籍善本全文影像資料庫。"
     },
     {
-      "edition": "笠翁評閱本",
+      "edition": "笠翁评阅本",
       "system": "評本",
       "tier": "可獲影印",
       "status": "已獲文本（OCR，已接閱讀、未校勘）",

@@ -1,8 +1,8 @@
 // 三国演义公版语料库清单（自动生成）
 const SANGUO_CORPUS = {
-  "updated": "2026-11-25",
+  "updated": "2026-11-28",
   "note": "《三国演义》公版语料库。正文均来自中文维基文库或公开电子本，许可为 PD-old。",
-  "totalChars": 12675862,
+  "totalChars": 13045645,
   "items": [
     {
       "id": "mao",
@@ -146,6 +146,17 @@ const SANGUO_CORPUS = {
       "kind": "marker",
       "ocr": true,
       "chars": 414723
+    },
+    {
+      "id": "yefengchun",
+      "file": "叶逢春刊本_OCR.txt",
+      "title": "叶逢春刊本",
+      "note": "明嘉靖二十七年（1548）葉逢春刊《三國志史傳》，志傳系統最早可繫年刻本，十卷每卷二十四則（全書240則）；孤本原缺卷三、卷十，實存192則（第1-48、73-216則）；含元峰子序、關索故事。VLM 視覺識別 OCR，僅檢索用",
+      "source": "西班牙埃斯科里亞爾皇家圖書館藏孤本；BabelStone 微縮膠片掃描 710 幅（https://babelstone.co.uk/SanguoYanyi/YeFengchun/）；多模態大模型 VLM 逐頁識讀",
+      "units": 192,
+      "kind": "ze",
+      "ocr": true,
+      "chars": 369783
     },
     {
       "id": "pinghua",
@@ -368,17 +379,16 @@ const SANGUO_CORPUS = {
       "edition": "葉逢春刊本",
       "system": "志傳系統",
       "tier": "可獲影印",
-      "status": "未獲文本（無可抓取源）",
-      "reason": "BabelStone 僅存微縮膠片掃描影像（1351×1093 雙葉、710 幅），無文本層；缺卷三、卷十；無公開 OCR 文本可抓。",
-      "form": "殘本影像（JPG，公開下載）",
+      "status": "已獲文本（OCR，已接閱讀、未校勘）",
+      "form": "殘本影像（JPG，公開下載）＋VLM OCR 文本",
       "holder": "西班牙埃斯科里亞爾皇家圖書館藏孤本",
-      "volumes": "十卷存八卷（缺卷三、卷十），710 影幅",
+      "volumes": "十卷存八卷（缺卷三、卷十），710 影幅；實存 192 則（第 1-48、73-216 則）",
       "url": "https://babelstone.co.uk/SanguoYanyi/YeFengchun/",
-      "download": "可下載",
+      "download": "已下載",
       "resolution": "1351×1093（雙葉，微縮膠片掃描），偏低",
-      "missing": "缺卷三、卷十",
-      "detail": "明嘉靖二十七年（1548）葉逢春刊《三國志史傳》，現存孤本，是志傳系統最早可繫年的刻本，含關索故事。BabelStone 將顯微膠片掃成 710 幅影像免費公開，可逐幅下載；雙葉僅 1351×1093，直接 OCR 精度有限，需放大與預處理。",
-      "path": "BabelStone 在線影像；上海古籍出版社《三國志演義古版叢刊續輯》影印本（十卷存八卷）。"
+      "missing": "缺卷三、卷十（則 49-72、217-240 無存）",
+      "detail": "明嘉靖二十七年（1548）葉逢春刊《三國志史傳》，現存孤本，是志傳系統最早可繫年的刻本，含元峰子序、關索故事。BabelStone 將顯微膠片掃成 710 幅影像免費公開，已全部下載（409.42 MB）；影像僅 1351×1093，以多模態大模型 VLM 逐頁識讀整理為 192 則（全局編號 1-240，每回 2 則），約 37 萬字，未經校勘，僅供檢索。",
+      "path": "已落盤 docs/texts/叶逢春刊本_OCR.txt（192 則）與 texts/ocr/叶逢春刊本/（9 卷分卷）；BabelStone 在線影像；上海古籍出版社《三國志演義古版叢刊續輯》影印本（十卷存八卷）。"
     },
     {
       "edition": "夏振宇刊本",

@@ -306,12 +306,12 @@ function renderSide(){
   for(const it of SANGUO_CORPUS.items){
     if(it.id==='mao'||it.id==='jiajing'||it.id==='huiping'||it.id==='huang'||
        it.id==='lizhuowu'||it.id==='liyu'||it.id==='xiazhenyu'||it.id==='xiongqingbo'||
-       it.id==='zhengshaoyuan'||it.id==='zhongbojing'||it.id==='zhudingchen') groups.body.push(it);
+       it.id==='zhengshaoyuan'||it.id==='zhongbojing'||it.id==='zhudingchen'||it.id==='yefengchun') groups.body.push(it);
     else if(it.id==='pinghua'||it.id==='huaguan'||it.id==='sanguozhi'||it.id==='sankuo-en') groups.extra.push(it);
     else if(it.id.startsWith('cmt-')) groups.cmt.push(it);
     else groups.front.push(it);
   }
-  const btn=it=>`<button class="ed ${state.ed===it.id?'on':''}" data-ed="${it.id}">${esc(it.title)}<small>${it.units}${it.id==='sanguozhi'?' 卷':it.id==='huang'?' 則':it.id==='pinghua'||it.id==='huaguan'?' 種':it.id.startsWith('cmt-')?' 回批語':' 回'} · ${(it.chars/10000).toFixed(1)}萬字</small></button>`;
+  const btn=it=>`<button class="ed ${state.ed===it.id?'on':''}" data-ed="${it.id}">${esc(it.title)}<small>${it.units}${it.kind==='ze'?' 則':it.id==='sanguozhi'?' 卷':it.id==='huang'?' 則':it.id==='pinghua'||it.id==='huaguan'?' 種':it.id.startsWith('cmt-')?' 回批語':' 回'} · ${(it.chars/10000).toFixed(1)}萬字</small></button>`;
   $('ed-body').innerHTML=groups.body.map(btn).join('');
   $('ed-extra').innerHTML=groups.extra.map(btn).join('');
   $('ed-cmt').innerHTML=groups.cmt.map(btn).join('');
@@ -365,6 +365,8 @@ function renderEdition(it, opts){
   const pdfOf = {'jiajing':'周曰校刊本','cmt-li':'李卓吾評本','cmt-zhong':'鍾伯敬評本','cmt-liyu':'笠翁評閱本','zhouyue':'周曰校刊本',
     'lizhuowu':'李卓吾評本','liyu':'笠翁評閱本','xiazhenyu':'夏振宇刊本','xiongqingbo':'熊清波藜光堂本',
     'zhengshaoyuan':'鄭少垣刊本','zhongbojing':'鍾伯敬評本','zhudingchen':'朱鼎臣刊本'};
+  // 影印未落盤 docs/pdf/ 者，外鏈公開影像源
+  const pdfExt = {'yefengchun':'https://babelstone.co.uk/SanguoYanyi/YeFengchun/'};
   const pdfEd = pdfOf[it.id] || '';
   const unitWord = it.ocr ? (it.kind==='ze'?'則':(it.kind==='volume'?'卷':'冊')) : (it.id==='sanguozhi'?'卷':it.id==='huang'?'則':'回');
   $('main').innerHTML=`
@@ -384,7 +386,7 @@ function renderEdition(it, opts){
       <div class="units-body">
         <div class="titlebar">
           <div><h2>${esc(it.title)}</h2>${it.ocr?`<span class="badge">未校勘 · 已接閱讀</span>`:''}<div class="meta">${esc(it.note)}</div></div>
-          <div class="meta">${pdfEd?`<a href="pdf-viewer.html#ed=${encodeURIComponent(pdfEd)}&f=1" style="color:var(--cinnabar);font-weight:600">影印本 →</a> · `:''}${esc(it.source)}</div>
+          <div class="meta">${pdfExt[it.id]?`<a href="${pdfExt[it.id]}" target="_blank" rel="noopener" style="color:var(--cinnabar);font-weight:600">影印本 ↗</a> · `:''}${pdfEd?`<a href="pdf-viewer.html#ed=${encodeURIComponent(pdfEd)}&f=1" style="color:var(--cinnabar);font-weight:600">影印本 →</a> · `:''}${esc(it.source)}</div>
         </div>
         <div class="toolbar">
           <button id="prev">← 上一</button><button id="next">下一 →</button>
