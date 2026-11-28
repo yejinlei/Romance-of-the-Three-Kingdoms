@@ -898,13 +898,6 @@
       bodyHTML = annotateReaderBody(bodyHTML, readerState.inline, chapterNum);
     }
 
-    // 批注内联注入（从 SANGUO_COMM_INLINE 离线语料库按回号取，整包追加到正文末尾）
-    let commInlineHTML = '';
-    if(readerState.inline.commInline){
-      // 初始渲染按 inlineCritic 状态过滤（与侧栏 annot 双向联动）
-      commInlineHTML = buildCommInlineBlockHTML(chapterNum, readerState.inlineCritic);
-    }
-
     const prevChapter = chapterNum - 1;
     const nextChapter = chapterNum + 1;
     // 工具栏「第 N 则/卷/篇 · 共 M」：点选侧栏单元时按其号显示，否则按毛本回正向映射；
@@ -1011,7 +1004,6 @@
                 ${chapterText.preComment}
               </div>` : ''}
             <div class="ancient-text" id="reader-text-body">${bodyHTML}</div>
-            ${commInlineHTML}
             ${annotBlocksHTML ? `
             <div class="mt-6 pt-4 border-t border-[#c9b896]" id="annot-section">
               <h3 class="font-bold text-[#8b0000] mb-2">评点批注（按评点家分栏）</h3>
@@ -1028,10 +1020,10 @@
       </div>
     </div>`;
   applyAnnotVisibility();
-    // 批注锚点嵌入：仅纯文本毛本正文分支（繁体/简体）且 commInline 开启时，按 pos 分布到句末
+    // 正文内联批语块：仅纯文本毛本正文分支（繁体/简体）且 commInline 开启时，按 pos 插入正文流
     ciChapterNum = chapterNum;
     if(readerState.inline.commInline && annotPure){
-      embedCommAnchors(el, chapterNum, readerState.inlineCritic);
+      embedCommAnnoBlocks(el, chapterNum, readerState.inlineCritic);
     }
     syncReaderUrl();
     // 非毛本版本：异步取该版本单元正文，填充 #ocr-ze-body（渲染占位后加载）
@@ -4403,118 +4395,40 @@
     return restoreTags(s);
   }
 
-  /* ======== 批注内联块：从 SANGUO_COMM_INLINE 生成 HTML ========
-   * 两层结构：先按 type（preface 回前评 / inline 夹评 / summary 总评）分大类
-   *            每大类内再按 critic 分组 + critic filter 复选条
-   * 显示顺序：preface (展开) → inline (展开) → summary (默认折叠)
-   * activeCritics: Set/array of criticIds 要显示；null/undefined = 全显
-   * 返回空串表示本回无批注或被全部过滤
-   */
-  function buildCommInlineBlockHTML(chapterNum, activeCritics){
-    const CCI = (typeof SANGUO_COMM_INLINE !== 'undefined') ? SANGUO_COMM_INLINE : null;
-    if(!CCI) return '';
-    const items = CCI[chapterNum] || [];
-    if(items.length === 0) return '';
-    const ciMap = {
-      maozigang: { name: '毛宗岗', color: '#b91c1c' },
-      lizhi:     { name: '李卓吾', color: '#7c3aed' },
-      zhongxing: { name: '钟伯敬', color: '#1d4ed8' },
-      liyuweng:  { name: '李渔',   color: '#047857' }
-    };
-    // 先按 type 分桶（同时给每条批注赋全局索引 _gi，供锚点定位）
-    const byType = { preface:[], inline:[], summary:[] };
-    items.forEach((it,gi)=>{ it._gi = gi; const t = it.type==='summary' ? 'summary' : it.type==='preface' ? 'preface' : 'inline'; byType[t].push(it); });
-    const totalByType = { preface: byType.preface.length, inline: byType.inline.length, summary: byType.summary.length };
+  /* ======== 评点家元数据（内联批语块共用） ======== */
+  const COMM_CRITIC_META = {
+    maozigang: { id: 'maozigang', name: '毛宗岗', color: '#b91c1c' },
+    lizhi:     { id: 'lizhi',     name: '李卓吾', color: '#7c3aed' },
+    zhongxing: { id: 'zhongxing', name: '钟伯敬', color: '#1d4ed8' },
+    liyuweng:  { id: 'liyuweng',  name: '李渔',   color: '#047857' }
+  };
+  const COMM_TYPE_LABEL = { preface: '回前评', inline: '夹批', summary: '总评' };
 
-    // critic filter 的统计（基于全部可见 items，供 toolbar 显示 count）
-    const MAX_SHOW_PER_TYPE = { preface: 3, inline: 200, summary: 5 };
-    const order = ['maozigang','lizhi','zhongxing','liyuweng'];
-    const escC = s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    // activeCritics 兼容两种形态：数组/Set（criticId 列表）或对象 {criticId:bool}
-    let active = null;
-    if(activeCritics){
-      if(Array.isArray(activeCritics) || (typeof Set !== 'undefined' && activeCritics instanceof Set)){
-        active = new Set(activeCritics);
-      } else if(typeof activeCritics === 'object'){
-        active = new Set(Object.entries(activeCritics).filter(([,v])=>v).map(([k])=>k));
-      }
-    }
-
-    // 计算 toolbar（从全量 items 算 count，让用户知道各 critic 总共有多少条）
-    const criticCounts = {};
-    items.forEach(it=>{ const c=it.critic||'maozigang'; criticCounts[c]=(criticCounts[c]||0)+1; });
-    const allCriticIds = [...order.filter(c=>criticCounts[c]), ...Object.keys(criticCounts).filter(c=>!order.includes(c))];
-
-    const toolbarHTML = `<div class="ci-filter-bar mb-3">
-      <span class="text-xs text-[#8b0000] mr-2 font-semibold">评点家筛选：</span>
-      ${allCriticIds.map(c=>{
-        const meta = ciMap[c] || { name: c, color: '#6b7280' };
-        const cnt = criticCounts[c];
-        const checked = !active || active.has(c);
-        return `<label class="ci-filter-item inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded mr-1 mb-1 cursor-pointer select-none" style="color:${meta.color};background:${meta.color}14;border:1px solid ${meta.color}40" data-ci-filter="${c}"><input type="checkbox" ${checked?'checked':''} onchange="appToggleCriticCommInline(this)" data-critic="${c}">${meta.name}(${cnt})</label>`;
-      }).join('')}
-    </div>`;
-
-    // 生成单个 critic group HTML
-    function criticGroupHTML(criticId, itemsToShow, isOpen){
-      if(itemsToShow.length === 0) return '';
-      const meta = ciMap[criticId] || { name: criticId, color: '#6b7280' };
-      const cnt = itemsToShow.length;
-      const inner = itemsToShow.map(it=>
-        `<span class="an-comm inline-block my-0.5 pr-2" id="ci-anchor-${chapterNum}-${it._gi}" data-ci-gid="${it._gi}" data-ci-critic-item="${criticId}" style="color:${meta.color};background:${meta.color}14;border-bottom:1px dashed ${meta.color};cursor:help" title="${escC(it.text)}">【${escC(meta.name)}】${escC(it.text)}</span>`
-      ).join('');
-      return `<details class="ci-group mt-2" data-ci-critic="${criticId}" ${isOpen?'open':''}><summary class="cursor-pointer text-sm font-semibold select-none py-1" style="color:${meta.color}">${isOpen?'▼':'▶'} ${meta.name} (${cnt})</summary><div class="flex flex-col gap-0.5 leading-relaxed">${inner}</div></details>`;
-    }
-
-    // 为每种 type 生成 section
-    function typeSection(typeKey, label, desc, defaultOpen){
-      const srcItems = byType[typeKey] || [];
-      if(srcItems.length === 0) return '';
-      // 限长（每类独立限，preface 短 summary 短 inline 长）
-      const limit = MAX_SHOW_PER_TYPE[typeKey] || 200;
-      const limited = srcItems.slice(0, limit);
-      // 按 critic 分组 + filter
-      const byC = {};
-      limited.forEach(it=>{ const c=it.critic||'maozigang'; if(!active||active.has(c)){ (byC[c]=byC[c]||[]).push(it); }});
-      const cIds = [...order.filter(c=>byC[c]), ...Object.keys(byC).filter(c=>!order.includes(c))];
-      if(cIds.length === 0) return '';
-      const sub = cIds.map(c=>criticGroupHTML(c, byC[c], defaultOpen)).join('');
-      const showMoreNote = (srcItems.length > limit) ? `（显示前 ${limit} 条，共 ${srcItems.length} 条）` : '';
-      return `<section class="ci-type-section mb-4" data-ci-type="${typeKey}">
-        <h4 class="ci-type-title text-xs font-bold uppercase tracking-wider text-[#8b0000] mt-2 mb-1 border-b border-dashed border-[#c9b896] pb-1">${label} · ${totalByType[typeKey]} 条${showMoreNote?` <span class="text-[#9a7050] normal-case font-normal">${showMoreNote}</span>`:''}</h4>
-        ${desc ? `<p class="text-[10px] text-[#9a7050] mb-1">${desc}</p>` : ''}
-        ${sub}
-      </section>`;
-    }
-
-    // 按 preface → inline → summary 顺序
-    const sectionsHTML =
-      typeSection('preface', '回前评', '每回开篇的回前长篇评点（毛宗岗独撰）', true) +
-      typeSection('inline',  '夹评',   '正文中穿插的逐句/逐段批注（本回主要评点内容）', true) +
-      typeSection('summary', '总评',   '回末总结性长篇评论（多位评点家分评）', false);
-
-    if(!sectionsHTML.trim()) return '';
-
-    return `<div class="comm-inline-block mt-6 pt-4 border-t border-dashed border-[#c9b896]" data-ci-chapter="${chapterNum}">
-      <h3 class="text-sm font-bold text-[#8b0000] mb-1">汇评夹批（七家汇评本 · 本回 ${items.length} 条批注 · 回前评 ${totalByType.preface} / 夹评 ${totalByType.inline} / 总评 ${totalByType.summary}）</h3>
-      ${toolbarHTML}
-      ${sectionsHTML}
-    </div>`;
-  }
-
-  /* ======== 批注锚点嵌入：把每条批注按 pos 分布到毛本正文句末 ========
-   * 在已渲染的 #reader-text-body 内，把 CCI[chapterNum] 每条批注的 pos（0-1）
-   * 映射到毛本段落累计进度的对应句子末尾，插入 <sup> 锚点标记。
-   * 锚点悬停显示批注全文（title），点击滚动到批注块对应条目并高亮。
+  /* ======== 正文内联批语块：按 pos 把每条批语作为独立块插入正文流 ========
+   * 仿「红楼未完」的读法：批语不集中堆在文末，也不靠锚点跳转，
+   * 而是按 pos（0-1 正文进度）直接插到对应段落之后，随文可读。
    * DOM 后处理：annotate 管线后调用，用 textContent 累计（不受 annotate 包标签影响）。
    * 仅对纯文本正文分支（繁体/简体毛本）生效；OCR/版本单元正文不嵌。
    */
-  function embedCommAnchors(rootEl, chapterNum, activeCritics){
+  function buildCommAnnoBlock(it, meta){
+    const typeKey = it.type === 'summary' ? 'summary' : it.type === 'preface' ? 'preface' : 'inline';
+    const srcLine = it.src ? `<div class="anno-src">【${esc(it.src)}】</div>` : '';
+    return `<div class="anno anno-${typeKey}" data-ci-critic="${meta.id}" style="--anno-color:${meta.color}">` +
+      `<div class="anno-hd"><span class="anno-tag">${esc(meta.name)} · ${COMM_TYPE_LABEL[typeKey]}</span></div>` +
+      `<div class="anno-t">${esc(it.text)}</div>${srcLine}</div>`;
+  }
+
+  function embedCommAnnoBlocks(rootEl, chapterNum, activeCritics){
     const CCI = (typeof SANGUO_COMM_INLINE !== 'undefined') ? SANGUO_COMM_INLINE : null;
     if(!CCI) return;
     const items = CCI[chapterNum] || [];
     if(items.length === 0) return;
-    // activeCritics 过滤（与批注块一致：null=全显，Set/array=白名单）
+    const bodyEl = rootEl.querySelector('#reader-text-body');
+    if(!bodyEl) return;
+    const paras = bodyEl.querySelectorAll('p');
+    if(paras.length === 0) return;
+
+    // activeCritics 过滤：null=全显，Set/array=白名单，对象 {criticId:bool}
     let active = null;
     if(activeCritics){
       if(Array.isArray(activeCritics) || (typeof Set !== 'undefined' && activeCritics instanceof Set)){
@@ -4523,17 +4437,6 @@
         active = new Set(Object.entries(activeCritics).filter(([,v])=>v).map(([k])=>k));
       }
     }
-    const ciMap = {
-      maozigang: { id: 'maozigang', name: '毛宗岗', color: '#b91c1c' },
-      lizhi:     { id: 'lizhi',     name: '李卓吾', color: '#7c3aed' },
-      zhongxing: { id: 'zhongxing', name: '钟伯敬', color: '#1d4ed8' },
-      liyuweng:  { id: 'liyuweng',  name: '李渔',   color: '#047857' }
-    };
-    // 只统计 inline 类（preface 回前评/总评不回正文，无 pos 意义；但 pos 都在，先全试）
-    const bodyEl = rootEl.querySelector('#reader-text-body');
-    if(!bodyEl) return;
-    const paras = bodyEl.querySelectorAll('p');
-    if(paras.length === 0) return;
 
     // 累计每段裸文本长度 → 段落进度表
     const paraLens = [];
@@ -4541,98 +4444,54 @@
     paras.forEach(p => { const L = (p.textContent || '').length; paraLens.push(L); totalChars += L; });
     if(totalChars === 0) return;
 
-    // 找目标段：累计字符进度 >= pos*totalChars
-    function paraIndexFor(pos){
-      const target = pos * totalChars;
-      let acc = 0;
-      for(let i=0;i<paraLens.length;i++){
-        acc += paraLens[i];
-        if(acc >= target) return { pIdx: i, local: target - (acc - paraLens[i]) };
-      }
-      return { pIdx: paras.length - 1, local: paraLens[paraLens.length-1] };
-    }
-
-    // 在某段的文本节点里，找 local 偏移后最近句末，插入 sup
-    function insertMarker(p, local, meta, gid, text){
-      const nodes = [];
-      (function walk(n){ if(n.nodeType === 3) nodes.push(n); else Array.from(n.childNodes).forEach(walk); })(p);
-      if(nodes.length === 0) return;
-      // 累计找到目标文本节点
-      let acc = 0;
-      let tNode = nodes[nodes.length-1], tOff = 0;
-      for(const n of nodes){
-        const L = n.nodeValue.length;
-        if(acc + L >= local){ tNode = n; tOff = Math.max(0, local - acc); break; }
-        acc += L;
-      }
-      // 从 tOff 向后找句末标点（在本节点及后续节点内）
-      const sentRe = /[。！？；]/;
-      let node = tNode, off = tOff;
-      let found = false;
-      while(node){
-        const s = node.nodeValue || '';
-        for(let i=off; i<s.length; i++){
-          if(sentRe.test(s[i])){ off = i+1; found = true; break; }
+    // 批语按 pos 归入目标段落之后的队列（同一 pos 的多家批语按数组原序叠加）
+    // 回前评（type=preface）置于正文首段之前，总评/夹评置于段落之后
+    const queue = new Array(paras.length).fill(null).map(()=>[]);
+    const preHTMLs = [];
+    items.forEach(it => {
+      if(active && !active.has(it.critic)) return;
+      const meta = COMM_CRITIC_META[it.critic] || { id: it.critic, name: it.critic, color: '#6b7280' };
+      const html = buildCommAnnoBlock(it, meta);
+      if(it.type === 'preface'){ preHTMLs.push(html); return; }
+      let pIdx;
+      if(typeof it.pos === 'number'){
+        const target = it.pos * totalChars;
+        let acc = 0;
+        pIdx = paras.length - 1;
+        for(let i=0;i<paraLens.length;i++){
+          acc += paraLens[i];
+          if(acc >= target){ pIdx = i; break; }
         }
-        if(found) break;
-        node = node.nextSibling;
-        off = 0;
-        // 只在本段内找，跨到别的文本节点但仍是段内
-        if(!node) break;
-      }
-      // 若未找到句末，用段末（段末尾）
-      const sup = document.createElement('sup');
-      sup.className = 'ci-anchor';
-      sup.setAttribute('data-ci-gid', gid);
-      sup.setAttribute('data-ci-critic', meta.id || '');
-      // tabindex=-1 使锚点不可聚焦：点击时浏览器不会把视口滚回锚点，避免覆盖 scrollIntoView
-      sup.setAttribute('tabindex', '-1');
-      sup.style.cssText = 'color:' + meta.color + ';cursor:pointer;font-size:0.72em;vertical-align:super;margin:0 1px;';
-      sup.title = '【' + meta.name + '】' + text;
-      sup.textContent = '●';
-      sup.onclick = function(ev){
-        // 阻止默认聚焦滚动：否则浏览器会把视口拉回点击的锚点，覆盖 scrollIntoView
-        if(ev && ev.preventDefault) ev.preventDefault();
-        ev.stopPropagation();
-        appJumpToComm(chapterNum, gid);
-      };
-      // 在目标节点偏移后插入
-      if(found){
-        const range = document.createRange();
-        range.setStart(node, off);
-        range.setEnd(node, off);
-        range.insertNode(sup);
       } else {
-        // 段末插入
-        const range = document.createRange();
-        range.setStart(tNode, tNode.nodeValue ? tNode.nodeValue.length : 0);
-        range.setEnd(tNode, tNode.nodeValue ? tNode.nodeValue.length : 0);
-        range.insertNode(sup);
+        pIdx = 0;
       }
+      queue[pIdx].push(html);
+    });
+
+    // 回前评置于正文首段之前
+    if(preHTMLs.length){
+      const preWrap = document.createElement('div');
+      preWrap.innerHTML = preHTMLs.join('');
+      const first = paras[0];
+      if(first && first.parentNode === bodyEl) bodyEl.insertBefore(preWrap, first);
+      else bodyEl.insertBefore(preWrap, bodyEl.firstChild);
     }
 
-    // 逐条批注嵌入
-    items.forEach((it, gid) => {
-      if(active && !active.has(it.critic)) return; // 被 filter 隐藏的批注不嵌
-      const meta = ciMap[it.critic] || { id: it.critic, name: it.critic, color: '#6b7280' };
-      if(typeof it.pos !== 'number') return;
-      const { pIdx, local } = paraIndexFor(it.pos);
-      const p = paras[pIdx];
-      if(p) insertMarker(p, local, meta, gid, it.text);
+    // 逐段插回 DOM：每段批语跟在该段之后
+    queue.forEach((htmls, i) => {
+      if(!htmls.length) return;
+      const wrap = document.createElement('div');
+      wrap.innerHTML = htmls.join('');
+      const anchor = paras[i];
+      if(anchor && anchor.parentNode === bodyEl) bodyEl.insertBefore(wrap, anchor.nextSibling);
+      else bodyEl.appendChild(wrap);
     });
   }
-  // 点击锚点 → 滚动到批注块对应条目并高亮
-  global.appJumpToComm = function(chapterNum, gid){
-    const target = document.getElementById('ci-anchor-' + chapterNum + '-' + gid);
-    if(!target) return;
-    // 同步定位：不依赖 rAF（某些环境 rAF 被节流导致不滚）。
-    // tabindex=-1 使锚点不可聚焦，同步 scrollTo 不会被浏览器聚焦滚动覆盖。
-    const rect = target.getBoundingClientRect();
-    const docTop = rect.top + (window.pageYOffset || document.documentElement.scrollTop || 0);
-    window.scrollTo(0, Math.max(0, docTop - window.innerHeight / 2));
-    target.classList.add('ci-flash');
-    setTimeout(()=> target.classList.remove('ci-flash'), 1800);
-  };
+
+  // 移除已插入正文的批语块（切换开关/评点家重嵌前调用）
+  function removeCommAnnoBlocks(){
+    document.querySelectorAll('#reader-text-body .anno').forEach(el => el.remove());
+  }
   function renderOntology(el){
     const o = ONT || {};
     const layers = o.layers || [];
@@ -4754,28 +4613,24 @@
         const cb = document.querySelector('input[data-annot-toggle="' + c.id + '"]');
         if(cb) cb.checked = on;
       });
-      // 双向联动：批注内联四家 filter + group 同步
+      // 双向联动：批注内联四家状态同步
       ANNOT_CRITICS.forEach(c => {
         if(readerState.inlineCritic) readerState.inlineCritic[c.id] = on;
-        document.querySelectorAll('.ci-filter-item input[data-critic="'+c.id+'"]').forEach(ci => { ci.checked = on; });
-        document.querySelectorAll('.ci-group[data-ci-critic="'+c.id+'"]').forEach(g => { g.classList.toggle('hidden', !on); });
       });
     } else if(Object.prototype.hasOwnProperty.call(readerState.annot, key)){
       readerState.annot[key] = on;
       // 双向联动：批注内联对应 critic 同步
       if(readerState.inlineCritic) readerState.inlineCritic[key] = on;
-      document.querySelectorAll('.ci-filter-item input[data-critic="'+key+'"]').forEach(ci => { ci.checked = on; });
-      document.querySelectorAll('.ci-group[data-ci-critic="'+key+'"]').forEach(g => { g.classList.toggle('hidden', !on); });
       // 个体变化后回写总开关勾选状态：四家全选 → 总开关勾上
       const allCb = document.getElementById('annot-toggle-all');
       if(allCb) allCb.checked = ANNOT_CRITICS.every(c => readerState.annot[c.id]);
     }
-    // 重建正文锚点（侧栏 critic 开关变化后，按新的 inlineCritic 过滤重新嵌入）
+    // 重建正文批语块（侧栏 critic 开关变化后，按新的 inlineCritic 过滤重新插入）
     if(ciChapterNum != null && readerState.inline.commInline){
       const bEl = document.querySelector('#reader-text-body');
       if(bEl){
-        bEl.querySelectorAll('.ci-anchor').forEach(a => a.remove());
-        embedCommAnchors(document, ciChapterNum, readerState.inlineCritic);
+        removeCommAnnoBlocks();
+        embedCommAnnoBlocks(document, ciChapterNum, readerState.inlineCritic);
       }
     }
     applyAnnotVisibility();
@@ -4796,27 +4651,10 @@
     if(readerState.lang === 'simplified') raw = simpleT2S(raw);
     bodyEl.innerHTML = annotateReaderBody(raw, readerState.inline, chapterNum);
 
-    // 批注内联块：根据开关重建或移除（复用 renderReader 的 buildCommInlineBlockHTML）
-    const oldBlock = document.querySelector('.comm-inline-block');
+    // 正文重绘后，已插入正文的批语块随 innerHTML 清空，按开关重新插入/清除
+    removeCommAnnoBlocks();
     if(readerState.inline.commInline){
-      const newHTML = buildCommInlineBlockHTML(chapterNum, readerState.inlineCritic);
-      if(newHTML){
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = newHTML.trim();
-        const newBlock = wrapper.firstElementChild;
-        if(oldBlock) oldBlock.replaceWith(newBlock);
-        else bodyEl.after(newBlock);
-      } else if(oldBlock){
-        oldBlock.remove();
-      }
-    } else if(oldBlock) {
-      oldBlock.remove();
-    }
-
-    // 锚点同步：重绘后清除旧锚点，若 commInline 开启则重新嵌入
-    bodyEl.querySelectorAll('.ci-anchor').forEach(a => a.remove());
-    if(readerState.inline.commInline){
-      embedCommAnchors(document, chapterNum, readerState.inlineCritic);
+      embedCommAnnoBlocks(document, chapterNum, readerState.inlineCritic);
     }
   };
   // 批注内联 filter ↔ 侧栏 critic 开关 双向联动
@@ -4827,29 +4665,23 @@
     if(readerState.inlineCritic && Object.prototype.hasOwnProperty.call(readerState.inlineCritic, criticId)){
       readerState.inlineCritic[criticId] = on;
     }
-    // 2) 内联 filter checkbox（可能在页面上存在多个，都同步）
-    document.querySelectorAll('.ci-filter-item input[data-critic="'+criticId+'"]').forEach(cb => { cb.checked = on; });
-    // 3) 内联 group 显隐（跨所有 ci-type-section）
-    document.querySelectorAll('.ci-group[data-ci-critic="'+criticId+'"]').forEach(g => {
-      g.classList.toggle('hidden', !on);
-    });
-    // 4) 侧栏分栏状态
+    // 2) 侧栏分栏状态
     if(readerState.annot && Object.prototype.hasOwnProperty.call(readerState.annot, criticId)){
       readerState.annot[criticId] = on;
     }
-    // 5) 侧栏 checkbox + 总开关回写
+    // 3) 侧栏 checkbox + 总开关回写
     const cb = document.querySelector('input[data-annot-toggle="'+criticId+'"]');
     if(cb) cb.checked = on;
     const allCb = document.getElementById('annot-toggle-all');
     if(allCb) allCb.checked = ANNOT_CRITICS.every(c => readerState.annot[c.id]);
-    // 6) 分栏批注显隐
+    // 4) 分栏批注显隐
     applyAnnotVisibility();
-    // 7) 重建正文锚点（按新的 inlineCritic 过滤）
+    // 5) 重建正文批语块（按新的 inlineCritic 过滤）
     if(ciChapterNum != null && readerState.inline.commInline){
       const bodyEl = document.querySelector('#reader-text-body');
       if(bodyEl){
-        bodyEl.querySelectorAll('.ci-anchor').forEach(a => a.remove());
-        embedCommAnchors(document, ciChapterNum, readerState.inlineCritic);
+        removeCommAnnoBlocks();
+        embedCommAnnoBlocks(document, ciChapterNum, readerState.inlineCritic);
       }
     }
     syncReaderUrl();
